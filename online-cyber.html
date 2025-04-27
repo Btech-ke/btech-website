@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Cyber Services</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Global background with gradient */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #007BFF, #00BFFF); /* Blue gradient background */
+            margin: 0;
+            padding: 0;
+            color: #333;
+            height: 100%;
+        }
+
+        /* Navbar Section */
+        header {
+            background-color: #007BFF;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 30px;
+            color: white;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .nav-links {
+            list-style-type: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f9f9f9;
+        }
+
+        /* Online Cyber Services Section */
+        #services {
+            padding: 50px 20px;
+            background-color: rgba(255, 255, 255, 0.85); /* White with slight transparency */
+        }
+
+        #services h2 {
+            color: #007BFF;
+            font-size: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .service-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .card {
+            background-color: #fff;
+            width: 250px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #007BFF;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .learn-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .learn-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer Section */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Section -->
+<header>
+    <div class="nav-container">
+        <div class="logo">BTECH</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- Online Cyber Services Section -->
+<section id="services" class="services">
+    <h2>Online Cyber Services</h2>
+    <div class="service-cards">
+        <!-- KUCCPS -->
+        <div class="card" style="background-color: #FFB6C1;">
+            <img src="images/kuccps.png" alt="KUCCPS">
+            <h3>KUCCPS Applications</h3>
+            <p>Apply for placement to universities and colleges through KUCCPS.</p>
+            <a href="kuccps-details.html" class="learn-btn">View Details</a>
+            <a href="request-application-kuccps.html" class="learn-btn">Request Application</a> <!-- Link to KUCCPS form -->
+        </div>
+
+        <!-- HELB -->
+        <div class="card" style="background-color: #ADD8E6;">
+            <img src="images/helb.png" alt="HELB">
+            <h3>HELB Loan Application</h3>
+            <p>Apply for the HELB student loan for your education needs.</p>
+            <a href="helb-details.html" class="learn-btn">View Details</a>
+            <a href="request-application-helb.html" class="learn-btn">Request Application</a> <!-- Link to HELB form -->
+        </div>
+
+        <!-- KRA -->
+        <div class="card" style="background-color: #98FB98;">
+            <img src="images/kra.png" alt="KRA">
+            <h3>KRA Services</h3>
+            <p>Access and apply for KRA services such as Tax PIN and registration.</p>
+            <a href="kra-details.html" class="learn-btn">View Details</a>
+            <a href="request-application-kra.html" class="learn-btn">Request Application</a> <!-- Link to KRA form -->
+        </div>
+
+        <!-- Other Cyber Services -->
+        <div class="card" style="background-color: #D3D3D3;">
+            <img src="images/other-services.png" alt="Other Services">
+            <h3>Other Cyber Services</h3>
+            <p>Explore other online services available for students and professionals.</p>
+            <a href="other-services-details.html" class="learn-btn">View Details</a>
+            <a href="request-application-other-services.html" class="learn-btn">Request Application</a> <!-- Link to Other Services form -->
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 BTECH. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

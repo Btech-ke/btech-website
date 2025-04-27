@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Form</title>
+    <style>
+        /* Body Styles with Gradient Background */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #00BFFF, #f0f8ff); /* Gradient Background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+        }
+
+        /* Enrollment Form Section */
+        .enrollment-form {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Scrollable form */
+            max-height: 90vh; /* Prevent form from overflowing screen */
+        }
+
+        .enrollment-form h3 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #007BFF;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+        .submit-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .enrollment-form {
+                padding: 20px;
+            }
+
+            .submit-btn {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Enrollment Form Section -->
+<section class="enrollment-form">
+    <div class="container">
+        <h3>Enrollment Form</h3>
+        <form action="https://formspree.io/f/mblolava" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="course">Course</label>
+                <select id="course" name="course" required>
+                    <option value="Computer Packages">Computer Packages</option>
+                    <option value="Learn Computer Basic Applications">Learn Computer Basic Applications</option>
+                    <option value="Introduction to Programming">Introduction to Programming</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Mobile App Development">Mobile App Development</option>
+                    <option value="Ethical Hacking">Ethical Hacking</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
+                    <option value="Cyber Security Basics">Cyber Security Basics</option>
+                    <option value="Networking">Networking</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="file">Upload Your Academic Docs (Required)</label>
+                <input type="file" id="file" name="file">
+            </div>
+            <button type="submit" class="submit-btn">Submit Enrollment</button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 BTECH. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

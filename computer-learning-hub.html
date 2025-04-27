@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Learning Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Body Styles with Gradient Background */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #00BFFF, #f0f8ff); /* Gradient Background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            height: 100%;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        header {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            background-color: rgba(0, 123, 255, 0.9); /* Transparent Navbar */
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Course Cards Container (Scrollable) */
+        .course-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+            gap: 20px;
+            padding: 80px 20px 20px;
+            max-width: 1200px;
+            width: 100%;
+            overflow-y: auto; /* Enable vertical scrolling */
+            height: 75vh; /* Limit height for scrollable area */
+            margin-top: 60px; /* Prevent content from being hidden behind navbar */
+        }
+
+        /* Individual Course Card Styling */
+        .course-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            overflow: hidden;
+            height: 300px;
+        }
+
+        .course-card:hover {
+            transform: scale(1.05);
+        }
+
+        .course-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            height: 120px;
+            object-fit: cover; /* Ensure image scales properly */
+        }
+
+        .course-card h3 {
+            font-size: 20px;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Enroll Button Styles */
+        .learn-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .learn-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 900px) {
+            .course-cards {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .course-cards {
+                grid-template-columns: 1fr; /* 1 column on small screens */
+                height: auto; /* No fixed height on smaller screens */
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar Section -->
+<header>
+    <div class="nav-container">
+        <div class="logo">BTECH</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- Computer Learning Hub Courses Section -->
+<section class="course-cards">
+    <h2>Courses Offered</h2>
+
+    <div class="course-card">
+        <img src="images/computer_packages.png" alt="Computer Packages">
+        <h3>Computer Packages</h3>
+        <p>Learn essential computer skills, including Microsoft Office and basic troubleshooting.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/basic-applications.png" alt="Land Computer Basic Applications">
+        <h3>Computer Basic Applications</h3>
+        <p>Understand the basics of computer applications for easy computer navigation.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/programming.png" alt="Introduction to Programming">
+        <h3>Introduction to Programming</h3>
+        <p>Learn the fundamentals of programming using Python and JavaScript.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/web-development.png" alt="Web Development">
+        <h3>Web Development</h3>
+        <p>Build modern, responsive websites using HTML, CSS, JavaScript, and frameworks.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/app.png" alt="Mobile App Development">
+        <h3>Mobile App Development</h3>
+        <p>Learn how to develop mobile apps for Android and iOS platforms.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/ethical_hacking.png" alt="Ethical Hacking">
+        <h3>Ethical Hacking</h3>
+        <p>Understand how to secure systems and networks through ethical hacking techniques.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/graphic.png" alt="Graphic Design">
+        <h3>Graphic Design</h3>
+        <p>Learn to design engaging visual content using Adobe tools and more.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/marketing.png" alt="Digital Marketing">
+        <h3>Digital Marketing</h3>
+        <p>Master digital marketing strategies, SEO, and social media marketing.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/cybersecurity.png" alt="Cyber Security Basics">
+        <h3>Cyber Security Basics</h3>
+        <p>Learn the basics of cyber security and how to protect systems from threats.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="course-card">
+        <img src="images/networking.png" alt="Networking">
+        <h3>Networking</h3>
+        <p>Understand the fundamentals of networking, from routers to network security.</p>
+        <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 BTECH. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
