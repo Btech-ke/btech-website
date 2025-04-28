@@ -183,6 +183,43 @@
       background-color: #218838;
     }
 
+    /* Staff Login Section */
+    .staff-login {
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .login-form {
+      display: inline-block;
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form input {
+      margin-bottom: 15px;
+      padding: 10px;
+      width: 250px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .login-form button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .login-form button:hover {
+      background-color: #0056b3;
+    }
+
     /* Footer */
     footer {
       text-align: center;
@@ -206,6 +243,7 @@
       <a href="#services">Services</a>
       <a href="#download">Download</a>
       <a href="#contact">Contact</a>
+      <a href="#staff-login">Staff Login</a> <!-- Added Staff Login Link -->
     </nav>
   </div>
 </header>
@@ -222,7 +260,7 @@
 <!-- CEO Section with Photo -->
 <section id="ceo" class="ceo-introduction">
   <div class="container">
-    <img src="your-photo.jpg" alt="CEO Photo" class="ceo-photo">
+    <img src="images/your-photo.jpg" alt="CEO Photo" class="ceo-photo">
     <p class="ceo-position">Teddy: CEO of BTECH</p>
   </div>
 </section>
@@ -240,25 +278,25 @@
   <h2>Our Services</h2>
   <div class="service-cards">
     <div class="card" style="background-color: #FFC0CB;">
-      <img src="cyber.png" alt="Cyber Services">
+      <img src="images/cyber.png" alt="Cyber Services">
       <h3>Online Cyber Services</h3>
       <p>Access services like KUCCPS, KRA, HELB, and more.</p>
       <a href="online-cyber.html" class="learn-btn">Learn More</a>
     </div>
     <div class="card" style="background-color: #F6C8A1;">
-      <img src="learning.png" alt="Learning">
+      <img src="images/learning.png" alt="Learning">
       <h3>Computer Learning Hub</h3>
       <p>Explore various computer courses and enroll today.</p>
       <a href="computer-learning-hub.html" class="learn-btn">Learn More</a>
     </div>
     <div class="card" style="background-color: #A1D1F6;">
-      <img src="business.png" alt="Business">
+      <img src="images/business.png" alt="Business">
       <h3>Digital Business Solutions</h3>
       <p>Get professional business solutions for your company.</p>
       <a href="digital-business-solutions.html" class="learn-btn">Learn More</a>
     </div>
     <div class="card" style="background-color: #F7F7F7;">
-      <img src="repair.png" alt="Tech Repair">
+      <img src="images/repair.png" alt="Tech Repair">
       <h3>Tech Repair & Maintenance</h3>
       <p>Fix your tech devices and keep them in top condition.</p>
       <a href="tech-repair.html" class="learn-btn">Learn More</a>
@@ -272,6 +310,44 @@
   <a href="BtechPlusApp.apk" class="download-btn">Download BTECH App</a>
   <p>Get the latest version of our app to explore more features.</p>
 </section>
+
+<!-- Staff Login Section -->
+<section id="staff-login" class="staff-login">
+  <h2>Staff Login</h2>
+  <div class="login-form">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="validateLogin()">Login</button>
+  </div>
+</section>
+
+<!-- Footer Section -->
+<footer>
+  <p>&copy; 2025 BTECH | All Rights Reserved</p>
+</footer>
+
+<script>
+  // Function to validate the login credentials
+  function validateLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    // Validating username and password
+    const validUsernamePattern = /^BTECH#([1-9]|10)$/; // Valid usernames: BTECH#1 to BTECH#10
+    const validPassword = "btech.ke";
+
+    if (validUsernamePattern.test(username) && password === validPassword) {
+      // Redirect to the dashboard if login is successful
+      window.location.href = "dashboard.html"; // Replace with your actual dashboard page URL
+    } else {
+      // Show an alert if login fails
+      alert("Invalid username or password. Please try again.");
+    }
+  }
+</script>
+
+</body>
+</html>
 
 <!-- Contact Section -->
 <section id="contact" class="about">
