@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTECH - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #00BFFF, #f0f8ff);
+      color: #333;
+      padding-top: 80px;
+    }
+
+    /* Navbar Styles */
+    header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      background-color: rgba(0, 123, 255, 0.9);
+      padding: 15px 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav a {
+      margin-left: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #FFD700;
+    }
+
+    /* Dashboard Main Section */
+    .dashboard {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .dashboard h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .dashboard p {
+      font-size: 18px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* Cards Layout */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card .card-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .card .card-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #007BFF;
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Header/Navbar -->
+<header>
+  <div class="nav-container">
+    <div class="logo">BTECH</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="index.html#staff-login">Logout</a> <!-- Logout link -->
+    </nav>
+  </div>
+</header>
+
+<!-- Dashboard Main Section -->
+<section class="dashboard">
+  <h1>Welcome to Your Dashboard, Staff Member</h1>
+  <p>Here, you can access the tools and resources for managing our technology and learning solutions.</p>
+
+  <div class="cards-container">
+    <!-- Card 1: Manage Courses -->
+    <div class="card" style="background-color: #FFC0CB;">
+      <h3>Manage Courses</h3>
+      <p>View and manage all courses offered in the Computer Learning Hub.</p>
+      <a href="manage-courses.html" class="card-btn">Manage</a>
+    </div>
+
+    <!-- Card 2: View Enrollments -->
+    <div class="card" style="background-color: #F6C8A1;">
+      <h3>View Enrollments</h3>
+      <p>Track student enrollments in various courses.</p>
+      <a href="view-enrollments.html" class="card-btn">View</a>
+    </div>
+
+    <!-- Card 3: Services Dashboard -->
+    <div class="card" style="background-color: #A1D1F6;">
+      <h3>Manage Services</h3>
+      <p>View and manage the various services offered by BTECH.</p>
+      <a href="manage-services.html" class="card-btn">Manage</a>
+    </div>
+
+    <!-- Card 4: Technical Support -->
+    <div class="card" style="background-color: #F7F7F7;">
+      <h3>Technical Support</h3>
+      <p>Request or view technical support issues and resolutions.</p>
+      <a href="technical-support.html" class="card-btn">Request Support</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer Section -->
+<footer>
+  <p>&copy; 2025 BTECH | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
