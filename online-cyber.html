@@ -4,38 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Online Cyber Services - BTECH</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Poppins', sans-serif;
       background: #f1f5f9;
       color: #333;
+      overflow-x: hidden;
     }
 
     header {
-      background-color: #007BFF;
+      background: linear-gradient(135deg, #007BFF, #0056b3);
       padding: 20px;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     header h1 {
-      margin: 0;
-      font-size: 24px;
+      font-size: 26px;
+      font-weight: 600;
     }
 
     .book-btn {
       background-color: #fff;
       color: #007BFF;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s, color 0.3s;
+      transition: 0.3s;
     }
 
     .book-btn:hover {
@@ -44,7 +52,7 @@
     }
 
     .services {
-      padding: 60px 20px;
+      padding: 70px 20px;
       max-width: 1200px;
       margin: auto;
     }
@@ -52,33 +60,35 @@
     .services h2 {
       text-align: center;
       font-size: 36px;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
       color: #007BFF;
+      font-weight: 700;
     }
 
     .service-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
       gap: 30px;
     }
 
     .card {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
-      padding: 25px;
+      padding: 30px 20px;
       text-align: center;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.12);
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
     }
 
     .card img {
       width: 100%;
-      height: 150px;
+      height: 160px;
       object-fit: cover;
       border-radius: 15px;
       margin-bottom: 20px;
@@ -88,6 +98,7 @@
       font-size: 22px;
       margin-bottom: 10px;
       color: #222;
+      font-weight: 600;
     }
 
     .card p {
@@ -99,12 +110,13 @@
     .learn-btn {
       display: inline-block;
       padding: 10px 20px;
+      margin: 5px;
       background-color: #007BFF;
       color: #fff;
       border-radius: 8px;
       text-decoration: none;
       font-size: 14px;
-      margin: 5px 5px;
+      font-weight: 500;
       transition: background-color 0.3s;
     }
 
@@ -114,98 +126,120 @@
 
     footer {
       text-align: center;
-      padding: 20px 10px;
+      padding: 20px;
       background-color: #007BFF;
       color: white;
-      margin-top: 60px;
+      margin-top: 80px;
+      font-size: 14px;
     }
 
     @media (max-width: 600px) {
       header {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
       }
       .services h2 {
         font-size: 28px;
       }
       .card img {
-        height: 130px;
+        height: 140px;
       }
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 30px 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 20px;
+      color: #007BFF;
+    }
+
+    .modal-content input {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .close-btn {
+      background: #dc3545;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .submit-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
-
-  <script>
-    function bookApplication() {
-      const service = prompt("Which service are you booking? (KUCCPS, KRA, HELB)").toUpperCase();
-
-      if (service === "KUCCPS" || service === "KRA" || service === "HELB") {
-        let amount = 0;
-        if (service === "HELB") {
-          amount = 500;
-        } else if (service === "KRA") {
-          amount = 200;
-        } else if (service === "KUCCPS") {
-          amount = 450;
-        }
-
-        alert(
-          `Payment Instructions:\n\n` +
-          `Service: ${service}\n` +
-          `Amount: KES ${amount}\n\n` +
-          `Go to M-Pesa > Lipa na M-Pesa > Buy Goods and Services.\n` +
-          `Enter Till Number: 4499436.\n` +
-          `Enter the amount: ${amount}.\n` +
-          `Enter your M-Pesa PIN to complete the payment.\n\n` +
-          `Thank you for booking with BTECH!`
-        );
-      } else if (service !== null) {
-        alert("Invalid service selected. Please enter KUCCPS, KRA, or HELB.");
-      }
-    }
-  </script>
-
 </head>
+
 <body>
 
 <header>
-  <button class="book-btn" onclick="bookApplication()">Book for Application</button>
+  <button class="book-btn" onclick="openModal()">Book for Application</button>
   <h1>BTECH Online Cyber Services</h1>
 </header>
 
 <section id="services" class="services">
   <h2>Our Online Cyber Services</h2>
   <div class="service-cards">
-    
-    <!-- KUCCPS -->
+
     <div class="card" style="background-color: #ffe6eb;">
-      <img src="kuccps.png" alt="KUCCPS">
+      <img src="kuccps.png" alt="KUCCPS Applications">
       <h3>KUCCPS Applications</h3>
       <p>Apply for placement to universities and colleges through KUCCPS.</p>
       <a href="kuccps-details.html" class="learn-btn">View Details</a>
       <a href="request-application-kuccps.html" class="learn-btn">Request Application</a>
     </div>
 
-    <!-- HELB -->
     <div class="card" style="background-color: #e6f0ff;">
-      <img src="helb.png" alt="HELB">
+      <img src="helb.png" alt="HELB Loan Application">
       <h3>HELB Loan Application</h3>
       <p>Apply for the HELB student loan for your education needs.</p>
       <a href="helb-details.html" class="learn-btn">View Details</a>
       <a href="request-application-helb.html" class="learn-btn">Request Application</a>
     </div>
 
-    <!-- KRA -->
     <div class="card" style="background-color: #e6ffe6;">
-      <img src="kra.png" alt="KRA">
+      <img src="kra.png" alt="KRA Services">
       <h3>KRA Services</h3>
       <p>Access and apply for KRA services such as Tax PIN and registration.</p>
       <a href="kra-details.html" class="learn-btn">View Details</a>
       <a href="request-application-kra.html" class="learn-btn">Request Application</a>
     </div>
 
-    <!-- Other Cyber Services -->
     <div class="card" style="background-color: #f0f0f0;">
-      <img src="other-services.png" alt="Other Services">
+      <img src="other-services.png" alt="Other Cyber Services">
       <h3>Other Cyber Services</h3>
       <p>Explore other online services available for students and professionals.</p>
       <a href="other-services-details.html" class="learn-btn">View Details</a>
@@ -218,6 +252,56 @@
 <footer>
   <p>&copy; 2025 BTECH. All rights reserved.</p>
 </footer>
+
+<!-- Modal Structure -->
+<div id="applicationModal" class="modal">
+  <div class="modal-content">
+    <h3>Book an Application</h3>
+    <input type="text" id="serviceInput" placeholder="Enter KUCCPS, KRA, or HELB">
+    <br>
+    <button class="close-btn" onclick="closeModal()">Cancel</button>
+    <button class="submit-btn" onclick="bookApplication()">Submit</button>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById("applicationModal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("applicationModal").style.display = "none";
+  }
+
+  function bookApplication() {
+    const serviceInput = document.getElementById("serviceInput").value.trim().toUpperCase();
+    let amount = 0;
+
+    if (serviceInput === "HELB") {
+      amount = 500;
+    } else if (serviceInput === "KRA") {
+      amount = 200;
+    } else if (serviceInput === "KUCCPS") {
+      amount = 450;
+    } else {
+      alert("Invalid service selected. Please enter KUCCPS, KRA, or HELB.");
+      return;
+    }
+
+    alert(
+      `Payment Instructions:\n\n` +
+      `Service: ${serviceInput}\n` +
+      `Amount: KES ${amount}\n\n` +
+      `Go to M-Pesa > Lipa na M-Pesa > Buy Goods and Services.\n` +
+      `Enter Till Number: 4499436.\n` +
+      `Enter the amount: ${amount}.\n` +
+      `Enter your M-Pesa PIN to complete the payment.\n\n` +
+      `Thank you for booking with BTECH!`
+    );
+
+    closeModal();
+  }
+</script>
 
 </body>
 </html>
