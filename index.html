@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BTECH - Technology & Learning Solutions</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="Blogo.png" type="image/png" />
   <style>
     * {
       margin: 0;
@@ -35,11 +36,11 @@
       align-items: center;
     }
 
-    .logo img {
+    .logo-img {
       width: 50px;
       height: 50px;
+      border-radius: 20%; /* SQUIRCLE style */
       object-fit: cover;
-      border-radius: 30%; /* Squircle logo */
     }
 
     nav a {
@@ -78,7 +79,7 @@
       width: 200px;
       height: 200px;
       object-fit: cover;
-      border-radius: 50%; /* CEO photo circular */
+      border-radius: 50%;
       margin-bottom: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
@@ -90,14 +91,16 @@
     }
 
     .about h2,
-    .services h2 {
+    .services h2,
+    .download h2,
+    .staff-login h2,
+    .about h2 {
       font-size: 32px;
-      text-align: center;
       margin-bottom: 20px;
+      text-align: center;
     }
 
-    .about p,
-    .services p {
+    .about p {
       font-size: 18px;
       text-align: center;
     }
@@ -124,6 +127,16 @@
     .card img {
       width: 80px;
       height: 80px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 16px;
       margin-bottom: 15px;
     }
 
@@ -205,126 +218,140 @@
       margin-top: 30px;
     }
   </style>
+
+  <!-- Schema.org JSON-LD for Logo -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BTECH",
+    "url": "https://btechplus.com",
+    "logo": "https://btechplus.com/Blogo.png"
+  }
+  </script>
 </head>
 
 <body>
-  <!-- Header/Navbar -->
-  <header>
-    <div class="nav-container">
-      <div class="logo">
-        <img src="Blogo.png" alt="BTECH Logo">
-      </div>
-      <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#download">Download</a>
-        <a href="#contact">Contact</a>
-        <a href="#staff-login">Staff Login</a>
-      </nav>
+
+<!-- Header -->
+<header>
+  <div class="nav-container">
+    <img src="Blogo.png" alt="BTECH Logo" class="logo-img" />
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#download">Download</a>
+      <a href="#contact">Contact</a>
+      <a href="#staff-login">Staff Login</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Home -->
+<section id="home" class="home">
+  <div class="container">
+    <h1>Welcome to BTECH</h1>
+    <p>Your trusted partner in technology and learning solutions.</p>
+    <p>Hello, I’m Teddy, the CEO of BTECH. We are dedicated to providing top-notch services in technology, learning, and business solutions. Our goal is to empower individuals and businesses to achieve their full potential through innovative technology and quality education.</p>
+  </div>
+</section>
+
+<!-- CEO -->
+<section id="ceo" class="ceo-introduction">
+  <div class="container">
+    <img src="your-photo.jpg" alt="CEO Photo" class="ceo-photo" />
+    <p class="ceo-position">Teddy: CEO of BTECH</p>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" class="about">
+  <div class="container">
+    <h2>About Us</h2>
+    <p>BTECH offers a range of technology services, including computer courses, business solutions, tech repair, and more. We're committed to providing professional services and empowering individuals with the knowledge and tools they need for success.</p>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services" class="services">
+  <h2>Our Services</h2>
+  <div class="service-cards">
+    <div class="card" style="background-color: #FFC0CB;">
+      <img src="cyber.png" alt="Cyber Services" />
+      <h3>Online Cyber Services</h3>
+      <p>Access services like KUCCPS, KRA, HELB, and more.</p>
+      <a href="online-cyber.html" class="learn-btn">See More</a>
     </div>
-  </header>
-
-  <!-- Home Section -->
-  <section id="home" class="home">
-    <div class="container">
-      <h1>Welcome to BTECH</h1>
-      <p>Your trusted partner in technology and learning solutions.</p>
-      <p>Hello, I’m Teddy, the CEO of BTECH. We are dedicated to providing top-notch services in technology, learning, and business solutions.</p>
+    <div class="card" style="background-color: #F6C8A1;">
+      <img src="learning.png" alt="Learning" />
+      <h3>Computer Learning Hub</h3>
+      <p>Explore various computer courses and enroll today.</p>
+      <a href="computer-learning-hub.html" class="learn-btn">View Available Courses</a>
     </div>
-  </section>
-
-  <!-- CEO Section -->
-  <section id="ceo" class="ceo-introduction">
-    <div class="container">
-      <img src="your-photo.jpg" alt="CEO Photo" class="ceo-photo">
-      <p class="ceo-position">Teddy: CEO of BTECH</p>
+    <div class="card" style="background-color: #A1D1F6;">
+      <img src="business.png" alt="Business" />
+      <h3>Digital Business Solutions</h3>
+      <p>Get professional business solutions for your company.</p>
+      <a href="digital-business-solutions.html" class="learn-btn">Learn More</a>
     </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="about">
-    <div class="container">
-      <h2>About Us</h2>
-      <p>BTECH offers a range of technology services, including computer courses, business solutions, tech repair, and more.</p>
+    <div class="card" style="background-color: #F7F7F7;">
+      <img src="repair.png" alt="Tech Repair" />
+      <h3>Tech Repair & Maintenance</h3>
+      <p>Fix your tech devices and keep them in top condition.</p>
+      <a href="tech-repair.html" class="learn-btn">Learn More</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Services -->
-  <section id="services" class="services">
-    <h2>Our Services</h2>
-    <div class="service-cards">
-      <div class="card" style="background-color: #FFC0CB;">
-        <img src="cyber.png" alt="Cyber Services">
-        <h3>Online Cyber Services</h3>
-        <p>Access services like KUCCPS, KRA, HELB, and more.</p>
-        <a href="online-cyber.html" class="learn-btn">See More</a>
-      </div>
-      <div class="card" style="background-color: #F6C8A1;">
-        <img src="learning.png" alt="Learning">
-        <h3>Computer Learning Hub</h3>
-        <p>Explore various computer courses and enroll today.</p>
-        <a href="computer-learning-hub.html" class="learn-btn">View Courses</a>
-      </div>
-      <div class="card" style="background-color: #A1D1F6;">
-        <img src="business.png" alt="Business">
-        <h3>Digital Business Solutions</h3>
-        <p>Get professional business solutions for your company.</p>
-        <a href="digital-business-solutions.html" class="learn-btn">Learn More</a>
-      </div>
-      <div class="card" style="background-color: #F7F7F7;">
-        <img src="repair.png" alt="Tech Repair">
-        <h3>Tech Repair & Maintenance</h3>
-        <p>Fix your tech devices and keep them in top condition.</p>
-        <a href="tech-repair.html" class="learn-btn">Learn More</a>
-      </div>
-    </div>
-  </section>
+<!-- Download -->
+<section id="download" class="download">
+  <h2>Download Our APK</h2>
+  <a href="BtechPlusApp.apk" class="download-btn">Download BTECH App</a>
+  <p>Get the latest version of our app to explore more features.</p>
+</section>
 
-  <!-- Download -->
-  <section id="download" class="download">
-    <h2>Download Our APK</h2>
-    <a href="BtechPlusApp.apk" class="download-btn">Download BTECH App</a>
-    <p>Get the latest version of our app to explore more features.</p>
-  </section>
+<!-- Staff Login -->
+<section id="staff-login" class="staff-login">
+  <h2>Staff Login</h2>
+  <div class="login-form">
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="validateLogin()">Login</button>
+  </div>
+</section>
 
-  <!-- Staff Login -->
-  <section id="staff-login" class="staff-login">
-    <h2>Staff Login</h2>
-    <div class="login-form">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button onclick="validateLogin()">Login</button>
-    </div>
-  </section>
+<!-- Contact -->
+<section id="contact" class="about">
+  <div class="container">
+    <h2>Contact Us</h2>
+    <p>Email: <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a></p>
+    <p>Phone: +254113996609 | +254734644917</p>
+    <p>Visit: <a href="https://btechplus.com" target="_blank">www.btechplus.com</a></p>
+  </div>
+</section>
 
-  <script>
-    function validateLogin() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const validUsernamePattern = /^BTECH#([1-9]|10)$/;
-      const validPassword = "btech.ke";
-      if (validUsernamePattern.test(username) && password === validPassword) {
-        window.location.href = "dashboard.html";
-      } else {
-        alert("Invalid username or password. Please try again.");
-      }
-    }
-  </script>
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 BTECH | All Rights Reserved</p>
+</footer>
 
-  <!-- Contact -->
-  <section id="contact" class="about">
-    <div class="container">
-      <h2>Contact Us</h2>
-      <p>Email: <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a></p>
-      <p>Phone: +254113996609 | +254734644917</p>
-      <p>Visit: <a href="https://btechplus.com" target="_blank">www.btechplus.com</a></p>
-    </div>
-  </section>
+<!-- Login Validation Script -->
+<script>
+function validateLogin() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 BTECH | All Rights Reserved</p>
-  </footer>
+  const validUsernamePattern = /^BTECH#([1-9]|10)$/;
+  const validPassword = "btech.ke";
+
+  if (validUsernamePattern.test(username) && password === validPassword) {
+    window.location.href = "dashboard.html";
+  } else {
+    alert("Invalid username or password. Please try again.");
+  }
+}
+</script>
+
 </body>
 </html>
