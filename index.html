@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -29,25 +29,11 @@
       z-index: 1000;
     }
 
-    .nav-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo img {
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
     nav {
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
-      margin-top: 10px;
+      justify-content: center;
     }
 
     nav a {
@@ -71,33 +57,32 @@
       text-align: center;
     }
 
+    .home {
+      position: relative;
+      text-align: center;
+      padding: 100px 20px 80px;
+      background: url('your-photo.jpg') center/cover no-repeat;
+      color: white;
+    }
+
+    .home div {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 60px 20px;
+      border-radius: 12px;
+    }
+
     .home h1 {
-      font-size: 36px;
-      margin-bottom: 15px;
+      font-size: 42px;
+      color: #FFD700;
+      font-weight: 700;
     }
 
     .home p {
-      font-size: 17px;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .ceo-introduction {
-      text-align: center;
-    }
-
-    .ceo-photo {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 20%;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .ceo-position {
-      font-weight: bold;
       font-size: 20px;
+      margin-top: 15px;
+      max-width: 800px;
+      margin-inline: auto;
+      line-height: 1.6;
     }
 
     .about p,
@@ -230,14 +215,9 @@
     }
 
     @media (max-width: 768px) {
-      .nav-container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
       nav {
-        justify-content: center;
-        width: 100%;
+        flex-direction: column;
+        align-items: center;
       }
 
       .service-item {
@@ -254,28 +234,26 @@
 <body>
   <!-- Header/Navbar -->
   <header>
-      <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#download">Download</a>
-        <a href="#contact">Contact</a>
-        <a href="#staff-login">Staff Login</a>
-      </nav>
-    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#download">Download</a>
+      <a href="#contact">Contact</a>
+      <a href="#staff-login">Staff Login</a>
+    </nav>
   </header>
 
-  <!-- Home Section -->
+  <!-- Hero Section -->
   <section id="home" class="home">
-    <h1>Welcome to BTECH</h1>
-    <p>Your trusted partner in technology and learning solutions.</p>
-    <p>Hello, I’m Teddy, the CEO of BTECH. We are dedicated to providing top-notch services in technology, learning, and business solutions.</p>
-  </section>
-
-  <!-- CEO Section -->
-  <section id="ceo" class="ceo-introduction">
-    <img src="your-photo.jpg" alt="CEO Photo" class="ceo-photo" />
-    <p class="ceo-position">Teddy: CEO of BTECH</p>
+    <div>
+      <h1>Welcome to BTECH</h1>
+      <p>
+        Hello, I’m <strong>Teddy</strong>, CEO of BTECH. We don’t just do tech — we empower futures.
+        At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in
+        technology, learning, and business transformation. Step in and explore the future with us.
+      </p>
+    </div>
   </section>
 
   <!-- About -->
