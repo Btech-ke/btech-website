@@ -1,138 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KRA Services - BTECH</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to bottom right, #f0f8ff, #ffffff);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KRA Services - BTECH</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #f0f8ff, #ffffff);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        header {
-            background-color: #007BFF;
-            padding: 20px 0;
-            color: white;
-            text-align: center;
-            width: 100%;
-            border-radius: 0 0 12px 12px;
-        }
+    /* --- Scrolling Countdown Banner --- */
+    .scrolling-banner {
+      width: 100%;
+      background-color: #ff1e1e;
+      color: white;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      z-index: 9999;
+      padding: 12px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
 
-        header h1 {
-            font-size: 28px;
-            margin: 0;
-        }
+    .scrolling-text {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: scroll-left 20s linear infinite;
+      font-size: 18px;
+      font-weight: bold;
+    }
 
-        .content {
-            margin: 30px;
-            width: 90%;
-            max-width: 900px;
-            overflow-y: auto;
-            max-height: 80vh;
-        }
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
 
-        .service-details {
-            background-color: white;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            margin-bottom: 30px;
-            transition: box-shadow 0.3s ease-in-out;
-        }
+    header {
+      background-color: #007BFF;
+      padding: 110px 20px 50px;
+      color: white;
+      text-align: center;
+      width: 100%;
+      border-radius: 0 0 20px 20px;
+      margin-top: 60px;
+    }
 
-        .service-details:hover {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
 
-        h2 {
-            color: #007BFF;
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
+    .content {
+      margin: 30px;
+      width: 90%;
+      max-width: 900px;
+    }
 
-        p, ul {
-            font-size: 18px;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 20px;
-        }
+    .service-details {
+      background-color: white;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      margin-bottom: 30px;
+      transition: box-shadow 0.3s ease-in-out;
+    }
 
-        ul {
-            list-style-type: decimal;
-            padding-left: 20px;
-        }
+    .service-details:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
 
-        .learn-more-btn {
-            background-color: #007BFF;
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
+    h2 {
+      color: #007BFF;
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
 
-        .learn-more-btn:hover {
-            background-color: #0056b3;
-        }
+    p, ul {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 24px;
-            }
+    ul {
+      list-style-type: decimal;
+      padding-left: 20px;
+    }
 
-            h2 {
-                font-size: 22px;
-            }
+    .learn-more-btn {
+      background-color: #007BFF;
+      color: white;
+      padding: 14px 24px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
 
-            p {
-                font-size: 16px;
-            }
-        }
-    </style>
+    .learn-more-btn:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .scrolling-text {
+        font-size: 16px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      .learn-more-btn {
+        font-size: 16px;
+        padding: 12px 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Navbar Section -->
+<!-- Scrolling Countdown Banner -->
+<div class="scrolling-banner">
+  <div class="scrolling-text" id="scrollText">
+    ⏳ Loading countdown...
+  </div>
+</div>
+
+<!-- Header Section -->
 <header>
-    <h1>KRA Services - Tax PIN & Registration</h1>
+  <h1>KRA Services - Tax PIN, Filing & Compliance</h1>
 </header>
 
-<!-- Content Section -->
+<!-- Main Content -->
 <div class="content">
-    <div class="service-details">
-        <h2>Tax Registration and Tax PIN</h2>
-        <p>The Kenya Revenue Authority (KRA) provides a range of online services for Kenyan citizens and residents, including applying for a Tax PIN, registering businesses for tax purposes, and filing tax returns. Having a Tax PIN is essential for anyone engaging in business or employment in Kenya.</p>
-        <p>The Tax PIN is a requirement for individuals and companies applying for services such as opening a bank account, applying for loans, or registering a business.</p>
-        <p>We offer a simplified application process for obtaining your Tax PIN and registration with the KRA. By submitting your application, we will guide you through the necessary steps for obtaining these crucial documents.</p>
-        
-        <a href="request-application-kra.html" class="learn-more-btn">Request Application</a>
-    </div>
+  <div class="service-details">
+    <h2>Tax Registration and KRA PIN</h2>
+    <p>The Kenya Revenue Authority (KRA) enables you to register for a KRA PIN, essential for employment, business, and financial services. We help you simplify the process from application to confirmation.</p>
+    <a href="request-application-kra.html" class="learn-more-btn">Request KRA PIN</a>
+  </div>
 
-    <!-- Other Services Section -->
-    <div class="service-details">
-        <h2>Why Apply for a Tax PIN?</h2>
-        <ul>
-            <li>Required for business registration and operation in Kenya.</li>
-            <li>Essential for applying for loans, credit cards, and mortgages.</li>
-            <li>Helps in the compliance of tax laws for individuals and businesses.</li>
-            <li>Required for filing tax returns and receiving government benefits.</li>
-        </ul>
-        <p>Make sure you are compliant with the Kenyan tax regulations by applying for your Tax PIN and ensuring your business is properly registered.</p>
-    </div>
+  <div class="service-details">
+    <h2>File Your KRA Returns</h2>
+    <p>It is mandatory for every registered taxpayer to file returns annually, even if you have no income. The KRA return filing deadline is <strong>30th June 2025</strong>.</p>
+    <ul>
+      <li>Timely compliance avoids penalties.</li>
+      <li>We assist in filing both NIL and active returns.</li>
+      <li>Filing can be done online via the iTax platform.</li>
+    </ul>
+    <a href="file-kra-returns.html" class="learn-more-btn">File My KRA Returns</a>
+  </div>
+
+  <div class="service-details">
+    <h2>Why File & Stay Compliant?</h2>
+    <ul>
+      <li>Required for job applications, tenders, and government services.</li>
+      <li>Proof of financial compliance for loans and grants.</li>
+      <li>Avoid hefty fines from late or non-filing.</li>
+      <li>Shows tax discipline and builds credit trust.</li>
+    </ul>
+    <p>Stay ahead of the KRA deadline to avoid last-minute stress and penalties. Let us assist you in every step of filing and compliance.</p>
+  </div>
 </div>
+
+<!-- Countdown Script -->
+<script>
+  function updateScrollBanner() {
+    const now = new Date();
+    const deadline = new Date("2025-06-30T23:59:59");
+    const diff = deadline - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    let message = "";
+    if (diff <= 0) {
+      message = "⚠️ KRA FILING DEADLINE HAS PASSED! FILE IMMEDIATELY TO AVOID PENALTIES.";
+    } else {
+      message = `⏰ KRA Returns Deadline: 30 June 2025 • Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s • FILE NOW TO AVOID PENALTIES! ✅`;
+    }
+
+    document.getElementById("scrollText").innerText = message;
+  }
+
+  setInterval(updateScrollBanner, 1000);
+  updateScrollBanner();
+</script>
 
 </body>
 </html>
