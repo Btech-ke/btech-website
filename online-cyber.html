@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Online Cyber Services - BTECH</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     * {
       margin: 0;
@@ -14,36 +14,35 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f1f5f9;
+      background: #f4f7fa;
       color: #333;
       overflow-x: hidden;
     }
 
     header {
       background: linear-gradient(135deg, #007BFF, #0056b3);
-      padding: 20px;
+      padding: 20px 30px;
       color: #fff;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
     }
 
     header h1 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 600;
     }
 
     .book-btn {
       background-color: #fff;
       color: #007BFF;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
+      padding: 10px 20px;
       font-weight: 600;
+      border-radius: 6px;
+      border: none;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.3s ease;
     }
 
     .book-btn:hover {
@@ -52,75 +51,80 @@
     }
 
     .services {
-      padding: 70px 20px;
+      padding: 60px 20px;
       max-width: 1200px;
       margin: auto;
     }
 
     .services h2 {
       text-align: center;
-      font-size: 36px;
-      margin-bottom: 50px;
+      font-size: 32px;
       color: #007BFF;
       font-weight: 700;
+      margin-bottom: 40px;
     }
 
-    .service-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 30px;
+    .service-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s, box-shadow 0.3s;
+    .service-item {
+      flex: 1 1 calc(50% - 20px);
+      background: #ffffff;
+      padding: 20px;
+      border-left: 6px solid #007BFF;
+      border-radius: 10px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    .service-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
-    .card img {
-      width: 100%;
-      height: 160px;
+    .service-item img {
+      width: 120px;
+      height: 120px;
       object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 20px;
+      border-radius: 10px;
     }
 
-    .card h3 {
-      font-size: 22px;
-      margin-bottom: 10px;
+    .service-info {
+      flex: 1;
+    }
+
+    .service-info h3 {
+      font-size: 20px;
       color: #222;
-      font-weight: 600;
+      margin-bottom: 10px;
     }
 
-    .card p {
-      font-size: 15px;
+    .service-info p {
+      font-size: 14px;
       color: #555;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
-    .learn-btn {
+    .service-info a {
       display: inline-block;
-      padding: 10px 20px;
-      margin: 5px;
+      margin-right: 10px;
+      margin-top: 5px;
       background-color: #007BFF;
       color: #fff;
-      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 6px;
       text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background-color 0.3s;
+      transition: background 0.3s ease;
     }
 
-    .learn-btn:hover {
+    .service-info a:hover {
       background-color: #0056b3;
     }
 
@@ -129,24 +133,11 @@
       padding: 20px;
       background-color: #007BFF;
       color: white;
-      margin-top: 80px;
       font-size: 14px;
+      margin-top: 60px;
     }
 
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 12px;
-      }
-      .services h2 {
-        font-size: 28px;
-      }
-      .card img {
-        height: 140px;
-      }
-    }
-
-    /* Modal styles */
+    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -156,12 +147,12 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.5);
     }
 
     .modal-content {
       background: #fff;
-      margin: 10% auto;
+      margin: 12% auto;
       padding: 30px 20px;
       border-radius: 10px;
       width: 90%;
@@ -170,8 +161,8 @@
     }
 
     .modal-content h3 {
-      margin-bottom: 20px;
       color: #007BFF;
+      margin-bottom: 20px;
     }
 
     .modal-content input {
@@ -179,71 +170,96 @@
       padding: 10px;
       margin-bottom: 20px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px;
+    }
+
+    .close-btn, .submit-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      margin: 0 6px;
     }
 
     .close-btn {
       background: #dc3545;
-      color: #fff;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 10px;
     }
 
     .submit-btn {
       background: #28a745;
-      color: #fff;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .service-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .service-item img {
+        width: 100%;
+        height: auto;
+      }
+
+      .service-grid {
+        flex-direction: column;
+      }
+
+      .book-btn {
+        margin-top: 12px;
+      }
     }
   </style>
 </head>
-
 <body>
 
 <header>
-  <button class="book-btn" onclick="openModal()">Book for Application</button>
   <h1>BTECH Online Cyber Services</h1>
+  <button class="book-btn" onclick="openModal()">Book for Application</button>
 </header>
 
-<section id="services" class="services">
+<section class="services">
   <h2>Our Online Cyber Services</h2>
-  <div class="service-cards">
+  <div class="service-grid">
 
-    <div class="card" style="background-color: #ffe6eb;">
+    <div class="service-item">
       <img src="kuccps.png" alt="KUCCPS Applications">
-      <h3>KUCCPS Applications</h3>
-      <p>Apply for placement to universities and colleges through KUCCPS.</p>
-      <a href="kuccps-details.html" class="learn-btn">View Details</a>
-      <a href="request-application-kuccps.html" class="learn-btn">Request Application</a>
+      <div class="service-info">
+        <h3>KUCCPS Applications</h3>
+        <p>Apply for placement to universities and colleges through KUCCPS.</p>
+        <a href="kuccps-details.html">View Details</a>
+        <a href="request-application-kuccps.html">Request</a>
+      </div>
     </div>
 
-    <div class="card" style="background-color: #e6f0ff;">
+    <div class="service-item">
       <img src="helb.png" alt="HELB Loan Application">
-      <h3>HELB Loan Application</h3>
-      <p>Apply for the HELB student loan for your education needs.</p>
-      <a href="helb-details.html" class="learn-btn">View Details</a>
-      <a href="request-application-helb.html" class="learn-btn">Request Application</a>
+      <div class="service-info">
+        <h3>HELB Loan Application</h3>
+        <p>Apply for the HELB student loan for your education needs.</p>
+        <a href="helb-details.html">View Details</a>
+        <a href="request-application-helb.html">Request</a>
+      </div>
     </div>
 
-    <div class="card" style="background-color: #e6ffe6;">
+    <div class="service-item">
       <img src="kra.png" alt="KRA Services">
-      <h3>KRA Services</h3>
-      <p>Access and apply for KRA services such as Tax PIN and registration.</p>
-      <a href="kra-details.html" class="learn-btn">View Details</a>
-      <a href="request-application-kra.html" class="learn-btn">Request Application</a>
+      <div class="service-info">
+        <h3>KRA Services</h3>
+        <p>Access and apply for KRA services such as Tax PIN and registration.</p>
+        <a href="kra-details.html">View Details</a>
+        <a href="request-application-kra.html">Request</a>
+      </div>
     </div>
 
-    <div class="card" style="background-color: #f0f0f0;">
+    <div class="service-item">
       <img src="other-services.png" alt="Other Cyber Services">
-      <h3>Other Cyber Services</h3>
-      <p>Explore other online services available for students and professionals.</p>
-      <a href="other-services-details.html" class="learn-btn">View Details</a>
-      <a href="request-application-other-services.html" class="learn-btn">Request Application</a>
+      <div class="service-info">
+        <h3>Other Cyber Services</h3>
+        <p>Explore other online services available for students and professionals.</p>
+        <a href="other-services-details.html">View Details</a>
+        <a href="request-application-other-services.html">Request</a>
+      </div>
     </div>
 
   </div>
@@ -253,12 +269,12 @@
   <p>&copy; 2025 BTECH. All rights reserved.</p>
 </footer>
 
-<!-- Modal Structure -->
+<!-- Modal -->
 <div id="applicationModal" class="modal">
   <div class="modal-content">
     <h3>Book an Application</h3>
-    <input type="text" id="serviceInput" placeholder="Enter KUCCPS, KRA, or HELB">
-    <br>
+    <input type="text" id="serviceInput" placeholder="Enter KUCCPS, KRA, or HELB" />
+    <br />
     <button class="close-btn" onclick="closeModal()">Cancel</button>
     <button class="submit-btn" onclick="bookApplication()">Submit</button>
   </div>
@@ -274,31 +290,18 @@
   }
 
   function bookApplication() {
-    const serviceInput = document.getElementById("serviceInput").value.trim().toUpperCase();
+    const input = document.getElementById("serviceInput").value.trim().toUpperCase();
     let amount = 0;
 
-    if (serviceInput === "HELB") {
-      amount = 500;
-    } else if (serviceInput === "KRA") {
-      amount = 200;
-    } else if (serviceInput === "KUCCPS") {
-      amount = 450;
-    } else {
+    if (input === "HELB") amount = 500;
+    else if (input === "KRA") amount = 200;
+    else if (input === "KUCCPS") amount = 450;
+    else {
       alert("Invalid service selected. Please enter KUCCPS, KRA, or HELB.");
       return;
     }
 
-    alert(
-      `Payment Instructions:\n\n` +
-      `Service: ${serviceInput}\n` +
-      `Amount: KES ${amount}\n\n` +
-      `Go to M-Pesa > Lipa na M-Pesa > Buy Goods and Services.\n` +
-      `Enter Till Number: 4499436.\n` +
-      `Enter the amount: ${amount}.\n` +
-      `Enter your M-Pesa PIN to complete the payment.\n\n` +
-      `Thank you for booking with BTECH!`
-    );
-
+    alert(`Payment Instructions:\n\nService: ${input}\nAmount: KES ${amount}\n\nGo to M-Pesa > Lipa na M-Pesa > Buy Goods.\nTill: 4499436\nAmount: ${amount}\n\nThank you for booking with BTECH!`);
     closeModal();
   }
 </script>
