@@ -1,10 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BTECH - Technology & Learning Solutions</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
   <style>
     * {
       margin: 0;
@@ -23,17 +23,28 @@
       width: 100%;
       position: fixed;
       top: 0;
-      background-color: rgba(0, 123, 255, 0.95);
+      background-color: #007BFF;
       padding: 15px 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
     }
 
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-container h1 {
+      color: white;
+      font-size: 20px;
+    }
+
     nav {
       display: flex;
+      gap: 20px;
       flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
     }
 
     nav a {
@@ -53,15 +64,10 @@
       margin: auto;
     }
 
-    h1, h2 {
-      text-align: center;
-    }
-
     .home {
-      position: relative;
       text-align: center;
       padding: 100px 20px 80px;
-      background: url('your-photo.jpg') center/cover no-repeat;
+      background: linear-gradient(to bottom right, #0052ccaa, #007bffcc), url('your-photo.jpg') center/cover no-repeat;
       color: white;
     }
 
@@ -72,78 +78,70 @@
     }
 
     .home h1 {
-      font-size: 42px;
+      font-size: 38px;
       color: #FFD700;
-      font-weight: 700;
     }
 
     .home p {
-      font-size: 20px;
+      font-size: 18px;
       margin-top: 15px;
       max-width: 800px;
       margin-inline: auto;
       line-height: 1.6;
     }
 
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
     .about p,
     .services p {
-      font-size: 17px;
+      font-size: 16px;
       text-align: center;
     }
 
     .service-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 25px;
-      padding: 20px;
     }
 
     .service-item {
-      flex: 1 1 260px;
-      background-color: white;
-      border-radius: 15px;
-      padding: 20px;
+      background: white;
+      border-radius: 12px;
       text-align: center;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
     }
 
     .service-item:hover {
       transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
     }
 
     .service-item img {
       width: 100px;
       height: 100px;
+      object-fit: cover;
       border-radius: 50%;
       margin-bottom: 15px;
-      object-fit: cover;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     .service-item h3 {
-      font-size: 20px;
-      margin-bottom: 10px;
       color: #007BFF;
-    }
-
-    .service-item p {
-      font-size: 15px;
-      margin-bottom: 10px;
     }
 
     .learn-btn {
       display: inline-block;
-      padding: 6px 18px;
-      background-color: #007BFF;
-      color: #fff;
+      margin-top: 10px;
+      background: #007BFF;
+      color: white;
+      padding: 8px 16px;
       border-radius: 20px;
       text-decoration: none;
       font-size: 14px;
-      margin-top: 5px;
-      transition: background 0.3s;
     }
 
     .learn-btn:hover {
@@ -155,73 +153,75 @@
     }
 
     .download-btn {
-      display: inline-block;
-      padding: 10px 25px;
-      background-color: #28a745;
+      background: #28a745;
       color: white;
+      padding: 12px 28px;
+      font-size: 16px;
       border-radius: 25px;
       text-decoration: none;
-      font-size: 18px;
-      margin-top: 20px;
-      transition: background 0.3s;
     }
 
     .download-btn:hover {
-      background-color: #218838;
+      background: #218838;
     }
 
     .staff-login {
-      padding: 40px 20px;
       text-align: center;
     }
 
     .login-form {
       background: #fff;
       display: inline-block;
-      padding: 25px 30px;
-      border-radius: 15px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     }
 
     .login-form input {
-      margin-bottom: 15px;
-      padding: 10px;
       width: 250px;
-      font-size: 16px;
-      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      border-radius: 8px;
       border: 1px solid #ccc;
     }
 
     .login-form button {
-      padding: 10px 20px;
-      background-color: #007BFF;
+      background: #007BFF;
       color: white;
-      border-radius: 10px;
-      font-size: 16px;
+      padding: 10px 20px;
       border: none;
+      border-radius: 8px;
+      font-size: 15px;
       cursor: pointer;
     }
 
     .login-form button:hover {
-      background-color: #0056b3;
+      background: #0056b3;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      background-color: #007BFF;
+      background: #007BFF;
       color: white;
-      margin-top: 40px;
+      padding: 20px;
+      margin-top: 50px;
     }
 
     @media (max-width: 768px) {
-      nav {
+      .nav-container {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
       }
 
-      .service-item {
-        flex: 1 1 100%;
+      nav {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      nav a {
+        padding: 8px 0;
       }
 
       .login-form input {
@@ -232,82 +232,74 @@
 </head>
 
 <body>
-  <!-- Header/Navbar -->
+
   <header>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#download">Download</a>
-      <a href="#contact">Contact</a>
-      <a href="#staff-login">Staff Login</a>
-    </nav>
+    <div class="nav-container">
+      <h1>BTECH</h1>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#download">Download</a>
+        <a href="#contact">Contact</a>
+        <a href="#staff-login">Staff Login</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- Hero Section -->
   <section id="home" class="home">
     <div>
       <h1>Welcome to BTECH</h1>
-      <p>
-        Hello, I’m <strong>Teddy</strong>, CEO of BTECH. We don’t just do tech — we empower futures.
-        At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in
-        technology, learning, and business transformation. Step in and explore the future with us.
-      </p>
+      <p>Hello, I’m <strong>Teddy</strong>, CEO of BTECH. We don’t just do tech — we empower futures. At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in technology, learning, and business transformation.</p>
     </div>
   </section>
 
-  <!-- About -->
   <section id="about" class="about">
     <h2>About Us</h2>
-    <p>BTECH offers a range of technology services, including computer courses, business solutions, tech repair, and more. We're committed to providing professional services and empowering individuals with the knowledge and tools they need for success.</p>
+    <p>BTECH offers a range of services from tech courses and business solutions to cyber services and tech repair — all geared towards empowering your digital journey.</p>
   </section>
 
-  <!-- Services -->
-  <section id="services" class="services" style="background-color: #f4faff;">
+  <section id="services" class="services">
     <h2>Our Services</h2>
     <div class="service-list">
       <div class="service-item">
-        <img src="cyber.png" alt="Cyber Services" />
+        <img src="cyber.png" alt="Cyber Services">
         <h3>Online Cyber Services</h3>
-        <p>Access services like KUCCPS, KRA, HELB, and more.</p>
+        <p>Access KUCCPS, KRA, HELB and more services online.</p>
         <a href="online-cyber.html" class="learn-btn">See More</a>
       </div>
       <div class="service-item">
-        <img src="learning.png" alt="Learning" />
+        <img src="learning.png" alt="Learning">
         <h3>Computer Learning Hub</h3>
-        <p>Explore various computer courses and enroll today.</p>
+        <p>Take industry-relevant computer courses and grow your skills.</p>
         <a href="computer-learning-hub.html" class="learn-btn">View Courses</a>
       </div>
       <div class="service-item">
-        <img src="business.png" alt="Business" />
+        <img src="business.png" alt="Business">
         <h3>Digital Business Solutions</h3>
-        <p>Get professional business solutions for your company.</p>
+        <p>Get modern business tech tools, designs, and strategies.</p>
         <a href="digital-business-solutions.html" class="learn-btn">Learn More</a>
       </div>
       <div class="service-item">
-        <img src="repair.png" alt="Tech Repair" />
+        <img src="repair.png" alt="Repair">
         <h3>Tech Repair & Maintenance</h3>
-        <p>Fix your tech devices and keep them in top condition.</p>
+        <p>We fix and maintain your tech devices with care.</p>
         <a href="tech-repair.html" class="learn-btn">Learn More</a>
       </div>
     </div>
   </section>
 
-  <!-- Download -->
   <section id="download" class="download">
     <h2>Download Our APK</h2>
     <a href="BtechPlusApp.apk" class="download-btn">Download BTECH App</a>
-    <p>Get the latest version of our app to explore more features.</p>
+    <p>Install the latest app to explore all BTECH features easily.</p>
   </section>
 
-  <!-- Staff Login -->
   <section id="staff-login" class="staff-login">
     <h2>Staff Login</h2>
     <div class="login-form">
-      <input type="text" id="username" placeholder="Username" required />
-      <br>
-      <input type="password" id="password" placeholder="Password" required />
-      <br>
+      <input type="text" id="username" placeholder="Username" required /><br>
+      <input type="password" id="password" placeholder="Password" required /><br>
       <button onclick="validateLogin()">Login</button>
     </div>
   </section>
@@ -321,12 +313,11 @@
       if (validUsernamePattern.test(username) && password === validPassword) {
         window.location.href = "dashboard.html";
       } else {
-        alert("Invalid username or password. Please try again.");
+        alert("Invalid username or password.");
       }
     }
   </script>
 
-  <!-- Contact -->
   <section id="contact" class="about">
     <h2>Contact Us</h2>
     <p>Email: <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a></p>
@@ -334,9 +325,9 @@
     <p>Visit: <a href="https://btechplus.com" target="_blank">www.btechplus.com</a></p>
   </section>
 
-  <!-- Footer -->
   <footer>
     <p>&copy; 2025 BTECH | All Rights Reserved</p>
   </footer>
+
 </body>
 </html>
