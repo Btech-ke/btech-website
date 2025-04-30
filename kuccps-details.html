@@ -1,116 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KUCCPS Application Details - BTECH</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Apply a gradient background to the entire body */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #007BFF, #00BFFF); /* Blue gradient background */
-            color: #111;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KUCCPS Application Details - BTECH</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Container for the content */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            background-color: rgba(255, 255, 255, 0.9); /* Slight transparency for background */
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            height: 100vh;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #007BFF, #00BFFF);
+      color: #222;
+      line-height: 1.6;
+    }
 
-        /* Heading styles */
-        h1, h2 {
-            text-align: center;
-            color: #007BFF;
-            margin-bottom: 20px;
-        }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      margin-top: 40px;
+    }
 
-        /* List style */
-        ul {
-            list-style-type: decimal;
-            margin-left: 40px;
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 18px;
-            line-height: 1.7;
-        }
+    h1 {
+      font-size: 32px;
+      color: #0056b3;
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: 700;
+    }
 
-        li {
-            margin-bottom: 10px;
-        }
+    h2 {
+      font-size: 22px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      color: #007BFF;
+      font-weight: 600;
+    }
 
-        /* Button style */
-        .apply-btn {
-            display: block;
-            width: fit-content;
-            margin: 40px auto 0;
-            padding: 14px 28px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-        }
+    ul {
+      list-style: decimal inside;
+      padding-left: 20px;
+      color: #333;
+      font-size: 17px;
+    }
 
-        .apply-btn:hover {
-            background-color: #0056b3;
-        }
+    li {
+      margin-bottom: 12px;
+    }
 
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
+    .apply-btn {
+      display: inline-block;
+      background-color: #007BFF;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 14px 28px;
+      margin: 40px auto 0;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
+      display: block;
+      width: fit-content;
+    }
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    .apply-btn:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 26px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .container {
+        padding: 30px 15px;
+        margin-top: 20px;
+      }
+
+      ul {
+        font-size: 16px;
+      }
+
+      .apply-btn {
+        font-size: 16px;
+        padding: 12px 24px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
+  <div class="container">
     <h1>KUCCPS Application Requirements</h1>
 
     <h2>1. Minimum Academic Qualifications</h2>
     <ul>
-        <li><strong>Degree Courses:</strong> Minimum grade of C+ in KCSE.</li>
-        <li><strong>Diploma Courses:</strong> Minimum grade of C- (some require C plain).</li>
-        <li><strong>Craft/Certificate Courses:</strong> Minimum grade of D in KCSE.</li>
-        <li><strong>Artisan Courses:</strong> Minimum grade of E in KCSE.</li>
+      <li><strong>Degree Courses:</strong> Minimum grade of C+ in KCSE.</li>
+      <li><strong>Diploma Courses:</strong> Minimum grade of C- (some require C plain).</li>
+      <li><strong>Craft/Certificate Courses:</strong> Minimum grade of D in KCSE.</li>
+      <li><strong>Artisan Courses:</strong> Minimum grade of E in KCSE.</li>
     </ul>
 
     <h2>2. Additional Requirements for Online Application</h2>
     <ul>
-        <li>KCSE Index Number (e.g., 12345678901/2023)</li>
-        <li>KCPE Index Number</li>
-        <li>Birth Certificate Number</li>
-        <li>Valid ID Card or Waiting Card (if available)</li>
-        <li>Parent/Guardian Phone Number</li>
-        <li>Correct Institution and Course Codes</li>
-        <li>Sufficient funds in your M-Pesa for application payment</li>
+      <li>KCSE Index Number (e.g., 12345678901/2023)</li>
+      <li>KCPE Index Number</li>
+      <li>Birth Certificate Number</li>
+      <li>Valid ID Card or Waiting Card (if available)</li>
+      <li>Parent/Guardian Phone Number</li>
+      <li>Correct Institution and Course Codes</li>
+      <li>Sufficient funds in your M-Pesa for application payment</li>
     </ul>
 
     <h2>3. Important Notes</h2>
     <ul>
-        <li>Confirm your eligibility for your selected course before applying.</li>
-        <li>Double-check all information entered to avoid mistakes.</li>
-        <li>Remember, KUCCPS allows only one application per window — apply carefully!</li>
-        <li>All applications are done online — no manual or physical submissions allowed.</li>
+      <li>Confirm your eligibility for your selected course before applying.</li>
+      <li>Double-check all information entered to avoid mistakes.</li>
+      <li>Remember, KUCCPS allows only one application per window — apply carefully!</li>
+      <li>All applications are done online — no manual or physical submissions allowed.</li>
     </ul>
 
     <a href="kuccps-application-request.html" class="apply-btn">Request Application</a>
-</div>
+  </div>
 
 </body>
 </html>
