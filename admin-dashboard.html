@@ -22,7 +22,7 @@
       align-items: center;
     }
 
-    header .title {
+    .title {
       font-size: 22px;
       font-weight: 600;
     }
@@ -38,7 +38,7 @@
 
     .container {
       padding: 40px 20px;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: auto;
     }
 
@@ -70,14 +70,40 @@
       color: #007bff;
     }
 
-    .card p {
-      margin-top: 8px;
-      font-size: 16px;
-      color: #333;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .search-bar {
+      margin-bottom: 15px;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
-<body onload="checkLogin()">
+<body onload="checkLogin(); fetchForms();">
 
 <header>
   <div class="title">🔒 Admin Panel - BTECH</div>
@@ -89,34 +115,42 @@
   <div class="section">
     <h2>Dashboard Insights</h2>
 
-    <div class="card">
-      <h3>🧑‍💼 Total Active Staff</h3>
-      <p>12</p>
+    <div class="card"><h3>🧑‍💼 Total Active Staff</h3><p>12</p></div>
+    <div class="card"><h3>📋 Tasks Assigned Today</h3><p>34</p></div>
+    <div class="card"><h3>⏱️ Total Shifts Logged</h3><p>57</p></div>
+    <div class="card"><h3>💬 Chat Messages Sent</h3><p>105</p></div>
+  </div>
+
+  <div class="section">
+    <h2>📑 Submitted KRA Return Forms</h2>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by name, email, or KRA PIN...">
     </div>
 
-    <div class="card">
-      <h3>📋 Tasks Assigned Today</h3>
-      <p>34</p>
-    </div>
-
-    <div class="card">
-      <h3>⏱️ Total Shifts Logged</h3>
-      <p>57</p>
-    </div>
-
-    <div class="card">
-      <h3>💬 Chat Messages Sent</h3>
-      <p>105</p>
-    </div>
-
+    <table id="kraTable">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>KRA PIN</th>
+          <th>ID Number</th>
+          <th>Notes</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="kraBody">
+        <tr><td colspan="7">Loading submissions...</td></tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
 
 <script>
   function checkLogin() {
-    const isAdmin = localStorage.getItem("isAdmin");
-    if (isAdmin !== "true") {
+    if (localStorage.getItem("isAdmin") !== "true") {
       alert("Unauthorized access. Redirecting...");
       window.location.href = "dashboard.html";
     }
@@ -125,6 +159,47 @@
   function logout() {
     localStorage.removeItem("isAdmin");
     window.location.href = "admin-login.html";
+  }
+
+  function fetchForms() {
+    fetch("admin/kra-log-view.php")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("kraBody");
+        tbody.innerHTML = "";
+
+        if (data.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='7'>No forms submitted yet.</td></tr>";
+          return;
+        }
+
+        data.forEach(entry => {
+          const row = `<tr>
+            <td>${entry.full_name}</td>
+            <td>${entry.email}</td>
+            <td>${entry.phone}</td>
+            <td>${entry.kra_pin}</td>
+            <td>${entry.id_number}</td>
+            <td>${entry.notes || '-'}</td>
+            <td>${entry.date || 'N/A'}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      })
+      .catch(err => {
+        document.getElementById("kraBody").innerHTML = `<tr><td colspan="7">Error loading data.</td></tr>`;
+        console.error(err);
+      });
+  }
+
+  function filterTable() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#kraBody tr");
+
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(input) ? "" : "none";
+    });
   }
 </script>
 
