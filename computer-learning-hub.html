@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Computer Learning Hub - BTECH</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #007bff;
+      --light-bg: #f4f9ff;
+      --text-dark: #222;
+      --text-light: #555;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #00BFFF, #f0f8ff);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background-color: rgba(0, 123, 255, 0.95);
+      padding: 14px 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: #fff;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 18px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Grid Section */
+    main {
+      max-width: 1200px;
+      margin: 100px auto 40px;
+      padding: 0 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .tile {
+      background-color: #ffffffee;
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+
+    .tile:hover {
+      transform: translateY(-4px);
+    }
+
+    .tile img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tile h3 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .tile p {
+      flex-grow: 1;
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .learn-btn {
+      align-self: flex-start;
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .learn-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Footer */
+    footer {
+      background-color: rgba(0, 123, 255, 0.85);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      margin-top: auto;
+    }
+
+    @media (max-width: 480px) {
+      .tile img {
+        height: 100px;
+      }
+
+      .tile h3 {
+        font-size: 16px;
+      }
+
+      .tile p {
+        font-size: 13px;
+      }
+
+      .learn-btn {
+        font-size: 13px;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container">
+    <div class="logo">BTECH</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <div class="tile">
+      <img src="computer_packages.png" alt="Computer Packages">
+      <h3>Computer Packages</h3>
+      <p>Master Office tools, Windows OS and basic PC operations.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="basic-applications.png" alt="Basic Applications">
+      <h3>Basic Applications</h3>
+      <p>Learn user-friendly software to improve your digital efficiency.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="programming.png" alt="Programming">
+      <h3>Programming Basics</h3>
+      <p>Code real projects using Python and JavaScript step-by-step.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="web-development.png" alt="Web Development">
+      <h3>Web Development</h3>
+      <p>Design responsive websites with HTML, CSS, and JS frameworks.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="app.png" alt="App Development">
+      <h3>Mobile App Dev</h3>
+      <p>Create mobile apps with Flutter or React Native and publish them.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="ethical_hacking.png" alt="Ethical Hacking">
+      <h3>Ethical Hacking</h3>
+      <p>Learn to test and secure systems against modern threats.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="graphic.png" alt="Graphic Design">
+      <h3>Graphic Design</h3>
+      <p>Design posters, logos and digital art with Adobe Suite tools.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="marketing.png" alt="Marketing">
+      <h3>Digital Marketing</h3>
+      <p>Promote brands online using SEO, PPC, and analytics tools.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="cybersecurity.png" alt="Cyber Security">
+      <h3>Cyber Security</h3>
+      <p>Protect networks and data from cyber attacks & malware.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+
+    <div class="tile">
+      <img src="networking.png" alt="Networking">
+      <h3>Networking</h3>
+      <p>Configure routers, switches, and understand TCP/IP concepts.</p>
+      <a href="enroll-form.html" class="learn-btn">Enroll Now</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 BTECH. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

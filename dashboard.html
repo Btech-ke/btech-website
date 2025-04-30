@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BTECH Staff Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
+      color: #333;
+      padding-top: 80px;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #007bff;
+      color: white;
+      padding: 20px 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .section {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn.red {
+      background-color: #dc3545;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    input, textarea {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-family: inherit;
+    }
+
+    #taskList li, #shiftHistory li {
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chat-box {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      height: 250px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    #chat-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #chat-message {
+      flex: 1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .link-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .tool-link {
+      flex: 1 1 200px;
+      padding: 15px;
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .tool-link:hover {
+      background: #f0f0f0;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">BTECH</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#shift-log">Shift</a>
+    <a href="#tasks">Tasks</a>
+    <a href="#chat">Chat</a>
+    <a href="admin-login.html" target="_blank">Admin</a>
+    <a href="index.html#staff-login" target="_blank">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <section class="section" id="welcome">
+    <h2>Welcome to Your Staff Dashboard</h2>
+    <p>Manage your daily responsibilities and stay connected with your team in real-time.</p>
+  </section>
+
+  <section class="section" id="shift-log">
+    <h2>Shift & Attendance Log</h2>
+    <button class="btn" onclick="startShift()">Start Shift</button>
+    <button class="btn red" onclick="endShift()">End Shift</button>
+    <ul id="shiftHistory" style="margin-top: 20px; list-style: none;"></ul>
+  </section>
+
+  <section class="section" id="tasks">
+    <h2>Staff Task Manager</h2>
+    <form id="taskForm" style="display: flex; gap: 10px;">
+      <input type="text" id="taskInput" placeholder="Enter a new task..." style="flex:1;">
+      <button type="submit" class="btn">Add Task</button>
+    </form>
+    <ul id="taskList" style="margin-top: 20px; list-style: none;"></ul>
+  </section>
+
+  <section class="section" id="chat">
+    <h2>Internal Staff Chat</h2>
+    <div id="chat-box" aria-live="polite"></div>
+    <form id="chat-form">
+      <input type="text" id="chat-message" placeholder="Type your message..." required />
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </section>
+
+  <section class="section" id="tools">
+    <h2>Staff Tools & Quick Shortcuts</h2>
+    <div class="link-group">
+      <a href="manage-courses.html" class="tool-link">📘 Manage Courses</a>
+      <a href="view-enrollments.html" class="tool-link">🧑‍🎓 View Enrollments</a>
+      <a href="manage-services.html" class="tool-link">🛠️ Services Management</a>
+      <a href="technical-support.html" class="tool-link">🔧 Technical Support</a>
+      <a href="reports.html" class="tool-link">📊 Performance Reports</a>
+      <a href="profile.html" class="tool-link">👤 Edit Staff Profile</a>
+      <a href="announcements.html" class="tool-link">📢 Staff Announcements</a>
+      <a href="admin-login.html" class="tool-link">🛡️ Admin Panel</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  &copy; 2025 BTECH | All Rights Reserved
+</footer>
+
+<script>
+  // Task Manager
+  document.getElementById('taskForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const taskInput = document.getElementById('taskInput');
+    const task = taskInput.value.trim();
+    if (task !== '') {
+      const li = document.createElement('li');
+      li.textContent = task;
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Remove';
+      delBtn.className = 'btn red';
+      delBtn.style.marginLeft = '10px';
+      delBtn.onclick = () => li.remove();
+
+      li.appendChild(delBtn);
+      document.getElementById('taskList').appendChild(li);
+      taskInput.value = '';
+    }
+  });
+
+  // Shift Log
+  let shiftStartTime = null;
+
+  function startShift() {
+    const now = new Date();
+    shiftStartTime = now.toISOString();
+    alert("Shift started at: " + new Date(shiftStartTime).toLocaleString());
+  }
+
+  function endShift() {
+    if (!shiftStartTime) {
+      alert("Please start a shift first.");
+      return;
+    }
+
+    const shiftEndTime = new Date().toISOString();
+    const formatted = `🕒 ${new Date(shiftStartTime).toLocaleString()} → ${new Date(shiftEndTime).toLocaleString()}`;
+
+    const li = document.createElement('li');
+    li.textContent = formatted;
+    document.getElementById('shiftHistory').appendChild(li);
+
+    // Optional backend saving
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "save_shift.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(`start=${shiftStartTime}&end=${shiftEndTime}`);
+
+    shiftStartTime = null;
+  }
+
+  // Chat
+  const chatForm = document.getElementById('chat-form');
+  const chatBox = document.getElementById('chat-box');
+  chatForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const msg = document.getElementById('chat-message').value.trim();
+    if (msg !== '') {
+      const div = document.createElement('div');
+      div.textContent = "🗨️ " + msg;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      document.getElementById('chat-message').value = '';
+    }
+  });
+</script>
+
+</body>
+</html>

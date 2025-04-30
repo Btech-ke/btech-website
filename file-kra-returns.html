@@ -8,128 +8,183 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f9fbff;
+      background: linear-gradient(to bottom right, #f0f8ff, #ffffff);
       margin: 0;
-      padding: 30px;
+      padding: 0;
     }
 
-    h1 {
-      color: #007BFF;
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+    }
+
+    header h1 {
+      margin: 0;
       font-size: 28px;
     }
 
-    form {
-      background-color: white;
-      padding: 25px;
+    .container {
       max-width: 600px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #007BFF;
+      margin-bottom: 25px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
     }
 
     label {
-      display: block;
-      margin-bottom: 8px;
       font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
     }
 
     input, textarea {
-      width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 20px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
+      transition: border-color 0.3s ease;
+      width: 100%;
     }
 
-    button {
+    input:focus, textarea:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+
+    .submit-btn {
       background-color: #007BFF;
       color: white;
-      padding: 14px 22px;
+      padding: 14px;
+      font-weight: bold;
       border: none;
       border-radius: 8px;
-      font-weight: bold;
-      font-size: 16px;
       cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
     }
 
-    button:hover {
+    .submit-btn:hover {
       background-color: #0056b3;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 15px;
+      color: #555;
+      text-align: center;
     }
 
     .success {
       color: green;
-      margin-top: 10px;
+      text-align: center;
+      margin-top: 15px;
     }
 
     .error {
       color: red;
-      margin-top: 10px;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 22px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
 
+<!-- Header Section -->
+<header>
   <h1>File Your KRA Returns</h1>
+</header>
 
+<!-- Form Section -->
+<div class="container">
+  <h2>Returns Filing Request Form</h2>
   <form id="kraForm">
-    <label>Full Names</label>
-    <input type="text" name="full_name" required>
+    <label for="fullname">Full Name</label>
+    <input type="text" id="fullname" name="full_name" placeholder="Enter your full name" required />
 
-    <label>Email Address</label>
-    <input type="email" name="email" required>
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" placeholder="Enter a valid email address" required />
 
-    <label>Phone Number</label>
-    <input type="tel" name="phone" required>
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" name="phone" placeholder="e.g. 0712345678" pattern="[0-9]{10}" required />
 
-    <label>KRA PIN</label>
-    <input type="text" name="kra_pin" required>
+    <label for="kraPin">KRA PIN Number</label>
+    <input type="text" id="kraPin" name="kra_pin" placeholder="e.g. A123456789B" pattern="[A-Z][0-9]{9}[A-Z]" required />
 
-    <label>ID Number</label>
-    <input type="text" name="id_number" required>
+    <label for="idNumber">National ID Number</label>
+    <input type="text" id="idNumber" name="id_number" placeholder="Enter your ID number" pattern="[0-9]{6,10}" required />
 
-    <label>Additional Notes</label>
-    <textarea name="notes" rows="4"></textarea>
+    <label for="notes">Additional Notes (Optional)</label>
+    <textarea id="notes" name="notes" rows="4" placeholder="Any extra details or comments..."></textarea>
 
-    <button type="submit">Submit</button>
+    <button type="submit" class="submit-btn">Submit Filing Request</button>
     <div id="message"></div>
   </form>
+  <div class="note">
+    Your request has been received and will be processed. You’ll get a confirmation via email or phone.
+  </div>
+</div>
 
-  <script>
-    const form = document.getElementById('kraForm');
-    const message = document.getElementById('message');
+<script>
+  const form = document.getElementById('kraForm');
+  const message = document.getElementById('message');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      const data = new FormData(form);
+    const data = new FormData(form);
 
-      // Send to Formspree
-      fetch("https://formspree.io/f/xblodzaa", {
-        method: "POST",
-        body: data,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-
-      // Send to Admin Log
-      fetch("admin/kra-log.php", {
-        method: "POST",
-        body: data
-      })
-      .then(res => res.text())
-      .then(result => {
-        message.textContent = "✅ Submitted successfully!";
-        message.className = "success";
-        form.reset();
-      })
-      .catch(error => {
-        message.textContent = "❌ Submission error. Try again.";
-        message.className = "error";
-      });
+    // Send to Formspree
+    fetch("https://formspree.io/f/xblodzaa", {
+      method: "POST",
+      body: data,
+      headers: {
+        'Accept': 'application/json'
+      }
     });
-  </script>
+
+    // Send to Admin Log
+    fetch("admin/kra-log.php", {
+      method: "POST",
+      body: data
+    })
+    .then(res => res.text())
+    .then(result => {
+      message.textContent = "✅ Submitted successfully!";
+      message.className = "success";
+      form.reset();
+    })
+    .catch(error => {
+      message.textContent = "❌ Submission error. Try again.";
+      message.className = "error";
+    });
+  });
+</script>
 
 </body>
 </html>
