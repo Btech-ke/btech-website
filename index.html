@@ -28,20 +28,27 @@
       padding: 15px 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      flex-direction: row;
+      gap: 15px;
     }
 
     .logo {
       color: white;
       font-size: 20px;
       font-weight: bold;
+      flex: 0 0 auto;
     }
 
     header a {
       color: #fff;
-      margin-left: 15px;
       text-decoration: none;
       font-size: 15px;
       transition: color 0.3s;
+      margin-left: 10px;
     }
 
     header a:hover {
@@ -118,9 +125,9 @@
       height: 100%;
       background-position: center;
       background-size: cover;
-      filter: blur(15px) brightness(1.2);
+      filter: blur(10px) brightness(1);
       z-index: 0;
-      opacity: 0.3;
+      opacity: 0.6;
     }
 
     .service-item img,
@@ -230,13 +237,14 @@
 
     @media (max-width: 768px) {
       header {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
       }
 
       header a {
-        margin: 5px 0;
+        margin: 5px;
       }
 
       .login-form input {
