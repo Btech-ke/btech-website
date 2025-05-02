@@ -28,27 +28,20 @@
       padding: 15px 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      flex-direction: row;
-      gap: 15px;
     }
 
     .logo {
       color: white;
       font-size: 20px;
       font-weight: bold;
-      flex: 0 0 auto;
     }
 
     header a {
       color: #fff;
+      margin-left: 15px;
       text-decoration: none;
       font-size: 15px;
       transition: color 0.3s;
-      margin-left: 10px;
     }
 
     header a:hover {
@@ -98,6 +91,7 @@
     .contact p {
       font-size: 16px;
       text-align: center;
+      font-weight: bold;
     }
 
     .service-list {
@@ -107,35 +101,11 @@
     }
 
     .service-item {
-      position: relative;
-      overflow: hidden;
-      border-radius: 12px;
       text-align: center;
       padding: 20px;
-      color: #333;
-      z-index: 1;
-    }
-
-    .service-item::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-position: center;
-      background-size: cover;
-      filter: blur(10px) brightness(1);
-      z-index: 0;
-      opacity: 0.6;
-    }
-
-    .service-item img,
-    .service-item h3,
-    .service-item p,
-    .service-item a {
-      position: relative;
-      z-index: 2;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .service-item img {
@@ -149,6 +119,12 @@
 
     .service-item h3 {
       color: #007BFF;
+      font-weight: bold;
+    }
+
+    .service-item p {
+      font-weight: bold;
+      font-size: 15px;
     }
 
     .learn-btn {
@@ -160,6 +136,7 @@
       border-radius: 20px;
       text-decoration: none;
       font-size: 14px;
+      font-weight: bold;
     }
 
     .learn-btn:hover {
@@ -177,6 +154,7 @@
       font-size: 16px;
       border-radius: 25px;
       text-decoration: none;
+      font-weight: bold;
     }
 
     .download-btn:hover {
@@ -212,6 +190,7 @@
       border-radius: 8px;
       font-size: 15px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     .login-form button:hover {
@@ -221,6 +200,7 @@
     .contact a {
       color: #007BFF;
       text-decoration: none;
+      font-weight: bold;
     }
 
     .contact a:hover {
@@ -233,37 +213,23 @@
       color: white;
       padding: 20px;
       margin-top: 50px;
+      font-weight: bold;
     }
 
     @media (max-width: 768px) {
       header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
       }
 
       header a {
-        margin: 5px;
+        margin: 5px 0;
       }
 
       .login-form input {
         width: 100%;
       }
-    }
-
-    /* Blurred background images for each service */
-    .service-item:nth-child(1)::before {
-      background-image: url('cyber.png');
-    }
-    .service-item:nth-child(2)::before {
-      background-image: url('learning.png');
-    }
-    .service-item:nth-child(3)::before {
-      background-image: url('business.png');
-    }
-    .service-item:nth-child(4)::before {
-      background-image: url('repair.png');
     }
   </style>
 </head>
