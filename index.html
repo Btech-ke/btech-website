@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BTECH - Technology & Learning Solutions</title>
-  <link rel="icon" type="image/png" href="Blogo.png" />
+  <link rel="icon" type="png" href="Blogo.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
   <style>
     * {
@@ -30,32 +30,21 @@
       z-index: 1000;
     }
 
-    .nav-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .nav-container h1 {
+    .logo {
       color: white;
       font-size: 20px;
+      font-weight: bold;
     }
 
-    nav {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
+    header a {
       color: #fff;
+      margin-left: 15px;
       text-decoration: none;
       font-size: 15px;
       transition: color 0.3s;
     }
 
-    nav a:hover {
+    header a:hover {
       color: #FFD700;
     }
 
@@ -111,16 +100,35 @@
     }
 
     .service-item {
-      background: white;
+      position: relative;
+      overflow: hidden;
       border-radius: 12px;
       text-align: center;
       padding: 20px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      transition: 0.3s;
+      color: #333;
+      z-index: 1;
     }
 
-    .service-item:hover {
-      transform: translateY(-5px);
+    .service-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-position: center;
+      background-size: cover;
+      filter: blur(15px) brightness(1.2);
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .service-item img,
+    .service-item h3,
+    .service-item p,
+    .service-item a {
+      position: relative;
+      z-index: 2;
     }
 
     .service-item img {
@@ -221,24 +229,33 @@
     }
 
     @media (max-width: 768px) {
-      .nav-container {
+      header {
+        display: flex;
         flex-direction: column;
         align-items: flex-start;
       }
 
-      nav {
-        flex-direction: column;
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      nav a {
-        padding: 8px 0;
+      header a {
+        margin: 5px 0;
       }
 
       .login-form input {
         width: 100%;
       }
+    }
+
+    /* Blurred background images for each service */
+    .service-item:nth-child(1)::before {
+      background-image: url('cyber.png');
+    }
+    .service-item:nth-child(2)::before {
+      background-image: url('learning.png');
+    }
+    .service-item:nth-child(3)::before {
+      background-image: url('business.png');
+    }
+    .service-item:nth-child(4)::before {
+      background-image: url('repair.png');
     }
   </style>
 </head>
