@@ -152,12 +152,13 @@
 
     .modal-content {
       background: #fff;
-      margin: 12% auto;
+      margin: 8% auto;
       padding: 30px 20px;
       border-radius: 10px;
       width: 90%;
-      max-width: 400px;
+      max-width: 450px;
       text-align: center;
+      position: relative;
     }
 
     .modal-content h3 {
@@ -165,10 +166,11 @@
       margin-bottom: 20px;
     }
 
-    .modal-content input {
+    .modal-content input,
+    .modal-content select {
       width: 80%;
       padding: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
     }
@@ -188,6 +190,19 @@
 
     .submit-btn {
       background: #28a745;
+    }
+
+    .payment-message {
+      background: #e9f7ff;
+      color: #333;
+      border-left: 4px solid #007BFF;
+      padding: 16px;
+      margin-top: 20px;
+      text-align: left;
+      white-space: pre-wrap;
+      font-size: 14px;
+      border-radius: 8px;
+      user-select: all;
     }
 
     @media (max-width: 768px) {
@@ -221,7 +236,6 @@
 <section class="services">
   <h2>Our Online Cyber Services</h2>
   <div class="service-grid">
-
     <div class="service-item">
       <img src="kuccps.png" alt="KUCCPS Applications">
       <div class="service-info">
@@ -261,7 +275,6 @@
         <a href="request-application-other-services.html">Request</a>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -273,7 +286,20 @@
 <div id="applicationModal" class="modal">
   <div class="modal-content">
     <h3>Book an Application</h3>
-    <input type="text" id="serviceInput" placeholder="Enter KUCCPS, KRA, or HELB" />
+
+    <label for="serviceSelect">Select Service</label><br>
+    <select id="serviceSelect" onchange="toggleOtherInput()">
+      <option value="">-- Choose a Service --</option>
+      <option value="KUCCPS">KUCCPS</option>
+      <option value="KRA">KRA</option>
+      <option value="HELB">HELB</option>
+      <option value="OTHER">Other Service</option>
+    </select>
+
+    <input type="text" id="otherServiceInput" placeholder="Type your service here" style="display:none;" />
+
+    <div id="paymentMessage" class="payment-message" style="display:none;"></div>
+
     <br />
     <button class="close-btn" onclick="closeModal()">Cancel</button>
     <button class="submit-btn" onclick="bookApplication()">Submit</button>
@@ -287,22 +313,62 @@
 
   function closeModal() {
     document.getElementById("applicationModal").style.display = "none";
+    document.getElementById("serviceSelect").value = "";
+    document.getElementById("otherServiceInput").style.display = "none";
+    document.getElementById("otherServiceInput").value = "";
+    document.getElementById("paymentMessage").style.display = "none";
+  }
+
+  function toggleOtherInput() {
+    const selected = document.getElementById("serviceSelect").value;
+    const otherInput = document.getElementById("otherServiceInput");
+    if (selected === "OTHER") {
+      otherInput.style.display = "block";
+    } else {
+      otherInput.style.display = "none";
+      otherInput.value = "";
+    }
+    document.getElementById("paymentMessage").style.display = "none";
   }
 
   function bookApplication() {
-    const input = document.getElementById("serviceInput").value.trim().toUpperCase();
+    const selected = document.getElementById("serviceSelect").value;
+    const otherService = document.getElementById("otherServiceInput").value.trim();
+    const messageBox = document.getElementById("paymentMessage");
+
+    let service = selected;
     let amount = 0;
 
-    if (input === "HELB") amount = 500;
-    else if (input === "KRA") amount = 200;
-    else if (input === "KUCCPS") amount = 450;
-    else {
-      alert("Invalid service selected. Please enter KUCCPS, KRA, or HELB.");
+    if (!selected) {
+      alert("Please select a service.");
       return;
     }
 
-    alert(`Payment Instructions:\n\nService: ${input}\nAmount: KES ${amount}\n\nGo to M-Pesa > Lipa na M-Pesa > Buy Goods.\nTill: 4499436\nAmount: ${amount}\n\nThank you for booking with BTECH!`);
-    closeModal();
+    if (selected === "KUCCPS") amount = 450;
+    else if (selected === "KRA") amount = 200;
+    else if (selected === "HELB") amount = 500;
+    else if (selected === "OTHER") {
+      if (!otherService) {
+        alert("Please type the name of the other service.");
+        return;
+      }
+      service = otherService;
+      amount = 500;
+    }
+
+    const message = `Payment Instructions:
+
+Service: ${service}
+Amount: KES ${amount}
+
+Go to M-Pesa > Lipa na M-Pesa > Buy Goods
+Till Number: 4499436
+Amount: ${amount}
+
+Thank you for booking with BTECH!`;
+
+    messageBox.style.display = "block";
+    messageBox.textContent = message;
   }
 </script>
 
