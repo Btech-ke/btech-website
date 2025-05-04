@@ -245,7 +245,6 @@
         <a href="request-application-kuccps.html">Request</a>
       </div>
     </div>
-
     <div class="service-item">
       <img src="helb.png" alt="HELB Loan Application">
       <div class="service-info">
@@ -255,7 +254,6 @@
         <a href="request-application-helb.html">Request</a>
       </div>
     </div>
-
     <div class="service-item">
       <img src="kra.png" alt="KRA Services">
       <div class="service-info">
@@ -266,7 +264,6 @@
         <a href="request-application-kra.html">Request New Pin</a>
       </div>
     </div>
-
     <div class="service-item">
       <img src="other-services.png" alt="Other Cyber Services">
       <div class="service-info">
@@ -304,9 +301,12 @@
     <br />
     <button class="close-btn" onclick="closeModal()">Cancel</button>
     <button class="submit-btn" onclick="bookApplication()">OK</button>
+    <button id="paystackBtn" class="submit-btn" style="background:#fbb034; display:none;" onclick="payWithPaystack()">PAY NOW</button>
   </div>
 </div>
 
+<!-- Scripts -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
   function openModal() {
     document.getElementById("applicationModal").style.display = "block";
@@ -318,24 +318,19 @@
     document.getElementById("otherServiceInput").style.display = "none";
     document.getElementById("otherServiceInput").value = "";
     document.getElementById("paymentMessage").style.display = "none";
+    document.getElementById("paystackBtn").style.display = "none";
   }
 
   function toggleOtherInput() {
     const selected = document.getElementById("serviceSelect").value;
-    const otherInput = document.getElementById("otherServiceInput");
-    if (selected === "OTHER") {
-      otherInput.style.display = "block";
-    } else {
-      otherInput.style.display = "none";
-      otherInput.value = "";
-    }
-    document.getElementById("paymentMessage").style.display = "none";
+    document.getElementById("otherServiceInput").style.display = (selected === "OTHER") ? "block" : "none";
   }
 
   function bookApplication() {
     const selected = document.getElementById("serviceSelect").value;
     const otherService = document.getElementById("otherServiceInput").value.trim();
     const messageBox = document.getElementById("paymentMessage");
+    const paystackBtn = document.getElementById("paystackBtn");
 
     let service = selected;
     let amount = 0;
@@ -370,6 +365,57 @@ Thank you for booking with BTECH!`;
 
     messageBox.style.display = "block";
     messageBox.textContent = message;
+    paystackBtn.style.display = "inline-block";
+  }
+
+  function payWithPaystack() {
+    const selected = document.getElementById("serviceSelect").value;
+    const otherService = document.getElementById("otherServiceInput").value.trim();
+
+    let service = selected;
+    let amount = 0;
+
+    if (!selected) {
+      alert("Please select a service.");
+      return;
+    }
+
+    if (selected === "KUCCPS") amount = 450;
+    else if (selected === "KRA") amount = 200;
+    else if (selected === "HELB") amount = 500;
+    else if (selected === "OTHER") {
+      if (!otherService) {
+        alert("Please type the name of the other service.");
+        return;
+      }
+      service = otherService;
+      amount = 500;
+    }
+
+    let handler = PaystackPop.setup({
+      key: 'pk_live_f6b9cee9c1297ff867e975724f4d96db49847c7b',
+      email: 'user@example.com',
+      amount: amount * 100,
+      currency: "KES",
+      ref: 'BTECH_' + Math.floor(Math.random() * 1000000000),
+      metadata: {
+        custom_fields: [
+          {
+            display_name: "Service",
+            variable_name: "service",
+            value: service
+          }
+        ]
+      },
+      callback: function(response) {
+        alert('Payment successful! Reference: ' + response.reference);
+        closeModal();
+      },
+      onClose: function() {
+        alert('Payment cancelled.');
+      }
+    });
+    handler.openIframe();
   }
 </script>
 
