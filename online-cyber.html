@@ -6,6 +6,7 @@
   <title>Online Cyber Services - BTECH</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
+    /* (Your same styles here, no changes needed) */
     * {
       margin: 0;
       padding: 0;
@@ -137,7 +138,6 @@
       margin-top: 60px;
     }
 
-    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -236,6 +236,7 @@
 <section class="services">
   <h2>Our Online Cyber Services</h2>
   <div class="service-grid">
+    <!-- (same service items, no change here) -->
     <div class="service-item">
       <img src="kuccps.png" alt="KUCCPS Applications">
       <div class="service-info">
@@ -285,6 +286,8 @@
   <div class="modal-content">
     <h3>Book an Application</h3>
 
+    <input type="text" id="payerName" placeholder="Your Full Name" />
+
     <label for="serviceSelect">Select Service</label><br>
     <select id="serviceSelect" onchange="toggleOtherInput()">
       <option value="">-- Choose a Service --</option>
@@ -305,7 +308,6 @@
   </div>
 </div>
 
-<!-- Scripts -->
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
   function openModal() {
@@ -317,6 +319,7 @@
     document.getElementById("serviceSelect").value = "";
     document.getElementById("otherServiceInput").style.display = "none";
     document.getElementById("otherServiceInput").value = "";
+    document.getElementById("payerName").value = "";
     document.getElementById("paymentMessage").style.display = "none";
     document.getElementById("paystackBtn").style.display = "none";
   }
@@ -329,11 +332,17 @@
   function bookApplication() {
     const selected = document.getElementById("serviceSelect").value;
     const otherService = document.getElementById("otherServiceInput").value.trim();
+    const payerName = document.getElementById("payerName").value.trim();
     const messageBox = document.getElementById("paymentMessage");
     const paystackBtn = document.getElementById("paystackBtn");
 
     let service = selected;
     let amount = 0;
+
+    if (!payerName) {
+      alert("Please enter your name.");
+      return;
+    }
 
     if (!selected) {
       alert("Please select a service.");
@@ -354,6 +363,7 @@
 
     const message = `Payment Instructions:
 
+Name: ${payerName}
 Service: ${service}
 Amount: KES ${amount}
 
@@ -374,9 +384,15 @@ Thank you for booking with BTECH!`;
   function payWithPaystack() {
     const selected = document.getElementById("serviceSelect").value;
     const otherService = document.getElementById("otherServiceInput").value.trim();
+    const payerName = document.getElementById("payerName").value.trim();
 
     let service = selected;
     let amount = 0;
+
+    if (!payerName) {
+      alert("Please enter your name.");
+      return;
+    }
 
     if (!selected) {
       alert("Please select a service.");
@@ -397,12 +413,17 @@ Thank you for booking with BTECH!`;
 
     let handler = PaystackPop.setup({
       key: 'pk_live_f6b9cee9c1297ff867e975724f4d96db49847c7b',
-      email: 'user@example.com',
+      email: payerName.replace(/\s/g, '') + '@btech.com', // fake email using name
       amount: amount * 100,
       currency: "KES",
       ref: 'BTECH_' + Math.floor(Math.random() * 1000000000),
       metadata: {
         custom_fields: [
+          {
+            display_name: "Payer Name",
+            variable_name: "payer_name",
+            value: payerName
+          },
           {
             display_name: "Service",
             variable_name: "service",
@@ -411,7 +432,7 @@ Thank you for booking with BTECH!`;
         ]
       },
       callback: function(response) {
-        alert('Payment successful! Reference: ' + response.reference);
+        alert('Payment successful! Reference: ' + response.reference + "\nName: " + payerName);
         closeModal();
       },
       onClose: function() {
