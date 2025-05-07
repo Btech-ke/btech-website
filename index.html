@@ -1,345 +1,940 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BTECH - Technology & Learning Solutions</title>
-  <link rel="icon" type="png" href="Blogo.png" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BTECH - Empowering Digital Futures</title>
+<meta name="description" content="BTECH offers tech courses, business solutions, cyber services, and tech repair to empower your digital journey." />
+<meta name="author" content="BTECH" />
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #00BFFF, #f0f8ff);
-      color: #333;
-      padding-top: 80px;
-    }
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Roboto+Mono&display=swap" rel="stylesheet" />
 
-    header {
-      width: 100%;
-      position: fixed;
-      top: 0;
-      background-color: #007BFF;
-      padding: 15px 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #00BFFF, #f0f8ff);
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  a {
+    color: #FFD700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  a:hover, a:focus {
+    color: #fff176;
+    outline: none;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+    border-radius: 20px;
+    user-select: none;
+    pointer-events: none;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    color: inherit;
+  }
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #00bfff22;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #ffd700aa;
+    border-radius: 5px;
+  }
+
+  /* Header */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 70px;
+    background: #007BFFDD;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    transition: top 0.3s ease, background-color 0.5s ease;
+    user-select: none;
+  }
+  header.hidden {
+    top: -80px;
+  }
+  .logo {
+    font-weight: 900;
+    font-size: 1.8rem;
+    letter-spacing: 0.15em;
+    color: #FFD700;
+    text-shadow: 0 0 10px #ffd700bb;
+    text-transform: uppercase;
+  }
+  nav {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  nav a {
+    font-weight: 600;
+    font-size: 1rem;
+    position: relative;
+    padding: 6px 0;
+    user-select: none;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #FFD700;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  nav a:hover::after,
+  nav a.active::after {
+    width: 100%;
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    width: 28px;
+    height: 3px;
+    background: #FFD700;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  nav.mobile {
+    position: fixed;
+    top: 70px; right: 0;
+    width: 260px;
+    background: #007BFFEE;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+    flex-direction: column;
+    padding: 2rem 2rem;
+    gap: 2rem;
+    z-index: 11000;
+    animation: slideIn 0.3s forwards;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(100%);}
+    to { transform: translateX(0);}
+  }
+  nav.mobile a {
+    font-size: 1.3rem;
+  }
+  nav.mobile::before {
+    content: '';
+    position: fixed;
+    top: 70px; left: 0;
+    width: calc(100% - 260px);
+    height: calc(100% - 70px);
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+  }
+
+  /* Main */
+  main {
+    margin-top: 70px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+  }
+
+  /* Hero with two columns */
+  .home {
+    min-height: 80vh;
+    position: relative;
+    background: linear-gradient(135deg, #0052cccc 40%, #007bffcc 100%), url('your-photo.jpg') center/cover no-repeat;
+    border-radius: 30px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    overflow: hidden;
+    padding: 3rem 2rem;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  .home::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0052cccc 40%, #007bffcc 100%);
+    z-index: 0;
+    backdrop-filter: brightness(0.8);
+    transform: translateZ(0);
+  }
+  .hero-text {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    flex: 1 1 320px;
+    animation: fadeInUp 1s ease forwards 0.3s;
+  }
+  .hero-photo {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 1s ease forwards 0.6s;
+  }
+  .hero-photo img {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 32px #007bff44, 0 2px 8px #ffd70033;
+    border: 6px solid #fff;
+    background: #f0f8ff;
+  }
+  .ceo-caption {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: #ffd700;
+    background: #0052ccbb;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .home h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 15px #ffd700cc;
+  }
+  .home p {
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  .typing-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #ffd700;
+    min-height: 2rem;
+    margin-bottom: 2rem;
+    font-family: 'Roboto Mono', monospace;
+    user-select: none;
+  }
+  .cta-btn {
+    background: linear-gradient(90deg, #FFD700, #fff176);
+    color: #0052cc;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 1rem 3rem;
+    border-radius: 40px;
+    box-shadow: 0 8px 30px #ffd700bb;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+    text-transform: uppercase;
+    user-select: none;
+  }
+  .cta-btn:hover, .cta-btn:focus {
+    background: linear-gradient(90deg, #fff176, #FFD700);
+    color: #003d99;
+    transform: translateY(-3px) scale(1.05);
+    outline: none;
+  }
+
+  /* Section headings */
+  h2 {
+    font-size: 2.8rem;
+    color: #0052cc;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  section {
+    border-radius: 30px;
+    background: #fff;
+    padding: 3rem 3rem 4rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+  .about p, .download p, .contact p {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* Services */
+  .services {
+    padding-top: 1rem;
+  }
+  .service-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  .service-item {
+    background: #f9f9f9;
+    border-radius: 30px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.07);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: pointer;
+    user-select: none;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  .service-item:hover, .service-item:focus-within {
+    transform: translateY(-10px) scale(1.05) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    outline: none;
+  }
+  .service-item img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 8px 25px #007bff33;
+    background: #f0f8ff;
+  }
+  .service-item h3 {
+    color: #0052cc;
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  .service-item p {
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    color: #444;
+  }
+  .learn-btn {
+    background: #0052cc;
+    color: #fff;
+    padding: 10px 26px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  .learn-btn:hover, .learn-btn:focus {
+    background: #003d99;
+    outline: none;
+  }
+
+  /* Download */
+  .download-btn {
+    background: #28a745;
+    color: #fff;
+    padding: 14px 40px;
+    font-size: 1.3rem;
+    border-radius: 40px;
+    font-weight: 700;
+    box-shadow: 0 8px 30px #28a745aa;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+    user-select: none;
+  }
+  .download-btn i {
+    font-size: 1.6rem;
+  }
+  .download-btn:hover, .download-btn:focus {
+    background: #218838;
+    transform: scale(1.05);
+    outline: none;
+  }
+  .download p {
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #222;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  /* Contact */
+  .contact a {
+    color: #0052cc;
+    font-weight: 700;
+    transition: color 0.3s ease;
+  }
+  .contact a:hover, .contact a:focus {
+    color: #ffd700;
+    outline: none;
+  }
+
+  /* Staff login */
+  .staff-login {
+    text-align: center;
+  }
+  .staff-login button {
+    background: #ffd700;
+    color: #0052cc;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 1rem 3.5rem;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 30px #b38f0055;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+    user-select: none;
+  }
+  .staff-login button:hover, .staff-login button:focus {
+    background: #fff176;
+    outline: none;
+    transform: scale(1.05);
+  }
+
+  /* Modal */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,123,255,0.15);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
+  .modal-bg.active {
+    display: flex;
+  }
+  .modal {
+    background: #fff;
+    padding: 3rem 3rem;
+    border-radius: 30px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    user-select: text;
+    animation: fadeInModal 0.4s ease forwards;
+  }
+  @keyframes fadeInModal {
+    from {opacity: 0; transform: translateY(-25px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+  .modal h3 {
+    font-weight: 800;
+    font-size: 2rem;
+    color: #0052cc;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .modal input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 1.5rem;
+    border-radius: 14px;
+    border: 2px solid #ccc;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .modal input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 10px #007bffaa;
+  }
+  .modal button {
+    width: 100%;
+    background: #007bff;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 14px 0;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .modal button:hover, .modal button:focus {
+    background: #0056b3;
+    outline: none;
+  }
+  .modal .close-btn {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #0052cc;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  .modal .close-btn:hover, .modal .close-btn:focus {
+    color: #ffd700;
+    outline: none;
+  }
+
+  /* Back to top */
+  #backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #ffd700;
+    color: #0052cc;
+    padding: 14px 18px;
+    border-radius: 50%;
+    font-size: 1.7rem;
+    box-shadow: 0 8px 30px #b38f0055;
+    cursor: pointer;
+    display: none;
+    z-index: 1500;
+    transition: background 0.3s ease;
+  }
+  #backToTop:hover, #backToTop:focus {
+    background: #fff176;
+    outline: none;
+  }
+
+  /* Footer */
+  footer {
+    background: #007BFF;
+    color: #fff;
+    text-align: center;
+    padding: 1.8rem 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    user-select: none;
+  }
+  .footer-social {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .footer-social a {
+    color: #FFD700;
+    font-size: 1.6rem;
+    transition: color 0.3s ease;
+  }
+  .footer-social a:hover, .footer-social a:focus {
+    color: #fff;
+    outline: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav {
+      display: none;
+    }
+    .hamburger {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 15px;
     }
-
-    .logo {
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
+    main {
+      padding: 2rem 1rem;
     }
-
-    header a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 15px;
-      transition: color 0.3s;
-      margin-left: 10px;
-      font-weight: bold;
+    .home > div {
+      padding: 2rem 1rem;
     }
-
-    header a:hover {
-      color: #FFD700;
-    }
-
-    section {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .home {
-      text-align: center;
-      padding: 100px 20px 80px;
-      background: linear-gradient(to bottom right, #0052ccaa, #007bffcc), url('your-photo.jpg') center/cover no-repeat;
-      color: white;
-    }
-
-    .home div {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 60px 20px;
-      border-radius: 12px;
-    }
-
-    .home h1 {
-      font-size: 38px;
-      color: #FFD700;
-    }
-
-    .home p {
-      font-size: 18px;
-      margin-top: 15px;
-      max-width: 800px;
-      margin-inline: auto;
-      line-height: 1.6;
-      font-weight: bold;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .about p,
-    .services p,
-    .download p,
-    .contact p {
-      font-size: 16px;
-      text-align: center;
-      font-weight: bold;
-    }
-
     .service-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
+      grid-template-columns: 1fr;
     }
-
-    .service-item {
-      border-radius: 12px;
-      text-align: center;
-      padding: 20px;
-      background: #ffffff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s;
+  }
+  @media (max-width: 500px) {
+    header {
+      padding: 0 1rem;
     }
-
-    .service-item:hover {
-      transform: translateY(-5px);
+    .logo {
+      font-size: 1.3rem;
     }
-
-    .service-item img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    nav.mobile {
+      width: 100vw;
+      left: 0;
     }
-
-    .service-item h3 {
-      color: #007BFF;
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .service-item p {
-      font-weight: bold;
-    }
-
-    .learn-btn {
-      display: inline-block;
-      margin-top: 10px;
-      background: #007BFF;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .learn-btn:hover {
-      background-color: #0056b3;
-    }
-
-    .download {
-      text-align: center;
-    }
-
-    .download-btn {
-      background: #28a745;
-      color: white;
-      padding: 12px 28px;
-      font-size: 16px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .download-btn:hover {
-      background: #218838;
-    }
-
-    .staff-login {
-      text-align: center;
-    }
-
-    .login-form {
-      background: #fff;
-      display: inline-block;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    }
-
-    .login-form input {
-      width: 250px;
-      padding: 10px;
-      margin-bottom: 15px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    .login-form button {
-      background: #007BFF;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .login-form button:hover {
-      background: #0056b3;
-    }
-
-    .contact a {
-      color: #007BFF;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .contact a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      text-align: center;
-      background: #007BFF;
-      color: white;
-      padding: 20px;
-      margin-top: 50px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-      }
-
-      header a {
-        margin: 5px;
-      }
-
-      .login-form input {
-        width: 100%;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <div class="logo">BTECH</div>
-    <a href="#home">Home</a>
+<header>
+  <div class="logo" aria-label="BTECH Logo">BTECH</div>
+  <nav id="main-nav" aria-label="Primary navigation">
+    <a href="#home" class="active">Home</a>
     <a href="#about">About</a>
     <a href="#services">Services</a>
     <a href="#download">Download</a>
     <a href="#contact">Contact</a>
-    <a href="#staff-login">Staff Login</a>
-  </header>
+    <a href="#staff-login" id="login-link">Staff Login</a>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav" aria-haspopup="true">
+    <span></span><span></span><span></span>
+  </button>
+</header>
 
-  <section id="home" class="home">
-    <div>
+<main>
+  <section id="home" class="home" tabindex="-1" aria-label="Welcome section">
+    <div class="hero-text">
       <h1>Welcome to BTECH</h1>
-      <p>Hello, I’m <strong>Teddy</strong>, CEO of BTECH. We don’t just do tech — we empower futures. At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in technology, learning, and business transformation.</p>
+      <p>Hello, I’m <strong>Teddy</strong>, CEO of BTECH.<br>We don’t just do tech - we empower futures.<br>At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in technology, learning, and business transformation.</p>
+      <div class="typing-text" aria-live="polite" aria-atomic="true"></div>
+      <a href="#services" class="cta-btn" aria-label="Explore our services">Explore Services</a>
+    </div>
+    <div class="hero-photo">
+      <img src="your-photo.jpg" alt="Teddy, CEO of BTECH" />
+      <div class="ceo-caption">Teddy, CEO</div>
     </div>
   </section>
 
-  <section id="about" class="about">
+  <section id="about" class="about" tabindex="-1" aria-label="About us section">
     <h2>About Us</h2>
-    <p>BTECH offers a range of services from tech courses and business solutions to cyber services and tech repair — all geared towards empowering your digital journey.</p>
+    <p>BTECH offers a range of services from tech courses and business solutions to cyber services and tech repair - all geared towards empowering your digital journey.</p>
   </section>
 
-  <section id="services" class="services">
+  <section id="services" class="services" tabindex="-1" aria-label="Services section">
     <h2>Our Services</h2>
     <div class="service-list">
-      <div class="service-item">
-        <img src="cyber.png" alt="Cyber Services">
+      <article class="service-item" tabindex="0" aria-label="Online Cyber Services">
+        <img src="cyber.png" alt="Cyber Services Icon" loading="lazy" />
         <h3>Online Cyber Services</h3>
         <p>Access KUCCPS, KRA, HELB and more services online.</p>
-        <a href="online-cyber.html" class="learn-btn">See More</a>
-      </div>
-      <div class="service-item">
-        <img src="learning.png" alt="Learning">
+        <a href="online-cyber.html" class="learn-btn" aria-label="See more about Online Cyber Services">See More</a>
+      </article>
+      <article class="service-item" tabindex="0" aria-label="Computer Learning Hub">
+        <img src="learning.png" alt="Learning Icon" loading="lazy" />
         <h3>Computer Learning Hub</h3>
         <p>Take industry-relevant computer courses and grow your skills.</p>
-        <a href="computer-learning-hub.html" class="learn-btn">View Available Courses</a>
-      </div>
-      <div class="service-item">
-        <img src="business.png" alt="Business">
+        <a href="computer-learning-hub.html" class="learn-btn" aria-label="View available courses">View Courses</a>
+      </article>
+      <article class="service-item" tabindex="0" aria-label="Digital Business Solutions">
+        <img src="business.png" alt="Business Icon" loading="lazy" />
         <h3>Digital Business Solutions</h3>
         <p>Get modern business tech tools, designs, and strategies.</p>
-        <a href="digital-business-solutions.html" class="learn-btn">View More</a>
-      </div>
-      <div class="service-item">
-        <img src="repair.png" alt="Repair">
+        <a href="digital-business-solutions.html" class="learn-btn" aria-label="View more about Digital Business Solutions">View More</a>
+      </article>
+      <article class="service-item" tabindex="0" aria-label="Tech Repair & Maintenance">
+        <img src="repair.png" alt="Repair Icon" loading="lazy" />
         <h3>Tech Repair & Maintenance</h3>
         <p>We fix and maintain your tech devices with care.</p>
-        <a href="tech-repair.html" class="learn-btn">Learn More</a>
-      </div>
+        <a href="tech-repair.html" class="learn-btn" aria-label="Learn more about Tech Repair & Maintenance">Learn More</a>
+      </article>
     </div>
   </section>
 
-  <section id="download" class="download">
+  <section id="download" class="download" tabindex="-1" aria-label="Download section">
     <h2>Download Our APK</h2>
-    <a href="BtechPlusApp.apk" class="download-btn">Download BTECH App</a>
+    <a href="BtechPlusApp.apk" class="download-btn" download aria-label="Download BTECH App">
+      <i class="fa fa-download"></i> Download BTECH App
+    </a>
     <p>Install the latest app to explore all BTECH features easily.</p>
   </section>
 
-  <section id="contact" class="contact">
+  <section id="contact" class="contact" tabindex="-1" aria-label="Contact section">
     <h2>Contact Us</h2>
     <p>Email: <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a></p>
-    <p>Phone: +254113996609 | +254734644917</p>
-    <p>Visit: <a href="https://btechplus.com" target="_blank">www.btechplus.com</a></p>
+    <p>Phone: <a href="tel:+254113996609">+254113996609</a> | <a href="tel:+254734644917">+254734644917</a></p>
+    <p>Visit: <a href="https://btechplus.com" target="_blank" rel="noopener noreferrer">www.btechplus.com</a></p>
   </section>
 
-  <section id="staff-login" class="staff-login">
+  <section id="staff-login" class="staff-login" tabindex="-1" aria-label="Staff login section">
     <h2>Staff Login</h2>
-    <div class="login-form">
-      <input type="text" id="username" placeholder="Username" required /><br>
-      <input type="password" id="password" placeholder="Password" required /><br>
-      <button onclick="validateLogin()">Login</button>
-    </div>
+    <button class="cta-btn" id="open-login-modal">Login</button>
   </section>
+</main>
 
-  <script>
-    function validateLogin() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const validUsernamePattern = /^BTECH#([1-9]|10)$/;
-      const validPassword = "btech.ke";
-      if (validUsernamePattern.test(username) && password === validPassword) {
-        window.location.href = "dashboard.html";
-      } else {
-        alert("Invalid username or password.");
+<!-- Login Modal -->
+<div class="modal-bg" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
+  <div class="modal" role="document">
+    <button class="close-btn" aria-label="Close login form">&times;</button>
+    <h3 id="modal-title">Staff Login</h3>
+    <form id="login-form" autocomplete="off" novalidate>
+      <input type="text" id="username" placeholder="Username (e.g. BTECH#1)" required pattern="^BTECH#([1-9]|10)$" aria-describedby="usernameHelp" />
+      <small id="usernameHelp" style="color:#007BFF; font-weight:600;">Example: BTECH#3</small>
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
+
+<!-- Back to top -->
+<button id="backToTop" aria-label="Back to top"><i class="fa fa-arrow-up"></i></button>
+
+<footer>
+  <div class="footer-social" aria-label="Social media links">
+    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+    <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  </div>
+  <p>&copy; 2025 BTECH | All Rights Reserved</p>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('main-nav');
+  hamburger.addEventListener('click', () => {
+    const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', !expanded);
+    nav.classList.toggle('mobile');
+  });
+  document.addEventListener('click', e => {
+    if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+      nav.classList.remove('mobile');
+      hamburger.setAttribute('aria-expanded', false);
+    }
+  });
+
+  // Active nav on scroll
+  const navLinks = nav.querySelectorAll('a');
+  const sections = [...navLinks].map(link => document.querySelector(link.getAttribute('href')));
+  window.addEventListener('scroll', () => {
+    const scrollPos = window.scrollY + window.innerHeight / 3;
+    sections.forEach((section, idx) => {
+      if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        navLinks[idx].classList.add('active');
+      }
+    });
+  });
+
+  // Header hide/show on scroll
+  let lastScroll = 0;
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    let currentScroll = window.pageYOffset;
+    if (currentScroll > lastScroll && currentScroll > 70) {
+      header.classList.add('hidden');
+    } else {
+      header.classList.remove('hidden');
+    }
+    lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+  });
+
+  // Modal login open/close
+  const loginModal = document.getElementById('login-modal');
+  const openLoginBtn = document.getElementById('open-login-modal');
+  const closeModalBtn = loginModal.querySelector('.close-btn');
+  const loginLink = document.getElementById('login-link');
+  const loginForm = document.getElementById('login-form');
+
+  function openModal() {
+    loginModal.classList.add('active');
+    loginModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    loginModal.querySelector('#username').focus();
+  }
+  function closeModal() {
+    loginModal.classList.remove('active');
+    loginModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    loginForm.reset();
+  }
+  openLoginBtn.addEventListener('click', openModal);
+  loginLink.addEventListener('click', e => {
+    e.preventDefault();
+    openModal();
+  });
+  closeModalBtn.addEventListener('click', closeModal);
+  loginModal.addEventListener('click', e => {
+    if (e.target === loginModal) closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && loginModal.classList.contains('active')) closeModal();
+  });
+
+  // Login form validation
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = loginForm.username.value.trim();
+    const password = loginForm.password.value;
+    const validUsername = /^BTECH#([1-9]|10)$/;
+    const validPassword = "btech.ke";
+    if (!validUsername.test(username)) {
+      alert('Invalid username format. Use BTECH#1 to BTECH#10.');
+      loginForm.username.focus();
+      return;
+    }
+    if (password !== validPassword) {
+      alert('Incorrect password.');
+      loginForm.password.focus();
+      return;
+    }
+    alert('Login successful! Redirecting...');
+    window.location.href = 'dashboard.html';
+  });
+
+  // Back to top button
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      backToTop.style.display = 'block';
+    } else {
+      backToTop.style.display = 'none';
+    }
+  });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+
+  // Typing effect in hero
+  const typingText = document.querySelector('.typing-text');
+  const phrases = [
+    "Innovate. Learn. Transform.",
+    "Empowering Digital Futures.",
+    "Your Tech Journey Starts Here.",
+    "Skill Up with BTECH.",
+    "Solutions for Tomorrow."
+  ];
+  let phraseIndex = 0;
+  let letterIndex = 0;
+  let deleting = false;
+  let typingSpeed = 80;
+
+  function typeEffect() {
+    const currentPhrase = phrases[phraseIndex];
+    if (!deleting) {
+      typingText.textContent = currentPhrase.slice(0, letterIndex + 1);
+      letterIndex++;
+      if (letterIndex === currentPhrase.length) {
+        deleting = true;
+        setTimeout(typeEffect, 1500);
+        return;
+      }
+    } else {
+      typingText.textContent = currentPhrase.slice(0, letterIndex - 1);
+      letterIndex--;
+      if (letterIndex === 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
       }
     }
-  </script>
+    setTimeout(typeEffect, deleting ? typingSpeed / 2 : typingSpeed);
+  }
+  typeEffect();
 
-  <footer>
-    <p>&copy; 2025 BTECH | All Rights Reserved</p>
-  </footer>
+  // 3D tilt effect on service cards
+  const serviceCards = document.querySelectorAll('.service-item');
+  serviceCards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * 8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+      card.style.transform = `perspective(700px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'none';
+    });
+    card.addEventListener('focus', () => {
+      card.style.transform = 'scale(1.05)';
+    });
+    card.addEventListener('blur', () => {
+      card.style.transform = 'none';
+    });
+  });
+</script>
 
-</body>
+<style>
+  /* Hero two-column layout styling */
+  .hero-text, .hero-photo {
+    flex: 1 1 320px;
+  }
+  .hero-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero-photo img {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 32px #007bff44, 0 2px 8px #ffd70033;
+    border: 6px solid #fff;
+    background: #f0f8ff;
+  }
+  .ceo-caption {
+    font-weight: 700;
+    color: #ffd700;
+    background: #0052ccbb;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+  @media (min-width: 900px) {
+    .home {
+      flex-wrap: nowrap;
+      text-align: left;
+    }
+  }
+  @media (max-width: 900px) {
+    .home {
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .hero-photo img {
+      width: 180px;
+      height: 180px;
+    }
+  }
+</style>
+
 </html>
