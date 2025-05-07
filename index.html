@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>BTECH - Empowering Digital Futures</title>
 <meta name="description" content="BTECH offers tech courses, business solutions, cyber services, and tech repair to empower your digital journey." />
 <meta name="author" content="BTECH" />
@@ -46,6 +46,7 @@
     border-radius: 20px;
     user-select: none;
     pointer-events: none;
+    height: auto;
   }
   button {
     cursor: pointer;
@@ -177,9 +178,9 @@
     gap: 6rem;
   }
 
-  /* Hero with two columns */
+  /* Hero */
   .home {
-    min-height: 80vh;
+    min-height: 70vh;
     position: relative;
     background: linear-gradient(135deg, #0052cccc 40%, #007bffcc 100%), url('your-photo.jpg') center/cover no-repeat;
     border-radius: 30px;
@@ -188,11 +189,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: left;
+    text-align: center;
     overflow: hidden;
     padding: 3rem 2rem;
-    gap: 3rem;
-    flex-wrap: wrap;
   }
   .home::before {
     content: '';
@@ -203,41 +202,15 @@
     backdrop-filter: brightness(0.8);
     transform: translateZ(0);
   }
-  .hero-text {
+  .home > div {
     position: relative;
     z-index: 1;
-    max-width: 600px;
-    flex: 1 1 320px;
+    max-width: 700px;
+    background: rgba(0,0,0,0.5);
+    padding: 3rem 2rem;
+    border-radius: 30px;
+    box-shadow: 0 12px 40px #000a;
     animation: fadeInUp 1s ease forwards 0.3s;
-  }
-  .hero-photo {
-    position: relative;
-    z-index: 1;
-    flex: 0 0 280px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    animation: fadeInUp 1s ease forwards 0.6s;
-  }
-  .hero-photo img {
-    width: 240px;
-    height: 240px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 8px 32px #007bff44, 0 2px 8px #ffd70033;
-    border: 6px solid #fff;
-    background: #f0f8ff;
-  }
-  .ceo-caption {
-    font-weight: 700;
-    color: #ffd700;
-    background: #0052ccbb;
-    padding: 0.5rem 1.5rem;
-    border-radius: 20px;
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-    user-select: none;
   }
   @keyframes fadeInUp {
     from {
@@ -250,7 +223,7 @@
     }
   }
   .home h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 900;
     margin-bottom: 1rem;
     text-transform: uppercase;
@@ -260,7 +233,7 @@
   .home p {
     font-weight: 600;
     font-size: 1.3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     line-height: 1.6;
   }
   .typing-text {
@@ -317,6 +290,30 @@
     max-width: 720px;
     margin: 0 auto;
     text-align: center;
+  }
+
+  /* CEO photo in About */
+  .about .ceo-photo {
+    max-width: 220px;
+    margin: 2rem auto 0;
+    border-radius: 50%;
+    box-shadow: 0 8px 32px #007bff44, 0 2px 8px #ffd70033;
+    border: 6px solid #fff;
+    background: #f0f8ff;
+    display: block;
+  }
+  .about .ceo-caption {
+    text-align: center;
+    font-weight: 700;
+    color: #0052cc;
+    background: #ffd70033;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    user-select: none;
+    max-width: 220px;
+    margin: 0.5rem auto 0;
   }
 
   /* Services */
@@ -619,7 +616,7 @@
     }
   }
 </style>
-</head>
+
 <body>
 
 <header>
@@ -645,15 +642,13 @@
       <div class="typing-text" aria-live="polite" aria-atomic="true"></div>
       <a href="#services" class="cta-btn" aria-label="Explore our services">Explore Services</a>
     </div>
-    <div class="hero-photo">
-      <img src="your-photo.jpg" alt="Teddy, CEO of BTECH" />
-      <div class="ceo-caption">Teddy, CEO</div>
-    </div>
   </section>
 
   <section id="about" class="about" tabindex="-1" aria-label="About us section">
     <h2>About Us</h2>
     <p>BTECH offers a range of services from tech courses and business solutions to cyber services and tech repair - all geared towards empowering your digital journey.</p>
+    <img src="your-photo.jpg" alt="Teddy, CEO of BTECH" class="ceo-photo" />
+    <div class="ceo-caption">Teddy, CEO</div>
   </section>
 
   <section id="services" class="services" tabindex="-1" aria-label="Services section">
@@ -903,51 +898,30 @@
 </script>
 
 <style>
-  /* Hero two-column layout styling */
-  .hero-text, .hero-photo {
-    flex: 1 1 320px;
-  }
-  .hero-photo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  .hero-photo img {
-    width: 240px;
-    height: 240px;
+  /* CEO Photo in About section */
+  .about .ceo-photo {
+    max-width: 220px;
+    margin: 2rem auto 0;
     border-radius: 50%;
-    object-fit: cover;
     box-shadow: 0 8px 32px #007bff44, 0 2px 8px #ffd70033;
     border: 6px solid #fff;
     background: #f0f8ff;
+    display: block;
   }
-  .ceo-caption {
+  .about .ceo-caption {
+    text-align: center;
     font-weight: 700;
-    color: #ffd700;
-    background: #0052ccbb;
+    color: #0052cc;
+    background: #ffd70033;
     padding: 0.5rem 1.5rem;
     border-radius: 20px;
     font-size: 1.1rem;
     letter-spacing: 0.05em;
     user-select: none;
-  }
-  @media (min-width: 900px) {
-    .home {
-      flex-wrap: nowrap;
-      text-align: left;
-    }
-  }
-  @media (max-width: 900px) {
-    .home {
-      flex-wrap: wrap;
-      text-align: center;
-    }
-    .hero-photo img {
-      width: 180px;
-      height: 180px;
-    }
+    max-width: 220px;
+    margin: 0.5rem auto 0;
   }
 </style>
 
+</body>
 </html>
