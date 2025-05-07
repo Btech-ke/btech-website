@@ -2,179 +2,328 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Online Cyber Services - BTECH</title>
+  <meta name="description" content="BTECH's Online Cyber Services: KUCCPS, KRA, HELB, and more. Apply and pay online, fast and secure." />
+  <meta name="author" content="BTECH" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    /* (Your same styles here, no changes needed) */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --blue: #007BFF;
+      --blue-dark: #0056b3;
+      --gold: #FFD700;
+      --white: #fff;
+      --shadow: 0 4px 24px rgba(0,0,0,0.09);
+      --radius: 16px;
+      --focus-color: #ffbf00;
     }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f4f7fa;
-      color: #333;
+      background: linear-gradient(135deg, #e3f2fd 60%, #fff 100%);
+      color: #222;
+      min-height: 100vh;
       overflow-x: hidden;
+      font-size: 16px;
+      line-height: 1.6;
     }
-
-    header {
-      background: linear-gradient(135deg, #007BFF, #0056b3);
-      padding: 20px 30px;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+    a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.3s;
     }
-
-    header h1 {
-      font-size: 24px;
-      font-weight: 600;
+    a:hover, a:focus {
+      color: #fff176;
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
     }
-
-    .book-btn {
-      background-color: #fff;
-      color: #007BFF;
-      padding: 10px 20px;
-      font-weight: 600;
-      border-radius: 6px;
-      border: none;
+    img {
+      max-width: 100%;
+      display: block;
+      border-radius: 18px;
+      user-select: none;
+      pointer-events: none;
+      height: auto;
+      transition: transform 0.3s;
+    }
+    button {
       cursor: pointer;
-      transition: 0.3s ease;
+      border: none;
+      background: none;
+      font-family: inherit;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+    button:focus-visible {
+      outline: 2.5px solid var(--gold);
+      outline-offset: 2px;
+    }
+    button:hover:not(:disabled),
+    button:focus:not(:disabled) {
+      transform: scale(1.05);
+    }
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ffd700aa;
+      border-radius: 5px;
     }
 
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(90deg, var(--blue), var(--blue-dark));
+      box-shadow: 0 6px 14px rgba(0,0,0,0.13);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 5vw;
+      user-select: none;
+      transition: box-shadow 0.3s;
+    }
+    header.scrolled {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+    }
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      text-shadow: 0 0 10px #ffd70055;
+      text-transform: uppercase;
+    }
+    .book-btn {
+      background: var(--gold);
+      color: var(--blue-dark);
+      padding: 10px 22px;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px #ffd70033;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-btn:active::after,
+    .book-btn:focus::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 120%; height: 120%;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%,-50%);
+      animation: ripple 0.5s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
     .book-btn:hover {
-      background-color: #0056b3;
-      color: #fff;
+      background: var(--blue-dark);
+      color: var(--gold);
+      box-shadow: 0 4px 16px #007bff22;
     }
 
+    /* Hero */
+    .hero {
+      background: linear-gradient(120deg, #e3f2fd 60%, #fff 100%);
+      padding: 48px 0 0 0;
+      text-align: center;
+      min-height: 180px;
+      position: relative;
+    }
+    .hero .typing-text {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin: 0 auto 1.2rem auto;
+      min-height: 2rem;
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: 0.04em;
+      user-select: none;
+      background: #fffbe7;
+      display: inline-block;
+      padding: 0.25em 1.2em;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px #ffd70022;
+      animation: fadeInUp 1s;
+    }
+    .hero h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--blue-dark);
+      margin-bottom: 0.6em;
+      letter-spacing: 0.06em;
+      text-shadow: 0 2px 8px #007bff11;
+    }
+
+    /* Services */
     .services {
-      padding: 60px 20px;
+      padding: 48px 5vw 30px 5vw;
       max-width: 1200px;
       margin: auto;
     }
-
     .services h2 {
       text-align: center;
-      font-size: 32px;
-      color: #007BFF;
+      font-size: 2rem;
+      color: var(--blue);
       font-weight: 700;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      letter-spacing: 0.04em;
     }
-
     .service-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px,1fr));
+      gap: 32px;
     }
-
     .service-item {
-      flex: 1 1 calc(50% - 20px);
-      background: #ffffff;
-      padding: 20px;
-      border-left: 6px solid #007BFF;
-      border-radius: 10px;
+      background: #fff;
+      padding: 22px 18px;
+      border-left: 7px solid var(--blue);
+      border-radius: var(--radius);
       display: flex;
-      gap: 20px;
+      gap: 18px;
       align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: var(--shadow);
+      transition: transform 0.35s, box-shadow 0.35s;
+      cursor: pointer;
+      will-change: transform;
+      perspective: 700px;
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      animation: fadeInCard 0.7s forwards;
     }
-
-    .service-item:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    .service-item:nth-child(1) { animation-delay: 0.1s;}
+    .service-item:nth-child(2) { animation-delay: 0.2s;}
+    .service-item:nth-child(3) { animation-delay: 0.3s;}
+    .service-item:nth-child(4) { animation-delay: 0.4s;}
+    .service-item:hover, .service-item:focus-within {
+      transform: translateY(-8px) scale(1.03) rotateY(2deg) rotateX(2deg);
+      box-shadow: 0 8px 32px rgba(0,123,255,0.13);
+      z-index: 2;
+      outline: 2px solid var(--gold);
     }
-
     .service-item img {
-      width: 120px;
-      height: 120px;
+      width: 90px;
+      height: 90px;
       object-fit: cover;
       border-radius: 10px;
+      background: #f4f7fa;
+      box-shadow: 0 2px 12px #007bff11;
+      flex-shrink: 0;
+      transition: box-shadow 0.3s;
+      will-change: transform;
     }
-
     .service-info {
       flex: 1;
+      min-width: 0;
     }
-
     .service-info h3 {
-      font-size: 20px;
+      font-size: 1.13rem;
       color: #222;
-      margin-bottom: 10px;
+      margin-bottom: 7px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
-
     .service-info p {
-      font-size: 14px;
+      font-size: 0.99rem;
       color: #555;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      line-height: 1.5;
     }
-
     .service-info a {
       display: inline-block;
-      margin-right: 10px;
-      margin-top: 5px;
-      background-color: #007BFF;
-      color: #fff;
-      padding: 8px 14px;
-      font-size: 13px;
-      border-radius: 6px;
+      margin-right: 8px;
+      margin-top: 4px;
+      background: var(--blue);
+      color: var(--white);
+      padding: 7px 15px;
+      font-size: 0.97rem;
+      border-radius: 7px;
       text-decoration: none;
-      transition: background 0.3s ease;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      font-weight: 600;
+      box-shadow: 0 2px 8px #007bff11;
+    }
+    .service-info a:hover, .service-info a:focus {
+      background: var(--gold);
+      color: var(--blue-dark);
+      box-shadow: 0 4px 14px #ffd70033;
+      outline: 2px solid var(--gold);
+    }
+    @keyframes fadeInCard {
+      to { opacity: 1; transform: translateY(0) scale(1);}
     }
 
-    .service-info a:hover {
-      background-color: #0056b3;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #007BFF;
-      color: white;
-      font-size: 14px;
-      margin-top: 60px;
-    }
-
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
       z-index: 999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.5);
+      align-items: center; justify-content: center;
+      animation: fadeInModalBg 0.35s;
     }
-
+    .modal.active { display: flex; }
+    @keyframes fadeInModalBg {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
     .modal-content {
       background: #fff;
-      margin: 8% auto;
-      padding: 30px 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 450px;
+      padding: 32px 18px 24px 18px;
+      border-radius: 14px;
+      width: 92vw;
+      max-width: 400px;
       text-align: center;
       position: relative;
+      box-shadow: 0 8px 32px rgba(0,123,255,0.08);
+      animation: fadeInModal 0.35s;
     }
-
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
     .modal-content h3 {
-      color: #007BFF;
-      margin-bottom: 20px;
+      color: var(--blue);
+      margin-bottom: 18px;
+      font-size: 1.18rem;
+      font-weight: 700;
     }
-
     .modal-content input,
     .modal-content select {
-      width: 80%;
+      width: 90%;
       padding: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 14px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border 0.2s;
+      background: #f8fafc;
     }
-
+    .modal-content input:focus,
+    .modal-content select:focus {
+      border: 1.5px solid var(--blue);
+      outline: none;
+      box-shadow: 0 0 8px #007BFFaa;
+    }
     .close-btn, .submit-btn {
       padding: 10px 16px;
       border: none;
@@ -182,81 +331,113 @@
       cursor: pointer;
       color: white;
       margin: 0 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 600;
+      transition: background 0.3s;
     }
-
-    .close-btn {
-      background: #dc3545;
-    }
-
-    .submit-btn {
-      background: #28a745;
-    }
-
+    .close-btn { background: #dc3545; }
+    .submit-btn { background: #28a745; }
+    #paystackBtn { background: #fbb034; color: #222; }
+    .close-btn:hover { background: #b02a37; }
+    .submit-btn:hover { background: #218838; }
+    #paystackBtn:hover { background: #ffdb6e; color: #0056b3; }
     .payment-message {
       background: #e9f7ff;
       color: #333;
-      border-left: 4px solid #007BFF;
-      padding: 16px;
-      margin-top: 20px;
+      border-left: 4px solid var(--blue);
+      padding: 14px;
+      margin-top: 16px;
       text-align: left;
       white-space: pre-wrap;
-      font-size: 14px;
+      font-size: 0.98rem;
       border-radius: 8px;
       user-select: all;
+      word-break: break-word;
     }
 
-    @media (max-width: 768px) {
-      .service-item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 28px 5vw 18px 5vw;
+      background: linear-gradient(90deg, #007BFF, #0056b3);
+      color: var(--white);
+      font-size: 1rem;
+      margin-top: 60px;
+      border-radius: 0 0 16px 16px;
+      letter-spacing: 0.05em;
+      box-shadow: 0 -2px 16px #007bff22;
+    }
+    .footer-social {
+      margin-bottom: 0.7rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.1rem;
+    }
+    .footer-social a {
+      color: var(--gold);
+      font-size: 1.25rem;
+      transition: color 0.2s, text-shadow 0.2s;
+      text-shadow: 0 2px 10px #ffd70033;
+    }
+    .footer-social a:hover { color: var(--white); text-shadow: 0 0 18px #ffd70099; }
 
-      .service-item img {
-        width: 100%;
-        height: auto;
-      }
-
-      .service-grid {
-        flex-direction: column;
-      }
-
-      .book-btn {
-        margin-top: 12px;
-      }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .services { padding: 32px 3vw 18px 3vw; }
+      .service-grid { gap: 18px; }
+    }
+    @media (max-width: 700px) {
+      header { flex-direction: column; gap: 14px; padding: 14px 3vw;}
+      .services { padding: 24px 3vw 8px 3vw; }
+      .service-item { flex-direction: column; align-items: flex-start;}
+      .service-item img { width: 100%; max-width: 220px; height: auto; margin-bottom: 8px;}
+      .book-btn { margin-top: 12px;}
+      .modal-content { padding: 18px 5px;}
+    }
+    @media (max-width: 500px) {
+      .services h2 { font-size: 1.4rem;}
+      .modal-content { padding: 8px 2vw;}
+      .service-info h3 { font-size: 1.01rem;}
+      .service-info p { font-size: 0.92rem;}
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>BTECH Online Cyber Services</h1>
+  <h1><i class="fa fa-globe"></i> BTECH Online Cyber Services</h1>
   <button class="book-btn" onclick="openModal()">Book for Application</button>
 </header>
 
-<section class="services">
+<section class="hero">
+  <div class="typing-text" aria-live="polite" aria-atomic="true"></div>
+  <h2>Fast, Secure &amp; Reliable Online Cyber Services</h2>
+</section>
+
+<section class="services" aria-label="Online Cyber Services">
   <h2>Our Online Cyber Services</h2>
   <div class="service-grid">
-    <!-- (same service items, no change here) -->
-    <div class="service-item">
-      <img src="kuccps.png" alt="KUCCPS Applications">
+    <article class="service-item" tabindex="0" aria-label="KUCCPS Applications">
+      <img src="kuccps.png" alt="KUCCPS Applications" loading="lazy" />
       <div class="service-info">
         <h3>KUCCPS Applications</h3>
         <p>Apply for placement to universities and colleges through KUCCPS.</p>
         <a href="kuccps-details.html">View Details</a>
         <a href="request-application-kuccps.html">Request</a>
       </div>
-    </div>
-    <div class="service-item">
-      <img src="helb.png" alt="HELB Loan Application">
+    </article>
+    <article class="service-item" tabindex="0" aria-label="HELB Loan Application">
+      <img src="helb.png" alt="HELB Loan Application" loading="lazy" />
       <div class="service-info">
         <h3>HELB Loan Application</h3>
         <p>Apply for the HELB student loan for your education needs.</p>
         <a href="helb-details.html">View Details</a>
         <a href="request-application-helb.html">Request</a>
       </div>
-    </div>
-    <div class="service-item">
-      <img src="kra.png" alt="KRA Services">
+    </article>
+    <article class="service-item" tabindex="0" aria-label="KRA Services">
+      <img src="kra.png" alt="KRA Services" loading="lazy" />
       <div class="service-info">
         <h3>KRA Services</h3>
         <p>Access and apply for KRA services such as Tax PIN and registration.</p>
@@ -264,58 +445,65 @@
         <a href="file-kra-returns.html">File My KRA Returns</a>
         <a href="request-application-kra.html">Request New Pin</a>
       </div>
-    </div>
-    <div class="service-item">
-      <img src="other-services.png" alt="Other Cyber Services">
+    </article>
+    <article class="service-item" tabindex="0" aria-label="Other Cyber Services">
+      <img src="other-services.png" alt="Other Cyber Services" loading="lazy" />
       <div class="service-info">
         <h3>Other Cyber Services</h3>
         <p>Explore other online services available for students and professionals.</p>
         <a href="other-services-details.html">View Details</a>
         <a href="request-application-other-services.html">Request</a>
       </div>
-    </div>
+    </article>
   </div>
 </section>
 
 <footer>
+  <div class="footer-social">
+    <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+    <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  </div>
   <p>&copy; 2025 BTECH. All rights reserved.</p>
 </footer>
 
 <!-- Modal -->
-<div id="applicationModal" class="modal">
-  <div class="modal-content">
-    <h3>Book an Application</h3>
-
-    <input type="text" id="payerName" placeholder="Your Full Name" />
-
-    <label for="serviceSelect">Select Service</label><br>
-    <select id="serviceSelect" onchange="toggleOtherInput()">
+<div id="applicationModal" class="modal" tabindex="-1" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Book an Application</h3>
+    <input type="text" id="payerName" placeholder="Your Full Name" autocomplete="name" aria-label="Your Full Name" />
+    <label for="serviceSelect" style="display:block;text-align:left;margin-bottom:3px;font-weight:600;">Select Service</label>
+    <select id="serviceSelect" onchange="toggleOtherInput()" aria-label="Select Service">
       <option value="">-- Choose a Service --</option>
       <option value="KUCCPS">KUCCPS</option>
       <option value="KRA">KRA</option>
       <option value="HELB">HELB</option>
       <option value="OTHER">Other Service</option>
     </select>
-
-    <input type="text" id="otherServiceInput" placeholder="Type your service here" style="display:none;" />
-
+    <input type="text" id="otherServiceInput" placeholder="Type your service here" style="display:none;" aria-label="Other Service" />
     <div id="paymentMessage" class="payment-message" style="display:none;"></div>
-
     <br />
-    <button class="close-btn" onclick="closeModal()">Cancel</button>
-    <button class="submit-btn" onclick="bookApplication()">OK</button>
-    <button id="paystackBtn" class="submit-btn" style="background:#fbb034; display:none;" onclick="payWithPaystack()">PAY NOW</button>
+    <button class="close-btn" onclick="closeModal()" aria-label="Cancel booking">Cancel</button>
+    <button class="submit-btn" onclick="bookApplication()" aria-label="Submit booking">OK</button>
+    <button id="paystackBtn" class="submit-btn" style="background:#fbb034; display:none;" onclick="payWithPaystack()" aria-label="Pay now">PAY NOW</button>
   </div>
 </div>
 
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
+  // Modal open/close
   function openModal() {
-    document.getElementById("applicationModal").style.display = "block";
+    const modal = document.getElementById("applicationModal");
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => document.getElementById("payerName").focus(), 200);
   }
-
   function closeModal() {
-    document.getElementById("applicationModal").style.display = "none";
+    const modal = document.getElementById("applicationModal");
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
     document.getElementById("serviceSelect").value = "";
     document.getElementById("otherServiceInput").style.display = "none";
     document.getElementById("otherServiceInput").value = "";
@@ -323,44 +511,34 @@
     document.getElementById("paymentMessage").style.display = "none";
     document.getElementById("paystackBtn").style.display = "none";
   }
+  document.getElementById("applicationModal").addEventListener("click", function(e){
+    if(e.target === this) closeModal();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeModal();
+  });
 
   function toggleOtherInput() {
     const selected = document.getElementById("serviceSelect").value;
     document.getElementById("otherServiceInput").style.display = (selected === "OTHER") ? "block" : "none";
   }
-
   function bookApplication() {
     const selected = document.getElementById("serviceSelect").value;
     const otherService = document.getElementById("otherServiceInput").value.trim();
     const payerName = document.getElementById("payerName").value.trim();
     const messageBox = document.getElementById("paymentMessage");
     const paystackBtn = document.getElementById("paystackBtn");
-
     let service = selected;
     let amount = 0;
-
-    if (!payerName) {
-      alert("Please enter your name.");
-      return;
-    }
-
-    if (!selected) {
-      alert("Please select a service.");
-      return;
-    }
-
+    if (!payerName) { alert("Please enter your name."); return; }
+    if (!selected) { alert("Please select a service."); return; }
     if (selected === "KUCCPS") amount = 450;
     else if (selected === "KRA") amount = 200;
     else if (selected === "HELB") amount = 500;
     else if (selected === "OTHER") {
-      if (!otherService) {
-        alert("Please type the name of the other service.");
-        return;
-      }
-      service = otherService;
-      amount = 500;
+      if (!otherService) { alert("Please type the name of the other service."); return; }
+      service = otherService; amount = 500;
     }
-
     const message = `Payment Instructions:
 
 Name: ${payerName}
@@ -371,77 +549,97 @@ Go to M-Pesa > Lipa na M-Pesa > Buy Goods
 Till Number: 4499436
 Amount: ${amount}
 
-or click "PAY NOW"
- to pay 
+or click "PAY NOW" to pay
 
 Thank you for booking with BTECH!`;
-
     messageBox.style.display = "block";
     messageBox.textContent = message;
     paystackBtn.style.display = "inline-block";
   }
-
   function payWithPaystack() {
     const selected = document.getElementById("serviceSelect").value;
     const otherService = document.getElementById("otherServiceInput").value.trim();
     const payerName = document.getElementById("payerName").value.trim();
-
-    let service = selected;
-    let amount = 0;
-
-    if (!payerName) {
-      alert("Please enter your name.");
-      return;
-    }
-
-    if (!selected) {
-      alert("Please select a service.");
-      return;
-    }
-
+    let service = selected, amount = 0;
+    if (!payerName) { alert("Please enter your name."); return; }
+    if (!selected) { alert("Please select a service."); return; }
     if (selected === "KUCCPS") amount = 450;
     else if (selected === "KRA") amount = 200;
     else if (selected === "HELB") amount = 500;
     else if (selected === "OTHER") {
-      if (!otherService) {
-        alert("Please type the name of the other service.");
-        return;
-      }
-      service = otherService;
-      amount = 500;
+      if (!otherService) { alert("Please type the name of the other service."); return; }
+      service = otherService; amount = 500;
     }
-
     let handler = PaystackPop.setup({
       key: 'pk_live_f6b9cee9c1297ff867e975724f4d96db49847c7b',
-      email: payerName.replace(/\s/g, '') + '@btech.com', // fake email using name
+      email: payerName.replace(/\s/g, '') + '@btech.com',
       amount: amount * 100,
       currency: "KES",
       ref: 'BTECH_' + Math.floor(Math.random() * 1000000000),
       metadata: {
         custom_fields: [
-          {
-            display_name: "Payer Name",
-            variable_name: "payer_name",
-            value: payerName
-          },
-          {
-            display_name: "Service",
-            variable_name: "service",
-            value: service
-          }
+          { display_name: "Payer Name", variable_name: "payer_name", value: payerName },
+          { display_name: "Service", variable_name: "service", value: service }
         ]
       },
       callback: function(response) {
         alert('Payment successful! Reference: ' + response.reference + "\nName: " + payerName);
         closeModal();
       },
-      onClose: function() {
-        alert('Payment cancelled.');
-      }
+      onClose: function() { alert('Payment cancelled.'); }
     });
     handler.openIframe();
   }
-</script>
 
+  // Typing effect in hero
+  const typingText = document.querySelector('.typing-text');
+  const phrases = [
+    "Innovate. Learn. Transform.",
+    "Empowering Digital Futures.",
+    "Your Tech Journey Starts Here.",
+    "Skill Up with BTECH.",
+    "Solutions for Tomorrow."
+  ];
+  let phraseIndex = 0, letterIndex = 0, deleting = false;
+  const typingSpeed = 80;
+  function typeEffect() {
+    const currentPhrase = phrases[phraseIndex];
+    if (!deleting) {
+      typingText.textContent = currentPhrase.slice(0, letterIndex + 1);
+      letterIndex++;
+      if (letterIndex === currentPhrase.length) {
+        deleting = true;
+        setTimeout(typeEffect, 1500);
+        return;
+      }
+    } else {
+      typingText.textContent = currentPhrase.slice(0, letterIndex - 1);
+      letterIndex--;
+      if (letterIndex === 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }
+    }
+    setTimeout(typeEffect, deleting ? typingSpeed / 2 : typingSpeed);
+  }
+  typeEffect();
+
+  // 3D tilt effect on service cards
+  document.querySelectorAll('.service-item').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * 8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+      card.style.transform = `perspective(700px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+    card.addEventListener('mouseleave', () => card.style.transform = 'none');
+    card.addEventListener('focus', () => card.style.transform = 'scale(1.05)');
+    card.addEventListener('blur', () => card.style.transform = 'none');
+  });
+</script>
 </body>
 </html>
