@@ -3,75 +3,490 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BTECH Admin Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BTECH Admin Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body {
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b1;
+      --secondary: #34a853;
+      --dark: #212121;
+      --light-gray: #f5f5f5;
+      --gray: #757575;
+      --error: #ea4335;
+      --success: #34a853;
+    }
+    
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+    
+    body {
       font-family: 'Poppins', sans-serif;
-      background: #ffffff;
+      background: var(--light-gray);
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    .split-layout {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+    
+    .brand-section {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 40px;
+      display: none;
+    }
+    
+    .brand-content {
+      max-width: 500px;
+      text-align: center;
+    }
+    
+    .brand-logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    .brand-tagline {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+    
+    .brand-features {
+      margin-top: 40px;
+      text-align: left;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .feature-icon {
+      margin-right: 15px;
+    }
+    
+    .login-section {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 20px;
     }
-    .login-box {
-      width: 360px;
+    
+    .login-container {
+      width: 100%;
+      max-width: 420px;
       padding: 40px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: #fff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
-    .login-box h2 {
-      margin-bottom: 20px;
+    
+    .login-header {
       text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .login-title {
+      font-size: 1.8rem;
       font-weight: 600;
-      color: #007bff;
+      color: var(--dark);
+      margin-bottom: 10px;
     }
-    .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+    
+    .login-subtitle {
+      color: var(--gray);
+      font-size: 0.95rem;
     }
-    .login-box button {
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      font-weight: 500;
+    }
+    
+    .form-input-wrapper {
+      position: relative;
+    }
+    
+    .form-input {
       width: 100%;
-      padding: 12px;
-      background: #007bff;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1.5px solid #e0e0e0;
+      font-size: 1rem;
+      transition: all 0.3s;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+    }
+    
+    .icon-left {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+    
+    .has-icon-left {
+      padding-left: 42px;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 1rem;
+    }
+    
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-bottom: 30px;
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+    
+    .remember-me input {
+      margin-right: 8px;
+    }
+    
+    .forgot-password {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
+      transition: background 0.3s;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .login-box button:hover {
-      opacity: 0.9;
+    
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-icon {
+      margin-left: 8px;
+    }
+    
+    .login-footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    
+    .help-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .help-link:hover {
+      text-decoration: underline;
+    }
+    
+    .alert {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    .alert-error {
+      background: rgba(234, 67, 53, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(234, 67, 53, 0.3);
+    }
+    
+    .alert-success {
+      background: rgba(52, 168, 83, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(52, 168, 83, 0.3);
+    }
+    
+    .alert-icon {
+      margin-right: 10px;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+      display: none;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (min-width: 992px) {
+      .brand-section {
+        display: flex;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .login-container {
+        padding: 30px 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Admin Login</h2>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="login()">Login</button>
+  <div class="split-layout">
+    <!-- Left side branding section (visible on larger screens) -->
+    <div class="brand-section">
+      <div class="brand-content">
+        <div class="brand-logo">BTECH</div>
+        <div class="brand-tagline">Advanced solutions for modern business technology</div>
+        
+        <div class="brand-features">
+          <div class="feature-item">
+            <span class="feature-icon"><i class="fas fa-shield-alt"></i></span>
+            <span>Secure administrative controls</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon"><i class="fas fa-chart-line"></i></span>
+            <span>Comprehensive analytics dashboard</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon"><i class="fas fa-users-cog"></i></span>
+            <span>User management system</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right side login section -->
+    <div class="login-section">
+      <div class="login-container">
+        <div class="login-header">
+          <h1 class="login-title">Admin Portal</h1>
+          <p class="login-subtitle">Enter your credentials to access the dashboard</p>
+        </div>
+        
+        <!-- Alert messages -->
+        <div id="alert" class="alert alert-error">
+          <span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
+          <span id="alert-message">Invalid username or password</span>
+        </div>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <div class="form-input-wrapper">
+              <input 
+                type="text" 
+                id="username" 
+                class="form-input has-icon-left" 
+                placeholder="Enter your username" 
+                required
+                autocomplete="username"
+              >
+              <i class="fas fa-user icon-left"></i>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="form-input-wrapper">
+              <input 
+                type="password" 
+                id="password" 
+                class="form-input has-icon-left" 
+                placeholder="Enter your password" 
+                required
+                autocomplete="current-password"
+              >
+              <i class="fas fa-lock icon-left"></i>
+              <button type="button" class="password-toggle" id="passwordToggle">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="login-options">
+            <label class="remember-me">
+              <input type="checkbox" id="rememberMe"> Remember me
+            </label>
+            <a href="#" class="forgot-password">Forgot password?</a>
+          </div>
+          
+          <button type="submit" class="btn" id="loginButton">
+            Sign In
+            <div class="loading" id="loadingSpinner"></div>
+          </button>
+        </form>
+        
+        <div class="login-footer">
+          Having trouble? <a href="#" class="help-link">Contact IT Support</a>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    function login() {
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-
-      if (user === "admin" && pass === "admin123") {
-        localStorage.setItem("isAdmin", "true");
-        window.location.href = "admin-dashboard.html";
+    // Toggle password visibility
+    document.getElementById('passwordToggle').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const passwordIcon = this.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
       } else {
-        alert("Invalid credentials!");
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
       }
+    });
+    
+    // Login form submission
+    function handleLogin(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+      const alert = document.getElementById('alert');
+      const alertMessage = document.getElementById('alert-message');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const loginButton = document.getElementById('loginButton');
+      
+      // Show loading state
+      loadingSpinner.style.display = 'inline-block';
+      loginButton.disabled = true;
+      
+      // Hide any existing alerts
+      alert.style.display = 'none';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        // Reset loading state
+        loadingSpinner.style.display = 'none';
+        loginButton.disabled = false;
+        
+        // For demo purposes - in production, this would be an API call
+        if (username === "admin" && password === "admin123") {
+          // Store authentication token/data in a more secure way
+          const authData = {
+            username: username,
+            token: "sample-jwt-token-would-go-here",
+            isAdmin: true,
+            loginTime: new Date().toISOString()
+          };
+          
+          // Store auth data
+          if (rememberMe) {
+            localStorage.setItem("authData", JSON.stringify(authData));
+          } else {
+            sessionStorage.setItem("authData", JSON.stringify(authData));
+          }
+          
+          // Show success message before redirect
+          alert.className = "alert alert-success";
+          alertMessage.textContent = "Login successful! Redirecting...";
+          alert.style.display = "flex";
+          
+          // Redirect to dashboard
+          setTimeout(() => {
+            window.location.href = "admin-dashboard.html";
+          }, 1000);
+          
+        } else {
+          // Show error message
+          alert.className = "alert alert-error";
+          alertMessage.textContent = "Invalid username or password";
+          alert.style.display = "flex";
+        }
+      }, 1000); // Simulate 1 second API delay
     }
+    
+    // Check if user is already logged in
+    window.addEventListener('DOMContentLoaded', () => {
+      const authData = JSON.parse(localStorage.getItem("authData") || sessionStorage.getItem("authData") || "null");
+      
+      if (authData && authData.isAdmin) {
+        // Verify token validity (would be more complex in production)
+        const loginTime = new Date(authData.loginTime);
+        const currentTime = new Date();
+        const hoursSinceLogin = (currentTime - loginTime) / (1000 * 60 * 60);
+        
+        // If login was less than 24 hours ago, redirect to dashboard
+        if (hoursSinceLogin < 24) {
+          window.location.href = "admin-dashboard.html";
+        } else {
+          // Clear expired auth data
+          localStorage.removeItem("authData");
+          sessionStorage.removeItem("authData");
+        }
+      }
+    });
   </script>
 </body>
 </html>
