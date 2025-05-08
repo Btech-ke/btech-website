@@ -3,141 +3,843 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Request Application - HELB Loan</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>HELB Loan Application - Higher Education Loans Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom right, #f0f8ff, #ffffff);
+    :root {
+      --primary: #0056b3;
+      --primary-light: #007BFF;
+      --primary-dark: #004494;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --white: #ffffff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4eff8 100%);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      flex-direction: column;
+      padding: 20px;
     }
-
-    .form-container {
-      background-color: #ffffff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-    }
-
-    h1 {
-      color: #007BFF;
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-
-    form {
+    
+    .page-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 40px auto;
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
-
-    input {
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      width: 100%;
     }
-
-    button {
-      margin-top: 20px;
-      padding: 14px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+    
+    .logo {
+      max-width: 180px;
+      margin-bottom: 15px;
     }
-
-    button:hover {
-      background-color: #0056b3;
+    
+    .header h1 {
+      color: var(--primary);
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
     }
-
-    /* Spinner Styles */
-    .spinner {
-      display: none;
-      margin-top: 20px;
+    
+    .header p {
+      color: var(--secondary);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .content-wrapper {
+      display: flex;
+      width: 100%;
+      gap: 30px;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    @media (min-width: 992px) {
+      .content-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+    
+    .info-sidebar {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 25px;
+      flex: 1;
+      max-width: 100%;
+    }
+    
+    @media (min-width: 992px) {
+      .info-sidebar {
+        max-width: 350px;
+      }
+    }
+    
+    .info-sidebar h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 10px;
+    }
+    
+    .info-list {
+      list-style: none;
+    }
+    
+    .info-list li {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .info-list i {
+      color: var(--primary);
+      margin-right: 10px;
+      min-width: 20px;
+      margin-top: 3px;
+    }
+    
+    .contact-info {
+      margin-top: 30px;
+    }
+    
+    .contact-info p {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .contact-info i {
+      color: var(--primary);
+      margin-right: 10px;
+      min-width: 20px;
+    }
+    
+    .form-container {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      flex: 2;
+    }
+    
+    .form-title {
+      color: var(--primary);
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+      font-weight: 600;
       text-align: center;
     }
-
-    .spinner div {
-      width: 30px;
-      height: 30px;
-      border: 4px solid #007BFF;
-      border-top: 4px solid transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: auto;
+    
+    .form-group {
+      margin-bottom: 20px;
     }
-
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--secondary);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 14px 15px 14px 45px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    }
+    
+    .form-control::placeholder {
+      color: #aaa;
+    }
+    
+    .help-text {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: var(--secondary);
+    }
+    
+    .required::after {
+      content: "*";
+      color: var(--danger);
+      margin-left: 4px;
+    }
+    
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px;
+    }
+    
+    .form-col {
+      flex: 1 0 100%;
+      padding: 0 10px;
+    }
+    
+    @media (min-width: 768px) {
+      .form-col-6 {
+        flex: 0 0 50%;
+      }
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+    
+    .checkbox-group input {
+      margin-right: 10px;
+    }
+    
+    .btn {
+      display: inline-block;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: 15px 25px;
+      font-size: 1rem;
+      line-height: 1.5;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      width: 100%;
+    }
+    
+    .btn-primary {
+      color: var(--white);
+      background-color: var(--primary-light);
+      border-color: var(--primary-light);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .btn-primary:active {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    .spinner-container {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 123, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-light);
+      animation: spin 1s linear infinite;
+    }
+    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
-    .spinner p {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #333;
+    
+    .spinner-text {
+      margin-top: 15px;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+    
+    .error-text {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    /* Success message */
+    .success-message {
+      display: none;
+      background-color: rgba(40, 167, 69, 0.1);
+      border: 1px solid var(--success);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .success-message i {
+      color: var(--success);
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .success-message h3 {
+      color: var(--success);
+      margin-bottom: 10px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--secondary);
+      font-size: 0.9rem;
+    }
+    
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      text-decoration: underline;
     }
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      .form-container {
-        padding: 30px 20px;
-      }
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: var(--primary-light);
+      width: 33%;
+      transition: width 0.5s;
+    }
+
+    /* Form Steps */
+    .form-step {
+      display: none;
+    }
+    
+    .form-step.active {
+      display: block;
+    }
+    
+    .step-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .btn-prev {
+      background-color: var(--light);
+      color: var(--dark);
+    }
+    
+    .btn-prev:hover {
+      background-color: #e2e6ea;
+    }
+    
+    .step-buttons .btn {
+      width: 48%;
     }
   </style>
 </head>
 <body>
-
-<div class="form-container">
-  <h1>Request Application</h1>
-  <form id="applicationForm" action="https://formspree.io/f/mgvkvrpk" method="POST">
-    <input type="text" name="Full Name" placeholder="Full Name" required>
-    <input type="tel" name="Phone Number" placeholder="Phone Number" required>
-    <input type="email" name="Email Address" placeholder="Email Address" required>
-    <input type="text" name="KCSE Index Number" placeholder="KCSE Index Number" required>
-    <input type="text" name="ID Number (Optional)" placeholder="ID Number (Optional)">
+  <div class="page-container">
+    <div class="header">
+      <img src="helb.png" alt="HELB Logo" class="logo">
+      <h1>HELB Loan Application</h1>
+      <p>Complete the form below to submit your Higher Education Loans Board (HELB) loan application request.</p>
+    </div>
     
-    <input type="hidden" name="_subject" value="New HELB Loan Application from BTECH">
-
-    <button type="submit">Submit Request</button>
-  </form>
-
-  <div class="spinner" id="spinner">
-    <div></div>
-    <p>Submitting your request, please wait...</p>
+    <div class="content-wrapper">
+      <div class="info-sidebar">
+        <h3>Application Guidelines</h3>
+        <ul class="info-list">
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <span>Ensure all required fields are completed accurately</span>
+          </li>
+          <li>
+            <i class="fas fa-id-card"></i>
+            <span>Have your KCSE index number and National ID (if available) ready</span>
+          </li>
+          <li>
+            <i class="fas fa-file-alt"></i>
+            <span>Provide a valid email address where you can receive application updates</span>
+          </li>
+          <li>
+            <i class="fas fa-info-circle"></i>
+            <span>After submission, you will receive a confirmation email with next steps</span>
+          </li>
+          <li>
+            <i class="fas fa-clock"></i>
+            <span>Processing time is typically 3-5 business days</span>
+          </li>
+        </ul>
+        
+        <div class="contact-info">
+          <h3>Need Help?</h3>
+          <p><i class="fas fa-envelope"></i> btechkenya@gmail.com</p>
+          <p><i class="fas fa-phone"></i> +254 (0) 113 996 609</p>
+          <p><i class="fas fa-map-marker-alt"></i> BTECH Plaza, Thika, Nairobi</p>
+        </div>
+      </div>
+      
+      <div class="form-container">
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <h2 class="form-title">Student Loan Application</h2>
+        
+        <form id="applicationForm" action="https://formspree.io/f/mgvkvrpk" method="POST">
+          <!-- Step 1: Personal Information -->
+          <div class="form-step active" id="step1">
+            <h3>Step 1: Personal Information</h3>
+            
+            <div class="form-row">
+              <div class="form-col form-col-6">
+                <div class="form-group">
+                  <label for="firstName" class="required">First Name</label>
+                  <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="firstName" name="First Name" class="form-control" placeholder="Enter your first name" required>
+                  </div>
+                  <span class="error-text" id="firstNameError">Please enter your first name</span>
+                </div>
+              </div>
+              
+              <div class="form-col form-col-6">
+                <div class="form-group">
+                  <label for="lastName" class="required">Last Name</label>
+                  <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="lastName" name="Last Name" class="form-control" placeholder="Enter your last name" required>
+                  </div>
+                  <span class="error-text" id="lastNameError">Please enter your last name</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email" class="required">Email Address</label>
+              <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="Email Address" class="form-control" placeholder="Enter your email address" required>
+              </div>
+              <span class="help-text">We'll send application updates to this email</span>
+              <span class="error-text" id="emailError">Please enter a valid email address</span>
+            </div>
+            
+            <div class="form-group">
+              <label for="phone" class="required">Phone Number</label>
+              <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input type="tel" id="phone" name="Phone Number" class="form-control" placeholder="Enter your phone number (e.g., 0712345678)" required>
+              </div>
+              <span class="error-text" id="phoneError">Please enter a valid phone number</span>
+            </div>
+            
+            <div class="form-group">
+              <label for="idNumber">ID Number</label>
+              <div class="input-group">
+                <i class="fas fa-id-card"></i>
+                <input type="text" id="idNumber" name="ID Number" class="form-control" placeholder="Enter your ID number (if available)">
+              </div>
+              <span class="help-text">Optional for applicants who have not yet received their ID</span>
+            </div>
+            
+            <div class="step-buttons">
+              <button type="button" class="btn btn-primary" id="nextToStep2">Continue to Next Step</button>
+            </div>
+          </div>
+          
+          <!-- Step 2: Academic Information -->
+          <div class="form-step" id="step2">
+            <h3>Step 2: Academic Information</h3>
+            
+            <div class="form-group">
+              <label for="kcseIndex" class="required">KCSE Index Number</label>
+              <div class="input-group">
+                <i class="fas fa-graduation-cap"></i>
+                <input type="text" id="kcseIndex" name="KCSE Index Number" class="form-control" placeholder="Enter your KCSE index number" required>
+              </div>
+              <span class="error-text" id="kcseIndexError">Please enter your KCSE index number</span>
+            </div>
+            
+            <div class="form-group">
+              <label for="kcseYear" class="required">Year of KCSE Completion</label>
+              <div class="input-group">
+                <i class="fas fa-calendar"></i>
+                <input type="number" id="kcseYear" name="KCSE Year" class="form-control" placeholder="Enter year (e.g., 2023)" min="1990" max="2025" required>
+              </div>
+              <span class="error-text" id="kcseYearError">Please enter a valid year</span>
+            </div>
+            
+            <div class="form-group">
+              <label for="institution" class="required">Institution Applied/Admitted</label>
+              <div class="input-group">
+                <i class="fas fa-university"></i>
+                <input type="text" id="institution" name="Institution" class="form-control" placeholder="Enter institution name" required>
+              </div>
+              <span class="error-text" id="institutionError">Please enter your institution name</span>
+            </div>
+            
+            <div class="form-group">
+              <label for="course" class="required">Course of Study</label>
+              <div class="input-group">
+                <i class="fas fa-book"></i>
+                <input type="text" id="course" name="Course" class="form-control" placeholder="Enter your course name" required>
+              </div>
+              <span class="error-text" id="courseError">Please enter your course of study</span>
+            </div>
+            
+            <div class="step-buttons">
+              <button type="button" class="btn btn-prev" id="prevToStep1">Previous</button>
+              <button type="button" class="btn btn-primary" id="nextToStep3">Continue to Final Step</button>
+            </div>
+          </div>
+          
+          <!-- Step 3: Additional Information & Submission -->
+          <div class="form-step" id="step3">
+            <h3>Step 3: Additional Information</h3>
+            
+            <div class="form-group">
+              <label for="guardianName">Parent/Guardian Name</label>
+              <div class="input-group">
+                <i class="fas fa-user-friends"></i>
+                <input type="text" id="guardianName" name="Guardian Name" class="form-control" placeholder="Enter parent/guardian name">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="guardianPhone">Parent/Guardian Phone</label>
+              <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input type="tel" id="guardianPhone" name="Guardian Phone" class="form-control" placeholder="Enter parent/guardian phone">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="addressInfo">Home Address</label>
+              <div class="input-group">
+                <i class="fas fa-home"></i>
+                <input type="text" id="addressInfo" name="Home Address" class="form-control" placeholder="Enter your home address">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Application Type</label>
+              <div class="checkbox-group">
+                <input type="checkbox" id="firstTime" name="First Time Applicant" value="yes" checked>
+                <label for="firstTime">I am a first-time applicant</label>
+              </div>
+            </div>
+            
+            <div class="checkbox-group">
+              <input type="checkbox" id="termsCheck" name="Terms Accepted" value="yes" required>
+              <label for="termsCheck" class="required">I agree that all information provided is accurate and complete</label>
+            </div>
+            
+            <input type="hidden" name="_subject" value="New HELB Loan Application">
+            
+            <div class="step-buttons">
+              <button type="button" class="btn btn-prev" id="prevToStep2">Previous</button>
+              <button type="submit" class="btn btn-primary" id="submitBtn">Submit Application</button>
+            </div>
+          </div>
+        </form>
+        
+        <div class="spinner-container" id="spinnerContainer">
+          <div class="spinner"></div>
+          <p class="spinner-text">Processing your application. Please wait...</p>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+          <i class="fas fa-check-circle"></i>
+          <h3>Application Submitted Successfully!</h3>
+          <p>Thank you for submitting your HELB loan application request. A confirmation has been sent to us and we're working on it.</p>
+          <p>Our team will review your request and contact you shortly.</p>
+          <p>Application Reference: <strong id="referenceNumber"></strong></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2025 BTECH PLUS. All rights reserved.</p>
+      <p>For assistance, contact <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a> or call +254 (0) 113 996 609</p>
+    </div>
   </div>
-</div>
-
-<script>
-  const form = document.getElementById('applicationForm');
-  const spinner = document.getElementById('spinner');
-
-  form.addEventListener('submit', function(event) {
-    form.style.display = 'none'; // Hide the form
-    spinner.style.display = 'block'; // Show spinner
-
-    // After 2 seconds, redirect
-     setTimeout(function() {
-      // For testing purposes, this line can redirect to a Thank You page or confirmation
-      window.location.href = 'thank-you.html';
-    }, 2500);
-    
-  });
-</script>
-
+  
+  <script>
+    // Form validation and multi-step functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('applicationForm');
+      const spinnerContainer = document.getElementById('spinnerContainer');
+      const successMessage = document.getElementById('successMessage');
+      const progressBar = document.getElementById('progressBar');
+      
+      // Step navigation buttons
+      const nextToStep2 = document.getElementById('nextToStep2');
+      const prevToStep1 = document.getElementById('prevToStep1');
+      const nextToStep3 = document.getElementById('nextToStep3');
+      const prevToStep2 = document.getElementById('prevToStep2');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // Form steps
+      const step1 = document.getElementById('step1');
+      const step2 = document.getElementById('step2');
+      const step3 = document.getElementById('step3');
+      
+      // Validation functions
+      function validateStep1() {
+        let isValid = true;
+        
+        // First name validation
+        const firstName = document.getElementById('firstName');
+        const firstNameError = document.getElementById('firstNameError');
+        if (!firstName.value.trim()) {
+          firstNameError.style.display = 'block';
+          firstName.classList.add('error');
+          isValid = false;
+        } else {
+          firstNameError.style.display = 'none';
+          firstName.classList.remove('error');
+        }
+        
+        // Last name validation
+        const lastName = document.getElementById('lastName');
+        const lastNameError = document.getElementById('lastNameError');
+        if (!lastName.value.trim()) {
+          lastNameError.style.display = 'block';
+          lastName.classList.add('error');
+          isValid = false;
+        } else {
+          lastNameError.style.display = 'none';
+          lastName.classList.remove('error');
+        }
+        
+        // Email validation
+        const email = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email.value)) {
+          emailError.style.display = 'block';
+          email.classList.add('error');
+          isValid = false;
+        } else {
+          emailError.style.display = 'none';
+          email.classList.remove('error');
+        }
+        
+        // Phone validation
+        const phone = document.getElementById('phone');
+        const phoneError = document.getElementById('phoneError');
+        const phonePattern = /^0[0-9]{9}$/;
+        if (!phonePattern.test(phone.value)) {
+          phoneError.style.display = 'block';
+          phone.classList.add('error');
+          isValid = false;
+        } else {
+          phoneError.style.display = 'none';
+          phone.classList.remove('error');
+        }
+        
+        return isValid;
+      }
+      
+      function validateStep2() {
+        let isValid = true;
+        
+        // KCSE Index validation
+        const kcseIndex = document.getElementById('kcseIndex');
+        const kcseIndexError = document.getElementById('kcseIndexError');
+        if (!kcseIndex.value.trim()) {
+          kcseIndexError.style.display = 'block';
+          kcseIndex.classList.add('error');
+          isValid = false;
+        } else {
+          kcseIndexError.style.display = 'none';
+          kcseIndex.classList.remove('error');
+        }
+        
+        // KCSE Year validation
+        const kcseYear = document.getElementById('kcseYear');
+        const kcseYearError = document.getElementById('kcseYearError');
+        const currentYear = new Date().getFullYear();
+        if (!kcseYear.value || kcseYear.value < 1990 || kcseYear.value > currentYear) {
+          kcseYearError.style.display = 'block';
+          kcseYear.classList.add('error');
+          isValid = false;
+        } else {
+          kcseYearError.style.display = 'none';
+          kcseYear.classList.remove('error');
+        }
+        
+        // Institution validation
+        const institution = document.getElementById('institution');
+        const institutionError = document.getElementById('institutionError');
+        if (!institution.value.trim()) {
+          institutionError.style.display = 'block';
+          institution.classList.add('error');
+          isValid = false;
+        } else {
+          institutionError.style.display = 'none';
+          institution.classList.remove('error');
+        }
+        
+        // Course validation
+        const course = document.getElementById('course');
+        const courseError = document.getElementById('courseError');
+        if (!course.value.trim()) {
+          courseError.style.display = 'block';
+          course.classList.add('error');
+          isValid = false;
+        } else {
+          courseError.style.display = 'none';
+          course.classList.remove('error');
+        }
+        
+        return isValid;
+      }
+      
+      // Step navigation
+      nextToStep2.addEventListener('click', function() {
+        if (validateStep1()) {
+          step1.classList.remove('active');
+          step2.classList.add('active');
+          progressBar.style.width = '66%';
+        }
+      });
+      
+      prevToStep1.addEventListener('click', function() {
+        step2.classList.remove('active');
+        step1.classList.add('active');
+        progressBar.style.width = '33%';
+      });
+      
+      nextToStep3.addEventListener('click', function() {
+        if (validateStep2()) {
+          step2.classList.remove('active');
+          step3.classList.add('active');
+          progressBar.style.width = '100%';
+        }
+      });
+      
+      prevToStep2.addEventListener('click', function() {
+        step3.classList.remove('active');
+        step2.classList.add('active');
+        progressBar.style.width = '66%';
+      });
+      
+      // Form submission
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Hide form, show spinner
+        form.style.display = 'none';
+        spinnerContainer.style.display = 'block';
+        
+        // Generate reference number
+        const referenceNumber = 'HELB' + Date.now().toString().substring(6);
+        document.getElementById('referenceNumber').textContent = referenceNumber;
+        
+        // Submit form data
+        const formData = new FormData(form);
+        formData.append('Reference Number', referenceNumber);
+        
+        fetch('https://formspree.io/f/mgvkvrpk', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          if (response.ok) {
+            // Show success message after short delay
+            setTimeout(function() {
+              spinnerContainer.style.display = 'none';
+              successMessage.style.display = 'block';
+            }, 1500);
+          } else {
+            console.error('Form submission error');
+            // Handle error case
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Handle error case
+        });
+      });
+      
+      // Additional form field validations
+      const inputFields = document.querySelectorAll('.form-control');
+      inputFields.forEach(field => {
+        field.addEventListener('input', function() {
+          if (this.classList.contains('error')) {
+            const errorId = this.id + 'Error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+              errorElement.style.display = 'none';
+            }
+            this.classList.remove('error');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
