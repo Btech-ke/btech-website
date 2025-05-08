@@ -57,7 +57,7 @@
   }
   /* Scrollbar */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     background: #00bfff22;
@@ -87,7 +87,7 @@
   }
   .logo {
     font-weight: 900;
-    font-size: 1.8rem;
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
     letter-spacing: 0.15em;
     color: #FFD700;
     text-shadow: 0 0 10px #ffd700bb;
@@ -140,7 +140,7 @@
   nav.mobile {
     position: fixed;
     top: 70px; right: 0;
-    width: 260px;
+    width: 100%; /* Full width on mobile */
     background: #007BFFEE;
     box-shadow: -5px 0 20px rgba(0,0,0,0.5);
     flex-direction: column;
@@ -148,6 +148,7 @@
     gap: 2rem;
     z-index: 11000;
     animation: slideIn 0.3s forwards;
+    height: calc(100vh - 70px); /* Full height minus header */
   }
   @keyframes slideIn {
     from { transform: translateX(100%);}
@@ -155,15 +156,14 @@
   }
   nav.mobile a {
     font-size: 1.3rem;
+    text-align: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: block;
+    width: 100%;
   }
-  nav.mobile::before {
-    content: '';
-    position: fixed;
-    top: 70px; left: 0;
-    width: calc(100% - 260px);
-    height: calc(100% - 70px);
-    background: rgba(0,0,0,0.5);
-    z-index: -1;
+  nav.mobile a:last-child {
+    border-bottom: none;
   }
 
   /* Main */
@@ -172,10 +172,10 @@
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    padding: 3rem 2rem;
+    padding: 3rem 1rem; /* Reduced horizontal padding for mobile */
     display: flex;
     flex-direction: column;
-    gap: 6rem;
+    gap: 4rem; /* Reduced gap for mobile */
   }
 
   /* Hero */
@@ -183,7 +183,7 @@
     min-height: 70vh;
     position: relative;
     background: linear-gradient(135deg, #0052cccc 40%, #007bffcc 100%), url('your-photo.jpg') center/cover no-repeat;
-    border-radius: 30px;
+    border-radius: 20px; /* Smaller radius for mobile */
     box-shadow: 0 12px 40px rgba(0,0,0,0.4);
     color: #fff;
     display: flex;
@@ -191,7 +191,7 @@
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    padding: 3rem 2rem;
+    padding: 2rem 1rem; /* Reduced padding for mobile */
   }
   .home::before {
     content: '';
@@ -207,8 +207,8 @@
     z-index: 1;
     max-width: 700px;
     background: rgba(0,0,0,0.5);
-    padding: 3rem 2rem;
-    border-radius: 30px;
+    padding: 2rem 1rem; /* Reduced padding for mobile */
+    border-radius: 20px; /* Smaller radius for mobile */
     box-shadow: 0 12px 40px #000a;
     animation: fadeInUp 1s ease forwards 0.3s;
   }
@@ -223,35 +223,34 @@
     }
   }
   .home h1 {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 8vw, 3rem); /* Responsive font size */
     font-weight: 900;
     margin-bottom: 1rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em; /* Reduced letter spacing for mobile */
     text-shadow: 0 0 15px #ffd700cc;
   }
   .home p {
     font-weight: 600;
-    font-size: 1.3rem;
-    margin-bottom: 2.5rem;
+    font-size: clamp(1rem, 4vw, 1.3rem); /* Responsive font size */
+    margin-bottom: 2rem;
     line-height: 1.6;
   }
   .typing-text {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 4vw, 1.5rem); /* Responsive font size */
     color: #ffd700;
     min-height: 2rem;
     margin-bottom: 2rem;
     font-family: 'Roboto Mono', monospace;
     user-select: none;
-    min-height: 2rem;
   }
   .cta-btn {
     background: linear-gradient(90deg, #FFD700, #fff176);
     color: #0052cc;
     font-weight: 700;
-    font-size: 1.2rem;
-    padding: 1rem 3rem;
+    font-size: clamp(1rem, 4vw, 1.2rem); /* Responsive font size */
+    padding: 0.8rem 2rem; /* Reduced padding for mobile */
     border-radius: 40px;
     box-shadow: 0 8px 30px #ffd700bb;
     border: none;
@@ -259,6 +258,7 @@
     transition: background 0.3s, color 0.3s, transform 0.2s;
     text-transform: uppercase;
     user-select: none;
+    display: inline-block; /* Ensure proper display on mobile */
   }
   .cta-btn:hover, .cta-btn:focus {
     background: linear-gradient(90deg, #fff176, #FFD700);
@@ -269,36 +269,36 @@
 
   /* Section headings */
   h2 {
-    font-size: 2.8rem;
+    font-size: clamp(1.8rem, 7vw, 2.8rem); /* Responsive font size */
     color: #0052cc;
     font-weight: 900;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
   section {
-    border-radius: 30px;
+    border-radius: 20px; /* Smaller radius for mobile */
     background: #fff;
-    padding: 3rem 3rem 4rem;
+    padding: 2rem 1.5rem; /* Reduced padding for mobile */
     box-shadow: 0 10px 40px rgba(0,0,0,0.1);
   }
   .about p, .download p, .contact p {
-    font-size: 1.15rem;
+    font-size: clamp(1rem, 3.5vw, 1.15rem); /* Responsive font size */
     font-weight: 600;
     color: #333;
     max-width: 720px;
-    margin: 0 auto;
+    margin: 0 auto 0.8rem; /* Added bottom margin */
     text-align: center;
   }
 
   /* CEO photo in About */
   .about .ceo-photo {
-    max-width: 220px;
+    max-width: 180px; /* Smaller for mobile */
     margin: 2rem auto 0;
     border-radius: 50%;
     box-shadow: 0 8px 32px #007bff44, 0 2px 8px #ffd70033;
-    border: 6px solid #fff;
+    border: 4px solid #fff; /* Thinner border for mobile */
     background: #f0f8ff;
     display: block;
   }
@@ -307,12 +307,12 @@
     font-weight: 700;
     color: #0052cc;
     background: #ffd70033;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 20px;
-    font-size: 1.1rem;
+    font-size: 1rem; /* Smaller for mobile */
     letter-spacing: 0.05em;
     user-select: none;
-    max-width: 220px;
+    max-width: 180px;
     margin: 0.5rem auto 0;
   }
 
@@ -322,15 +322,15 @@
   }
   .service-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
     margin-top: 2rem;
   }
   .service-item {
     background: #f9f9f9;
-    border-radius: 30px;
+    border-radius: 20px; /* Smaller radius for mobile */
     box-shadow: 0 6px 30px rgba(0,0,0,0.07);
-    padding: 2.5rem 2rem;
+    padding: 2rem 1.5rem; /* Reduced padding for mobile */
     text-align: center;
     transition: transform 0.35s ease, box-shadow 0.35s ease;
     cursor: pointer;
@@ -344,35 +344,36 @@
     outline: none;
   }
   .service-item img {
-    width: 110px;
-    height: 110px;
+    width: 90px; /* Smaller for mobile */
+    height: 90px; /* Smaller for mobile */
     border-radius: 50%;
-    margin-bottom: 1.2rem;
+    margin: 0 auto 1.2rem;
     box-shadow: 0 8px 25px #007bff33;
     background: #f0f8ff;
   }
   .service-item h3 {
     color: #0052cc;
     font-weight: 800;
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 5vw, 1.4rem); /* Responsive font size */
     margin-bottom: 1rem;
     text-transform: uppercase;
   }
   .service-item p {
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: clamp(0.95rem, 3.5vw, 1.05rem); /* Responsive font size */
     margin-bottom: 1.5rem;
     color: #444;
   }
   .learn-btn {
     background: #0052cc;
     color: #fff;
-    padding: 10px 26px;
+    padding: 8px 22px; /* Reduced padding for mobile */
     border-radius: 30px;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem; /* Smaller for mobile */
     text-decoration: none;
     transition: background 0.3s ease;
+    display: inline-block; /* Ensure proper display on mobile */
   }
   .learn-btn:hover, .learn-btn:focus {
     background: #003d99;
@@ -383,20 +384,22 @@
   .download-btn {
     background: #28a745;
     color: #fff;
-    padding: 14px 40px;
-    font-size: 1.3rem;
+    padding: 12px 30px; /* Reduced padding for mobile */
+    font-size: clamp(1.1rem, 4vw, 1.3rem); /* Responsive font size */
     border-radius: 40px;
     font-weight: 700;
     box-shadow: 0 8px 30px #28a745aa;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem; /* Reduced gap for mobile */
     transition: background 0.3s ease, transform 0.2s ease;
     user-select: none;
+    margin: 0 auto; /* Center button */
+    justify-content: center; /* Center content */
   }
   .download-btn i {
-    font-size: 1.6rem;
+    font-size: clamp(1.3rem, 5vw, 1.6rem); /* Responsive font size */
   }
   .download-btn:hover, .download-btn:focus {
     background: #218838;
@@ -406,12 +409,17 @@
   .download p {
     margin-top: 1rem;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem); /* Responsive font size */
     color: #222;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+  }
+  .download {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   /* Contact */
@@ -419,6 +427,7 @@
     color: #0052cc;
     font-weight: 700;
     transition: color 0.3s ease;
+    word-break: break-word; /* Prevent email from overflowing on mobile */
   }
   .contact a:hover, .contact a:focus {
     color: #ffd700;
@@ -433,8 +442,8 @@
     background: #ffd700;
     color: #0052cc;
     font-weight: 700;
-    font-size: 1.3rem;
-    padding: 1rem 3.5rem;
+    font-size: clamp(1.1rem, 4vw, 1.3rem); /* Responsive font size */
+    padding: 0.8rem 2.5rem; /* Reduced padding for mobile */
     border-radius: 40px;
     border: none;
     cursor: pointer;
@@ -458,14 +467,15 @@
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    padding: 1rem; /* Add padding for mobile */
   }
   .modal-bg.active {
     display: flex;
   }
   .modal {
     background: #fff;
-    padding: 3rem 3rem;
-    border-radius: 30px;
+    padding: 2rem 1.5rem; /* Reduced padding for mobile */
+    border-radius: 20px; /* Smaller radius for mobile */
     box-shadow: 0 12px 40px rgba(0,0,0,0.3);
     width: 100%;
     max-width: 450px;
@@ -479,18 +489,18 @@
   }
   .modal h3 {
     font-weight: 800;
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 6vw, 2rem); /* Responsive font size */
     color: #0052cc;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
   }
   .modal input {
     width: 100%;
-    padding: 14px 18px;
+    padding: 12px 16px; /* Reduced padding for mobile */
     margin-bottom: 1.5rem;
     border-radius: 14px;
     border: 2px solid #ccc;
-    font-size: 1.1rem;
+    font-size: 1rem; /* Smaller for mobile */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .modal input:focus {
@@ -503,8 +513,8 @@
     background: #007bff;
     color: #fff;
     font-weight: 700;
-    font-size: 1.3rem;
-    padding: 14px 0;
+    font-size: clamp(1.1rem, 4vw, 1.3rem); /* Responsive font size */
+    padding: 12px 0; /* Reduced padding for mobile */
     border-radius: 40px;
     border: none;
     cursor: pointer;
@@ -516,14 +526,15 @@
   }
   .modal .close-btn {
     position: absolute;
-    top: 18px;
-    right: 24px;
+    top: 15px;
+    right: 20px;
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.8rem; /* Smaller for mobile */
     color: #0052cc;
     cursor: pointer;
     transition: color 0.3s ease;
+    padding: 5px; /* Add padding for better tap target */
   }
   .modal .close-btn:hover, .modal .close-btn:focus {
     color: #ffd700;
@@ -533,13 +544,13 @@
   /* Back to top */
   #backToTop {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: 20px;
+    right: 20px;
     background: #ffd700;
     color: #0052cc;
-    padding: 14px 18px;
+    padding: 12px 16px; /* Reduced padding for mobile */
     border-radius: 50%;
-    font-size: 1.7rem;
+    font-size: 1.5rem; /* Smaller for mobile */
     box-shadow: 0 8px 30px #b38f0055;
     cursor: pointer;
     display: none;
@@ -556,10 +567,11 @@
     background: #007BFF;
     color: #fff;
     text-align: center;
-    padding: 1.8rem 1rem;
+    padding: 1.5rem 1rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em; /* Reduced letter spacing for mobile */
     user-select: none;
+    margin-top: auto; /* Push footer to bottom */
   }
   .footer-social {
     margin-bottom: 1rem;
@@ -569,15 +581,19 @@
   }
   .footer-social a {
     color: #FFD700;
-    font-size: 1.6rem;
+    font-size: 1.5rem; /* Smaller for mobile */
     transition: color 0.3s ease;
+    padding: 5px; /* Add padding for better tap target */
   }
   .footer-social a:hover, .footer-social a:focus {
     color: #fff;
     outline: none;
   }
+  footer p {
+    font-size: 0.9rem; /* Smaller for mobile */
+  }
 
-  /* Responsive */
+  /* Additional mobile specific fixes */
   @media (max-width: 900px) {
     nav {
       display: none;
@@ -586,34 +602,73 @@
       display: flex;
     }
     main {
-      padding: 2rem 1rem;
-    }
-    .home {
-      flex-wrap: wrap;
-      text-align: center;
-    }
-    .hero-photo {
-      margin: 0 auto 2rem;
-    }
-    .hero-photo img {
-      width: 180px;
-      height: 180px;
+      gap: 3rem; /* Further reduce gap for mobile */
     }
     .service-list {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; /* Force single column on mobile */
+    }
+    .service-item:hover {
+      transform: translateY(-5px) scale(1.02); /* Less dramatic effect on mobile */
+    }
+    .download-btn, .cta-btn, .learn-btn {
+      width: 100%; /* Full width buttons on mobile */
+      max-width: 300px; /* But with a max width */
+      justify-content: center;
     }
   }
+  
   @media (max-width: 500px) {
     header {
       padding: 0 1rem;
+      height: 60px; /* Smaller header for very small screens */
     }
-    .logo {
+    main {
+      margin-top: 60px; /* Match smaller header */
+      padding: 2rem 0.8rem;
+      gap: 2.5rem;
+    }
+    .home {
+      padding: 1.5rem 1rem;
+    }
+    .home > div {
+      padding: 1.5rem 1rem;
+    }
+    section {
+      padding: 1.5rem 1rem;
+    }
+    .service-item {
+      padding: 1.5rem 1rem;
+    }
+    .modal {
+      padding: 1.5rem 1rem;
+    }
+    .modal .close-btn {
+      top: 10px;
+      right: 15px;
+    }
+    #backToTop {
+      bottom: 15px;
+      right: 15px;
+      padding: 10px 14px;
       font-size: 1.3rem;
     }
-    nav.mobile {
-      width: 100vw;
-      left: 0;
-    }
+  }
+  
+  /* Fix any remaining overlap issues */
+  .modal small {
+    display: block;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Make touch targets larger for mobile */
+  a, button {
+    min-height: 44px; /* Minimum recommended touch target size */
+    display: inline-flex;
+    align-items: center;
+  }
+  nav a {
+    min-height: unset; /* Reset for nav links */
   }
 </style>
 
@@ -638,7 +693,7 @@
   <section id="home" class="home" tabindex="-1" aria-label="Welcome section">
     <div class="hero-text">
       <h1>Welcome to BTECH</h1>
-      <p>Hello, I’m <strong>Teddy</strong>, CEO of BTECH.<br>We don’t just do tech - we empower futures.<br>At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in technology, learning, and business transformation.</p>
+      <p>Hello, I'm <strong>Teddy</strong>, CEO of BTECH.<br>We don't just do tech - we empower futures.<br>At BTECH, we combine innovation, skill-building, and reliable support to fuel your goals in technology, learning, and business transformation.</p>
       <div class="typing-text" aria-live="polite" aria-atomic="true"></div>
       <a href="#services" class="cta-btn" aria-label="Explore our services">Explore Services</a>
     </div>
@@ -701,15 +756,14 @@
     <button class="cta-btn" id="open-login-modal">Login</button>
   </section>
 </main>
-
 <!-- Login Modal -->
 <div class="modal-bg" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
   <div class="modal" role="document">
     <button class="close-btn" aria-label="Close login form">&times;</button>
     <h3 id="modal-title">Staff Login</h3>
     <form id="login-form" autocomplete="off" novalidate>
-      <input type="text" id="username" placeholder="Username (e.g. BTECH#1)" required pattern="^BTECH#([1-9]|10)$" aria-describedby="usernameHelp" />
-      <small id="usernameHelp" style="color:#007BFF; font-weight:600;">Example: BTECH#3</small>
+      <input type="text" id="username" placeholder="Username (Input the username you were provided)" required pattern="^BTECH#([1-9]|10)$" aria-describedby="usernameHelp" />
+      <small id="usernameHelp" style="color:#007BFF; font-weight:600;">Forgot password? Contact Btech Admin</small>
       <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
@@ -732,48 +786,54 @@
   // Mobile nav toggle
   const hamburger = document.getElementById('hamburger');
   const nav = document.getElementById('main-nav');
-  hamburger.addEventListener('click', () => {
-    const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-    hamburger.setAttribute('aria-expanded', !expanded);
-    nav.classList.toggle('mobile');
-  });
-  document.addEventListener('click', e => {
-    if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
-      nav.classList.remove('mobile');
-      hamburger.setAttribute('aria-expanded', false);
-    }
-  });
-
-  // Active nav on scroll
-  const navLinks = nav.querySelectorAll('a');
-  const sections = [...navLinks].map(link => document.querySelector(link.getAttribute('href')));
-  window.addEventListener('scroll', () => {
-    const scrollPos = window.scrollY + window.innerHeight / 3;
-    sections.forEach((section, idx) => {
-      if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        navLinks[idx].classList.add('active');
+  if (hamburger && nav) {
+    hamburger.addEventListener('click', () => {
+      const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', !expanded);
+      nav.classList.toggle('mobile');
+    });
+    document.addEventListener('click', e => {
+      if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+        nav.classList.remove('mobile');
+        hamburger.setAttribute('aria-expanded', false);
       }
     });
-  });
+  }
+
+  // Active nav on scroll
+  if (nav) {
+    const navLinks = nav.querySelectorAll('a');
+    const sections = [...navLinks].map(link => document.querySelector(link.getAttribute('href')));
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+      sections.forEach((section, idx) => {
+        if (section && section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          navLinks[idx].classList.add('active');
+        }
+      });
+    });
+  }
 
   // Header hide/show on scroll
-  let lastScroll = 0;
   const header = document.querySelector('header');
-  window.addEventListener('scroll', () => {
-    let currentScroll = window.pageYOffset;
-    if (currentScroll > lastScroll && currentScroll > 70) {
-      header.classList.add('hidden');
-    } else {
-      header.classList.remove('hidden');
-    }
-    lastScroll = currentScroll <= 0 ? 0 : currentScroll;
-  });
+  let lastScroll = 0;
+  if (header) {
+    window.addEventListener('scroll', () => {
+      let currentScroll = window.pageYOffset;
+      if (currentScroll > lastScroll && currentScroll > 70) {
+        header.classList.add('hidden');
+      } else {
+        header.classList.remove('hidden');
+      }
+      lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+    });
+  }
 
   // Modal login open/close
   const loginModal = document.getElementById('login-modal');
   const openLoginBtn = document.getElementById('open-login-modal');
-  const closeModalBtn = loginModal.querySelector('.close-btn');
+  const closeModalBtn = loginModal?.querySelector('.close-btn');
   const loginLink = document.getElementById('login-link');
   const loginForm = document.getElementById('login-form');
 
@@ -789,39 +849,37 @@
     document.body.style.overflow = '';
     loginForm.reset();
   }
-  openLoginBtn.addEventListener('click', openModal);
-  loginLink.addEventListener('click', e => {
-    e.preventDefault();
-    openModal();
-  });
-  closeModalBtn.addEventListener('click', closeModal);
-  loginModal.addEventListener('click', e => {
-    if (e.target === loginModal) closeModal();
-  });
+
+  if (openLoginBtn) openLoginBtn.addEventListener('click', openModal);
+  if (loginLink) loginLink.addEventListener('click', e => { e.preventDefault(); openModal(); });
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+  if (loginModal) loginModal.addEventListener('click', e => { if (e.target === loginModal) closeModal(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && loginModal.classList.contains('active')) closeModal();
   });
 
   // Login form validation
-  loginForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const username = loginForm.username.value.trim();
-    const password = loginForm.password.value;
-    const validUsername = /^BTECH#([1-9]|10)$/;
-    const validPassword = "btech.ke";
-    if (!validUsername.test(username)) {
-      alert('Invalid username format. Use BTECH#1 to BTECH#10.');
-      loginForm.username.focus();
-      return;
-    }
-    if (password !== validPassword) {
-      alert('Incorrect password.');
-      loginForm.password.focus();
-      return;
-    }
-    alert('Login successful! Redirecting...');
-    window.location.href = 'dashboard.html';
-  });
+  if (loginForm) {
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const username = loginForm.username.value.trim();
+      const password = loginForm.password.value;
+      const validUsername = /^BTECH#([1-9]|10)$/;
+      const validPassword = "btech.ke";
+      if (!validUsername.test(username)) {
+        alert('Invalid username format.');
+        loginForm.username.focus();
+        return;
+      }
+      if (password !== validPassword) {
+        alert('Incorrect password.');
+        loginForm.password.focus();
+        return;
+      }
+      alert('Login successful! Redirecting...');
+      window.location.href = 'dashboard.html';
+    });
+  }
 
   // Back to top button
   const backToTop = document.getElementById('backToTop');
@@ -833,44 +891,46 @@
     }
   });
   backToTop.addEventListener('click', () => {
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   // Typing effect in hero
   const typingText = document.querySelector('.typing-text');
-  const phrases = [
-    "Innovate. Learn. Transform.",
-    "Empowering Digital Futures.",
-    "Your Tech Journey Starts Here.",
-    "Skill Up with BTECH.",
-    "Solutions for Tomorrow."
-  ];
-  let phraseIndex = 0;
-  let letterIndex = 0;
-  let deleting = false;
-  let typingSpeed = 80;
+  if (typingText) {
+    const phrases = [
+      "Innovate. Learn. Transform.",
+      "Empowering Digital Futures.",
+      "Your Tech Journey Starts Here.",
+      "Skill Up with BTECH.",
+      "Solutions for Tomorrow."
+    ];
+    let phraseIndex = 0;
+    let letterIndex = 0;
+    let deleting = false;
+    let typingSpeed = 80;
 
-  function typeEffect() {
-    const currentPhrase = phrases[phraseIndex];
-    if (!deleting) {
-      typingText.textContent = currentPhrase.slice(0, letterIndex + 1);
-      letterIndex++;
-      if (letterIndex === currentPhrase.length) {
-        deleting = true;
-        setTimeout(typeEffect, 1500);
-        return;
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIndex];
+      if (!deleting) {
+        typingText.textContent = currentPhrase.slice(0, letterIndex + 1);
+        letterIndex++;
+        if (letterIndex === currentPhrase.length) {
+          deleting = true;
+          setTimeout(typeEffect, 1500);
+          return;
+        }
+      } else {
+        typingText.textContent = currentPhrase.slice(0, letterIndex - 1);
+        letterIndex--;
+        if (letterIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
       }
-    } else {
-      typingText.textContent = currentPhrase.slice(0, letterIndex - 1);
-      letterIndex--;
-      if (letterIndex === 0) {
-        deleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-      }
+      setTimeout(typeEffect, deleting ? typingSpeed / 2 : typingSpeed);
     }
-    setTimeout(typeEffect, deleting ? typingSpeed / 2 : typingSpeed);
+    typeEffect();
   }
-  typeEffect();
 
   // 3D tilt effect on service cards
   const serviceCards = document.querySelectorAll('.service-item');
@@ -898,6 +958,65 @@
 </script>
 
 <style>
+  /* Modal styles */
+  .modal-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .modal-bg.active {
+    display: flex;
+  }
+  .modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 300px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+  .close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+  }
+  .modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .modal form input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .modal form button {
+    padding: 0.7rem;
+    background: #007BFF;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .modal form button:hover {
+    background: #0056b3;
+  }
+
   /* CEO Photo in About section */
   .about .ceo-photo {
     max-width: 220px;
@@ -925,3 +1044,5 @@
 
 </body>
 </html>
+
+
