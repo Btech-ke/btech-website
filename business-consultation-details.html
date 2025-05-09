@@ -1,47 +1,1042 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Consultation Details</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BTECH - Professional Business Consultation Services to transform your business operations and strategy">
+  <title>Business Consultation Services - BTECH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #0056b3;
+      --primary-light: #007BFF;
+      --primary-dark: #003b7a;
+      --secondary: #3a3a3a;
+      --accent: #ffb400;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f8f9fa;
+      color: var(--secondary);
+      line-height: 1.6;
+    }
+    
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Button Styles */
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: var(--primary-light);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Header / Navbar */
+    .header {
+      background-color: white;
+      box-shadow: var(--shadow);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0;
+    }
+    
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+    
+    .logo-text span {
+      color: var(--accent);
+    }
+    
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav-links li a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      padding: 5px 0;
+    }
+    
+    .nav-links li a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-light);
+      transition: var(--transition);
+    }
+    
+    .nav-links li a:hover {
+      color: var(--primary-light);
+    }
+    
+    .nav-links li a:hover::after {
+      width: 100%;
+    }
+    
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--secondary);
+      font-size: 24px;
+    }
+    
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 160px 0 80px;
+      text-align: center;
+    }
+    
+    .page-header h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    .breadcrumbs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      font-size: 15px;
+    }
+    
+    .breadcrumbs a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumbs a:hover {
+      color: white;
+    }
+    
+    .breadcrumbs .separator {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .breadcrumbs .current {
+      color: var(--accent);
+    }
+    
+    /* Service Detail Section */
+    .service-detail {
+      padding: 80px 0;
+    }
+    
+    .service-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+    
+    .service-image {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    .service-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .service-content h2 {
+      font-size: 32px;
+      color: var(--dark);
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .service-content h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary-light);
+    }
+    
+    .service-content p {
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #555;
+    }
+    
+    /* Service Features */
+    .service-features {
+      background-color: #f0f7ff;
+      padding: 70px 0;
+      margin: 60px 0;
+    }
+    
+    .features-heading {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    
+    .features-heading h2 {
+      font-size: 32px;
+      color: var(--dark);
+      margin-bottom: 15px;
+    }
+    
+    .features-heading p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #555;
+      font-size: 16px;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      background-color: rgba(0, 123, 255, 0.1);
+      border-radius: 50%;
+      margin-bottom: 20px;
+      color: var(--primary-light);
+      font-size: 28px;
+    }
+    
+    .feature-card h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+    
+    .feature-card p {
+      font-size: 15px;
+      color: #666;
+    }
+    
+    /* Process Section */
+    .process-section {
+      padding: 80px 0;
+    }
+    
+    .process-heading {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .process-heading h2 {
+      font-size: 32px;
+      color: var(--dark);
+      margin-bottom: 15px;
+    }
+    
+    .process-heading p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #555;
+      font-size: 16px;
+    }
+    
+    .process-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 70px;
+      left: 60px;
+      right: 60px;
+      height: 2px;
+      background-color: #e0e0e0;
+      z-index: 1;
+    }
+    
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      width: 140px;
+    }
+    
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+    
+    .step-content {
+      text-align: center;
+    }
+    
+    .step-content h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    
+    .step-content p {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* Benefits Section */
+    .benefits-section {
+      padding: 70px 0;
+      background-color: #f8f9fa;
+    }
+    
+    .benefits-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    
+    .benefits-content h2 {
+      font-size: 32px;
+      color: var(--dark);
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .benefits-content h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary-light);
+    }
+    
+    .benefits-content p {
+      font-size: 16px;
+      margin-bottom: 30px;
+      color: #555;
+    }
+    
+    .benefits-list {
+      list-style: none;
+    }
+    
+    .benefits-list li {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    
+    .benefit-icon {
+      color: var(--primary-light);
+      margin-right: 15px;
+      font-size: 18px;
+      padding-top: 2px;
+    }
+    
+    .benefit-text h4 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: var(--dark);
+    }
+    
+    .benefit-text p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 0;
+    }
+    
+    .benefits-image {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    .benefits-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #003b7a 0%, #0056b3 100%);
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .cta-section h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    
+    .cta-section p {
+      font-size: 17px;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      opacity: 0.9;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-accent {
+      background-color: var(--accent);
+      color: var(--dark);
+    }
+    
+    .btn-accent:hover {
+      background-color: #e6a200;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid white;
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: var(--dark);
+      color: #b3b3b3;
+      padding: 80px 0 30px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+    
+    .footer-column h3 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background-color: var(--primary-light);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links li a {
+      color: #b3b3b3;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links li a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    
+    .social-icon:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-3px);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+    }
+    
+    /* Mobile */
+    @media (max-width: 1000px) {
+      .hamburger {
+        display: block;
+      }
+      
+      .nav-links {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        gap: 0;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.3s ease;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .nav-links.active {
+        height: 240px;
+      }
+      
+      .nav-links li {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      
+      .nav-links.active li {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .nav-links li a {
+        display: block;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .service-overview {
+        grid-template-columns: 1fr;
+      }
+      
+      .benefits-wrapper {
+        grid-template-columns: 1fr;
+      }
+      
+      .process-steps {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+      }
+      
+      .process-steps::before {
+        top: 0;
+        bottom: 0;
+        left: 24px;
+        right: auto;
+        width: 2px;
+        height: auto;
+      }
+      
+      .step {
+        flex-direction: row;
+        width: 100%;
+        gap: 20px;
+        justify-content: flex-start;
+      }
+      
+      .step-content {
+        text-align: left;
+      }
+      
+      .page-header h1 {
+        font-size: 32px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .logo-text {
+        font-size: 24px;
+      }
+      
+      .page-header {
+        padding: 130px 0 60px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- Navbar Section -->
-<header>
-    <div class="nav-container">
-        <div class="logo">BTECH</div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </div>
+<!-- Header -->
+<header class="header">
+  <div class="container">
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html" class="logo-text">B<span>TECH</span></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#why-us">Why Us</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+  </div>
 </header>
 
-<!-- Business Consultation Details Section -->
-<section id="business-consultation">
-    <h2>Business Consultation</h2>
-    <p>Our business consultation services are designed to provide you with tailored solutions that will help your business grow. We analyze your current business model, identify areas of improvement, and guide you through practical strategies to increase efficiency and profitability.</p>
-    
-    <h3>Our Consultation Services Include:</h3>
-    <ul>
-        <li>Market Research and Analysis</li>
-        <li>Business Strategy Development</li>
-        <li>Financial Planning and Budgeting</li>
-        <li>Operational Optimization</li>
-        <li>Business Expansion and Scaling</li>
-    </ul>
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <h1>Business Consultation</h1>
+    <div class="breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="separator">></span>
+      <a href="index.html#services">Services</a>
+      <span class="separator">></span>
+      <span class="current">Business Consultation</span>
+    </div>
+  </div>
+</section>
 
-    <p>Contact us today for a consultation, and let's start building a better future for your business.</p>
+<!-- Service Detail Section -->
+<section class="service-detail">
+  <div class="container">
+    <div class="service-overview">
+      <div class="service-image">
+        <img src="business.png" alt="Business Consultation Services">
+      </div>
+      <div class="service-content">
+        <h2>Strategic Business Consultation</h2>
+        <p>Our business consultation services are designed to provide you with tailored solutions that will help your business grow and thrive in today's competitive landscape. We take a comprehensive approach to understanding your unique challenges and opportunities.</p>
+        <p>Working closely with your team, we analyze your current business model, identify areas of improvement, and guide you through practical strategies to increase efficiency, profitability, and sustainable growth.</p>
+        <a href="#contact" class="btn">Schedule a Consultation</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Service Features -->
+<section class="service-features">
+  <div class="container">
+    <div class="features-heading">
+      <h2>Our Consultation Services</h2>
+      <p>Comprehensive solutions tailored to address your specific business challenges and help you achieve your goals.</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Market Research & Analysis</h3>
+        <p>In-depth research to identify market trends, competitive landscape, and growth opportunities specific to your industry and target audience.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-sitemap"></i>
+        </div>
+        <h3>Business Strategy Development</h3>
+        <p>Creation of comprehensive business strategies aligned with your vision, mission, and objectives to drive sustainable growth.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <h3>Financial Planning & Budgeting</h3>
+        <p>Expert financial guidance to optimize cash flow, develop realistic budgets, and create financial forecasts that support your business goals.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-cogs"></i>
+        </div>
+        <h3>Operational Optimization</h3>
+        <p>Analysis of your current operations to streamline processes, improve efficiency, and reduce costs while maintaining quality standards.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </div>
+        <h3>Business Expansion & Scaling</h3>
+        <p>Strategic guidance for sustainable business growth, including market expansion, product diversification, and scaling operations.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Team Development & Leadership</h3>
+        <p>Strategies to build high-performing teams, develop leadership capabilities, and create a positive organizational culture.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Section -->
+<section class="process-section">
+  <div class="container">
+    <div class="process-heading">
+      <h2>Our Consultation Process</h2>
+      <p>A methodical approach designed to deliver actionable insights and tangible results for your business.</p>
+    </div>
+    
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Discovery</h3>
+          <p>Initial assessment of your business needs and objectives</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Analysis</h3>
+          <p>Comprehensive review of operations and market position</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Strategy</h3>
+          <p>Development of tailored solutions and action plans</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Implementation</h3>
+          <p>Guided execution of recommended strategies</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>Evaluation</h3>
+          <p>Monitoring progress and refining approaches</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits-section">
+  <div class="container">
+    <div class="benefits-wrapper">
+      <div class="benefits-content">
+        <h2>Benefits of Our Consultation Services</h2>
+        <p>Partner with BTECH to transform your business operations and achieve sustainable growth through expert guidance and strategic insights.</p>
+        
+        <ul class="benefits-list">
+          <li>
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-text">
+              <h4>Increased Profitability</h4>
+              <p>Optimize operations and implement strategies that directly impact your bottom line.</p>
+            </div>
+          </li>
+          
+          <li>
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-text">
+              <h4>Enhanced Decision Making</h4>
+              <p>Access to data-driven insights to make informed strategic decisions.</p>
+            </div>
+          </li>
+          
+          <li>
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-text">
+              <h4>Competitive Advantage</h4>
+              <p>Identify and leverage unique opportunities in your market.</p>
+            </div>
+          </li>
+          
+          <li>
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-text">
+              <h4>Risk Mitigation</h4>
+              <p>Anticipate challenges and develop contingency plans to protect your business.</p>
+            </div>
+          </li>
+          
+          <li>
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-text">
+              <h4>Sustainable Growth</h4>
+              <p>Create a solid foundation for long-term business success and expansion.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="benefits-image">
+        <img src="growth.png" alt="Business Growth Benefits">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to Transform Your Business?</h2>
+    <p>Contact us today to schedule a consultation and discover how our expert business consultants can help you achieve your business goals.</p>
+    <div class="cta-buttons">
+      <a href="#contact" class="btn btn-accent">Schedule a Consultation</a>
+      <a href="tel:+254113996609" class="btn btn-outline">Call Us: (555) 123-4567</a>
+    </div>
+  </div>
 </section>
 
 <!-- Footer -->
-<footer>
-    <p>&copy; 2025 BTECH. All rights reserved.</p>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>About BTECH</h3>
+        <p>We provide comprehensive digital business solutions to help companies thrive in the digital age. Our expertise spans across multiple industries and technologies.</p>
+        <div class="social-links">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Our Services</h3>
+        <ul class="footer-links">
+          <li><a href="business-consultation-details.html">Business Consultation</a></li>
+          <li><a href="web-development-details.html">Web Development</a></li>
+          <li><a href="ecommerce-details.html">E-Commerce Solutions</a></li>
+          <li><a href="digital-marketing-details.html">Digital Marketing</a></li>
+          <li><a href="branding-solutions-details.html">Branding Solutions</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#why-us">Why Choose Us</a></li>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Us</h3>
+        <ul class="footer-links">
+          <li><i class="fas fa-map-marker-alt"></i> 392 BTECH Plaza, Thika</li>
+          <li><i class="fas fa-phone"></i> +254 113 996 609</li>
+          <li><i class="fas fa-envelope"></i> btechkenya@gmail.com</li>
+          <li><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 5:00 PM</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 BTECH Solutions. All rights reserved. | <a href="#" style="color: #b3b3b3;">Privacy Policy</a> | <a href="#" style="color: #b3b3b3;">Terms of Service</a></p>
+    </div>
+  </div>
 </footer>
+
+<script>
+  // Mobile navigation toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    hamburger.innerHTML = navLinks.classList.contains('active') 
+      ? '<i class="fas fa-times"></i>' 
+      : '<i class="fas fa-bars"></i>';
+  });
+  
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Close mobile menu if open
+      if (navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+      
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+  
+  // Header scroll effect
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 50) {
+      header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    } else {
+      header.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.05)';
+    }
+  });
+</script>
 
 </body>
 </html>
