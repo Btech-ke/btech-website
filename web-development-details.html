@@ -3,56 +3,786 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Development Details</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="BTECH - Professional web development services including custom design, e-commerce solutions, and digital marketing">
+    <meta name="keywords" content="web development, custom websites, responsive design, SEO, e-commerce">
+    <title>BTECH - Professional Web Development Solutions</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #0f172a;
+            --accent-color: #3b82f6;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --success-color: #10b981;
+            --font-main: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f9fafb;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: var(--accent-color);
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links li a {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links li a:hover::after {
+            width: 100%;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Main Content */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem 0;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+        
+        .service-content {
+            padding: 1.5rem;
+        }
+        
+        .service-card h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        /* Tech Stack */
+        .tech-stack {
+            background-color: var(--light-color);
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tech-category {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tech-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .tech-category ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tech-category li {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .tech-category li::before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: -1rem;
+        }
+        
+        /* Process Section */
+        .process-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative;
+        }
+        
+        .process-step {
+            flex-basis: calc(25% - 2rem);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .process-step h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .process-step p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+        
+        /* Call to Action */
+        .cta {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: #e2e8f0;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-contact li {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            color: #cbd5e1;
+            font-size: 1.25rem;
+        }
+        
+        .social-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: space-around;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .process-step {
+                flex-basis: calc(50% - 2rem);
+                margin-bottom: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .process-step {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- Header Section -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">B<span>TECH</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
 
-<!-- Navbar Section -->
-<header>
-    <div class="nav-container">
-        <div class="logo">BTECH</div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </div>
-</header>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Transforming Ideas Into Digital Reality</h1>
+            <p>We build cutting-edge web solutions that drive business growth and deliver exceptional user experiences.</p>
+            <a href="#contact" class="btn btn-primary">Get Started</a>
+            <a href="#services" class="btn btn-outline" style="color: white; border-color: white;">Learn More</a>
+        </div>
+    </section>
 
-<!-- Web Development Details Section -->
-<section id="web-development">
-    <h2>Web Development</h2>
-    <p>At BTECH, we specialize in building modern, responsive websites that help you achieve your business goals. Whether you're looking to create a simple informational site or a complex e-commerce platform, we have the expertise to deliver high-quality, functional websites tailored to your needs.</p>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">Who We Are</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">At BTECH, we're passionate about creating digital solutions that help businesses thrive in today's competitive landscape. With a team of experienced developers, designers, and digital strategists, we deliver custom web solutions that align with your business objectives and exceed your expectations.</p>
+            
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 3rem; margin-top: 3rem;">
+                <div style="text-align: center; flex: 1; min-width: 250px;">
+                    <i class="fas fa-code" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h3>Expert Development</h3>
+                    <p>Our developers leverage the latest technologies to build robust, scalable, and secure web applications.</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 250px;">
+                    <i class="fas fa-palette" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h3>Creative Design</h3>
+                    <p>We create visually stunning interfaces that enhance user experience and strengthen your brand identity.</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 250px;">
+                    <i class="fas fa-rocket" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h3>Results-Driven</h3>
+                    <p>Our solutions are designed to deliver measurable results that contribute to your business success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section" style="background-color: #f1f5f9;">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto;">We offer a comprehensive range of web development services tailored to meet your specific needs and business goals.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Custom Website Development</h3>
+                        <p>We create tailor-made websites that perfectly align with your brand identity and business requirements, ensuring optimal functionality and user experience.</p>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Responsive Web Design</h3>
+                        <p>Our designs adapt seamlessly to all devices and screen sizes, ensuring consistent user experience and accessibility across desktop, tablet, and mobile platforms.</p>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>E-commerce Solutions</h3>
+                        <p>We build secure, feature-rich online stores that offer smooth shopping experiences, efficient inventory management, and seamless payment processing.</p>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Search Engine Optimization</h3>
+                        <p>We optimize your website to rank higher in search engine results, implementing best practices to increase visibility and drive organic traffic to your site.</p>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Content Management Systems</h3>
+                        <p>We implement user-friendly CMS solutions that allow you to easily update and manage your website content without technical knowledge.</p>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Website Maintenance & Support</h3>
+                        <p>We provide ongoing maintenance and technical support to ensure your website remains secure, up-to-date, and performs optimally at all times.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech-stack" class="section tech-stack">
+        <div class="container">
+            <h2 class="section-title">Our Technology Stack</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">We leverage cutting-edge technologies to deliver high-performance, scalable, and secure web solutions.</p>
+            
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>Frontend Technologies</h3>
+                    <ul>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>React.js</li>
+                        <li>Angular</li>
+                        <li>Vue.js</li>
+                        <li>SASS/SCSS</li>
+                        <li>Tailwind CSS</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>Backend Technologies</h3>
+                    <ul>
+                        <li>Node.js</li>
+                        <li>PHP</li>
+                        <li>Python</li>
+                        <li>Ruby on Rails</li>
+                        <li>Java</li>
+                        <li>Express.js</li>
+                        <li>GraphQL</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>Database Systems</h3>
+                    <ul>
+                        <li>MySQL</li>
+                        <li>PostgreSQL</li>
+                        <li>MongoDB</li>
+                        <li>Redis</li>
+                        <li>Firebase</li>
+                        <li>MariaDB</li>
+                        <li>SQLite</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>CMS & E-commerce</h3>
+                    <ul>
+                        <li>WordPress</li>
+                        <li>Shopify</li>
+                        <li>Magento</li>
+                        <li>WooCommerce</li>
+                        <li>Drupal</li>
+                        <li>Joomla</li>
+                        <li>PrestaShop</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="section">
+        <div class="container">
+            <h2 class="section-title">Our Development Process</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">We follow a structured approach to deliver high-quality projects on time and within budget.</p>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Discovery</h3>
+                    <p>We begin by understanding your business goals, target audience, and project requirements to ensure our solution aligns with your objectives.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Planning</h3>
+                    <p>We create a detailed project roadmap, outlining the scope, timeline, and resources required to successfully deliver your project.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Design</h3>
+                    <p>Our designers create intuitive user interfaces and engaging user experiences that reflect your brand identity and meet your users' needs.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Development</h3>
+                    <p>Our developers build your solution using clean, efficient code and industry best practices to ensure performance, security, and scalability.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">5</div>
+                    <h3>Testing</h3>
+                    <p>We rigorously test your solution across different devices and browsers to ensure functionality, usability, and compatibility.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">6</div>
+                    <h3>Deployment</h3>
+                    <p>We launch your solution in a controlled manner, ensuring a smooth transition and minimal disruption to your business operations.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">7</div>
+                    <h3>Maintenance</h3>
+                    <p>We provide ongoing support and maintenance to keep your solution secure, up-to-date, and performing optimally.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">8</div>
+                    <h3>Growth</h3>
+                    <p>We continuously analyze performance data and user feedback to identify opportunities for improvement and growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Start Your Project?</h2>
+            <p>Contact us today for a free consultation and let's discuss how we can help you achieve your digital goals.</p>
+            <a href="#contact" class="btn btn-primary">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">Have a question or want to discuss your project? Fill out the form below and we'll get back to you as soon as possible.</p>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 3rem;">
+                <div style="flex: 1; min-width: 300px;">
+                    <form action="https://formspree.io/f/mblolava" method="POST" id="enrollmentForm" enctype="application/json" style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="name" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Full Name</label>
+                            <input type="text" id="name" name="name" style="width: 100%; padding: 0.75rem; border-radius: 4px; border: 1px solid #cbd5e1;" required>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email Address</label>
+                            <input type="email" id="email" name="email" style="width: 100%; padding: 0.75rem; border-radius: 4px; border: 1px solid #cbd5e1;" required>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" style="width: 100%; padding: 0.75rem; border-radius: 4px; border: 1px solid #cbd5e1;">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="message" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Message</label>
+                            <textarea id="message" name="message" rows="5" style="width: 100%; padding: 0.75rem; border-radius: 4px; border: 1px solid #cbd5e1;" required></textarea>
+                        </div>
+                        
+                        <!-- Anti-spam field (hidden) -->
+                        <input type="text" name="_gotcha" style="display: none;">
+                        
+                        <!-- Success page redirect -->
+                        <input type="hidden" name="_next" value="https://btechplus.com/thank-you">
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px;">
+                    <div style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--secondary-color);">Contact Information</h3>
+                        
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--primary-color); font-size: 1.25rem; margin-top: 0.25rem;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem;">Address</h4>
+                                <p>392 BTECH PLAZA, Thika, TC </p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem;">
+                            <i class="fas fa-phone-alt" style="color: var(--primary-color); font-size: 1.25rem; margin-top: 0.25rem;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem;">Phone</h4>
+                                <p>0113996609</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem;">
+                            <i class="fas fa-envelope" style="color: var(--primary-color); font-size: 1.25rem; margin-top: 0.25rem;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem;">Email</h4>
+                                <p>btechkenya@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <i class="fas fa-clock" style="color: var(--primary-color); font-size: 1.25rem; margin-top: 0.25rem;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem;">Business Hours</h4>
+                                <p>Monday - Saturday: 9:00 AM - 6:00 PM<br>Sunday: Opened from 2pm</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h4 style="margin-bottom: 1rem;">Follow Us</h4>
+                            <div style="display: flex; gap: 1rem;">
+                                <a href="#" style="color: var(--primary-color); font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                                <a href="#" style="color: var(--primary-color); font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                                <a href="#" style="color: var(--primary-color); font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" style="color: var(--primary-color); font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     
-    <h3>What We Offer:</h3>
-    <ul>
-        <li>Custom Website Design</li>
-        <li>Responsive and Mobile-Friendly Design</li>
-        <li>Search Engine Optimization (SEO)</li>
-        <li>Content Management Systems (CMS)</li>
-        <li>E-commerce Solutions</li>
-        <li>Website Maintenance and Support</li>
-    </ul>
-    
-    <h3>Technologies We Use:</h3>
-    <ul>
-        <li>HTML5, CSS3, JavaScript</li>
-        <li>React, Angular, Vue.js</li>
-        <li>PHP, Python, Node.js</li>
-        <li>WordPress, Shopify, Magento</li>
-        <li>MySQL, MongoDB, PostgreSQL</li>
-    </ul>
-
-    <p>Our team will guide you through every step of the web development process to ensure your website meets your objectives and is fully optimized for your target audience.</p>
-    <p>If you're ready to get started, contact us today for a consultation!</p>
-</section>
-
-<!-- Footer -->
-<footer>
-    <p>&copy; 2025 BTECH. All rights reserved.</p>
-</footer>
-
-</body>
-</html>
