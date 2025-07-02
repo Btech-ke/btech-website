@@ -533,11 +533,11 @@
     if (!payerName) { alert("Please enter your name."); return; }
     if (!selected) { alert("Please select a service."); return; }
     if (selected === "KUCCPS") amount = 450;
-    else if (selected === "KRA") amount = 20;
+    else if (selected === "KRA") amount = 200;
     else if (selected === "HELB") amount = 500;
     else if (selected === "OTHER") {
       if (!otherService) { alert("Please type the name of the other service."); return; }
-      service = otherService; amount = 10;
+      service = otherService; amount = 500;
     }
     const message = `Payment Instructions:
 
@@ -568,7 +568,7 @@ Thank you for booking with BTECH!`;
     else if (selected === "HELB") amount = 500;
     else if (selected === "OTHER") {
       if (!otherService) { alert("Please type the name of the other service."); return; }
-      service = otherService; amount = 500;
+      service = otherService; amount = 10;
     }
     let handler = PaystackPop.setup({
       key: 'pk_live_5f7aed7f532c2856d645a4be19928c741c3bde03',
