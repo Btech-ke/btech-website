@@ -3,14 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>BTECH - Empowering Digital Futures</title>
-<meta name="description" content="BTECH offers tech courses, business solutions, cyber services, and tech repair to empower your digital journey." />
+<title>BTECH - Empowering Digital Futures & Kenya ETA Services</title>
+<meta name="description" content="BTECH offers tech courses, business solutions, cyber services, tech repair, and official Kenya ETA application assistance for international travelers." />
 <meta name="author" content="BTECH" />
 
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 <style>
@@ -20,6 +17,8 @@
     --primary-blue-light: #3b82f6;
     --accent-orange: #f59e0b;
     --accent-orange-light: #fbbf24;
+    --eta-green: #10b981;
+    --eta-green-dark: #059669;
     --text-dark: #1f2937;
     --text-light: #6b7280;
     --background-light: #f8fafc;
@@ -29,6 +28,7 @@
     --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
     --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --gradient-eta: linear-gradient(135deg, #10b981 0%, #059669 100%);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -50,10 +50,179 @@
     overflow-x: hidden;
   }
 
+  /* Language Selector */
+  .language-selector {
+    position: fixed;
+    top: 90px;
+    right: 2rem;
+    z-index: 998;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    transition: var(--transition);
+  }
+
+  .language-dropdown {
+    position: relative;
+  }
+
+  .language-btn {
+    background: var(--gradient-eta);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+  }
+
+  .language-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .language-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition);
+    margin-top: 0.5rem;
+  }
+
+  .language-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .language-menu button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .language-menu button:hover {
+    background: var(--background-light);
+  }
+
+  /* ETA Alert Banner */
+  .eta-banner {
+    background: var(--gradient-eta);
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+  
+  .eta-banner.hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+  }
+
+  .eta-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  }
+
+  .eta-banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .eta-banner-text {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .eta-banner-cta {
+    background: white;
+    color: var(--eta-green);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .eta-banner-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .close-banner {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: var(--transition);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close-banner:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
   /* Header */
   header {
     position: fixed;
-    top: 0;
+    top: 60px; /* Position below the banner */
     left: 0;
     right: 0;
     height: 80px;
@@ -61,7 +230,11 @@
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     z-index: 1000;
-    transition: var(--transition);
+    transition: top 0.5s ease-in-out, background 0.5s, box-shadow 0.5s;
+  }
+  
+  .header-no-banner {
+      top: 0;
   }
 
   .header-container {
@@ -115,6 +288,41 @@
     border-radius: 1px;
   }
 
+  .nav-menu .eta-nav-item a {
+    background: var(--gradient-eta);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-menu .eta-nav-item a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .nav-menu .eta-nav-item a:hover::before {
+    left: 100%;
+  }
+
+  .nav-menu .eta-nav-item a::after {
+    display: none;
+  }
+
+  .nav-menu .eta-nav-item a:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+  }
+
   .cta-header {
     background: var(--gradient-primary);
     color: white;
@@ -166,7 +374,7 @@
 
   .mobile-nav {
     position: fixed;
-    top: 80px;
+    top: 140px;
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.98);
@@ -178,6 +386,10 @@
     visibility: hidden;
     transition: var(--transition);
     z-index: 999;
+  }
+  
+  .mobile-nav-no-banner {
+      top: 80px;
   }
 
   .mobile-nav.active {
@@ -208,6 +420,15 @@
     transform: translateX(10px);
   }
 
+  .mobile-nav .eta-mobile-item a {
+    background: var(--gradient-eta);
+    color: white;
+    border-radius: 12px;
+    padding: 1rem;
+    border-bottom: none;
+    text-align: center;
+  }
+
   /* Hero Section */
   .hero {
     min-height: 100vh;
@@ -217,6 +438,11 @@
     background: var(--gradient-primary);
     position: relative;
     overflow: hidden;
+    margin-top: 140px; /* Adjusted to account for banner and header */
+  }
+  
+  .hero-no-banner {
+      margin-top: 80px;
   }
 
   .hero::before {
@@ -315,6 +541,45 @@
     transform: translateY(-2px);
   }
 
+  .btn-eta {
+    background: var(--gradient-eta);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-soft);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-eta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-eta:hover::before {
+    left: 100%;
+  }
+
+  .btn-eta:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-large);
+  }
+
   .hero-visual {
     display: flex;
     justify-content: center;
@@ -363,9 +628,110 @@
     animation-delay: -3s;
   }
 
+  .floating-card.card-3 {
+    top: 60%;
+    right: 10%;
+    animation-delay: -2s;
+    background: var(--gradient-eta);
+    color: white;
+  }
+
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
+  }
+
+  /* ETA Quick Access Section */
+  .eta-quick-access {
+    color: white;
+    padding: 4rem 2rem;
+    position: relative;
+    z-index: 5;
+    margin-top: -2rem;
+    background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  }
+
+  .eta-quick-access::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(16, 185, 129, 0.85); /* 85% opacity of ETA green */
+    z-index: 1;
+  }
+
+  .eta-quick-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .eta-quick-header {
+    margin-bottom: 3rem;
+  }
+
+  .eta-quick-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  .eta-quick-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .eta-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .eta-feature {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .eta-feature:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .eta-feature-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: var(--eta-green);
+    font-size: 2rem;
+  }
+
+  .eta-feature h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  .eta-feature p {
+    opacity: 0.9;
+    line-height: 1.6;
   }
 
   /* Section Styles */
@@ -521,6 +887,10 @@
     box-shadow: var(--shadow-large);
   }
 
+  .service-card.eta-card::before {
+    background: var(--gradient-eta);
+  }
+
   .service-icon {
     width: 80px;
     height: 80px;
@@ -532,6 +902,10 @@
     margin-bottom: 1.5rem;
     color: white;
     font-size: 2rem;
+  }
+
+  .service-icon.eta-icon {
+    background: var(--gradient-eta);
   }
 
   .service-card h3 {
@@ -560,6 +934,14 @@
   .service-link:hover {
     color: var(--primary-blue-dark);
     transform: translateX(5px);
+  }
+
+  .service-link.eta-link {
+    color: var(--eta-green);
+  }
+
+  .service-link.eta-link:hover {
+    color: var(--eta-green-dark);
   }
 
   /* Download Section */
@@ -1022,6 +1404,10 @@
     .download-stats {
       gap: 2rem;
     }
+    
+    .language-selector {
+        right: 1rem;
+    }
   }
 
   @media (max-width: 768px) {
@@ -1083,6 +1469,27 @@
       grid-template-columns: 1fr;
       text-align: center;
     }
+
+    .eta-banner-content {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .language-selector {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 1rem;
+    }
+
+    .eta-quick-access {
+      padding: 3rem 1rem;
+    }
+
+    .eta-features {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 
   @media (max-width: 480px) {
@@ -1092,7 +1499,8 @@
     }
 
     .btn-primary,
-    .btn-secondary {
+    .btn-secondary,
+    .btn-eta {
       width: 100%;
       justify-content: center;
     }
@@ -1122,7 +1530,23 @@
     }
 
     .mobile-nav {
-      top: 70px;
+      top: 130px;
+    }
+
+    .hero {
+      margin-top: 130px;
+    }
+
+    .eta-banner {
+      padding: 0.75rem 1rem;
+    }
+
+    .eta-banner-text {
+      font-size: 0.9rem;
+    }
+
+    .eta-feature {
+      padding: 1.5rem;
     }
   }
 
@@ -1160,12 +1584,6 @@
     transform: translateX(0);
   }
 
-  /* Parallax Effect */
-  .parallax {
-    transform: translateY(0);
-    transition: transform 0.1s ease-out;
-  }
-
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
@@ -1196,11 +1614,30 @@
     outline: 2px solid var(--primary-blue);
     outline-offset: 2px;
   }
+
+  /* Hidden class for elements that should be hidden initially */
+  .hidden {
+    display: none !important;
+  }
 </style>
 </head>
 
 <body>
-  <!-- Header -->
+  <div class="eta-banner" id="etaBanner">
+    <div class="eta-banner-content">
+      <div class="eta-banner-text" data-translate="eta-banner-text">
+        🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) here - Official processing in 72 hours
+      </div>
+      <a href="#eta-services" class="eta-banner-cta" data-translate="eta-banner-cta">
+        <i class="fas fa-plane"></i>
+        Apply for ETA - $90 USD
+      </a>
+    </div>
+    <button class="close-banner" id="closeBanner" aria-label="Close banner">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
   <header>
     <div class="header-container">
       <a href="#home" class="logo">BTECH</a>
@@ -1209,12 +1646,44 @@
           <li><a href="#home" class="active">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
+          <li class="eta-nav-item"><a href="#eta-services" data-translate="nav-eta">Kenya ETA</a></li>
           <li><a href="#download">Download</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
       <div style="display: flex; align-items: center; gap: 1rem;">
         <a href="#login" class="cta-header">Staff Login</a>
+        <div class="language-selector" id="languageSelector">
+          <div class="language-dropdown">
+            <button class="language-btn" id="languageBtn">
+              <i class="fas fa-globe"></i>
+              <span id="currentLang">English</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="language-menu" id="languageMenu">
+              <button onclick="changeLanguage('en')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA3LjVIMjBWMTVIMFY3LjVaIiBmaWxsPSIjRkZGIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIwVjcuNUgwVjBaIiBmaWxsPSIjRkYwMDAwIi8+Cjwvc3ZnPgo=" alt="EN" style="width: 16px;">
+                English
+              </button>
+              <button onclick="changeLanguage('es')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZBQTAwIi8+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIzIiBmaWxsPSIjRkYwMDAwIi8+CjxyZWN0IHk9IjEyIiB3aWR0aD0iMjAiIGhlaWdodD0iMyIgZmlsbD0iI0ZGMDAwMCIvPgo8L3N2Zz4K" alt="ES" style="width: 16px;">
+                Español
+              </button>
+              <button onclick="changeLanguage('zh')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkYwMDAwIi8+CjxwYXRoIGQ9Ik0yIDJMNCAzTDMgNEwyIDJaIiBmaWxsPSIjRkZENzAwIi8+Cjwvc3ZnPgo=" alt="ZH" style="width: 16px;">
+                中文
+              </button>
+              <button onclick="changeLanguage('fr')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDJBOEYiLz4KPHJlY3QgeD0iNyIgd2lkdGg9IjYiIGhlaWdodD0iMTUiIGZpbGw9IiNGRkYiLz4KPHJlY3QgeD0iMTMiIHdpZHRoPSI3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRUQyOTM5Ii8+Cjwvc3ZnPgo=" alt="FR" style="width: 16px;">
+                Français
+              </button>
+              <button onclick="changeLanguage('ar')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRjAwMDAiLz4KPHJlY3QgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkYiLz4KPHJlY3QgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjMDAwIi8+Cjwvc3ZnPgo=" alt="AR" style="width: 16px;">
+                العربية
+              </button>
+            </div>
+          </div>
+        </div>
         <button class="mobile-menu-btn" id="mobileMenuBtn">
           <span></span>
           <span></span>
@@ -1222,12 +1691,12 @@
         </button>
       </div>
     </div>
-    <!-- Mobile Navigation -->
     <nav class="mobile-nav" id="mobileNav">
       <ul>
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
+        <li class="eta-mobile-item"><a href="#eta-services" data-translate="nav-eta">🇰🇪 Kenya ETA</a></li>
         <li><a href="#download">Download</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="#login">Staff Login</a></li>
@@ -1235,7 +1704,6 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <section id="home" class="hero">
     <div class="hero-container">
       <div class="hero-content">
@@ -1246,6 +1714,10 @@
           <a href="#services" class="btn-primary">
             <i class="fas fa-rocket"></i>
             Explore Services
+          </a>
+          <a href="#eta-services" class="btn-eta" data-translate="hero-eta-btn">
+            <i class="fas fa-plane"></i>
+            Get Kenya ETA
           </a>
           <a href="#about" class="btn-secondary">
             <i class="fas fa-play"></i>
@@ -1263,11 +1735,50 @@
           <i class="fas fa-shield-alt" style="color: var(--accent-orange); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
           <div style="font-size: 0.9rem; font-weight: 600;">Cyber Security</div>
         </div>
+        <div class="floating-card card-3">
+          <i class="fas fa-plane" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+          <div style="font-size: 0.9rem; font-weight: 600;" data-translate="floating-eta">Kenya ETA</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
+  <section id="eta-services" class="eta-quick-access">
+    <div class="eta-quick-container">
+      <div class="eta-quick-header fade-in">
+        <h2 data-translate="eta-title">Kenya Electronic Travel Authorization (ETA)</h2>
+        <p data-translate="eta-subtitle">Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.</p>
+        <a href="eta-application.html" class="btn-primary" style="background: white; color: var(--eta-green); margin-top: 2rem;">
+          <i class="fas fa-passport"></i>
+          <span data-translate="eta-apply-btn">Apply for Kenya ETA - $90 USD</span>
+        </a>
+      </div>
+      <div class="eta-features">
+        <div class="eta-feature fade-in">
+          <div class="eta-feature-icon">
+            <i class="fas fa-file-invoice"></i>
+          </div>
+          <h3 data-translate="feature-1-title">Simplified Application</h3>
+          <p data-translate="feature-1-text">Our user-friendly platform guides you through every step, ensuring a smooth and error-free process.</p>
+        </div>
+        <div class="eta-feature fade-in">
+          <div class="eta-feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 data-translate="feature-2-title">Secure & Confidential</h3>
+          <p data-translate="feature-2-text">We prioritize your data security and handle all information with the highest level of confidentiality.</p>
+        </div>
+        <div class="eta-feature fade-in">
+          <div class="eta-feature-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3 data-translate="feature-3-title">24/7 Support</h3>
+          <p data-translate="feature-3-text">Our team is available around the clock to assist you with any questions or issues you may have.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="about" class="section">
     <div class="section-container">
       <div class="section-header">
@@ -1303,7 +1814,6 @@
     </div>
   </section>
 
-  <!-- Services Section -->
   <section id="services" class="section" style="background: var(--background-white);">
     <div class="section-container">
       <div class="section-header">
@@ -1351,11 +1861,20 @@
             Get Support <i class="fas fa-arrow-right"></i>
           </a>
         </div>
+        <div class="service-card eta-card fade-in">
+          <div class="service-icon eta-icon">
+            <i class="fas fa-plane"></i>
+          </div>
+          <h3 data-translate="eta-service-card-title">Kenya ETA Services</h3>
+          <p data-translate="eta-service-card-text">Official and secure processing of your electronic travel authorization for a seamless journey to Kenya.</p>
+          <a href="#eta-services" class="service-link eta-link">
+            <span data-translate="eta-service-link">Apply Now</span> <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Download Section -->
   <section id="download" class="section download-section">
     <div class="section-container">
       <div class="download-content">
@@ -1385,7 +1904,6 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
   <section id="contact" class="section">
     <div class="section-container">
       <div class="section-header">
@@ -1422,7 +1940,6 @@
     </div>
   </section>
 
-  <!-- Staff Login Section -->
   <section id="login" class="section login-section">
     <div class="section-container">
       <div class="login-card fade-in">
@@ -1436,7 +1953,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-content">
       <div class="footer-grid">
@@ -1457,6 +1973,7 @@
           <a href="#">Computer Training</a>
           <a href="#">Business Solutions</a>
           <a href="#">Tech Repair</a>
+          <a href="#eta-services" data-translate="footer-eta">Kenya ETA Services</a>
         </div>
         <div class="footer-section">
           <h4>Contact Info</h4>
@@ -1488,7 +2005,6 @@
     </div>
   </footer>
 
-  <!-- Login Modal -->
   <div class="modal-overlay" id="loginModal">
     <div class="modal">
       <div class="modal-header">
@@ -1516,13 +2032,105 @@
     </div>
   </div>
 
-  <!-- Back to Top Button -->
   <button class="back-to-top" id="backToTop">
     <i class="fas fa-arrow-up"></i>
   </button>
 
   <script>
-    // Mobile Menu Functionality
+    // --- Translations Data ---
+    const translations = {
+      en: {
+        'eta-banner-text': '🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) here - Official processing in 72 hours',
+        'eta-banner-cta': 'Apply for ETA - $90 USD',
+        'nav-eta': 'Kenya ETA',
+        'hero-eta-btn': 'Get Kenya ETA',
+        'floating-eta': 'Kenya ETA',
+        'eta-title': 'Kenya Electronic Travel Authorization (ETA)',
+        'eta-subtitle': 'Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.',
+        'eta-apply-btn': 'Apply for Kenya ETA - $90 USD',
+        'feature-1-title': 'Simplified Application',
+        'feature-1-text': 'Our user-friendly platform guides you through every step, ensuring a smooth and error-free process.',
+        'feature-2-title': 'Secure & Confidential',
+        'eta-service-card-title': 'Kenya ETA Services',
+        'eta-service-card-text': 'Official and secure processing of your electronic travel authorization for a seamless journey to Kenya.',
+        'eta-service-link': 'Apply Now',
+        'footer-eta': 'Kenya ETA Services'
+      },
+      es: {
+        'eta-banner-text': '🇰🇪 ¿Viajas a Kenia? Obtén tu Autorización Electrónica de Viaje (ETA) aquí - Procesamiento oficial en 72 horas',
+        'eta-banner-cta': 'Solicitar ETA - $90 USD',
+        'nav-eta': 'ETA Kenia',
+        'hero-eta-btn': 'Obtener ETA Kenia',
+        'floating-eta': 'ETA Kenia',
+        'eta-title': 'Autorización Electrónica de Viaje (ETA) de Kenia',
+        'eta-subtitle': 'Procesamiento oficial de ETA para viajeros internacionales. Requerido para todos los visitantes a Kenia desde enero de 2024. Servicio rápido, seguro y confiable.',
+        'eta-apply-btn': 'Solicitar ETA Kenia - $90 USD',
+        'feature-1-title': 'Solicitud Simplificada',
+        'feature-1-text': 'Nuestra plataforma fácil de usar te guía en cada paso, asegurando un proceso sin problemas y sin errores.',
+        'feature-2-title': 'Seguro y Confidencial',
+        'feature-2-text': 'Priorizamos la seguridad de tus datos y manejamos toda la información con el más alto nivel de confidencialidad.',
+        'eta-service-card-title': 'Servicios de ETA Kenia',
+        'eta-service-card-text': 'Procesamiento oficial y seguro de tu autorización de viaje electrónica para un viaje sin contratiempos a Kenia.',
+        'eta-service-link': 'Aplicar Ahora',
+        'footer-eta': 'Servicios de ETA Kenia'
+      },
+      zh: {
+        'eta-banner-text': '🇰🇪 前往肯尼亚？在此获取您的电子旅行授权 (ETA) - 72 小时内官方处理',
+        'eta-banner-cta': '申请 ETA - 90 美元',
+        'nav-eta': '肯尼亚 ETA',
+        'hero-eta-btn': '获取肯尼亚 ETA',
+        'floating-eta': '肯尼亚 ETA',
+        'eta-title': '肯尼亚电子旅行授权 (ETA)',
+        'eta-subtitle': '为国际旅客提供官方 ETA 办理服务。自 2024 年 1 月起，所有前往肯尼亚的游客均需办理。服务快速、安全、可靠。',
+        'eta-apply-btn': '申请肯尼亚 ETA - 90 美元',
+        'feature-1-title': '简化申请',
+        'feature-1-text': '我们友好的平台将指导您完成每一步，确保流程顺畅且无误。',
+        'feature-2-title': '安全与保密',
+        'feature-2-text': '我们优先考虑您的数据安全，并以最高级别的保密性处理所有信息。',
+        'eta-service-card-title': '肯尼亚 ETA 服务',
+        'eta-service-card-text': '官方安全地办理您的电子旅行授权，确保您前往肯尼亚的旅程无缝衔接。',
+        'eta-service-link': '立即申请',
+        'footer-eta': '肯尼亚 ETA 服务'
+      },
+      fr: {
+        'eta-banner-text': '🇰🇪 Vous voyagez au Kenya ? Obtenez votre Autorisation de Voyage Électronique (ETA) ici - Traitement officiel en 72 heures',
+        'eta-banner-cta': 'Demander l\'ETA - 90 USD',
+        'nav-eta': 'ETA Kenya',
+        'hero-eta-btn': 'Obtenir l\'ETA Kenya',
+        'floating-eta': 'ETA Kenya',
+        'eta-title': 'Autorisation de Voyage Électronique (ETA) pour le Kenya',
+        'eta-subtitle': 'Traitement officiel de l\'ETA pour les voyageurs internationaux. Requis pour tous les visiteurs au Kenya depuis janvier 2024. Service rapide, sécurisé et fiable.',
+        'eta-apply-btn': 'Demander l\'ETA Kenya - 90 USD',
+        'feature-1-title': 'Demande Simplifiée',
+        'feature-1-text': 'Notre plateforme conviviale vous guide à chaque étape, garantissant un processus fluide et sans erreur.',
+        'feature-2-title': 'Sécurisé et Confidentiel',
+        'feature-2-text': 'Nous priorisons la sécurité de vos données et traitons toutes les informations avec le plus haut niveau de confidentialité.',
+        'eta-service-card-title': 'Services ETA Kenya',
+        'eta-service-card-text': 'Traitement officiel et sécurisé de votre autorisation de voyage électronique pour un voyage sans encombre au Kenya.',
+        'eta-service-link': 'Postuler maintenant',
+        'footer-eta': 'Services ETA Kenya'
+      },
+      ar: {
+        'eta-banner-text': '🇰🇪 هل تسافر إلى كينيا؟ احصل على تصريح السفر الإلكتروني (ETA) الخاص بك من هنا - معالجة رسمية في غضون 72 ساعة',
+        'eta-banner-cta': 'التقديم على ETA - 90 دولار أمريكي',
+        'nav-eta': 'ETA كينيا',
+        'hero-eta-btn': 'احصل على ETA كينيا',
+        'floating-eta': 'ETA كينيا',
+        'eta-title': 'تصريح السفر الإلكتروني (ETA) لكينيا',
+        'eta-subtitle': 'معالجة رسمية لتصريح ETA للمسافرين الدوليين. مطلوب لجميع الزوار إلى كينيا منذ يناير 2024. خدمة سريعة وآمنة وموثوقة.',
+        'feature-1-title': 'تطبيق مبسط',
+        'feature-1-text': 'منصتنا سهلة الاستخدام ترشدك خلال كل خطوة، مما يضمن عملية سلسة وخالية من الأخطاء.',
+        'feature-2-title': 'آمن وسري',
+        'feature-2-text': 'نحن نعطي الأولوية لأمان بياناتك ونتعامل مع جميع المعلومات بأعلى مستوى من السرية.',
+        'eta-service-card-title': 'خدمات ETA كينيا',
+        'eta-service-card-text': 'معالجة رسمية وآمنة لتصريح السفر الإلكتروني الخاص بك لرحلة سلسة إلى كينيا.',
+        'eta-service-link': 'قدم الآن',
+        'footer-eta': 'خدمات ETA كينيا'
+      }
+    };
+
+    // --- JavaScript Functions ---
+    // Mobile Menu
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileNav = document.getElementById('mobileNav');
     
@@ -1598,7 +2206,7 @@
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-          const offsetTop = target.offsetTop - 80;
+          const offsetTop = target.offsetTop - (document.getElementById('etaBanner').offsetHeight + document.querySelector('header').offsetHeight) - 20;
           window.scrollTo({
             top: offsetTop,
             behavior: 'smooth'
@@ -1608,15 +2216,34 @@
     });
 
     // Header background change on scroll
+    const header = document.querySelector('header');
+    const etaBanner = document.getElementById('etaBanner');
+    
+    function updateHeaderPosition() {
+        if (etaBanner.classList.contains('hidden')) {
+            header.classList.add('header-no-banner');
+            mobileNav.classList.add('mobile-nav-no-banner');
+            document.querySelector('.hero').classList.add('hero-no-banner');
+        } else {
+            header.classList.remove('header-no-banner');
+            mobileNav.classList.remove('mobile-nav-no-banner');
+            document.querySelector('.hero').classList.remove('hero-no-banner');
+        }
+    }
+    
+    // Automatically hide the banner after 3 seconds
+    setTimeout(() => {
+        document.getElementById('closeBanner').click();
+    }, 3000);
+
     window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
-        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-      } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.boxShadow = 'none';
-      }
+        if (window.scrollY > 0) {
+            header.style.background = 'rgba(255, 255, 255, 0.98)';
+            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.boxShadow = 'none';
+        }
     });
 
     // Active navigation highlighting
@@ -1626,7 +2253,7 @@
     window.addEventListener('scroll', () => {
       let current = '';
       sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
+        const sectionTop = section.offsetTop - (header.offsetHeight + etaBanner.offsetHeight);
         if (window.pageYOffset >= sectionTop) {
           current = section.getAttribute('id');
         }
@@ -1638,6 +2265,45 @@
           link.classList.add('active');
         }
       });
+    });
+
+    // Language Translation
+    const currentLang = document.getElementById('currentLang');
+
+    function changeLanguage(lang) {
+      if (!translations[lang]) return;
+
+      // Update ETA text content
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        el.textContent = translations[lang][key];
+      });
+
+      // Update current language display
+      currentLang.textContent = lang === 'en' ? 'English' : lang === 'es' ? 'Español' : lang === 'zh' ? '中文' : lang === 'fr' ? 'Français' : 'العربية';
+      document.getElementById('languageMenu').classList.remove('active');
+    }
+
+    // Language Selector Toggle
+    document.getElementById('languageBtn').addEventListener('click', () => {
+      document.getElementById('languageMenu').classList.toggle('active');
+    });
+
+    // Close language menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const languageSelector = document.getElementById('languageSelector');
+      if (!languageSelector.contains(e.target)) {
+        document.getElementById('languageMenu').classList.remove('active');
+      }
+    });
+
+    // Close banner button
+    document.getElementById('closeBanner').addEventListener('click', () => {
+      etaBanner.classList.add('hidden');
+      document.querySelector('header').classList.add('header-no-banner');
+      document.querySelector('.hero').classList.add('hero-no-banner');
+      document.getElementById('languageSelector').style.top = "2rem"; // Adjust language selector position
+      document.querySelector('.mobile-nav').classList.add('mobile-nav-no-banner');
     });
 
     // Modal functionality
@@ -1759,17 +2425,6 @@
       observer.observe(el);
     });
 
-    // Parallax effect for hero background
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const parallaxElements = document.querySelectorAll('.parallax');
-      
-      parallaxElements.forEach(element => {
-        const speed = 0.5;
-        element.style.transform = `translateY(${scrolled * speed}px)`;
-      });
-    });
-
     // Service card interactions
     document.querySelectorAll('.service-card').forEach(card => {
       card.addEventListener('mouseenter', () => {
@@ -1804,10 +2459,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
