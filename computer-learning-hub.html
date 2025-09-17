@@ -3,344 +3,545 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="BTECH - Premier Technology Learning Hub offering professional courses in programming, web development, cybersecurity and more.">
-  <title>BTECH - Professional Technology Learning Center</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="BTECH Computer Learning Hub - Master cutting-edge technology skills with industry-leading courses in programming, cybersecurity, web development, and more.">
+  <title>Computer Learning Hub - BTECH</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     :root {
-      --primary: #0062cc;
-      --primary-dark: #0051a8;
-      --primary-light: #e6f2ff;
-      --secondary: #6c757d;
-      --success: #28a745;
-      --info: #17a2b8;
-      --dark: #1c2331;
-      --light: #f8f9fa;
-      --white: #ffffff;
-      --shadow: 0 5px 15px rgba(0,0,0,0.08);
-      --transition: all 0.3s ease;
+      --primary-blue: #1e40af;
+      --primary-blue-dark: #1e3a8a;
+      --primary-blue-light: #3b82f6;
+      --accent-orange: #f59e0b;
+      --accent-orange-light: #fbbf24;
+      --success-green: #10b981;
+      --warning-yellow: #f59e0b;
+      --error-red: #ef4444;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --background-light: #f8fafc;
+      --background-white: #ffffff;
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * {
+    *, *::before, *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      color: var(--dark);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       line-height: 1.6;
+      color: var(--text-dark);
+      background: var(--background-light);
+      overflow-x: hidden;
     }
 
     /* Header */
-    header {
-      background-color: var(--white);
-      padding: 15px 0;
+    .header {
       position: fixed;
       top: 0;
-      width: 100%;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       z-index: 1000;
-      box-shadow: var(--shadow);
       transition: var(--transition);
     }
 
-    header.scrolled {
-      padding: 10px 0;
+    .header.scrolled {
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: var(--shadow-medium);
     }
 
-    .nav-container {
+    .header-container {
       max-width: 1200px;
-      margin: auto;
+      margin: 0 auto;
+      height: 100%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
+      justify-content: space-between;
+      padding: 0 2rem;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .logo-text {
-      font-family: 'Montserrat', sans-serif;
-      color: var(--primary);
-      font-size: 24px;
+      gap: 0.75rem;
       font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .logo-icon {
-      color: var(--primary);
-      font-size: 28px;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav-links a {
-      color: var(--dark);
+      font-size: 1.5rem;
+      color: var(--primary-blue);
       text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo i {
+      font-size: 1.75rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-dark);
       font-weight: 500;
-      font-size: 16px;
+      font-size: 0.95rem;
+      padding: 0.5rem 0;
       position: relative;
       transition: var(--transition);
     }
 
-    .nav-links a:hover {
-      color: var(--primary);
+    .nav-menu a:hover {
+      color: var(--primary-blue);
     }
 
-    .nav-links a::after {
+    .nav-menu a::after {
       content: '';
       position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: -4px;
+      bottom: -8px;
       left: 0;
-      background-color: var(--primary);
+      right: 0;
+      height: 2px;
+      background: var(--primary-blue);
+      border-radius: 1px;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .nav-menu a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .cta-btn {
+      background: var(--gradient-primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-soft);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-large);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 1002;
+    }
+
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 2px;
+      background: var(--text-dark);
+      border-radius: 1px;
       transition: var(--transition);
     }
 
-    .nav-links a:hover::after {
-      width: 100%;
+    .mobile-menu-btn.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
     }
 
-    .hamburger {
-      display: none;
-      cursor: pointer;
-      font-size: 24px;
-      color: var(--primary);
+    .mobile-menu-btn.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-btn.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 999;
+    }
+
+    .mobile-nav.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-nav ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .mobile-nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+
+    .mobile-nav a:hover {
+      color: var(--primary-blue);
+      transform: translateX(10px);
     }
 
     /* Hero Section */
     .hero {
-      background: linear-gradient(rgba(0, 74, 173, 0.8), rgba(0, 74, 173, 0.9)), url('/api/placeholder/1200/600') center/cover no-repeat;
-      padding: 150px 20px 80px;
+      background: var(--gradient-hero);
+      color: white;
+      padding: 8rem 2rem 6rem;
       text-align: center;
-      color: var(--white);
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero-content {
-      max-width: 800px;
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      opacity: 0.1;
+    }
+
+    .hero-container {
+      max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .typing-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--accent-orange-light);
+      margin-bottom: 1.5rem;
+      min-height: 1.5em;
     }
 
     .hero h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 42px;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
       font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
     }
 
     .hero p {
-      font-size: 18px;
-      margin-bottom: 30px;
+      font-size: 1.25rem;
       opacity: 0.9;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .hero-btns {
+    .hero-buttons {
       display: flex;
-      gap: 15px;
+      gap: 1rem;
       justify-content: center;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 12px 28px;
-      border-radius: 6px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: var(--transition);
-      cursor: pointer;
+      flex-wrap: wrap;
     }
 
     .btn-primary {
-      background-color: var(--white);
-      color: var(--primary);
-      border: 2px solid var(--white);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--primary-blue);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-soft);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
     }
 
     .btn-primary:hover {
-      background-color: transparent;
-      color: var(--white);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-large);
+      background: white;
     }
 
-    .btn-outline {
-      background-color: transparent;
-      color: var(--white);
-      border: 2px solid var(--white);
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
     }
 
-    .btn-outline:hover {
-      background-color: var(--white);
-      color: var(--primary);
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
     }
 
-    /* Stats */
-    .stats {
-      background-color: var(--white);
-      padding: 40px 20px;
-      margin-bottom: 40px;
+    /* Stats Section */
+    .stats-section {
+      background: var(--background-white);
+      padding: 4rem 2rem;
     }
 
     .stats-container {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
     }
 
     .stat-item {
       text-align: center;
+      padding: 2rem;
+      background: var(--background-light);
+      border-radius: 16px;
+      transition: var(--transition);
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
     }
 
     .stat-item i {
-      color: var(--primary);
-      font-size: 36px;
-      margin-bottom: 15px;
+      font-size: 3rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
     }
 
     .stat-number {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 5px;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: block;
+      margin-bottom: 0.5rem;
     }
 
-    .stat-text {
-      color: var(--secondary);
-      font-size: 16px;
+    .stat-label {
+      font-size: 1rem;
+      color: var(--text-light);
+      font-weight: 500;
     }
 
-    /* Course Grid Section */
-    .courses {
+    /* Courses Section */
+    .courses-section {
+      padding: 6rem 2rem;
+      background: var(--background-light);
+    }
+
+    .courses-container {
       max-width: 1200px;
-      margin: 0 auto 60px;
-      padding: 0 20px;
+      margin: 0 auto;
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 4rem;
     }
 
     .section-header h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 32px;
-      color: var(--dark);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
       position: relative;
       display: inline-block;
-      margin-bottom: 15px;
     }
 
     .section-header h2::after {
       content: '';
       position: absolute;
-      width: 60px;
-      height: 3px;
-      background-color: var(--primary);
       bottom: -10px;
       left: 50%;
       transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
     }
 
     .section-header p {
-      color: var(--secondary);
+      font-size: 1.1rem;
+      color: var(--text-light);
       max-width: 700px;
       margin: 0 auto;
     }
 
-    .grid {
+    .courses-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
     }
 
     .course-card {
-      background-color: var(--white);
-      border-radius: 8px;
+      background: white;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-soft);
       transition: var(--transition);
-      display: flex;
-      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .course-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-large);
     }
 
-    .course-img {
+    .course-image {
       position: relative;
+      height: 200px;
       overflow: hidden;
-      height: 180px;
     }
 
-    .course-img img {
+    .course-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: var(--transition);
     }
 
-    .course-card:hover .course-img img {
+    .course-card:hover .course-image img {
       transform: scale(1.05);
     }
 
     .course-category {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 6px 12px;
+      top: 1rem;
+      right: 1rem;
+      background: var(--gradient-primary);
+      color: white;
+      padding: 0.5rem 1rem;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 0.8rem;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .course-content {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
+      padding: 2rem;
     }
 
     .course-card h3 {
-      font-size: 20px;
+      font-size: 1.5rem;
       font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 12px;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      line-height: 1.3;
     }
 
     .course-card p {
-      color: var(--secondary);
-      font-size: 15px;
-      margin-bottom: 20px;
-      flex-grow: 1;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .course-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .course-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .course-features i {
+      color: var(--success-green);
+      font-size: 0.8rem;
     }
 
     .course-footer {
-      border-top: 1px solid #eee;
-      padding: 15px 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1.5rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -348,159 +549,186 @@
 
     .course-meta {
       display: flex;
-      align-items: center;
-      gap: 15px;
-      color: var(--secondary);
-      font-size: 14px;
+      gap: 1rem;
+      color: var(--text-light);
+      font-size: 0.85rem;
     }
 
     .course-meta span {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 0.25rem;
     }
 
     .enroll-btn {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 8px 18px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 14px;
+      background: var(--primary-blue);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
       text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
       transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .enroll-btn:hover {
-      background-color: var(--primary-dark);
+      background: var(--primary-blue-dark);
+      transform: translateY(-1px);
     }
 
-    /* Testimonials */
-    .testimonials {
-      background-color: var(--primary-light);
-      padding: 60px 20px;
-      margin-bottom: 60px;
+    /* Testimonials Section */
+    .testimonials-section {
+      background: var(--background-white);
+      padding: 6rem 2rem;
     }
 
-    .testimonial-container {
+    .testimonials-container {
       max-width: 1000px;
       margin: 0 auto;
     }
 
     .testimonial-card {
-      background-color: var(--white);
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-      margin: 0 auto;
-      max-width: 800px;
+      background: var(--background-light);
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
       position: relative;
+      box-shadow: var(--shadow-soft);
     }
 
     .testimonial-card::before {
       content: '\201C';
       font-family: Georgia, serif;
       position: absolute;
-      top: 20px;
-      left: 30px;
-      font-size: 60px;
-      color: #e6e6e6;
-      z-index: 0;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4rem;
+      color: var(--primary-blue-light);
+      opacity: 0.3;
     }
 
     .testimonial-text {
-      margin-bottom: 25px;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      line-height: 1.7;
+      margin-bottom: 2rem;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
-    .testimonial-person {
+    .testimonial-author {
       display: flex;
       align-items: center;
-      gap: 15px;
+      justify-content: center;
+      gap: 1rem;
     }
 
-    .testimonial-person img {
+    .testimonial-author img {
       width: 60px;
       height: 60px;
       border-radius: 50%;
       object-fit: cover;
+      border: 3px solid var(--primary-blue-light);
     }
 
     .testimonial-info h4 {
-      font-size: 18px;
-      margin-bottom: 5px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
     }
 
     .testimonial-info p {
-      color: var(--secondary);
-      font-size: 14px;
+      color: var(--text-light);
+      font-size: 0.9rem;
     }
 
     /* CTA Section */
-    .cta {
-      background: linear-gradient(rgba(0, 74, 173, 0.9), rgba(0, 74, 173, 0.9)), url('/api/placeholder/1200/600') center/cover no-repeat;
-      padding: 60px 20px;
+    .cta-section {
+      background: var(--gradient-primary);
+      color: white;
+      padding: 6rem 2rem;
       text-align: center;
-      color: var(--white);
-      margin-bottom: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      opacity: 0.1;
     }
 
     .cta-container {
       max-width: 800px;
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
 
-    .cta h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 32px;
-      margin-bottom: 20px;
+    .cta-section h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 1.5rem;
     }
 
-    .cta p {
-      margin-bottom: 30px;
-      font-size: 18px;
+    .cta-section p {
+      font-size: 1.2rem;
       opacity: 0.9;
+      margin-bottom: 2.5rem;
     }
 
     /* Footer */
     footer {
-      background-color: var(--dark);
-      color: var(--light);
-      padding: 60px 0 0;
-      margin-top: auto;
+      background: var(--text-dark);
+      color: white;
+      padding: 4rem 2rem 2rem;
     }
 
-    .footer-container {
+    .footer-content {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 20px;
+    }
+
+    .footer-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
     }
 
-    .footer-column h3 {
-      font-size: 18px;
-      margin-bottom: 20px;
+    .footer-section h4 {
+      color: white;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
       position: relative;
-      padding-bottom: 10px;
+      padding-bottom: 0.5rem;
     }
 
-    .footer-column h3::after {
+    .footer-section h4::after {
       content: '';
       position: absolute;
-      width: 40px;
-      height: 2px;
-      background-color: var(--primary);
       bottom: 0;
       left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent-orange);
     }
 
-    .footer-column p {
-      margin-bottom: 20px;
-      opacity: 0.8;
-      font-size: 14px;
+    .footer-section p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+      line-height: 1.6;
     }
 
     .footer-links {
@@ -508,20 +736,18 @@
     }
 
     .footer-links li {
-      margin-bottom: 10px;
+      margin-bottom: 0.75rem;
     }
 
     .footer-links a {
-      color: var(--light);
+      color: rgba(255, 255, 255, 0.8);
       text-decoration: none;
-      opacity: 0.8;
       transition: var(--transition);
-      font-size: 14px;
+      font-size: 0.95rem;
     }
 
     .footer-links a:hover {
-      opacity: 1;
-      color: var(--primary-light);
+      color: var(--accent-orange);
       padding-left: 5px;
     }
 
@@ -531,434 +757,890 @@
 
     .contact-info li {
       display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      font-size: 14px;
-      opacity: 0.8;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .contact-info i {
-      color: var(--primary-light);
+      color: var(--accent-orange);
+      width: 16px;
     }
 
     .social-links {
       display: flex;
-      gap: 15px;
-      margin-top: 20px;
+      gap: 1rem;
+      margin-top: 1.5rem;
     }
 
     .social-links a {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      background-color: rgba(255,255,255,0.1);
-      color: var(--white);
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
       border-radius: 50%;
       transition: var(--transition);
+      font-size: 1.1rem;
     }
 
     .social-links a:hover {
-      background-color: var(--primary);
+      background: var(--primary-blue);
+      transform: translateY(-3px);
     }
 
-    .copyright {
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
       text-align: center;
-      padding: 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin-top: 40px;
-      font-size: 14px;
-      opacity: 0.8;
+    }
+
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+
+    /* Scroll Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s ease;
+    }
+
+    .slide-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.6s ease;
+    }
+
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     /* Responsive Design */
-    @media (max-width: 992px) {
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .header-container {
+        padding: 0 1rem;
+      }
+
+      .hero {
+        padding: 6rem 1rem 4rem;
+      }
+
       .stats-container {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
       }
-      
-      .hero h1 {
-        font-size: 36px;
-      }
-    }
 
-    @media (max-width: 768px) {
-      .hamburger {
-        display: block;
+      .courses-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
-      
-      .nav-links {
-        position: fixed;
-        top: 70px;
-        left: -100%;
-        background-color: var(--white);
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary,
+      .btn-secondary {
         width: 100%;
-        height: calc(100vh - 70px);
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .course-footer {
         flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding-top: 40px;
-        transition: var(--transition);
+        gap: 1rem;
+        align-items: stretch;
       }
-      
-      .nav-links.active {
-        left: 0;
+
+      .course-meta {
+        justify-content: center;
       }
-      
-      .hero-btns {
-        flex-direction: column;
-        align-items: center;
+
+      .enroll-btn {
+        text-align: center;
+        justify-content: center;
       }
-      
-      .hero h1 {
-        font-size: 32px;
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .social-links {
+        justify-content: center;
       }
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 480px) {
+      .course-card {
+        margin: 0 0.5rem;
+      }
+
+      .testimonial-card {
+        padding: 2rem 1.5rem;
+      }
+
       .stats-container {
         grid-template-columns: 1fr;
       }
-      
-      .hero h1 {
-        font-size: 28px;
+
+      header {
+        height: 70px;
       }
-      
-      .section-header h2 {
-        font-size: 28px;
+
+      .mobile-nav {
+        top: 70px;
       }
-      
-      .course-footer {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
+
+      .hero {
+        padding: 5rem 1rem 3rem;
       }
+
+      .courses-section,
+      .testimonials-section,
+      .cta-section {
+        padding: 4rem 1rem;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--background-light);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-blue);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-blue-dark);
+    }
+
+    /* Focus States for Accessibility */
+    *:focus {
+      outline: 2px solid var(--primary-blue);
+      outline-offset: 2px;
+    }
+
+    button:focus,
+    a:focus,
+    input:focus,
+    select:focus {
+      outline: 2px solid var(--primary-blue);
+      outline-offset: 2px;
     }
   </style>
 </head>
+
 <body>
-
-<header id="header">
-  <div class="nav-container">
-    <a href="#" class="logo">
-      <i class="fas fa-laptop-code logo-icon"></i>
-      <span class="logo-text">BTECH</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#courses">Courses</a></li>
-      <li><a href="#about">About Us</a></li>
-      <li><a href="#testimonials">Testimonials</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="hamburger" id="hamburger">
-      <i class="fas fa-bars"></i>
-    </div>
-  </div>
-</header>
-
-<section class="hero" id="home">
-  <div class="hero-content">
-    <h1>Transform Your Future with Modern Tech Skills</h1>
-    <p>Join BTECH's professional learning programs and master the digital skills needed for today's competitive job market.</p>
-    <div class="hero-btns">
-      <a href="#courses" class="btn btn-primary">Explore Courses</a>
-      <a href="#contact" class="btn btn-outline">Contact Us</a>
-    </div>
-  </div>
-</section>
-
-<section class="stats">
-  <div class="stats-container">
-    <div class="stat-item">
-      <i class="fas fa-users"></i>
-      <div class="stat-number">500+</div>
-      <div class="stat-text">Students Trained</div>
-    </div>
-    <div class="stat-item">
-      <i class="fas fa-laptop"></i>
-      <div class="stat-number">5+</div>
-      <div class="stat-text">Professional Courses</div>
-    </div>
-    <div class="stat-item">
-      <i class="fas fa-award"></i>
-      <div class="stat-number">98%</div>
-      <div class="stat-text">Success Rate</div>
-    </div>
-    <div class="stat-item">
-      <i class="fas fa-briefcase"></i>
-      <div class="stat-number">15+</div>
-      <div class="stat-text">Corporate Partners</div>
-    </div>
-  </div>
-</section>
-
-<section class="courses" id="courses">
-  <div class="section-header">
-    <h2>Our Professional Courses</h2>
-    <p>Discover hands-on learning experiences designed to build real-world skills with industry-standard tools and technologies.</p>
-  </div>
-  <div class="grid">
-    <div class="course-card">
-      <div class="course-img">
-        <img src="computer_packages.png" alt="Computer Packages">
-        <span class="course-category">Essentials</span>
-      </div>
-      <div class="course-content">
-        <h3>Professional Computer Packages</h3>
-        <p>Master Microsoft Office Suite, Windows OS management, and essential computer operations for workplace productivity.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 4 weeks</span>
-          <span><i class="far fa-user"></i> Beginner</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="../index.html" class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>BTECH Learning</span>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="enroll-form.html" class="cta-btn">
+          <i class="fas fa-rocket"></i>
+          Enroll Now
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="business.png" alt="Basic Applications">
-        <span class="course-category">Productivity</span>
-      </div>
-      <div class="course-content">
-        <h3>Business Applications</h3>
-        <p>Learn productivity software, data management tools, and cloud applications to streamline your business operations.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 6 weeks</span>
-          <span><i class="far fa-user"></i> Intermediate</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="programming.png" alt="Programming">
-        <span class="course-category">Development</span>
-      </div>
-      <div class="course-content">
-        <h3>Modern Programming Fundamentals</h3>
-        <p>Build real-world projects using Python, JavaScript, and object-oriented programming principles with expert guidance.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 10 weeks</span>
-          <span><i class="far fa-user"></i> Beginner-Intermediate</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="web-development.png" alt="Web Development">
-        <span class="course-category">Development</span>
-      </div>
-      <div class="course-content">
-        <h3>Full-Stack Web Development</h3>
-        <p>Create responsive, dynamic websites with HTML5, CSS3, JavaScript, and modern frameworks like React and Node.js.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 12 weeks</span>
-          <span><i class="far fa-user"></i> Intermediate</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="app.png" alt="App Development">
-        <span class="course-category">Development</span>
-      </div>
-      <div class="course-content">
-        <h3>Mobile App Development</h3>
-        <p>Design and develop cross-platform mobile applications using Flutter or React Native with industry best practices.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 14 weeks</span>
-          <span><i class="far fa-user"></i> Intermediate-Advanced</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="ethical_hacking.png" alt="Ethical Hacking">
-        <span class="course-category">Security</span>
-      </div>
-      <div class="course-content">
-        <h3>Ethical Hacking & Penetration Testing</h3>
-        <p>Learn to identify vulnerabilities, perform security assessments, and implement countermeasures against cyber threats.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 12 weeks</span>
-          <span><i class="far fa-user"></i> Intermediate-Advanced</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="graphic.png" alt="Graphic Design">
-        <span class="course-category">Design</span>
-      </div>
-      <div class="course-content">
-        <h3>Professional Graphic Design</h3>
-        <p>Master Adobe Creative Suite to create stunning visual assets, branding materials, and digital artwork for professional use.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 8 weeks</span>
-          <span><i class="far fa-user"></i> All Levels</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="marketing.png" alt="Digital Marketing">
-        <span class="course-category">Marketing</span>
-      </div>
-      <div class="course-content">
-        <h3>Digital Marketing Strategy</h3>
-        <p>Develop comprehensive marketing campaigns using SEO, social media, PPC advertising, and data analytics tools.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 8 weeks</span>
-          <span><i class="far fa-user"></i> All Levels</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="cybersecurity.png" alt="Cyber Security">
-        <span class="course-category">Security</span>
-      </div>
-      <div class="course-content">
-        <h3>Advanced Cyber Security</h3>
-        <p>Implement robust security protocols to protect networks, systems, and sensitive data from sophisticated cyber attacks.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 16 weeks</span>
-          <span><i class="far fa-user"></i> Advanced</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-img">
-        <img src="networking.png" alt="Network Engineering">
-        <span class="course-category">Infrastructure</span>
-      </div>
-      <div class="course-content">
-        <h3>Network Engineering</h3>
-        <p>Design, configure, and manage enterprise networks with Cisco technologies, TCP/IP protocols, and network security.</p>
-      </div>
-      <div class="course-footer">
-        <div class="course-meta">
-          <span><i class="far fa-clock"></i> 12 weeks</span>
-          <span><i class="far fa-user"></i> Intermediate-Advanced</span>
-        </div>
-        <a href="enroll-form.html" class="enroll-btn">Enroll Now</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="testimonials" id="testimonials">
-  <div class="testimonial-container">
-    <div class="section-header">
-      <h2>Student Success Stories</h2>
-      <p>Hear what our graduates have to say about their learning experience at BTECH</p>
-    </div>
-    <div class="testimonial-card">
-      <p class="testimonial-text">"The Full-Stack Web Development course at BTECH completely transformed my career. The practical approach and industry-relevant curriculum helped me land a job at a leading tech company within two months of completion. The instructors were incredibly supportive and knowledgeable."</p>
-      <div class="testimonial-person">
-        <img src="sarah.png" alt="Sarah Johnson">
-        <div class="testimonial-info">
-          <h4>Sarah Johnson</h4>
-          <p>Web Developer at TechCorp</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="cta">
-  <div class="cta-container">
-    <h2>Ready to Advance Your Tech Career?</h2>
-    <p>Join thousands of successful professionals who have transformed their careers with BTECH's expert-led courses.</p>
-    <a href="enroll-form.html" class="btn btn-primary">Enroll Today</a>
-  </div>
-</section>
-
-<footer id="contact">
-  <div class="footer-container">
-    <div class="footer-column">
-      <h3>About BTECH</h3>
-      <p>BTECH is a premier technology learning center dedicated to providing industry-relevant education and hands-on training to build the digital workforce of tomorrow.</p>
-      <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-    
-    <div class="footer-column">
-      <h3>Quick Links</h3>
-      <ul class="footer-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#courses">Our Courses</a></li>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#testimonials">Testimonials</a></li>
-        <li><a href="#contact">Contact Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms & Conditions</a></li>
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-badge">
+        <i class="fas fa-award"></i>
+        Industry-Leading Technology Education
+      </div>
+      <div class="typing-text" id="typingText"></div>
+      <h1>Master Tomorrow's Technology Today</h1>
+      <p>Transform your career with cutting-edge courses in programming, cybersecurity, web development, and emerging technologies. Learn from industry experts and build real-world projects.</p>
+      <div class="hero-buttons">
+        <a href="#courses" class="btn-primary">
+          <i class="fas fa-play"></i>
+          Explore Courses
+        </a>
+        <a href="#contact" class="btn-secondary">
+          <i class="fas fa-phone"></i>
+          Get Started
+        </a>
+      </div>
     </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section" id="about">
+    <div class="stats-container">
+      <div class="stat-item fade-in">
+        <i class="fas fa-users"></i>
+        <span class="stat-number">1,500+</span>
+        <span class="stat-label">Students Trained</span>
+      </div>
+      <div class="stat-item fade-in">
+        <i class="fas fa-laptop-code"></i>
+        <span class="stat-number">12+</span>
+        <span class="stat-label">Professional Courses</span>
+      </div>
+      <div class="stat-item fade-in">
+        <i class="fas fa-briefcase"></i>
+        <span class="stat-number">25+</span>
+        <span class="stat-label">Industry Partners</span>
+      </div>
+      <div class="stat-item fade-in">
+        <i class="fas fa-clock"></i>
+        <span class="stat-number">24/7</span>
+        <span class="stat-label">Learning Support</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section class="courses-section" id="courses">
+    <div class="courses-container">
+      <div class="section-header">
+        <h2 class="fade-in">Professional Technology Courses</h2>
+        <p class="fade-in">Master industry-relevant skills with hands-on training, real-world projects, and expert mentorship to accelerate your tech career.</p>
+      </div>
+      
+      <div class="courses-grid">
+        <!-- Computer Packages Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="computer_packages.png" alt="Computer Packages Course">
+            <div class="course-category">Essentials</div>
+          </div>
+          <div class="course-content">
+            <h3>Professional Computer Packages</h3>
+            <p>Master Microsoft Office Suite, Windows administration, and essential productivity tools for modern workplace success.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Microsoft Word, Excel, PowerPoint mastery</li>
+              <li><i class="fas fa-check-circle"></i> Windows OS administration</li>
+              <li><i class="fas fa-check-circle"></i> File management & security</li>
+              <li><i class="fas fa-check-circle"></i> Professional certification</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 4 weeks</span>
+              <span><i class="far fa-user"></i> Beginner</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Business Applications Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="business.png" alt="Business Applications Course">
+            <div class="course-category">Business</div>
+          </div>
+          <div class="course-content">
+            <h3>Business Applications & Analytics</h3>
+            <p>Learn advanced business software, data analysis tools, and cloud platforms to optimize business operations and decision-making.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Advanced Excel & data analysis</li>
+              <li><i class="fas fa-check-circle"></i> Business intelligence tools</li>
+              <li><i class="fas fa-check-circle"></i> Cloud productivity suites</li>
+              <li><i class="fas fa-check-circle"></i> Project management software</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 6 weeks</span>
+              <span><i class="far fa-user"></i> Intermediate</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Programming Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="programming.png" alt="Programming Course">
+            <div class="course-category">Development</div>
+          </div>
+          <div class="course-content">
+            <h3>Modern Programming Fundamentals</h3>
+            <p>Build solid programming foundations with Python, JavaScript, and modern development practices through hands-on projects.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Python & JavaScript mastery</li>
+              <li><i class="fas fa-check-circle"></i> Object-oriented programming</li>
+              <li><i class="fas fa-check-circle"></i> Version control with Git</li>
+              <li><i class="fas fa-check-circle"></i> Real-world project portfolio</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 10 weeks</span>
+              <span><i class="far fa-user"></i> Beginner-Intermediate</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Web Development Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="web-development.png" alt="Web Development Course">
+            <div class="course-category">Development</div>
+          </div>
+          <div class="course-content">
+            <h3>Full-Stack Web Development</h3>
+            <p>Create responsive, dynamic web applications using modern frameworks like React, Node.js, and industry-standard tools.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> HTML5, CSS3, JavaScript ES6+</li>
+              <li><i class="fas fa-check-circle"></i> React & Node.js development</li>
+              <li><i class="fas fa-check-circle"></i> Database design & management</li>
+              <li><i class="fas fa-check-circle"></i> Deployment & hosting</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 14 weeks</span>
+              <span><i class="far fa-user"></i> Intermediate</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile App Development Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="app.png" alt="Mobile App Development Course">
+            <div class="course-category">Development</div>
+          </div>
+          <div class="course-content">
+            <h3>Cross-Platform Mobile Development</h3>
+            <p>Design and build native mobile applications for iOS and Android using Flutter and React Native frameworks.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Flutter & React Native</li>
+              <li><i class="fas fa-check-circle"></i> UI/UX design principles</li>
+              <li><i class="fas fa-check-circle"></i> API integration & databases</li>
+              <li><i class="fas fa-check-circle"></i> App store deployment</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 16 weeks</span>
+              <span><i class="far fa-user"></i> Intermediate-Advanced</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Ethical Hacking Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="ethical_hacking.png" alt="Ethical Hacking Course">
+            <div class="course-category">Security</div>
+          </div>
+          <div class="course-content">
+            <h3>Ethical Hacking & Penetration Testing</h3>
+            <p>Learn advanced cybersecurity techniques, vulnerability assessment, and penetration testing methodologies used by professionals.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Network & web app penetration testing</li>
+              <li><i class="fas fa-check-circle"></i> Security assessment tools</li>
+              <li><i class="fas fa-check-circle"></i> Vulnerability research</li>
+              <li><i class="fas fa-check-circle"></i> Industry certifications prep</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 14 weeks</span>
+              <span><i class="far fa-user"></i> Advanced</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Graphic Design Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="graphic.png" alt="Graphic Design Course">
+            <div class="course-category">Design</div>
+          </div>
+          <div class="course-content">
+            <h3>Professional Graphic Design</h3>
+            <p>Master Adobe Creative Suite and design principles to create stunning visual content for digital and print media.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Adobe Photoshop, Illustrator, InDesign</li>
+              <li><i class="fas fa-check-circle"></i> Logo & brand identity design</li>
+              <li><i class="fas fa-check-circle"></i> Print & digital media design</li>
+              <li><i class="fas fa-check-circle"></i> Client project portfolio</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 10 weeks</span>
+              <span><i class="far fa-user"></i> All Levels</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Digital Marketing Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="marketing.png" alt="Digital Marketing Course">
+            <div class="course-category">Marketing</div>
+          </div>
+          <div class="course-content">
+            <h3>Digital Marketing & Growth Strategy</h3>
+            <p>Develop comprehensive digital marketing campaigns using SEO, social media, PPC, and advanced analytics tools.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> SEO & content marketing</li>
+              <li><i class="fas fa-check-circle"></i> Social media strategy & ads</li>
+              <li><i class="fas fa-check-circle"></i> Google Ads & analytics</li>
+              <li><i class="fas fa-check-circle"></i> Conversion optimization</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 8 weeks</span>
+              <span><i class="far fa-user"></i> All Levels</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Cybersecurity Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="cybersecurity.png" alt="Cybersecurity Course">
+            <div class="course-category">Security</div>
+          </div>
+          <div class="course-content">
+            <h3>Advanced Cybersecurity & Defense</h3>
+            <p>Implement enterprise-grade security solutions and develop incident response strategies to protect organizational assets.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Security architecture & design</li>
+              <li><i class="fas fa-check-circle"></i> Incident response & forensics</li>
+              <li><i class="fas fa-check-circle"></i> Compliance & risk management</li>
+              <li><i class="fas fa-check-circle"></i> Advanced threat detection</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 18 weeks</span>
+              <span><i class="far fa-user"></i> Advanced</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Network Engineering Course -->
+        <div class="course-card fade-in">
+          <div class="course-image">
+            <img src="networking.png" alt="Network Engineering Course">
+            <div class="course-category">Infrastructure</div>
+          </div>
+          <div class="course-content">
+            <h3>Enterprise Network Engineering</h3>
+            <p>Design, configure, and manage enterprise networks with advanced routing, switching, and security protocols.</p>
+            <ul class="course-features">
+              <li><i class="fas fa-check-circle"></i> Cisco CCNA & CCNP preparation</li>
+              <li><i class="fas fa-check-circle"></i> Advanced routing & switching</li>
+              <li><i class="fas fa-check-circle"></i> Network security implementation</li>
+              <li><i class="fas fa-check-circle"></i> Cloud networking & SD-WAN</li>
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 14 weeks</span>
+              <span><i class="far fa-user"></i> Intermediate-Advanced</span>
+            </div>
+            <a href="enroll-form.html" class="enroll-btn">
+              <i class="fas fa-rocket"></i>
+              Enroll Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="testimonials-container">
+      <div class="section-header">
+        <h2 class="fade-in">Student Success Stories</h2>
+        <p class="fade-in">Hear from our graduates who have transformed their careers and achieved remarkable success in the tech industry.</p>
+      </div>
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">"The Full-Stack Web Development course at BTECH completely transformed my career trajectory. The comprehensive curriculum, hands-on projects, and expert mentorship gave me the confidence and skills to land my dream job at a leading tech company. The practical approach to learning and real-world applications made all the difference in my professional growth."</p>
+        <div class="testimonial-author">
+          <img src="sarah.png" alt="Sarah Johnson - Graduate">
+          <div class="testimonial-info">
+            <h4>Sarah Johnson</h4>
+            <p>Senior Web Developer at TechCorp Kenya</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2 class="fade-in">Ready to Transform Your Tech Career?</h2>
+      <p class="fade-in">Join thousands of successful professionals who have accelerated their careers with BTECH's industry-leading courses and expert mentorship.</p>
+      <a href="enroll-form.html" class="btn-primary fade-in">
+        <i class="fas fa-graduation-cap"></i>
+        Start Your Journey Today
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>BTECH Learning Hub</h4>
+          <p>Kenya's premier technology education center, dedicated to providing world-class training and hands-on experience to build the next generation of tech professionals.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="#courses">Our Courses</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#testimonials">Student Reviews</a></li>
+            <li><a href="enroll-form.html">Enrollment</a></li>
+            <li><a href="#">Career Services</a></li>
+            <li><a href="#">Alumni Network</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Popular Courses</h4>
+          <ul class="footer-links">
+            <li><a href="#">Full-Stack Web Development</a></li>
+            <li><a href="#">Mobile App Development</a></li>
+            <li><a href="#">Cybersecurity & Ethical Hacking</a></li>
+            <li><a href="#">Digital Marketing Strategy</a></li>
+            <li><a href="#">Professional Graphic Design</a></li>
+            <li><a href="#">Network Engineering</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contact Information</h4>
+          <ul class="contact-info">
+            <li><i class="fas fa-map-marker-alt"></i> BTECH Learning Center, Nairobi, Kenya</li>
+            <li><i class="fas fa-phone"></i> +254 113 996 609</li>
+            <li><i class="fas fa-phone"></i> +254 734 644 917</li>
+            <li><i class="fas fa-envelope"></i> btechkenya@gmail.com</li>
+            <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+            <li><i class="fas fa-clock"></i> Sat: 9:00 AM - 4:00 PM</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 BTECH Computer Learning Hub. All rights reserved. Empowering the next generation of tech professionals.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Menu Functionality
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
     
-    <div class="footer-column">
-      <h3>Our Courses</h3>
-      <ul class="footer-links">
-        <li><a href="#">Computer Packages</a></li>
-        <li><a href="#">Web Development</a></li>
-        <li><a href="#">Programming</a></li>
-        <li><a href="#">Mobile App Development</a></li>
-        <li><a href="#">Cyber Security</a></li>
-        <li><a href="#">Digital Marketing</a></li>
-      </ul>
-    </div>
+    if (mobileMenuBtn && mobileNav) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.classList.toggle('active');
+        mobileNav.classList.toggle('active');
+        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+      });
+
+      // Close mobile menu when clicking on links
+      document.querySelectorAll('.mobile-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    // Typing effect
+    const typingElement = document.getElementById('typingText');
+    const phrases = [
+      "Learn. Code. Create. Succeed.",
+      "Build Your Tech Future Today",
+      "Industry-Ready Skills & Certifications", 
+      "Expert Mentorship & Real Projects",
+      "Transform Your Career in Tech"
+    ];
     
-    <div class="footer-column">
-      <h3>Contact Us</h3>
-      <ul class="contact-info">
-        <li><i class="fas fa-map-marker-alt"></i> 392 BTECH Avenue, Nairobi</li>
-        <li><i class="fas fa-phone"></i> +254 (0) 113 996 609</li>
-        <li><i class="fas fa-envelope"></i> btechkenya@gmail.com</li>
-        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
-      </ul>
-    </div>
-  </div>
-  
-  <div class="copyright">
-    <p>&copy; 2025 BTECH Learning Center. All rights reserved.</p>
-  </div>
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIndex];
+      
+      if (!isDeleting) {
+        typingElement.textContent = currentPhrase.slice(0, charIndex + 1);
+        charIndex++;
+        
+        if (charIndex === currentPhrase.length) {
+          isDeleting = true;
+          setTimeout(typeEffect, 2000);
+          return;
+        }
+      } else {
+        typingElement.textContent = currentPhrase.slice(0, charIndex - 1);
+        charIndex--;
+        
+        if (charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+      
+      setTimeout(typeEffect, isDeleting ? 50 : 100);
+    }
+    
+    if (typingElement) {
+      typeEffect();
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.header');
+      if (window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offsetTop = target.offsetTop - 80;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe elements for scroll animations
+    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Course card hover effects
+    document.querySelectorAll('.course-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px) scale(1.02)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+
+    // Stats counter animation
+    const animateStats = () => {
+      const stats = document.querySelectorAll('.stat-number');
+      
+      stats.forEach(stat => {
+        const target = stat.textContent;
+        const isNumeric = /^\d+\+?$/.test(target);
+        
+        if (isNumeric) {
+          const finalNumber = parseInt(target.replace('+', ''));
+          const hasPlus = target.includes('+');
+          const duration = 2000;
+          const steps = 60;
+          const increment = finalNumber / steps;
+          let current = 0;
+          
+          const counter = setInterval(() => {
+            current += increment;
+            
+            if (current >= finalNumber) {
+              stat.textContent = finalNumber + (hasPlus ? '+' : '');
+              clearInterval(counter);
+            } else {
+              stat.textContent = Math.floor(current) + (hasPlus ? '+' : '');
+            }
+          }, duration / steps);
+        }
+      });
+    };
+
+    // Trigger stats animation when section is visible
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStats();
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+      statsObserver.observe(statsSection);
+    }
+
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (mobileNav && mobileNav.classList.contains('active')) {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+
+    // Prevent form resubmission on page refresh
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+</body>
+</html>
