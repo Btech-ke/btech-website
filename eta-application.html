@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenya ETA Application - BTECH</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+    :root {
+        --primary-blue: #1e40af;
+        --primary-blue-dark: #1e3a8a;
+        --eta-green: #10b981;
+        --eta-green-dark: #059669;
+        --text-dark: #1f2937;
+        --text-light: #6b7280;
+        --background-light: #f8fafc;
+        --background-white: #ffffff;
+        --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--background-light);
+        color: var(--text-dark);
+        line-height: 1.6;
+        padding: 2rem 1rem;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--background-white);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: var(--shadow-soft);
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .header h1 {
+        font-size: clamp(2rem, 5vw, 2.5rem);
+        font-weight: 800;
+        color: var(--eta-green);
+    }
+
+    .header p {
+        color: var(--text-light);
+    }
+
+    .stepper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .stepper-line {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #e5e7eb;
+        transform: translateY(-50%);
+        z-index: 0;
+    }
+
+    .stepper-progress {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 2px;
+        background-color: var(--eta-green);
+        transform: translateY(-50%);
+        transition: width 0.5s ease-in-out;
+        z-index: 1;
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 2;
+    }
+
+    .step-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #e5e7eb;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        transition: var(--transition);
+        margin-bottom: 0.5rem;
+    }
+
+    .step-circle.active {
+        background-color: var(--eta-green);
+    }
+
+    .step-label {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        text-align: center;
+    }
+
+    .form-step {
+        display: none;
+    }
+
+    .form-step.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="date"],
+    .form-group input[type="file"],
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+    
+    input[type="file"] {
+      padding-top: 0.5rem;
+    }
+
+    .file-input-label {
+        display: block;
+        background-color: #f3f4f6;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+
+    .file-input-label:hover {
+        background-color: #e5e7eb;
+    }
+
+    .file-name {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-prev {
+        background: #e5e7eb;
+        color: var(--text-dark);
+    }
+
+    .btn-next,
+    .btn-submit {
+        background: var(--eta-green);
+        color: white;
+    }
+
+    .btn-prev:hover, .btn-next:hover, .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    #loadingOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 3000;
+    }
+
+    .loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Kenya ETA Application</h1>
+        <p>Complete the form below to process your Electronic Travel Authorization to Kenya.</p>
+    </div>
+
+    <div class="stepper">
+        <div class="stepper-line"></div>
+        <div class="stepper-progress" style="width: 0;"></div>
+        <div class="step active" data-step="1">
+            <div class="step-circle">1</div>
+            <span class="step-label">Personal Info</span>
+        </div>
+        <div class="step" data-step="2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Travel Details</span>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Documents</span>
+        </div>
+    </div>
+
+    <form id="etaForm" action="submit-eta.php" method="POST" enctype="multipart/form-data">
+        <div class="form-step active" data-step="1">
+            <h2>Personal Information</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-light);">Enter your details exactly as they appear on your passport.</p>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="nationality">Nationality</label>
+                <input type="text" id="nationality" name="nationality" required>
+            </div>
+            <div class="button-group">
+                <button type="button" class="btn btn-next">Next Step <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="form-step" data-step="2">
+            <h2>Passport & Travel Details</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-light);">Provide your travel document and planned itinerary.</p>
+            <div class="form-group">
+                <label for="passportNumber">Passport Number</label>
+                <input type="text" id="passportNumber" name="passportNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="issueDate">Passport Issue Date</label>
+                <input type="date" id="issueDate" name="issueDate" required>
+            </div>
+            <div class="form-group">
+                <label for="expiryDate">Passport Expiry Date</label>
+                <input type="date" id="expiryDate" name="expiryDate" required>
+            </div>
+            <div class="form-group">
+                <label for="arrivalDate">Planned Arrival Date</label>
+                <input type="date" id="arrivalDate" name="arrivalDate" required>
+            </div>
+            <div class="button-group">
+                <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="button" class="btn btn-next">Next Step <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="form-step" data-step="3">
+            <h2>Document Uploads</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-light);">Upload the required documents. Formats: .jpg, .png, .pdf</p>
+            <div class="form-group">
+                <label for="passportPhoto">Passport-sized Photo</label>
+                <input type="file" id="passportPhoto" name="passportPhoto" accept=".jpg, .jpeg, .png" required>
+            </div>
+            <div class="form-group">
+                <label for="passportScan">Passport Biodata Page Scan</label>
+                <input type="file" id="passportScan" name="passportScan" accept=".jpg, .jpeg, .png, .pdf" required>
+            </div>
+            <div class="form-group">
+                <label for="airTicket">Return Air Ticket</label>
+                <input type="file" id="airTicket" name="airTicket" accept=".jpg, .jpeg, .png, .pdf" required>
+            </div>
+            <div class="button-group">
+                <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="submit" class="btn btn-submit" id="submitBtn">
+                    Submit Application
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="loadingOverlay">
+    <div class="loader">
+        <div class="spinner"></div>
+        <span id="loadingText">Processing your application...</span>
+    </div>
+</div>
+
+<script>
+    const formSteps = document.querySelectorAll('.form-step');
+    const stepCircles = document.querySelectorAll('.step-circle');
+    const stepLabels = document.querySelectorAll('.step-label');
+    const stepperProgress = document.querySelector('.stepper-progress');
+    let currentStep = 0;
+
+    function updateFormSteps() {
+        formSteps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+        });
+        stepCircles.forEach((circle, index) => {
+            circle.classList.toggle('active', index <= currentStep);
+        });
+        updateProgressBar();
+    }
+
+    function updateProgressBar() {
+        const progress = (currentStep / (formSteps.length - 1)) * 100;
+        stepperProgress.style.width = `${progress}%`;
+    }
+
+    document.querySelectorAll('.btn-next').forEach(button => {
+        button.addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                currentStep++;
+                updateFormSteps();
+            } else {
+                alert('Please fill out all required fields.');
+            }
+        });
+    });
+
+    document.querySelectorAll('.btn-prev').forEach(button => {
+        button.addEventListener('click', () => {
+            currentStep--;
+            updateFormSteps();
+        });
+    });
+
+    function validateStep(stepIndex) {
+        const currentFormStep = formSteps[stepIndex];
+        const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
+        for (let i = 0; i < inputs.length; i++) {
+            if (!inputs[i].checkValidity()) {
+                inputs[i].reportValidity();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Handle file input changes to show file names
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+            const label = e.target.closest('.form-group').querySelector('label');
+            const fileNameDisplay = document.createElement('div');
+            fileNameDisplay.className = 'file-name';
+            fileNameDisplay.textContent = `Selected: ${fileName}`;
+            if (label.nextElementSibling && label.nextElementSibling.className === 'file-name') {
+                label.nextElementSibling.remove();
+            }
+            label.parentNode.appendChild(fileNameDisplay);
+        });
+    });
+
+    document.getElementById('etaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Show lazy loading overlay
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        document.getElementById('submitBtn').disabled = true;
+
+        const formData = new FormData(e.target);
+        
+        // This is a placeholder. You need a server-side script to handle this.
+        // The URL 'submit-eta.php' is an example.
+        try {
+            const response = await fetch('submit-eta.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                // Success
+                document.getElementById('loadingText').textContent = 'Application submitted successfully!';
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    alert('Your application has been submitted. We will contact you via email shortly.');
+                    window.location.href = 'index.html'; // Redirect to homepage
+                }, 2000);
+            } else {
+                // Error
+                throw new Error('Server responded with an error.');
+            }
+        } catch (error) {
+            console.error('Submission failed:', error);
+            document.getElementById('loadingText').textContent = 'Submission failed. Please try again.';
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+            }, 3000);
+        }
+    });
+</script>
+
+</body>
+</html>
