@@ -26,15 +26,36 @@
         color: var(--text-dark);
         line-height: 1.6;
         padding: 2rem 1rem;
+        background-image: url('https://images.unsplash.com/photo-1614717142416-834f3869265f?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 0;
     }
 
     .container {
+        position: relative;
+        z-index: 1;
         max-width: 800px;
         margin: 0 auto;
         background: var(--background-white);
         padding: 2rem;
         border-radius: 20px;
-        box-shadow: var(--shadow-soft);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     .header {
@@ -46,10 +67,12 @@
         font-size: clamp(2rem, 5vw, 2.5rem);
         font-weight: 800;
         color: var(--eta-green);
+        text-shadow: var(--shadow-soft);
     }
 
     .header p {
         color: var(--text-light);
+        font-weight: 500;
     }
 
     .stepper {
@@ -105,6 +128,7 @@
 
     .step-circle.active {
         background-color: var(--eta-green);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
     }
 
     .step-label {
@@ -119,6 +143,12 @@
 
     .form-step.active {
         display: block;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .form-group {
@@ -142,6 +172,7 @@
         border-radius: 12px;
         font-size: 1rem;
         transition: var(--transition);
+        background: #fdfdfd;
     }
 
     .form-group input:focus,
@@ -150,7 +181,7 @@
         border-color: var(--eta-green);
         box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
     }
-
+    
     .summary-item {
         margin-bottom: 1rem;
         padding-bottom: 1rem;
@@ -204,9 +235,16 @@
         color: white;
     }
 
-    .btn-prev:hover, .btn-next:hover, .btn-submit:hover {
+    .btn-prev:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-soft);
+        background: #d1d5db;
+    }
+    
+    .btn-next:hover, .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-soft);
+        background: var(--eta-green-dark);
     }
 
     .btn-submit:disabled {
@@ -248,14 +286,119 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+
+    .language-selector {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        z-index: 10;
+    }
+
+    .language-dropdown {
+        position: relative;
+    }
+
+    .language-btn {
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(5px);
+        color: var(--text-dark);
+        border: 1px solid #d1d5db;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .language-btn:hover {
+        background-color: white;
+    }
+
+    .language-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow-soft);
+        min-width: 150px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: var(--transition);
+        margin-top: 0.5rem;
+    }
+
+    .language-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .language-menu button {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .language-menu button:hover {
+        background: var(--background-light);
+    }
 </style>
 </head>
 <body>
 
+<div class="language-selector">
+    <div class="language-dropdown">
+        <button class="language-btn" id="languageBtn">
+            <i class="fas fa-globe"></i>
+            <span id="currentLang">English</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="language-menu" id="languageMenu">
+            <button onclick="changeLanguage('en')">
+                <img src="https://flagcdn.com/w20/gb.png" alt="EN" style="width: 16px;">
+                English
+            </button>
+            <button onclick="changeLanguage('es')">
+                <img src="https://flagcdn.com/w20/es.png" alt="ES" style="width: 16px;">
+                Español
+            </button>
+            <button onclick="changeLanguage('fr')">
+                <img src="https://flagcdn.com/w20/fr.png" alt="FR" style="width: 16px;">
+                Français
+            </button>
+            <button onclick="changeLanguage('zh')">
+                <img src="https://flagcdn.com/w20/cn.png" alt="ZH" style="width: 16px;">
+                中文
+            </button>
+            <button onclick="changeLanguage('hi')">
+                <img src="https://flagcdn.com/w20/in.png" alt="HI" style="width: 16px;">
+                हिंदी
+            </button>
+            <button onclick="changeLanguage('ru')">
+                <img src="https://flagcdn.com/w20/ru.png" alt="RU" style="width: 16px;">
+                Русский
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="header">
-        <h1>Kenya ETA Application</h1>
-        <p>Complete the form below to process your Electronic Travel Authorization to Kenya.</p>
+        <h1 data-key="h1">Kenya ETA Application</h1>
+        <p data-key="p_header">Your journey to Kenya begins here. Please fill out the form to get started.</p>
     </div>
 
     <div class="stepper">
@@ -263,79 +406,81 @@
         <div class="stepper-progress" style="width: 0;"></div>
         <div class="step active" data-step="1">
             <div class="step-circle">1</div>
-            <span class="step-label">Personal Info</span>
+            <span class="step-label" data-key="step1_label">Personal Info</span>
         </div>
         <div class="step" data-step="2">
             <div class="step-circle">2</div>
-            <span class="step-label">Travel Details</span>
+            <span class="step-label" data-key="step2_label">Travel Details</span>
         </div>
         <div class="step" data-step="3">
             <div class="step-circle">3</div>
-            <span class="step-label">Confirm & Send</span>
+            <span class="step-label" data-key="step3_label">Confirm & Send</span>
         </div>
     </div>
 
     <form id="etaForm">
         <div class="form-step active" data-step="1">
-            <h2>Personal Information</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-light);">Enter your details exactly as they appear on your passport.</p>
+            <h2 data-key="h2_step1">Personal Information</h2>
+            <p data-key="p_step1" style="margin-bottom: 2rem; color: var(--text-light);">Let's start with your personal details, exactly as they appear on your passport.</p>
             <div class="form-group">
-                <label for="firstName">First Name</label>
+                <label data-key="label_firstName" for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName" required>
             </div>
             <div class="form-group">
-                <label for="lastName">Last Name</label>
+                <label data-key="label_lastName" for="lastName">Last Name</label>
                 <input type="text" id="lastName" name="lastName" required>
             </div>
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label data-key="label_email" for="email">Email Address</label>
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
-                <label for="nationality">Nationality</label>
-                <input type="text" id="nationality" name="nationality" required>
+                <label data-key="label_nationality" for="nationality">Nationality</label>
+                <select id="nationality" name="nationality" required>
+                    <option value="" disabled selected data-key="select_nationality"></option>
+                </select>
             </div>
             <div class="button-group">
-                <button type="button" class="btn btn-next">Next Step <i class="fas fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-next" data-key="btn_next">Next Step <i class="fas fa-arrow-right"></i></button>
             </div>
         </div>
 
         <div class="form-step" data-step="2">
-            <h2>Passport & Travel Details</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-light);">Provide your travel document and planned itinerary.</p>
+            <h2 data-key="h2_step2">Passport & Travel Details</h2>
+            <p data-key="p_step2" style="margin-bottom: 2rem; color: var(--text-light);">Please provide your travel document and planned itinerary.</p>
             <div class="form-group">
-                <label for="passportNumber">Passport Number</label>
+                <label data-key="label_passportNumber" for="passportNumber">Passport Number</label>
                 <input type="text" id="passportNumber" name="passportNumber" required>
             </div>
             <div class="form-group">
-                <label for="issueDate">Passport Issue Date</label>
+                <label data-key="label_issueDate" for="issueDate">Passport Issue Date</label>
                 <input type="date" id="issueDate" name="issueDate" required>
             </div>
             <div class="form-group">
-                <label for="expiryDate">Passport Expiry Date</label>
+                <label data-key="label_expiryDate" for="expiryDate">Passport Expiry Date</label>
                 <input type="date" id="expiryDate" name="expiryDate" required>
             </div>
             <div class="form-group">
-                <label for="arrivalDate">Planned Arrival Date</label>
+                <label data-key="label_arrivalDate" for="arrivalDate">Planned Arrival Date</label>
                 <input type="date" id="arrivalDate" name="arrivalDate" required>
             </div>
             <div class="button-group">
-                <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left"></i> Previous</button>
-                <button type="button" class="btn btn-next">Next Step <i class="fas fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-prev" data-key="btn_prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="button" class="btn btn-next" data-key="btn_next">Next Step <i class="fas fa-arrow-right"></i></button>
             </div>
         </div>
 
         <div class="form-step" data-step="3">
-            <h2>Confirm & Send</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-light);">Review your details and send them to our team via WhatsApp.</p>
+            <h2 data-key="h2_step3">Review Your Details</h2>
+            <p data-key="p_step3" style="margin-bottom: 2rem; color: var(--text-light);">Please take a moment to review your application details below before sending.</p>
             <div id="summary"></div>
-            <p style="margin-top: 1.5rem; color: var(--eta-green); font-weight: 600;">
+            <p data-key="whatsapp_action" style="margin-top: 1.5rem; color: var(--eta-green); font-weight: 600;">
                 ⚠️ **ACTION REQUIRED**: After sending this message, please reply to our WhatsApp chat with your passport scan, passport photo, and return air ticket.
             </p>
             <div class="button-group">
-                <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="button" class="btn btn-prev" data-key="btn_prev"><i class="fas fa-arrow-left"></i> Previous</button>
                 <button type="submit" class="btn btn-submit" id="submitBtn">
-                    <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                    <i class="fab fa-whatsapp"></i> <span data-key="btn_send_whatsapp">Send via WhatsApp</span>
                 </button>
             </div>
         </div>
@@ -345,133 +490,424 @@
 <div id="loadingOverlay">
     <div class="loader">
         <div class="spinner"></div>
-        <span id="loadingText">Preparing your message...</span>
+        <span id="loadingText" data-key="loading_text">Preparing your message...</span>
     </div>
 </div>
 
 <script>
-    const formSteps = document.querySelectorAll('.form-step');
-    const stepCircles = document.querySelectorAll('.step-circle');
-    const stepperProgress = document.querySelector('.stepper-progress');
-    let currentStep = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+        const formSteps = document.querySelectorAll('.form-step');
+        const stepCircles = document.querySelectorAll('.step-circle');
+        const stepperProgress = document.querySelector('.stepper-progress');
+        const etaForm = document.getElementById('etaForm');
+        const summaryDiv = document.getElementById('summary');
+        const whatsappNumber = '+254113996609';
+        const nationalitySelect = document.getElementById('nationality');
+        let currentStep = 0;
 
-    const etaForm = document.getElementById('etaForm');
-    const summaryDiv = document.getElementById('summary');
-    const whatsappNumber = '+254113996609';
+        // List of countries (comprehensive list)
+        const countries = [
+            "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+            "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia (Plurinational State of)",
+            "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+            "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Brazzaville)",
+            "Congo (Democratic Republic of the)", "Costa Rica", "Côte d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica",
+            "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
+            "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti",
+            "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+            "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",
+            "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
+            "Mauritania", "Mauritius", "Mexico", "Micronesia (Federated States of)", "Moldova (Republic of)", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
+            "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea",
+            "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+            "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia",
+            "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia",
+            "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
+            "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan",
+            "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+            "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay",
+            "Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic of)", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+        ];
 
-    function updateFormSteps() {
-        formSteps.forEach((step, index) => {
-            step.classList.toggle('active', index === currentStep);
-        });
-        stepCircles.forEach((circle, index) => {
-            circle.classList.toggle('active', index <= currentStep);
-        });
-
-        if (currentStep === formSteps.length - 1) {
-            generateSummary();
-        }
-
-        updateProgressBar();
-    }
-
-    function updateProgressBar() {
-        const progress = (currentStep / (formSteps.length - 1)) * 100;
-        stepperProgress.style.width = `${progress}%`;
-    }
-
-    function validateStep(stepIndex) {
-        const currentFormStep = formSteps[stepIndex];
-        const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
-        for (let i = 0; i < inputs.length; i++) {
-            if (!inputs[i].checkValidity()) {
-                inputs[i].reportValidity();
-                return false;
+        // Language Translation Data
+        const translations = {
+            en: {
+                'h1': 'Kenya ETA Application',
+                'p_header': 'Your journey to Kenya begins here. Please fill out the form to get started.',
+                'step1_label': 'Personal Info',
+                'step2_label': 'Travel Details',
+                'step3_label': 'Confirm & Send',
+                'h2_step1': 'Personal Information',
+                'p_step1': 'Let\'s start with your personal details, exactly as they appear on your passport.',
+                'label_firstName': 'First Name',
+                'label_lastName': 'Last Name',
+                'label_email': 'Email Address',
+                'label_nationality': 'Nationality',
+                'select_nationality': 'Select your country',
+                'btn_next': 'Next Step',
+                'h2_step2': 'Passport & Travel Details',
+                'p_step2': 'Please provide your travel document and planned itinerary.',
+                'label_passportNumber': 'Passport Number',
+                'label_issueDate': 'Passport Issue Date',
+                'label_expiryDate': 'Passport Expiry Date',
+                'label_arrivalDate': 'Planned Arrival Date',
+                'btn_prev': 'Previous',
+                'h2_step3': 'Review Your Details',
+                'p_step3': 'Please take a moment to review your application details below before sending.',
+                'summary_name': 'Full Name',
+                'summary_email': 'Email Address',
+                'summary_nationality': 'Nationality',
+                'summary_passport': 'Passport Number',
+                'summary_issue': 'Passport Issue Date',
+                'summary_expiry': 'Passport Expiry Date',
+                'summary_arrival': 'Planned Arrival Date',
+                'whatsapp_action': '⚠️ **ACTION REQUIRED**: After sending this message, please reply to our WhatsApp chat with your passport scan, passport photo, and return air ticket.',
+                'btn_send_whatsapp': 'Send via WhatsApp',
+                'loading_text': 'Preparing your message...'
+            },
+            es: {
+                'h1': 'Solicitud de ETA para Kenia',
+                'p_header': 'Su viaje a Kenia comienza aquí. Por favor, complete el formulario para empezar.',
+                'step1_label': 'Datos Personales',
+                'step2_label': 'Datos de Viaje',
+                'step3_label': 'Confirmar y Enviar',
+                'h2_step1': 'Información Personal',
+                'p_step1': 'Comencemos con sus datos personales, exactamente como aparecen en su pasaporte.',
+                'label_firstName': 'Nombre',
+                'label_lastName': 'Apellido',
+                'label_email': 'Correo Electrónico',
+                'label_nationality': 'Nacionalidad',
+                'select_nationality': 'Seleccione su país',
+                'btn_next': 'Siguiente Paso',
+                'h2_step2': 'Datos de Pasaporte y Viaje',
+                'p_step2': 'Por favor, proporcione su documento de viaje y su itinerario planificado.',
+                'label_passportNumber': 'Número de Pasaporte',
+                'label_issueDate': 'Fecha de Emisión del Pasaporte',
+                'label_expiryDate': 'Fecha de Vencimiento del Pasaporte',
+                'label_arrivalDate': 'Fecha de Llegada Prevista',
+                'btn_prev': 'Anterior',
+                'h2_step3': 'Revise sus Detalles',
+                'p_step3': 'Por favor, revise los detalles de su solicitud a continuación antes de enviarla.',
+                'summary_name': 'Nombre Completo',
+                'summary_email': 'Correo Electrónico',
+                'summary_nationality': 'Nacionalidad',
+                'summary_passport': 'Número de Pasaporte',
+                'summary_issue': 'Fecha de Emisión del Pasaporte',
+                'summary_expiry': 'Fecha de Vencimiento del Pasaporte',
+                'summary_arrival': 'Fecha de Llegada Prevista',
+                'whatsapp_action': '⚠️ **ACCIÓN REQUERIDA**: Después de enviar este mensaje, por favor, responda a nuestro chat de WhatsApp con su escaneo de pasaporte, foto de pasaporte y billete de avión de regreso.',
+                'btn_send_whatsapp': 'Enviar por WhatsApp',
+                'loading_text': 'Preparando su mensaje...'
+            },
+            fr: {
+                'h1': 'Demande d\'ETA pour le Kenya',
+                'p_header': 'Votre voyage au Kenya commence ici. Veuillez remplir le formulaire pour commencer.',
+                'step1_label': 'Infos Perso',
+                'step2_label': 'Détails de Voyage',
+                'step3_label': 'Confirmer et Envoyer',
+                'h2_step1': 'Informations Personnelles',
+                'p_step1': 'Commençons par vos informations personnelles, exactement comme elles apparaissent sur votre passeport.',
+                'label_firstName': 'Prénom',
+                'label_lastName': 'Nom de Famille',
+                'label_email': 'Adresse E-mail',
+                'label_nationality': 'Nationalité',
+                'select_nationality': 'Sélectionnez votre pays',
+                'btn_next': 'Étape Suivante',
+                'h2_step2': 'Détails du Passeport et du Voyage',
+                'p_step2': 'Veuillez fournir votre document de voyage et votre itinéraire prévu.',
+                'label_passportNumber': 'Numéro de Passeport',
+                'label_issueDate': 'Date de Délivrance du Passeport',
+                'label_expiryDate': 'Date d\'Expiration du Passeport',
+                'label_arrivalDate': 'Date d\'Arrivée Prévue',
+                'btn_prev': 'Précédent',
+                'h2_step3': 'Vérifiez vos Détails',
+                'p_step3': 'Veuillez prendre un moment pour revoir les détails de votre demande ci-dessous avant d\'envoyer.',
+                'summary_name': 'Nom Complet',
+                'summary_email': 'Adresse E-mail',
+                'summary_nationality': 'Nationalité',
+                'summary_passport': 'Numéro de Passeport',
+                'summary_issue': 'Date de Délivrance du Passeport',
+                'summary_expiry': 'Date d\'Expiration du Passeport',
+                'summary_arrival': 'Date d\'Arrivée Prévue',
+                'whatsapp_action': '⚠️ **ACTION REQUISE**: Après l\'envoi de ce message, veuillez répondre à notre chat WhatsApp avec le scan de votre passeport, la photo d\'identité et le billet d\'avion de retour.',
+                'btn_send_whatsapp': 'Envoyer par WhatsApp',
+                'loading_text': 'Préparation de votre message...'
+            },
+            zh: {
+                'h1': '肯尼亚 ETA 申请',
+                'p_header': '您的肯尼亚之旅从这里开始。请填写表格以开始。',
+                'step1_label': '个人信息',
+                'step2_label': '旅行详情',
+                'step3_label': '确认并发送',
+                'h2_step1': '个人信息',
+                'p_step1': '让我们从您的个人详细信息开始，确保与护照上的信息完全一致。',
+                'label_firstName': '名字',
+                'label_lastName': '姓氏',
+                'label_email': '电子邮件地址',
+                'label_nationality': '国籍',
+                'select_nationality': '选择您的国家',
+                'btn_next': '下一步',
+                'h2_step2': '护照及旅行详情',
+                'p_step2': '请提供您的旅行证件和计划行程。',
+                'label_passportNumber': '护照号码',
+                'label_issueDate': '护照签发日期',
+                'label_expiryDate': '护照有效期',
+                'label_arrivalDate': '计划抵达日期',
+                'btn_prev': '上一步',
+                'h2_step3': '复核您的详细信息',
+                'p_step3': '在发送之前，请花点时间复核您的申请详情。',
+                'summary_name': '全名',
+                'summary_email': '电子邮件地址',
+                'summary_nationality': '国籍',
+                'summary_passport': '护照号码',
+                'summary_issue': '护照签发日期',
+                'summary_expiry': '护照有效期',
+                'summary_arrival': '计划抵达日期',
+                'whatsapp_action': '⚠️ **需要操作**: 发送此消息后，请在我们的WhatsApp聊天中回复您的护照扫描件、护照照片和返程机票。',
+                'btn_send_whatsapp': '通过WhatsApp发送',
+                'loading_text': '正在准备您的消息...'
+            },
+            hi: {
+                'h1': 'केन्या ईटीए आवेदन',
+                'p_header': 'केन्या की आपकी यात्रा यहाँ से शुरू होती है। कृपया शुरू करने के लिए फॉर्म भरें।',
+                'step1_label': 'व्यक्तिगत जानकारी',
+                'step2_label': 'यात्रा विवरण',
+                'step3_label': 'पुष्टि करें और भेजें',
+                'h2_step1': 'व्यक्तिगत जानकारी',
+                'p_step1': 'चलिए आपकी व्यक्तिगत जानकारी से शुरू करते हैं, जो आपके पासपोर्ट पर ठीक वैसी ही है।',
+                'label_firstName': 'पहला नाम',
+                'label_lastName': 'अंतिम नाम',
+                'label_email': 'ईमेल पता',
+                'label_nationality': 'राष्ट्रीयता',
+                'select_nationality': 'अपना देश चुनें',
+                'btn_next': 'अगला कदम',
+                'h2_step2': 'पासपोर्ट और यात्रा विवरण',
+                'p_step2': 'कृपया अपना यात्रा दस्तावेज़ और नियोजित यात्रा कार्यक्रम प्रदान करें।',
+                'label_passportNumber': 'पासपोर्ट नंबर',
+                'label_issueDate': 'पासपोर्ट जारी करने की तारीख',
+                'label_expiryDate': 'पासपोर्ट की समाप्ति तिथि',
+                'label_arrivalDate': 'नियोजित आगमन तिथि',
+                'btn_prev': 'पिछला',
+                'h2_step3': 'अपने विवरण की समीक्षा करें',
+                'p_step3': 'कृपया भेजने से पहले अपने आवेदन के विवरण की समीक्षा करने के लिए कुछ समय निकालें।',
+                'summary_name': 'पूरा नाम',
+                'summary_email': 'ईमेल पता',
+                'summary_nationality': 'राष्ट्रीयता',
+                'summary_passport': 'पासपोर्ट नंबर',
+                'summary_issue': 'पासपोर्ट जारी करने की तारीख',
+                'summary_expiry': 'पासपोर्ट की समाप्ति तिथि',
+                'summary_arrival': 'नियोजित आगमन तिथि',
+                'whatsapp_action': '⚠️ **आवश्यक कार्रवाई**: इस संदेश को भेजने के बाद, कृपया हमारी व्हाट्सएप चैट पर अपने पासपोर्ट स्कैन, पासपोर्ट फोटो और वापसी हवाई टिकट के साथ जवाब दें।',
+                'btn_send_whatsapp': 'व्हाट्सएप के माध्यम से भेजें',
+                'loading_text': 'आपका संदेश तैयार किया जा रहा है...'
+            },
+            ru: {
+                'h1': 'Заявка на ETA в Кению',
+                'p_header': 'Ваше путешествие в Кению начинается здесь. Пожалуйста, заполните форму, чтобы начать.',
+                'step1_label': 'Личные данные',
+                'step2_label': 'Данные о поездке',
+                'step3_label': 'Подтвердить и отправить',
+                'h2_step1': 'Личная информация',
+                'p_step1': 'Начнем с ваших личных данных, точно как они указаны в паспорте.',
+                'label_firstName': 'Имя',
+                'label_lastName': 'Фамилия',
+                'label_email': 'Адрес электронной почты',
+                'label_nationality': 'Гражданство',
+                'select_nationality': 'Выберите вашу страну',
+                'btn_next': 'Следующий шаг',
+                'h2_step2': 'Паспорт и детали поездки',
+                'p_step2': 'Пожалуйста, предоставьте данные вашего проездного документа и запланированного маршрута.',
+                'label_passportNumber': 'Номер паспорта',
+                'label_issueDate': 'Дата выдачи паспорта',
+                'label_expiryDate': 'Срок действия паспорта',
+                'label_arrivalDate': 'Планируемая дата прибытия',
+                'btn_prev': 'Назад',
+                'h2_step3': 'Проверьте ваши данные',
+                'p_step3': 'Пожалуйста, найдите минутку, чтобы проверить данные вашей заявки перед отправкой.',
+                'summary_name': 'Полное имя',
+                'summary_email': 'Адрес электронной почты',
+                'summary_nationality': 'Гражданство',
+                'summary_passport': 'Номер паспорта',
+                'summary_issue': 'Дата выдачи паспорта',
+                'summary_expiry': 'Срок действия паспорта',
+                'summary_arrival': 'Планируемая дата прибытия',
+                'whatsapp_action': '⚠️ **ТРЕБУЕТСЯ ДЕЙСТВИЕ**: После отправки этого сообщения, пожалуйста, ответьте в нашем чате WhatsApp, прикрепив скан вашего паспорта, фото и обратный авиабилет.',
+                'btn_send_whatsapp': 'Отправить через WhatsApp',
+                'loading_text': 'Подготовка вашего сообщения...'
             }
+        };
+
+        function getTranslation(key, lang) {
+            return (translations[lang] && translations[lang][key]) ? translations[lang][key] : translations['en'][key];
         }
-        return true;
-    }
-
-    function generateSummary() {
-        const formData = new FormData(etaForm);
-        summaryDiv.innerHTML = `
-            <div class="summary-item">
-                <h4>Full Name</h4>
-                <p>${formData.get('firstName')} ${formData.get('lastName')}</p>
-            </div>
-            <div class="summary-item">
-                <h4>Email Address</h4>
-                <p>${formData.get('email')}</p>
-            </div>
-            <div class="summary-item">
-                <h4>Nationality</h4>
-                <p>${formData.get('nationality')}</p>
-            </div>
-            <div class="summary-item">
-                <h4>Passport Number</h4>
-                <p>${formData.get('passportNumber')}</p>
-            </div>
-            <div class="summary-item">
-                <h4>Passport Issue Date</h4>
-                <p>${formData.get('issueDate')}</p>
-            </div>
-            <div class="summary-item">
-                <h4>Passport Expiry Date</h4>
-                <p>${formData.get('expiryDate')}</p>
-            </div>
-            <div class="summary-item">
-                <h4>Planned Arrival Date</h4>
-                <p>${formData.get('arrivalDate')}</p>
-            </div>
-        `;
-    }
-
-    document.querySelectorAll('.btn-next').forEach(button => {
-        button.addEventListener('click', () => {
-            if (validateStep(currentStep)) {
-                currentStep++;
-                updateFormSteps();
-            } else {
-                alert('Please fill out all required fields.');
-            }
-        });
-    });
-
-    document.querySelectorAll('.btn-prev').forEach(button => {
-        button.addEventListener('click', () => {
-            currentStep--;
-            updateFormSteps();
-        });
-    });
-
-    etaForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        document.getElementById('loadingOverlay').style.display = 'flex';
-        document.getElementById('submitBtn').disabled = true;
-
-        const formData = new FormData(e.target);
-        const message = `ETA Application Request from BTECH Website:\n\n`
-            + `Name: ${formData.get('firstName')} ${formData.get('lastName')}\n`
-            + `Email: ${formData.get('email')}\n`
-            + `Nationality: ${formData.get('nationality')}\n`
-            + `Passport Number: ${formData.get('passportNumber')}\n`
-            + `Passport Issue Date: ${formData.get('issueDate')}\n`
-            + `Passport Expiry Date: ${formData.get('expiryDate')}\n`
-            + `Planned Arrival: ${formData.get('arrivalDate')}\n\n`
-            + `[*ACTION REQUIRED*]: _Please reply to this chat with your passport scan, passport photo, and return air ticket_.`;
-
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
         
-        setTimeout(() => {
-            window.open(whatsappUrl, '_blank');
-            document.getElementById('loadingOverlay').style.display = 'none';
-            document.getElementById('submitBtn').disabled = false;
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                let translatedText = getTranslation(key, lang);
+                
+                if (translatedText.includes('**')) {
+                    translatedText = translatedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                }
+                
+                element.innerHTML = translatedText;
+            });
+            document.getElementById('currentLang').textContent = lang === 'en' ? 'English' : lang === 'es' ? 'Español' : lang === 'fr' ? 'Français' : lang === 'zh' ? '中文' : lang === 'hi' ? 'हिंदी' : 'Русский';
             
-            etaForm.reset();
-            currentStep = 0;
+            const nationalityPlaceholder = nationalitySelect.querySelector('option[data-key="select_nationality"]');
+            if (nationalityPlaceholder) {
+                nationalityPlaceholder.textContent = getTranslation('select_nationality', lang);
+            }
+        }
+
+        function changeLanguage(lang) {
+            applyTranslations(lang);
+            localStorage.setItem('formLang', lang);
+            document.getElementById('languageMenu').classList.remove('active');
             updateFormSteps();
-        }, 2000);
+        }
+        
+        const savedLang = localStorage.getItem('formLang') || 'en';
+
+        // Populate the nationality dropdown
+        countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            nationalitySelect.appendChild(option);
+        });
+        
+        applyTranslations(savedLang);
+
+        document.getElementById('languageBtn').addEventListener('click', () => {
+            document.getElementById('languageMenu').classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            const languageSelector = document.querySelector('.language-selector');
+            if (!languageSelector.contains(e.target)) {
+                document.getElementById('languageMenu').classList.remove('active');
+            }
+        });
+
+        function updateFormSteps() {
+            formSteps.forEach((step, index) => {
+                step.classList.toggle('active', index === currentStep);
+            });
+            stepCircles.forEach((circle, index) => {
+                circle.classList.toggle('active', index <= currentStep);
+            });
+
+            if (currentStep === formSteps.length - 1) {
+                generateSummary();
+            }
+
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const progress = (currentStep / (formSteps.length - 1)) * 100;
+            stepperProgress.style.width = `${progress}%`;
+        }
+
+        function validateStep(stepIndex) {
+            const currentFormStep = formSteps[stepIndex];
+            const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
+            for (let i = 0; i < inputs.length; i++) {
+                if (!inputs[i].checkValidity()) {
+                    inputs[i].reportValidity();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function generateSummary() {
+            const formData = new FormData(etaForm);
+            const lang = localStorage.getItem('formLang') || 'en';
+            summaryDiv.innerHTML = `
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_name', lang)}</h4>
+                    <p>${formData.get('firstName')} ${formData.get('lastName')}</p>
+                </div>
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_email', lang)}</h4>
+                    <p>${formData.get('email')}</p>
+                </div>
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_nationality', lang)}</h4>
+                    <p>${formData.get('nationality')}</p>
+                </div>
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_passport', lang)}</h4>
+                    <p>${formData.get('passportNumber')}</p>
+                </div>
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_issue', lang)}</h4>
+                    <p>${formData.get('issueDate')}</p>
+                </div>
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_expiry', lang)}</h4>
+                    <p>${formData.get('expiryDate')}</p>
+                </div>
+                <div class="summary-item">
+                    <h4>${getTranslation('summary_arrival', lang)}</h4>
+                    <p>${formData.get('arrivalDate')}</p>
+                </div>
+            `;
+        }
+
+        document.querySelectorAll('.btn-next').forEach(button => {
+            button.addEventListener('click', () => {
+                if (validateStep(currentStep)) {
+                    currentStep++;
+                    updateFormSteps();
+                } else {
+                    alert(getTranslation('alert_fill_fields', localStorage.getItem('formLang') || 'en'));
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-prev').forEach(button => {
+            button.addEventListener('click', () => {
+                currentStep--;
+                updateFormSteps();
+            });
+        });
+
+        etaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('submitBtn').disabled = true;
+
+            const lang = localStorage.getItem('formLang') || 'en';
+            const formData = new FormData(e.target);
+            const message = `ETA Application Request from BTECH Website:\n\n`
+                + `${getTranslation('summary_name', lang)}: ${formData.get('firstName')} ${formData.get('lastName')}\n`
+                + `${getTranslation('summary_email', lang)}: ${formData.get('email')}\n`
+                + `${getTranslation('summary_nationality', lang)}: ${formData.get('nationality')}\n`
+                + `${getTranslation('summary_passport', lang)}: ${formData.get('passportNumber')}\n`
+                + `${getTranslation('summary_issue', lang)}: ${formData.get('issueDate')}\n`
+                + `${getTranslation('summary_expiry', lang)}: ${formData.get('expiryDate')}\n`
+                + `${getTranslation('summary_arrival', lang)}: ${formData.get('arrivalDate')}\n\n`
+                + `${getTranslation('whatsapp_action', lang)}`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                
+                etaForm.reset();
+                currentStep = 0;
+                updateFormSteps();
+            }, 2000);
+        });
+
+        updateFormSteps();
     });
 </script>
 
