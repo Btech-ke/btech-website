@@ -135,7 +135,6 @@
     .form-group input[type="text"],
     .form-group input[type="email"],
     .form-group input[type="date"],
-    .form-group input[type="file"],
     .form-group select {
         width: 100%;
         padding: 0.75rem 1rem;
@@ -148,32 +147,29 @@
     .form-group input:focus,
     .form-group select:focus {
         outline: none;
-        border-color: var(--primary-blue);
-        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        border-color: var(--eta-green);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .summary-item {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e5e7eb;
     }
     
-    input[type="file"] {
-      padding-top: 0.5rem;
+    .summary-item:last-child {
+        border-bottom: none;
     }
-
-    .file-input-label {
-        display: block;
-        background-color: #f3f4f6;
-        padding: 0.75rem 1rem;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        text-align: center;
+    
+    .summary-item h4 {
+        color: var(--primary-blue);
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
     }
-
-    .file-input-label:hover {
-        background-color: #e5e7eb;
-    }
-
-    .file-name {
-        margin-top: 0.5rem;
-        font-size: 0.8rem;
-        color: var(--text-light);
+    
+    .summary-item p {
+        color: var(--text-dark);
+        font-weight: 500;
     }
 
     .button-group {
@@ -275,11 +271,11 @@
         </div>
         <div class="step" data-step="3">
             <div class="step-circle">3</div>
-            <span class="step-label">Documents</span>
+            <span class="step-label">Confirm & Send</span>
         </div>
     </div>
 
-    <form id="etaForm" action="submit-eta.php" method="POST" enctype="multipart/form-data">
+    <form id="etaForm">
         <div class="form-step active" data-step="1">
             <h2>Personal Information</h2>
             <p style="margin-bottom: 2rem; color: var(--text-light);">Enter your details exactly as they appear on your passport.</p>
@@ -330,24 +326,16 @@
         </div>
 
         <div class="form-step" data-step="3">
-            <h2>Document Uploads</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-light);">Upload the required documents. Formats: .jpg, .png, .pdf</p>
-            <div class="form-group">
-                <label for="passportPhoto">Passport-sized Photo</label>
-                <input type="file" id="passportPhoto" name="passportPhoto" accept=".jpg, .jpeg, .png" required>
-            </div>
-            <div class="form-group">
-                <label for="passportScan">Passport Biodata Page Scan</label>
-                <input type="file" id="passportScan" name="passportScan" accept=".jpg, .jpeg, .png, .pdf" required>
-            </div>
-            <div class="form-group">
-                <label for="airTicket">Return Air Ticket</label>
-                <input type="file" id="airTicket" name="airTicket" accept=".jpg, .jpeg, .png, .pdf" required>
-            </div>
+            <h2>Confirm & Send</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-light);">Review your details and send them to our team via WhatsApp.</p>
+            <div id="summary"></div>
+            <p style="margin-top: 1.5rem; color: var(--eta-green); font-weight: 600;">
+                ⚠️ **ACTION REQUIRED**: After sending this message, please reply to our WhatsApp chat with your passport scan, passport photo, and return air ticket.
+            </p>
             <div class="button-group">
                 <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left"></i> Previous</button>
                 <button type="submit" class="btn btn-submit" id="submitBtn">
-                    Submit Application
+                    <i class="fab fa-whatsapp"></i> Send via WhatsApp
                 </button>
             </div>
         </div>
@@ -357,16 +345,19 @@
 <div id="loadingOverlay">
     <div class="loader">
         <div class="spinner"></div>
-        <span id="loadingText">Processing your application...</span>
+        <span id="loadingText">Preparing your message...</span>
     </div>
 </div>
 
 <script>
     const formSteps = document.querySelectorAll('.form-step');
     const stepCircles = document.querySelectorAll('.step-circle');
-    const stepLabels = document.querySelectorAll('.step-label');
     const stepperProgress = document.querySelector('.stepper-progress');
     let currentStep = 0;
+
+    const etaForm = document.getElementById('etaForm');
+    const summaryDiv = document.getElementById('summary');
+    const whatsappNumber = '+254113996609';
 
     function updateFormSteps() {
         formSteps.forEach((step, index) => {
@@ -375,12 +366,63 @@
         stepCircles.forEach((circle, index) => {
             circle.classList.toggle('active', index <= currentStep);
         });
+
+        if (currentStep === formSteps.length - 1) {
+            generateSummary();
+        }
+
         updateProgressBar();
     }
 
     function updateProgressBar() {
         const progress = (currentStep / (formSteps.length - 1)) * 100;
         stepperProgress.style.width = `${progress}%`;
+    }
+
+    function validateStep(stepIndex) {
+        const currentFormStep = formSteps[stepIndex];
+        const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
+        for (let i = 0; i < inputs.length; i++) {
+            if (!inputs[i].checkValidity()) {
+                inputs[i].reportValidity();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function generateSummary() {
+        const formData = new FormData(etaForm);
+        summaryDiv.innerHTML = `
+            <div class="summary-item">
+                <h4>Full Name</h4>
+                <p>${formData.get('firstName')} ${formData.get('lastName')}</p>
+            </div>
+            <div class="summary-item">
+                <h4>Email Address</h4>
+                <p>${formData.get('email')}</p>
+            </div>
+            <div class="summary-item">
+                <h4>Nationality</h4>
+                <p>${formData.get('nationality')}</p>
+            </div>
+            <div class="summary-item">
+                <h4>Passport Number</h4>
+                <p>${formData.get('passportNumber')}</p>
+            </div>
+            <div class="summary-item">
+                <h4>Passport Issue Date</h4>
+                <p>${formData.get('issueDate')}</p>
+            </div>
+            <div class="summary-item">
+                <h4>Passport Expiry Date</h4>
+                <p>${formData.get('expiryDate')}</p>
+            </div>
+            <div class="summary-item">
+                <h4>Planned Arrival Date</h4>
+                <p>${formData.get('arrivalDate')}</p>
+            </div>
+        `;
     }
 
     document.querySelectorAll('.btn-next').forEach(button => {
@@ -401,70 +443,35 @@
         });
     });
 
-    function validateStep(stepIndex) {
-        const currentFormStep = formSteps[stepIndex];
-        const inputs = currentFormStep.querySelectorAll('input[required], select[required]');
-        for (let i = 0; i < inputs.length; i++) {
-            if (!inputs[i].checkValidity()) {
-                inputs[i].reportValidity();
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Handle file input changes to show file names
-    document.querySelectorAll('input[type="file"]').forEach(input => {
-        input.addEventListener('change', (e) => {
-            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
-            const label = e.target.closest('.form-group').querySelector('label');
-            const fileNameDisplay = document.createElement('div');
-            fileNameDisplay.className = 'file-name';
-            fileNameDisplay.textContent = `Selected: ${fileName}`;
-            if (label.nextElementSibling && label.nextElementSibling.className === 'file-name') {
-                label.nextElementSibling.remove();
-            }
-            label.parentNode.appendChild(fileNameDisplay);
-        });
-    });
-
-    document.getElementById('etaForm').addEventListener('submit', async (e) => {
+    etaForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // Show lazy loading overlay
         document.getElementById('loadingOverlay').style.display = 'flex';
         document.getElementById('submitBtn').disabled = true;
 
         const formData = new FormData(e.target);
-        
-        // This is a placeholder. You need a server-side script to handle this.
-        // The URL 'submit-eta.php' is an example.
-        try {
-            const response = await fetch('submit-eta.php', {
-                method: 'POST',
-                body: formData
-            });
+        const message = `ETA Application Request from BTECH Website:\n\n`
+            + `Name: ${formData.get('firstName')} ${formData.get('lastName')}\n`
+            + `Email: ${formData.get('email')}\n`
+            + `Nationality: ${formData.get('nationality')}\n`
+            + `Passport Number: ${formData.get('passportNumber')}\n`
+            + `Passport Issue Date: ${formData.get('issueDate')}\n`
+            + `Passport Expiry Date: ${formData.get('expiryDate')}\n`
+            + `Planned Arrival: ${formData.get('arrivalDate')}\n\n`
+            + `[*ACTION REQUIRED*]: _Please reply to this chat with your passport scan, passport photo, and return air ticket_.`;
 
-            if (response.ok) {
-                // Success
-                document.getElementById('loadingText').textContent = 'Application submitted successfully!';
-                setTimeout(() => {
-                    document.getElementById('loadingOverlay').style.display = 'none';
-                    alert('Your application has been submitted. We will contact you via email shortly.');
-                    window.location.href = 'index.html'; // Redirect to homepage
-                }, 2000);
-            } else {
-                // Error
-                throw new Error('Server responded with an error.');
-            }
-        } catch (error) {
-            console.error('Submission failed:', error);
-            document.getElementById('loadingText').textContent = 'Submission failed. Please try again.';
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                document.getElementById('submitBtn').disabled = false;
-            }, 3000);
-        }
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+        
+        setTimeout(() => {
+            window.open(whatsappUrl, '_blank');
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+            
+            etaForm.reset();
+            currentStep = 0;
+            updateFormSteps();
+        }, 2000);
     });
 </script>
 
