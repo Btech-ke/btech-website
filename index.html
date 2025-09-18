@@ -892,7 +892,7 @@
     background: var(--gradient-eta);
   }
 
-  .service-icon {
+  .service-item {
     width: 80px;
     height: 80px;
     background: var(--gradient-primary);
@@ -905,7 +905,14 @@
     font-size: 2rem;
   }
 
-  .service-icon.eta-icon {
+  .service-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  .service-item.eta-item {
     background: var(--gradient-eta);
   }
 
@@ -1863,7 +1870,7 @@
           </a>
         </div>
         <div class="service-card fade-in">
-          <div class="service-item">
+          <div class="service-item" style="background: none;">
             <img src="plane.jpg" alt="Plane Icon" loading="lazy" />
           </div>
           <h3 data-translate="eta-service-card-title">Kenya ETA Services</h3>
@@ -2128,7 +2135,6 @@
         'floating-eta': 'ETA كينيا',
         'eta-title': 'تصريح السفر الإلكتروني (ETA) لكينيا',
         'eta-subtitle': 'معالجة رسمية لتصريح ETA للمسافرين الدوليين. مطلوب لجميع الزوار إلى كينيا منذ يناير 2024. خدمة سريعة وآمنة وموثوقة.',
-        'eta-apply-btn': 'قدم على ETA كينيا - 90 دولار أمريكي',
         'feature-1-title': 'تطبيق مبسط',
         'feature-1-text': 'منصتنا سهلة الاستخدام ترشدك خلال كل خطوة، مما يضمن عملية سلسة وخالية من الأخطاء.',
         'feature-2-title': 'آمن وسري',
@@ -2475,6 +2481,3 @@
   </script>
 </body>
 </html>
-
-
-
