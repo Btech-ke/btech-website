@@ -22,11 +22,10 @@
 
     body {
         font-family: 'Inter', sans-serif;
-        background-color: var(--background-light);
         color: var(--text-dark);
         line-height: 1.6;
         padding: 2rem 1rem;
-        background-image: url('https://images.unsplash.com/photo-1614717142416-834f3869265f?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-image: url('plane.jpg');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
@@ -34,28 +33,30 @@
         align-items: center;
         justify-content: center;
         min-height: 100vh;
+        position: relative;
     }
 
     body::before {
         content: '';
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(16, 185, 129, 0.15);
+        z-index: 1;
     }
 
     .container {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         max-width: 800px;
         margin: 0 auto;
-        background: var(--background-white);
+        background: rgba(255, 255, 255, 0.5); /* Changed to semi-transparent white */
         padding: 2rem;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(5px); /* Added a subtle blur effect for better readability */
     }
 
     .header {
@@ -71,7 +72,7 @@
     }
 
     .header p {
-        color: var(--text-light);
+        color: var(--text-dark); /* Changed to dark for better contrast */
         font-weight: 500;
     }
 
@@ -110,6 +111,7 @@
         flex-direction: column;
         align-items: center;
         z-index: 2;
+        position: relative;
     }
 
     .step-circle {
@@ -133,7 +135,7 @@
 
     .step-label {
         font-size: 0.9rem;
-        color: var(--text-light);
+        color: var(--text-dark); /* Changed to dark for better contrast */
         text-align: center;
     }
 
@@ -172,7 +174,7 @@
         border-radius: 12px;
         font-size: 1rem;
         transition: var(--transition);
-        background: #fdfdfd;
+        background: rgba(255, 255, 255, 0.7); /* Adjusted opacity for input fields too */
     }
 
     .form-group input:focus,
@@ -291,7 +293,7 @@
         position: absolute;
         top: 2rem;
         right: 2rem;
-        z-index: 10;
+        z-index: 1000;
     }
 
     .language-dropdown {
@@ -367,27 +369,27 @@
             <i class="fas fa-chevron-down"></i>
         </button>
         <div class="language-menu" id="languageMenu">
-            <button onclick="changeLanguage('en')">
+            <button data-lang="en">
                 <img src="https://flagcdn.com/w20/gb.png" alt="EN" style="width: 16px;">
                 English
             </button>
-            <button onclick="changeLanguage('es')">
+            <button data-lang="es">
                 <img src="https://flagcdn.com/w20/es.png" alt="ES" style="width: 16px;">
                 Español
             </button>
-            <button onclick="changeLanguage('fr')">
+            <button data-lang="fr">
                 <img src="https://flagcdn.com/w20/fr.png" alt="FR" style="width: 16px;">
                 Français
             </button>
-            <button onclick="changeLanguage('zh')">
+            <button data-lang="zh">
                 <img src="https://flagcdn.com/w20/cn.png" alt="ZH" style="width: 16px;">
                 中文
             </button>
-            <button onclick="changeLanguage('hi')">
+            <button data-lang="hi">
                 <img src="https://flagcdn.com/w20/in.png" alt="HI" style="width: 16px;">
                 हिंदी
             </button>
-            <button onclick="changeLanguage('ru')">
+            <button data-lang="ru">
                 <img src="https://flagcdn.com/w20/ru.png" alt="RU" style="width: 16px;">
                 Русский
             </button>
@@ -421,7 +423,7 @@
     <form id="etaForm">
         <div class="form-step active" data-step="1">
             <h2 data-key="h2_step1">Personal Information</h2>
-            <p data-key="p_step1" style="margin-bottom: 2rem; color: var(--text-light);">Let's start with your personal details, exactly as they appear on your passport.</p>
+            <p data-key="p_step1" style="margin-bottom: 2rem; color: var(--text-dark);">Let's start with your personal details, exactly as they appear on your passport.</p>
             <div class="form-group">
                 <label data-key="label_firstName" for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName" required>
@@ -437,7 +439,7 @@
             <div class="form-group">
                 <label data-key="label_nationality" for="nationality">Nationality</label>
                 <select id="nationality" name="nationality" required>
-                    <option value="" disabled selected data-key="select_nationality"></option>
+                    <option value="" disabled selected data-key="select_nationality">Select your country</option>
                 </select>
             </div>
             <div class="button-group">
@@ -447,7 +449,7 @@
 
         <div class="form-step" data-step="2">
             <h2 data-key="h2_step2">Passport & Travel Details</h2>
-            <p data-key="p_step2" style="margin-bottom: 2rem; color: var(--text-light);">Please provide your travel document and planned itinerary.</p>
+            <p data-key="p_step2" style="margin-bottom: 2rem; color: var(--text-dark);">Please provide your travel document and planned itinerary.</p>
             <div class="form-group">
                 <label data-key="label_passportNumber" for="passportNumber">Passport Number</label>
                 <input type="text" id="passportNumber" name="passportNumber" required>
@@ -472,7 +474,7 @@
 
         <div class="form-step" data-step="3">
             <h2 data-key="h2_step3">Review Your Details</h2>
-            <p data-key="p_step3" style="margin-bottom: 2rem; color: var(--text-light);">Please take a moment to review your application details below before sending.</p>
+            <p data-key="p_step3" style="margin-bottom: 2rem; color: var(--text-dark);">Please take a moment to review your application details below before sending.</p>
             <div id="summary"></div>
             <p data-key="whatsapp_action" style="margin-top: 1.5rem; color: var(--eta-green); font-weight: 600;">
                 ⚠️ **ACTION REQUIRED**: After sending this message, please reply to our WhatsApp chat with your passport scan, passport photo, and return air ticket.
@@ -505,7 +507,6 @@
         const nationalitySelect = document.getElementById('nationality');
         let currentStep = 0;
 
-        // List of countries (comprehensive list)
         const countries = [
             "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
             "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia (Plurinational State of)",
@@ -529,7 +530,6 @@
             "Uzbekistan", "Vanuatu", "Venezuela (Bolivarian Republic of)", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
         ];
 
-        // Language Translation Data
         const translations = {
             en: {
                 'h1': 'Kenya ETA Application',
@@ -713,7 +713,6 @@
                 'label_lastName': 'Фамилия',
                 'label_email': 'Адрес электронной почты',
                 'label_nationality': 'Гражданство',
-                'select_nationality': 'Выберите вашу страну',
                 'btn_next': 'Следующий шаг',
                 'h2_step2': 'Паспорт и детали поездки',
                 'p_step2': 'Пожалуйста, предоставьте данные вашего проездного документа и запланированного маршрута.',
@@ -744,16 +743,21 @@
         function applyTranslations(lang) {
             document.querySelectorAll('[data-key]').forEach(element => {
                 const key = element.getAttribute('data-key');
-                let translatedText = getTranslation(key, lang);
+                const translatedText = getTranslation(key, lang);
                 
-                if (translatedText.includes('**')) {
-                    translatedText = translatedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                // Keep the 'onclick' event handlers intact on the language buttons
+                const formattedText = translatedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                if (element.tagName === 'BUTTON' && element.hasAttribute('data-lang')) {
+                    // Do not change innerHTML for language buttons to keep icon and text separate
+                } else if (element.tagName === 'SPAN' && element.id === 'currentLang') {
+                    element.textContent = translatedText;
+                } else if (element.tagName === 'OPTION' && element.hasAttribute('data-key')) {
+                    element.textContent = translatedText;
+                } else {
+                    element.innerHTML = formattedText;
                 }
-                
-                element.innerHTML = translatedText;
             });
             document.getElementById('currentLang').textContent = lang === 'en' ? 'English' : lang === 'es' ? 'Español' : lang === 'fr' ? 'Français' : lang === 'zh' ? '中文' : lang === 'hi' ? 'हिंदी' : 'Русский';
-            
             const nationalityPlaceholder = nationalitySelect.querySelector('option[data-key="select_nationality"]');
             if (nationalityPlaceholder) {
                 nationalityPlaceholder.textContent = getTranslation('select_nationality', lang);
@@ -767,9 +771,16 @@
             updateFormSteps();
         }
         
+        // Corrected Language Button event listeners
+        document.querySelectorAll('#languageMenu button').forEach(button => {
+            button.addEventListener('click', () => {
+                const lang = button.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
         const savedLang = localStorage.getItem('formLang') || 'en';
 
-        // Populate the nationality dropdown
         countries.forEach(country => {
             const option = document.createElement('option');
             option.value = country;
@@ -779,7 +790,8 @@
         
         applyTranslations(savedLang);
 
-        document.getElementById('languageBtn').addEventListener('click', () => {
+        document.getElementById('languageBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
             document.getElementById('languageMenu').classList.toggle('active');
         });
 
@@ -862,8 +874,6 @@
                 if (validateStep(currentStep)) {
                     currentStep++;
                     updateFormSteps();
-                } else {
-                    alert(getTranslation('alert_fill_fields', localStorage.getItem('formLang') || 'en'));
                 }
             });
         });
@@ -877,6 +887,9 @@
 
         etaForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (!validateStep(currentStep)) {
+                return;
+            }
 
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('submitBtn').disabled = true;
@@ -891,7 +904,7 @@
                 + `${getTranslation('summary_issue', lang)}: ${formData.get('issueDate')}\n`
                 + `${getTranslation('summary_expiry', lang)}: ${formData.get('expiryDate')}\n`
                 + `${getTranslation('summary_arrival', lang)}: ${formData.get('arrivalDate')}\n\n`
-                + `${getTranslation('whatsapp_action', lang)}`;
+                + `⚠️ *${getTranslation('whatsapp_action', lang).replace(/\*\*/g, '').replace('**', '')}*`;
 
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
