@@ -3,1054 +3,2481 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>BTECH - Premium Digital Solutions & Kenya ETA Services</title>
-<meta name="description" content="Experience world-class tech education, business solutions, cyber services, tech repair, and official Kenya ETA processing. Your digital transformation partner." />
+<title>BTECH - Empowering Digital Futures & Kenya ETA Services</title>
+<meta name="description" content="BTECH offers tech courses, business solutions, cyber services, tech repair, and official Kenya ETA application assistance for international travelers." />
 <meta name="author" content="BTECH" />
-<meta name="theme-color" content="#1e40af" />
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-<link rel="stylesheet" href="/btech-website-project/style.css" />
+<style>
+  :root {
+    --primary-blue: #1e40af;
+    --primary-blue-dark: #1e3a8a;
+    --primary-blue-light: #3b82f6;
+    --accent-orange: #f59e0b;
+    --accent-orange-light: #fbbf24;
+    --eta-green: #10b981;
+    --eta-green-dark: #059669;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --background-light: #f8fafc;
+    --background-white: #ffffff;
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --gradient-eta: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: var(--background-light);
+    overflow-x: hidden;
+  }
+
+  /* Language Selector */
+  .language-selector {
+    position: fixed;
+    top: 90px;
+    right: 2rem;
+    z-index: 998;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    transition: var(--transition);
+  }
+
+  .language-dropdown {
+    position: relative;
+  }
+
+  .language-btn {
+    background: var(--gradient-eta);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+  }
+
+  .language-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .language-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition);
+    margin-top: 0.5rem;
+  }
+
+  .language-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .language-menu button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .language-menu button:hover {
+    background: var(--background-light);
+  }
+
+  /* ETA Alert Banner */
+  .eta-banner {
+    background: var(--gradient-eta);
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+  
+  .eta-banner.hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+  }
+
+  .eta-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  }
+
+  .eta-banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .eta-banner-text {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .eta-banner-cta {
+    background: white;
+    color: var(--eta-green);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .eta-banner-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .close-banner {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: var(--transition);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close-banner:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Header */
+  header {
+    position: fixed;
+    top: 60px; /* Position below the banner */
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    transition: top 0.5s ease-in-out, background 0.5s, box-shadow 0.5s;
+  }
+  
+  .header-no-banner {
+      top: 0;
+  }
+
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+  }
+
+  .logo {
+    font-weight: 800;
+    font-size: 1.75rem;
+    color: var(--primary-blue);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav-menu a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: var(--transition);
+  }
+
+  .nav-menu a:hover {
+    color: var(--primary-blue);
+  }
+
+  .nav-menu a.active::after,
+  .nav-menu a:hover::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-blue);
+    border-radius: 1px;
+  }
+
+  .nav-menu .eta-nav-item a {
+    background: var(--gradient-eta);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-menu .eta-nav-item a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .nav-menu .eta-nav-item a:hover::before {
+    left: 100%;
+  }
+
+  .nav-menu .eta-nav-item a::after {
+    display: none;
+  }
+
+  .nav-menu .eta-nav-item a:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .cta-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .cta-header:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  /* Mobile Menu */
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1002;
+  }
+
+  .mobile-menu-btn span {
+    width: 24px;
+    height: 2px;
+    background: var(--text-dark);
+    border-radius: 1px;
+    transition: var(--transition);
+  }
+
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+  .mobile-nav {
+    position: fixed;
+    top: 140px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+    z-index: 999;
+  }
+  
+  .mobile-nav-no-banner {
+      top: 80px;
+  }
+
+  .mobile-nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .mobile-nav a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+  }
+
+  .mobile-nav a:hover {
+    color: var(--primary-blue);
+    transform: translateX(10px);
+  }
+
+  .mobile-nav .eta-mobile-item a {
+    background: var(--gradient-eta);
+    color: white;
+    border-radius: 12px;
+    padding: 1rem;
+    border-bottom: none;
+    text-align: center;
+  }
+
+  /* Hero Section */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    background: var(--gradient-primary);
+    position: relative;
+    overflow: hidden;
+    margin-top: 140px; /* Adjusted to account for banner and header */
+  }
+  
+  .hero-no-banner {
+      margin-top: 80px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    opacity: 0.1;
+  }
+
+  .hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: white;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-content .subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .typing-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--accent-orange);
+    margin-bottom: 2.5rem;
+    min-height: 1.5em;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--gradient-accent);
+    color: var(--text-dark);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-soft);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-large);
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-eta {
+    background: var(--gradient-eta);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-soft);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-eta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-eta:hover::before {
+    left: 100%;
+  }
+
+  .btn-eta:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-large);
+  }
+
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-image {
+    width: 100%;
+    max-width: 500px;
+    height: 500px;
+    background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    border-radius: 20px;
+    box-shadow: var(--shadow-large);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(30, 64, 175, 0.2), rgba(59, 130, 246, 0.2));
+  }
+
+  /* Floating elements */
+  .floating-card {
+    position: absolute;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    animation: float 6s ease-in-out infinite;
+    z-index: 3;
+  }
+
+  .floating-card.card-1 {
+    top: 10%;
+    right: -10%;
+    animation-delay: -1s;
+  }
+
+  .floating-card.card-2 {
+    bottom: 20%;
+    left: -15%;
+    animation-delay: -3s;
+  }
+
+  .floating-card.card-3 {
+    top: 60%;
+    right: 10%;
+    animation-delay: -2s;
+    background: var(--gradient-eta);
+    color: white;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  /* ETA Quick Access Section */
+  .eta-quick-access {
+    color: white;
+    padding: 4rem 2rem;
+    position: relative;
+    z-index: 5;
+    margin-top: -2rem;
+    /* Updated background for ETA section using plane.jpg */
+    background: url('plane.jpg') center/cover no-repeat;
+  }
+
+  .eta-quick-access::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(16, 185, 129, 0.1); /* 1% opacity of ETA green */
+    z-index: 1;
+  }
+
+  .eta-quick-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .eta-quick-header {
+    margin-bottom: 3rem;
+  }
+
+  .eta-quick-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  .eta-quick-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .eta-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .eta-feature {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .eta-feature:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .eta-feature-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: var(--eta-green);
+    font-size: 2rem;
+  }
+
+  .eta-feature h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  .eta-feature p {
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  /* Section Styles */
+  .section {
+    padding: 6rem 2rem;
+  }
+
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .section-header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* About Section */
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .ceo-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .ceo-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-large);
+  }
+
+  .ceo-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    background: url('mypic.jpg') center/cover no-repeat;
+    border: 4px solid var(--accent-orange);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .ceo-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .ceo-card .title {
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .about-text {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    line-height: 1.8;
+  }
+
+  .about-text p {
+    margin-bottom: 1.5rem;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: rgba(30, 64, 175, 0.05);
+    border-radius: 16px;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  /* Services Section */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .service-card {
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition);
+  }
+
+  .service-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-large);
+  }
+
+  .service-card.eta-card::before {
+    background: var(--gradient-eta);
+  }
+
+  .service-item {
+    width: 80px;
+    height: 80px;
+    background: var(--gradient-primary);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: white;
+    font-size: 2rem;
+  }
+
+  .service-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  .service-item.eta-item {
+    background: var(--gradient-eta);
+  }
+
+  .service-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .service-card p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .service-link {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+  }
+
+  .service-link:hover {
+    color: var(--primary-blue-dark);
+    transform: translateX(5px);
+  }
+
+  .service-link.eta-link {
+    color: var(--eta-green);
+  }
+
+  .service-link.eta-link:hover {
+    color: var(--eta-green-dark);
+  }
+
+  /* Download Section */
+  .download-section {
+    background: var(--gradient-primary);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .download-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+    opacity: 0.1;
+  }
+
+  .download-content {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .download-content h2 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .app-preview {
+    width: 200px;
+    height: 400px;
+    background: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover no-repeat;
+    border-radius: 25px;
+    margin: 2rem auto;
+    box-shadow: var(--shadow-large);
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .app-preview::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(30, 64, 175, 0.3), rgba(59, 130, 246, 0.3));
+  }
+
+  .download-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+  }
+
+  .download-stat {
+    text-align: center;
+  }
+
+  .download-stat .number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+  }
+
+  .download-stat .label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  /* Contact Section */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .contact-item {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: var(--transition);
+  }
+
+  .contact-item:hover::before {
+    transform: scaleX(1);
+  }
+
+  .contact-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .contact-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .contact-item h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-item a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+  }
+
+  .contact-item a:hover {
+    color: var(--primary-blue-dark);
+  }
+
+  /* Staff Login Section */
+  .login-section {
+    background: var(--background-white);
+  }
+
+  .login-card {
+    background: var(--gradient-primary);
+    padding: 3rem 2rem;
+    border-radius: 24px;
+    text-align: center;
+    color: white;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: url('https://images.unsplash.com/photo-1563207153-f403bf289096?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover no-repeat;
+    opacity: 0.1;
+    border-radius: 50%;
+  }
+
+  .login-card h2 {
+    color: white;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .login-card p {
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--text-dark);
+    color: white;
+    padding: 3rem 2rem 2rem;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+
+  .footer-section h4 {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .footer-section p,
+  .footer-section a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    display: block;
+    transition: var(--transition);
+  }
+
+  .footer-section a:hover {
+    color: var(--accent-orange);
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .social-links a {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 1.2rem;
+  }
+
+  .social-links a:hover {
+    background: var(--primary-blue);
+    transform: translateY(-3px);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .footer-bottom p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+  }
+
+  /* Back to top button */
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-medium);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+    z-index: 999;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .back-to-top:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-large);
+  }
+
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem;
+    box-shadow: var(--shadow-large);
+    transform: translateY(50px);
+    transition: var(--transition);
+  }
+
+  .modal-overlay.active .modal {
+    transform: translateY(0);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .modal-header h3 {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .close-modal {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: var(--transition);
+    padding: 0.25rem;
+  }
+
+  .close-modal:hover {
+    color: var(--text-dark);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--gradient-primary);
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  /* Success and Error States */
+  .alert {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+
+  .alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+
+  /* Loading Animation */
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .hero-container {
+      gap: 2rem;
+    }
+    
+    .about-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    .download-stats {
+      gap: 2rem;
+    }
+    
+    .language-selector {
+        right: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-menu {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+    }
+
+    .header-container {
+      padding: 0 1rem;
+    }
+
+    .hero {
+      padding: 0 1rem;
+    }
+
+    .hero-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+
+    .floating-card {
+      display: none;
+    }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .section {
+      padding: 4rem 1rem;
+    }
+
+    .about-stats {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .download-stats {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .eta-banner-content {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .language-selector {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 1rem;
+    }
+
+    .eta-quick-access {
+      padding: 3rem 1rem;
+    }
+
+    .eta-features {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-eta {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .service-card {
+      padding: 2rem 1.5rem;
+    }
+
+    .contact-item {
+      padding: 1.5rem;
+    }
+
+    .modal {
+      margin: 0.5rem;
+      padding: 1.5rem;
+    }
+
+    .back-to-top {
+      bottom: 1rem;
+      right: 1rem;
+      width: 45px;
+      height: 45px;
+    }
+
+    header {
+      height: 70px;
+    }
+
+    .mobile-nav {
+      top: 130px;
+    }
+
+    .hero {
+      margin-top: 130px;
+    }
+
+    .eta-banner {
+      padding: 0.75rem 1rem;
+    }
+
+    .eta-banner-text {
+      font-size: 0.9rem;
+    }
+
+    .eta-feature {
+      padding: 1.5rem;
+    }
+  }
+
+  /* Scroll Animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.6s ease;
+  }
+
+  .slide-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .slide-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.6s ease;
+  }
+
+  .slide-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue-dark);
+  }
+
+  /* Focus States for Accessibility */
+  *:focus {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+  }
+
+  button:focus,
+  a:focus,
+  input:focus {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+  }
+
+  /* Hidden class for elements that should be hidden initially */
+  .hidden {
+    display: none !important;
+  }
+</style>
 </head>
 
 <body>
-  <div id="particles-js"></div>
-  <div class="progress-bar" id="progressBar"></div>
+  <div class="eta-banner" id="etaBanner">
+    <div class="eta-banner-content">
+      <div class="eta-banner-text" data-translate="eta-banner-text">
+        🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) here - Official processing in 72 hours
+      </div>
+      <a href="eta-application.html" class="eta-banner-cta" data-translate="eta-banner-cta">
+        <i class="fas fa-plane"></i>
+        Apply for ETA - $90 USD
+      </a>
+    </div>
+    <button class="close-banner" id="closeBanner" aria-label="Close banner">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
 
-  <div class="preloader" id="preloader">
-    <div class="preloader-content">
-      <div class="preloader-logo">BTECH</div>
-      <div class="preloader-spinner"></div>
-    </div>
-  </div>
+  <header>
+    <div class="header-container">
+      <a href="#home" class="logo">BTECH</a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li class="eta-nav-item"><a href="#eta-services" data-translate="nav-eta">Kenya ETA</a></li>
+          <li><a href="#download">Download</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="#login" class="cta-header">Staff Login</a>
+        <div class="language-selector" id="languageSelector">
+          <div class="language-dropdown">
+            <button class="language-btn" id="languageBtn">
+              <i class="fas fa-globe"></i>
+              <span id="currentLang">English</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="language-menu" id="languageMenu">
+              <button onclick="changeLanguage('en')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA3LjVIMjBWMTVIMFY3LjVaIiBmaWxsPSIjRkZGIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIwVjcuNUgwVjBaIiBmaWxsPSIjRkYwMDAwIi8+Cjwvc3ZnPgo=" alt="EN" style="width: 16px;">
+                English
+              </button>
+              <button onclick="changeLanguage('es')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZBQTAwIi8+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIzIiBmaWxsPSIjRkYwMDAwIi8+CjxyZWN0IHk9IjEyIiB3aWR0aD0iMjAiIGhlaWdodD0iMyIgZmlsbD0iI0ZGMDAwMCIvPgo8L3N2Zz4K" alt="ES" style="width: 16px;">
+                Español
+              </button>
+              <button onclick="changeLanguage('zh')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkYwMDAwIi8+CjxwYXRoIGQ9Ik0yIDJMNCAzTDMgNEwyIDJaIiBmaWxsPSIjRkZENzAwIi8+Cjwvc3ZnPgo=" alt="ZH" style="width: 16px;">
+                中文
+              </button>
+              <button onclick="changeLanguage('fr')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDJBOEYiLz4KPHJlY3QgeD0iNyIgd2lkdGg9IjYiIGhlaWdodD0iMTUiIGZpbGw9IiNGRkYiLz4KPHJlY3QgeD0iMTMiIHdpZHRoPSI3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRUQyOTM5Ii8+Cjwvc3ZnPgo=" alt="FR" style="width: 16px;">
+                Français
+              </button>
+              <button onclick="changeLanguage('ar')">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRjAwMDAiLz4KPHJlY3QgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkYiLz4KPHJlY3QgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjMDAwIi8+Cjwvc3ZnPgo=" alt="AR" style="width: 16px;">
+                العربية
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li class="eta-mobile-item"><a href="#eta-services" data-translate="nav-eta">🇰🇪 Kenya ETA</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#login">Staff Login</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <div class="eta-banner" id="etaBanner">
-    <div class="eta-banner-content">
-      <div class="eta-banner-text" data-translate="eta-banner-text">
-        🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) here - Official processing in 72 hours
-      </div>
-      <a href="eta-application.html" class="eta-banner-cta" data-translate="eta-banner-cta">
-        <i class="fas fa-plane"></i>
-        Apply for ETA - $90 USD
-      </a>
-      </div>
-    <button class="close-banner" id="closeBanner" aria-label="Close banner">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
+  <section id="home" class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1>Your digital journey begins here</h1>
+        <p class="subtitle">Transform your future with cutting-edge technology courses, expert business solutions, and comprehensive digital services from anywhere, anytime.</p>
+        <div class="typing-text" id="typingText"></div>
+        <div class="hero-buttons">
+          <a href="#services" class="btn-primary">
+            <i class="fas fa-rocket"></i>
+            Explore Services
+          </a>
+          <a href="eta-application.html" class="btn-eta" data-translate="hero-eta-btn">
+            <i class="fas fa-plane"></i>
+            Get Kenya ETA
+          </a>
+          <a href="#about" class="btn-secondary">
+            <i class="fas fa-play"></i>
+            Learn More
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-image"></div>
+        <div class="floating-card card-1">
+          <i class="fas fa-code" style="color: var(--primary-blue); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+          <div style="font-size: 0.9rem; font-weight: 600;">Web Development</div>
+        </div>
+        <div class="floating-card card-2">
+          <i class="fas fa-shield-alt" style="color: var(--accent-orange); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+          <div style="font-size: 0.9rem; font-weight: 600;">Cyber Security</div>
+        </div>
+        <div class="floating-card card-3">
+          <i class="fas fa-plane" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+          <div style="font-size: 0.9rem; font-weight: 600;" data-translate="floating-eta">Kenya ETA</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <header>
-    <div class="header-container">
-      <a href="#home" class="logo">BTECH</a>
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="#home" class="active">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
-          <li class="eta-nav-item"><a href="#eta-services" data-translate="nav-eta">Kenya ETA</a></li>
-          <li><a href="#download">Download</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-      <div style="display: flex; align-items: center; gap: 1rem;">
-        <a href="#login" class="cta-header">Staff Login</a>
-        <div class="language-selector" id="languageSelector">
-          <div class="language-dropdown">
-            <button class="language-btn" id="languageBtn">
-              <i class="fas fa-globe"></i>
-              <span id="currentLang">English</span>
-              <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="language-menu" id="languageMenu">
-              <button onclick="changeLanguage('en')">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCA3LjVIMjBWMTVIMFY3LjVaIiBmaWxsPSIjRkZGIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIwVjcuNUgwVjBaIiBmaWxsPSIjRkYwMDAwIi8+Cjwvc3ZnPgo=" alt="EN" style="width: 16px;">
-                English
-              </button>
-              <button onclick="changeLanguage('es')">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZBQTAwIi8+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIzIiBmaWxsPSIjRkYwMDAwIi8+CjxyZWN0IHk9IjEyIiB3aWR0aD0iMjAiIGhlaWdodD0iMyIgZmlsbD0iI0ZGMDAwMCIvPgo8L3N2Z3M+Cg==" alt="ES" style="width: 16px;">
-                Español
-              </button>
-              <button onclick="changeLanguage('zh')">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkYwMDAwIi8+CjxwYXRoIGQ9Ik0yIDJMN desarrolle(0, 3T:00)T0Z" fill="rgb(255, 215, 0)"/>
-                中文
-              </button>
-              <button onclick="changeLanguage('fr')">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDJBOEYiLz4KPHJlY3QgeD0iNyIgd2lkdGg9IjYiIGhlaWdodD0iMTUiIGZpbGw9IiNGRkYiLz4KPHJlY3QgeD0iMTMiIHdpZHRoPSI3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRUQyOTM5Ii8+Cjwvc3ZnPgo=" alt="FR" style="width: 16px;">
-                Français
-              </button>
-              <button onclick="changeLanguage('ar')">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRjAwMDAiLz4KPHJlY3QgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkYiLz4KPHJlY3QgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjMDAwIi8+Cjwvc3ZnPgo=" alt="AR" style="width: 16px;">
-                العربية
-              </button>
-            </div>
-          </div>
-        </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-    <nav class="mobile-nav" id="mobileNav">
-      <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#testimonials">Testimonials</a></li>
-        <li class="eta-mobile-item"><a href="#eta-services" data-translate="nav-eta">🇰🇪 Kenya ETA</a></li>
-        <li><a href="#download">Download</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#login">Staff Login</a></li>
-      </ul>
-    </nav>
-  </header>
+  <section id="eta-services" class="eta-quick-access">
+    <div class="eta-quick-container">
+      <div class="eta-quick-header fade-in">
+        <h2 data-translate="eta-title">Kenya Electronic Travel Authorization (ETA)</h2>
+        <p data-translate="eta-subtitle">Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.</p>
+        <a href="eta-application.html" class="btn-primary" style="background: white; color: var(--eta-green); margin-top: 2rem;">
+          <i class="fas fa-passport"></i>
+          <span data-translate="eta-apply-btn">Apply for Kenya ETA - $90 USD</span>
+        </a>
+      </div>
+      <div class="eta-features">
+        <div class="eta-feature fade-in">
+          <div class="eta-feature-icon">
+            <i class="fas fa-file-invoice"></i>
+          </div>
+          <h3 data-translate="feature-1-title">Simplified Application</h3>
+          <p data-translate="feature-1-text">Our user-friendly platform guides you through every step, ensuring a smooth and error-free process.</p>
+        </div>
+        <div class="eta-feature fade-in">
+          <div class="eta-feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 data-translate="feature-2-title">Secure & Confidential</h3>
+          <p data-translate="feature-2-text">We prioritize your data security and handle all information with the highest level of confidentiality.</p>
+        </div>
+        <div class="eta-feature fade-in">
+          <div class="eta-feature-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3 data-translate="feature-3-title">24/7 Support</h3>
+          <p data-translate="feature-3-text">Our team is available around the clock to assist you with any questions or issues you may have.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section id="home" class="hero">
-    <div class="hero-container">
-      <div class="hero-content">
-        <h1>Your digital journey begins here</h1>
-        <p class="subtitle">Transform your future with cutting-edge technology courses, expert business solutions, and comprehensive digital services from anywhere, anytime.</p>
-        <div class="typing-text" id="typingText"></div>
-        <div class="hero-buttons">
-          <a href="#services" class="btn-primary">
-            <i class="fas fa-rocket"></i>
-            Explore Services
-          </a>
-          <a href="eta-application.html" class="btn-eta" data-translate="hero-eta-btn">
-            <i class="fas fa-plane"></i>
-            Get Kenya ETA
-          </a>
-          <a href="#about" class="btn-secondary">
-            <i class="fas fa-play"></i>
-            Learn More
-          </a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-image"></div>
-        <div class="floating-card card-1">
-          <i class="fas fa-code" style="color: var(--primary-blue); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-          <div style="font-size: 0.9rem; font-weight: 600;">Web Development</div>
-        </div>
-        <div class="floating-card card-2">
-          <i class="fas fa-shield-alt" style="color: var(--accent-orange); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-          <div style="font-size: 0.9rem; font-weight: 600;">Cyber Security</div>
-        </div>
-        <div class="floating-card card-3">
-          <i class="fas fa-plane" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-          <div style="font-size: 0.9rem; font-weight: 600;" data-translate="floating-eta">Kenya ETA</div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section id="about" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="fade-in">About BTECH</h2>
+        <p class="fade-in">We don't just do tech - we empower futures through innovation, skill-building, and reliable support.</p>
+      </div>
+      <div class="about-content">
+        <div class="ceo-card slide-in-left">
+          <img src="mypic.jpg" alt="CEO of BTECH" class="ceo-image-actual" style="width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 1.5rem; object-fit: cover; border: 4px solid var(--accent-orange); box-shadow: var(--shadow-medium);" loading="lazy" />
+          <h3>Teddy</h3>
+          <p class="title">CEO & Founder</p>
+          <p style="font-size: 0.9rem; color: var(--text-light);">Leading BTECH's mission to transform lives through technology education and digital innovation.</p>
+        </div>
+        <div class="about-text slide-in-right">
+          <p>At BTECH, we combine years of industry experience with cutting-edge technology to deliver comprehensive digital solutions. From professional training programs to business transformation services, we're committed to empowering individuals and organizations in their digital journey.</p>
+          <p>Our team of experts specializes in modern web development, cybersecurity, digital marketing, and business automation - ensuring our clients stay ahead in today's fast-paced digital landscape.</p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number">500+</span>
+              <span class="stat-label">Students Trained</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">100+</span>
+              <span class="stat-label">Projects Completed</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">5+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section class="stats-banner">
-    <div class="stats-container">
-      <div class="stat-box fade-in">
-        <i class="fas fa-users stat-icon"></i>
-        <span class="stat-number" data-count="500">0</span>
-        <span class="stat-label">Happy Graduates</span>
-      </div>
-      <div class="stat-box fade-in" data-delay="0.1">
-        <i class="fas fa-desktop stat-icon"></i>
-        <span class="stat-number" data-count="15">0</span>
-        <span class="stat-label">Expert Courses</span>
-      </div>
-      <div class="stat-box fade-in" data-delay="0.2">
-        <i class="fas fa-globe-africa stat-icon"></i>
-        <span class="stat-number" data-count="1500">0</span>
-        <span class="stat-label" data-translate="eta-success-rate">ETA Applications</span>
-      </div>
-      <div class="stat-box fade-in" data-delay="0.3">
-        <i class="fas fa-business-time stat-icon"></i>
-        <span class="stat-number" data-count="100">0</span>
-        <span class="stat-label">Business Clients</span>
-      </div>
-    </div>
-  </section>
+  <section id="services" class="section" style="background: var(--background-white);">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="fade-in">Our Services</h2>
+        <p class="fade-in">Comprehensive digital solutions tailored to meet your unique needs and goals.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card fade-in">
+          <div class="service-item">
+            <img src="cyber.png" alt="Cyber Services Icon" loading="lazy" />
+          </div>
+          <h3>Online Cyber Services</h3>
+          <p>Secure access to KUCCPS, KRA, HELB and other essential government services with our trusted cyber platform.</p>
+          <a href="online-cyber.html" class="service-link">
+            Learn More <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-item">
+            <img src="learning.png" alt="Learning Icon" loading="lazy" />
+          </div>
+          <h3>Computer Learning Hub</h3>
+          <p>Master industry-relevant skills with our comprehensive computer courses designed by experts.</p>
+          <a href="computer-learning-hub.html" class="service-link">
+            View Courses <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-item">
+            <img src="business.png" alt="Business Icon" loading="lazy" />
+          </div>
+          <h3>Digital Business Solutions</h3>
+          <p>Transform your business with modern tools, innovative designs, and strategic digital solutions.</p>
+          <a href="digital-business-solutions.html" class="service-link">
+            Discover More <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-item">
+            <img src="repair.png" alt="Repair Icon" loading="lazy" />
+          </div>
+          <h3>Tech Repair & Maintenance</h3>
+          <p>Professional repair and maintenance services for all your technology devices with guaranteed quality.</p>
+          <a href="tech-repair.html" class="service-link">
+            Get Support <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="service-card fade-in">
+          <div class="service-item" style="background: none;">
+            <img src="plane.jpg" alt="Plane Icon" loading="lazy" />
+          </div>
+          <h3 data-translate="eta-service-card-title">Kenya ETA Services</h3>
+          <p data-translate="eta-service-card-text">Official and secure processing of your electronic travel authorization for a seamless journey to Kenya.</p>
+          <a href="eta-application.html" class="service-link eta-link">
+            <span data-translate="eta-service-link">Apply Now</span> <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section id="eta-services" class="eta-quick-access">
-    <div class="eta-quick-container">
-      <div class="eta-quick-header fade-in">
-        <h2 data-translate="eta-title">Kenya Electronic Travel Authorization (ETA)</h2>
-        <p data-translate="eta-subtitle">Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.</p>
-        <a href="eta-application.html" class="btn-primary" style="background: white; color: var(--eta-green); margin-top: 2rem;">
-          <i class="fas fa-passport"></i>
-          <span data-translate="eta-apply-btn">Apply for Kenya ETA - $90 USD</span>
-        </a>
-      </div>
-      <div class="eta-features">
-        <div class="eta-feature fade-in">
-          <div class="eta-feature-icon">
-            <i class="fas fa-file-invoice"></i>
-          </div>
-          <h3 data-translate="feature-1-title">Simplified Application</h3>
-          <p data-translate="feature-1-text">Our user-friendly platform guides you through every step, ensuring a smooth and error-free process.</p>
-        </div>
-        <div class="eta-feature fade-in">
-          <div class="eta-feature-icon">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h3 data-translate="feature-2-title">Secure & Confidential</h3>
-          <p data-translate="feature-2-text">We prioritize your data security and handle all information with the highest level of confidentiality.</p>
-        </div>
-        <div class="eta-feature fade-in">
-          <div class="eta-feature-icon">
-            <i class="fas fa-headset"></i>
-          </div>
-          <h3 data-translate="feature-3-title">24/7 Support</h3>
-          <p data-translate="feature-3-text">Our team is available around the clock to assist you with any questions or issues you may have.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section id="download" class="section download-section">
+    <div class="section-container">
+      <div class="download-content">
+        <h2 class="fade-in">Download Our Mobile App</h2>
+        <p class="fade-in" style="opacity: 0.9; margin-bottom: 2rem;">Get instant access to all BTECH services right from your smartphone. Available for Android devices.</p>
+        <div class="app-preview fade-in"></div>
+        <a href="BtechPlusApp.apk" class="btn-primary fade-in" style="background: white; color: var(--primary-blue); margin-bottom: 2rem;">
+          <i class="fab fa-android"></i>
+          Download for Android
+        </a>
+        <div class="download-stats fade-in">
+          <div class="download-stat">
+            <div class="number">10K+</div>
+            <div class="label">Downloads</div>
+          </div>
+          <div class="download-stat">
+            <div class="number">4.8★</div>
+            <div class="label">Rating</div>
+          </div>
+          <div class="download-stat">
+            <div class="number">5MB</div>
+            <div class="label">Size</div>
+          </div>
+        </div>
+        <p class="fade-in" style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.8;">Install the latest version to explore all BTECH features seamlessly.</p>
+      </div>
+    </div>
+  </section>
 
-  <section id="about" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <h2 class="fade-in">About BTECH</h2>
-        <p class="fade-in">We don't just do tech - we empower futures through innovation, skill-building, and reliable support.</p>
-      </div>
-      <div class="about-content">
-        <div class="ceo-card slide-in-left">
-          <img src="mypic.jpg" alt="CEO of BTECH" class="ceo-image-actual" style="width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 1.5rem; object-fit: cover; border: 4px solid var(--accent-orange); box-shadow: var(--shadow-medium);" loading="lazy" />
-          <h3>Teddy</h3>
-          <p class="title">CEO & Founder</p>
-          <p style="font-size: 0.9rem; color: var(--text-light);">Leading BTECH's mission to transform lives through technology education and digital innovation.</p>
-        </div>
-        <div class="about-text slide-in-right">
-          <p>At BTECH, we combine years of industry experience with cutting-edge technology to deliver comprehensive digital solutions. From professional training programs to business transformation services, we're committed to empowering individuals and organizations in their digital journey.</p>
-          <p>Our team of experts specializes in modern web development, cybersecurity, digital marketing, and business automation - ensuring our clients stay ahead in today's fast-paced digital landscape.</p>
-          <div class="about-stats">
-            <div class="stat-item">
-              <span class="stat-number">500+</span>
-              <span class="stat-label">Students Trained</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number">100+</span>
-              <span class="stat-label">Projects Completed</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number">5+</span>
-              <span class="stat-label">Years Experience</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section id="contact" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="fade-in">Get in Touch</h2>
+        <p class="fade-in">Ready to start your digital transformation? We're here to help you every step of the way.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-item fade-in">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h4>Email Us</h4>
+          <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
+          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Quick response within 24 hours</p>
+        </div>
+        <div class="contact-item fade-in">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <h4>Call Us</h4>
+          <a href="tel:+254113996609">+254 113 996 609</a>
+          <a href="tel:+254734644917">+254 734 644 917</a>
+          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Available 24/7 for support</p>
+        </div>
+        <div class="contact-item fade-in">
+          <div class="contact-icon">
+            <i class="fas fa-globe"></i>
+          </div>
+          <h4>Visit Website</h4>
+          <a href="https://btechplus.com" target="_blank">www.btechplus.com</a>
+          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Explore our full portfolio</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section id="services" class="section" style="background: var(--background-white);">
-    <div class="section-container">
-      <div class="section-header">
-        <h2 class="fade-in">Our Core Services</h2>
-        <p class="fade-in">Comprehensive digital solutions tailored to meet your unique needs and goals.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <i class="fas fa-desktop"></i>
-          </div>
-          <h3>Online Cyber Services</h3>
-          <p>Secure access to KUCCPS, KRA, HELB and other essential government services with our trusted cyber platform.</p>
-          <a href="online-cyber.html" class="service-link">
-            Learn More <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <i class="fas fa-laptop-code"></i>
-          </div>
-          <h3>Computer Learning Hub</h3>
-          <p>Master industry-relevant skills with our comprehensive computer courses designed by experts.</p>
-          <a href="computer-learning-hub.html" class="service-link">
-            View Courses <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <h3>Digital Business Solutions</h3>
-          <p>Transform your business with modern tools, innovative designs, and strategic digital solutions.</p>
-          <a href="digital-business-solutions.html" class="service-link">
-            Discover More <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <i class="fas fa-wrench"></i>
-          </div>
-          <h3>Tech Repair & Maintenance</h3>
-          <p>Professional repair and maintenance services for all your technology devices with guaranteed quality.</p>
-          <a href="tech-repair.html" class="service-link">
-            Get Support <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-        <div class="service-card fade-in eta-card">
-          <div class="service-item eta-item">
-            <i class="fas fa-passport"></i>
-          </div>
-          <h3 data-translate="eta-service-card-title">Kenya ETA Services</h3>
-          <p data-translate="eta-service-card-text">Official and secure processing of your electronic travel authorization for a seamless journey to Kenya.</p>
-          <a href="eta-application.html" class="service-link eta-link">
-            <span data-translate="eta-service-link">Apply Now</span> <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section id="login" class="section login-section">
+    <div class="section-container">
+      <div class="login-card fade-in">
+        <h2>Staff Portal Access</h2>
+        <p>Secure login for BTECH team members and authorized personnel.</p>
+        <button class="btn-primary" id="openModal" style="background: white; color: var(--primary-blue);">
+          <i class="fas fa-lock"></i>
+          Access Portal
+        </button>
+      </div>
+    </div>
+  </section>
 
-  <section id="testimonials" class="section testimonials-section">
-    <div class="section-container">
-      <div class="section-header fade-in">
-        <h2>What Our Clients Say</h2>
-        <p>Hear from the individuals and businesses we've empowered.</p>
-      </div>
-      <div class="testimonials-slider fade-in">
-                <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-avatar" style="background: var(--gradient-primary);">JD</div>
-            <div class="testimonial-info">
-              <h4>John Doe</h4>
-              <p>Web Developer Graduate</p>
-            </div>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <p class="testimonial-text">"The coding bootcamp transformed my career. The instructors were excellent and the hands-on projects gave me the skills I needed to land my first developer job!"</p>
-        </div>
-                <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-avatar" style="background: var(--gradient-eta);">SM</div>
-            <div class="testimonial-info">
-              <h4>Sofia Martinez</h4>
-              <p data-translate="traveler-title">International Traveler</p>
-            </div>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-          </div>
-          <p class="testimonial-text" data-translate="eta-testimonial-text">"Applying for the Kenya ETA was stress-free thanks to BTECH. The process was quick, and their support team was helpful and professional. Highly recommend this service."</p>
-        </div>
-                <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-avatar" style="background: var(--gradient-accent);">MK</div>
-            <div class="testimonial-info">
-              <h4>Michael King'ori</h4>
-              <p>Small Business Owner</p>
-            </div>
-          </div>
-          <div class="testimonial-rating">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <p class="testimonial-text">"BTECH completely modernized our digital infrastructure. Their business solutions saved us time and money, making our operations much more efficient."</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>BTECH</h4>
+          <p>Empowering digital futures through innovative technology solutions, professional training, and comprehensive business services.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-section">
+          <h4>Services</h4>
+          <a href="#">Online Cyber Services</a>
+          <a href="#">Computer Training</a>
+          <a href="#">Business Solutions</a>
+          <a href="#">Tech Repair</a>
+          <a href="#eta-services" data-translate="footer-eta">Kenya ETA Services</a>
+        </div>
+        <div class="footer-section">
+          <h4>Contact Info</h4>
+          <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
+          <a href="tel:+254113996609">+254 113 996 609</a>
+          <a href="https://btechplus.com">www.btechplus.com</a>
+        </div>
+      </div>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" aria-label="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 BTECH. All rights reserved. Empowering digital futures across Kenya and beyond.</p>
+      </div>
+    </div>
+  </footer>
 
-  <section id="download" class="section download-section">
-    <div class="section-container">
-      <div class="download-content">
-        <h2 class="fade-in">Download Our Mobile App</h2>
-        <p class="fade-in" style="opacity: 0.9; margin-bottom: 2rem;">Get instant access to all BTECH services right from your smartphone. Available for Android devices.</p>
-        <a href="BtechPlusApp.apk" class="btn-primary fade-in" style="background: white; color: var(--primary-blue); margin-bottom: 2rem;">
-          <i class="fab fa-android"></i>
-          Download for Android
-        </a>
-        <div class="download-stats fade-in">
-          <div class="download-stat">
-            <div class="number">10K+</div>
-            <div class="label">Downloads</div>
-          </div>
-          <div class="download-stat">
-            <div class="number">4.8★</div>
-            <div class="label">Rating</div>
-          </div>
-          <div class="download-stat">
-            <div class="number">5MB</div>
-            <div class="label">Size</div>
-          </div>
-        </div>
-        <p class="fade-in" style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.8;">Install the latest version to explore all BTECH features seamlessly.</p>
-      </div>
-    </div>
-  </section>
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Staff Authentication</h3>
+        <button class="close-modal" id="closeModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="alertContainer"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Staff ID</label>
+          <input type="text" id="username" name="username" placeholder="BTECH#1" required>
+          <small style="color: var(--text-light); font-size: 0.8rem;">Format: BTECH#1 through BTECH#10</small>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <i class="fas fa-sign-in-alt"></i>
+          Login to Portal
+        </button>
+      </form>
+    </div>
+  </div>
 
-  <section class="newsletter-section">
-    <div class="newsletter-container fade-in">
-      <h3>Stay Updated with BTECH</h3>
-      <p>Subscribe to our newsletter for the latest tech trends, course updates, and exclusive ETA news.</p>
-      <form class="newsletter-form" id="newsletterForm">
-        <input type="email" placeholder="Enter your email address" required aria-label="Email address for newsletter subscription">
-        <button type="submit">Subscribe <i class="fas fa-paper-plane"></i></button>
-      </form>
-      <div id="newsletterAlert" style="margin-top: 1rem;"></div>
-    </div>
-  </section>
+  <button class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
-  <section id="contact" class="section">
-    <div class="section-container">
-      <div class="section-header">
-        <h2 class="fade-in">Get in Touch</h2>
-        <p class="fade-in">Ready to start your digital transformation? We're here to help you every step of the way.</p>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-item fade-in">
-          <div class="contact-icon">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <h4>Email Us</h4>
-          <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
-          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Quick response within 24 hours</p>
-        </div>
-        <div class="contact-item fade-in">
-          <div class="contact-icon">
-            <i class="fas fa-phone"></i>
-          </div>
-          <h4>Call Us</h4>
-          <a href="tel:+254113996609">+254 113 996 609</a>
-          <a href="tel:+254734644917">+254 734 644 917</a>
-          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Available 24/7 for support</p>
-        </div>
-        <div class="contact-item fade-in">
-          <div class="contact-icon">
-            <i class="fas fa-globe"></i>
-          </div>
-          <h4>Visit Website</h4>
-          <a href="https://btechplus.com" target="_blank">www.btechplus.com</a>
-          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">Explore our full portfolio</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <script>
+    // --- Translations Data ---
+    const translations = {
+      en: {
+        'eta-banner-text': '🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) here - Official processing in 72 hours',
+        'eta-banner-cta': 'Apply for ETA - $90 USD',
+        'nav-eta': 'Kenya ETA',
+        'hero-eta-btn': 'Get Kenya ETA',
+        'floating-eta': 'Kenya ETA',
+        'eta-title': 'Kenya Electronic Travel Authorization (ETA)',
+        'eta-subtitle': 'Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.',
+        'eta-apply-btn': 'Apply for Kenya ETA - $90 USD',
+        'feature-1-title': 'Simplified Application',
+        'feature-1-text': 'Our user-friendly platform guides you through every step, ensuring a smooth and error-free process.',
+        'feature-2-title': 'Secure & Confidential',
+        'feature-2-text': 'We prioritize your data security and handle all information with the highest level of confidentiality.',
+        'feature-3-title': '24/7 Support',
+        'feature-3-text': 'Our team is available around the clock to assist you with any questions or issues you may have.',
+        'eta-service-card-title': 'Kenya ETA Services',
+        'eta-service-card-text': 'Official and secure processing of your electronic travel authorization for a seamless journey to Kenya.',
+        'eta-service-link': 'Apply Now',
+        'footer-eta': 'Kenya ETA Services'
+      },
+      es: {
+        'eta-banner-text': '🇰🇪 ¿Viajas a Kenia? Obtén tu Autorización Electrónica de Viaje (ETA) aquí - Procesamiento oficial en 72 horas',
+        'eta-banner-cta': 'Solicitar ETA - $90 USD',
+        'nav-eta': 'ETA Kenia',
+        'hero-eta-btn': 'Obtener ETA Kenia',
+        'floating-eta': 'ETA Kenia',
+        'eta-title': 'Autorización Electrónica de Viaje (ETA) de Kenia',
+        'eta-subtitle': 'Procesamiento oficial de ETA para viajeros internacionales. Requerido para todos los visitantes a Kenia desde enero de 2024. Servicio rápido, seguro y confiable.',
+        'eta-apply-btn': 'Solicitar ETA Kenia - $90 USD',
+        'feature-1-title': 'Solicitud Simplificada',
+        'feature-1-text': 'Nuestra plataforma fácil de usar te guía en cada paso, asegurando un proceso sin problemas y sin errores.',
+        'feature-2-title': 'Seguro y Confidencial',
+        'feature-2-text': 'Priorizamos la seguridad de tus datos y manejamos toda la información con el más alto nivel de confidencialidad.',
+        'feature-3-title': 'Soporte 24/7',
+        'feature-3-text': 'Nuestro equipo está disponible las 24 horas del día, los 7 días de la semana para ayudarte con cualquier pregunta o problema que puedas tener.',
+        'eta-service-card-title': 'Servicios de ETA Kenia',
+        'eta-service-card-text': 'Procesamiento oficial y seguro de tu autorización de viaje electrónica para un viaje sin contratiempos a Kenia.',
+        'eta-service-link': 'Aplicar Ahora',
+        'footer-eta': 'Servicios de ETA Kenia'
+      },
+      zh: {
+        'eta-banner-text': '🇰🇪 前往肯尼亚？在此获取您的电子旅行授权 (ETA) - 72 小时内官方处理',
+        'eta-banner-cta': '申请 ETA - 90 美元',
+        'nav-eta': '肯尼亚 ETA',
+        'hero-eta-btn': '获取肯尼亚 ETA',
+        'floating-eta': '肯尼亚 ETA',
+        'eta-title': '肯尼亚电子旅行授权 (ETA)',
+        'eta-subtitle': '为国际旅客提供官方 ETA 办理服务。自 2024 年 1 月起，所有前往肯尼亚的游客均需办理。服务快速、安全、可靠。',
+        'eta-apply-btn': '申请肯尼亚 ETA - 90 美元',
+        'feature-1-title': '简化申请',
+        'feature-1-text': '我们友好的平台将指导您完成每一步，确保流程顺畅且无误。',
+        'feature-2-title': '安全与保密',
+        'feature-2-text': '我们优先考虑您的数据安全，并以最高级别的保密性处理所有信息。',
+        'feature-3-title': '24/7 支持',
+        'feature-3-text': '我们的团队全天候待命，为您提供任何问题或疑虑的帮助。',
+        'eta-service-card-title': '肯尼亚 ETA 服务',
+        'eta-service-card-text': '官方安全地办理您的电子旅行授权，确保您前往肯尼亚的旅程无缝衔接。',
+        'eta-service-link': '立即申请',
+        'footer-eta': '肯尼亚 ETA 服务'
+      },
+      fr: {
+        'eta-banner-text': '🇰🇪 Vous voyagez au Kenya ? Obtenez votre Autorisation de Voyage Électronique (ETA) ici - Traitement officiel en 72 heures',
+        'eta-banner-cta': 'Demander l\'ETA - 90 USD',
+        'nav-eta': 'ETA Kenya',
+        'hero-eta-btn': 'Obtenir l\'ETA Kenya',
+        'floating-eta': 'ETA Kenya',
+        'eta-title': 'Autorisation de Voyage Électronique (ETA) pour le Kenya',
+        'eta-subtitle': 'Traitement officiel de l\'ETA pour les voyageurs internationaux. Requis pour tous les visiteurs au Kenya depuis janvier 2024. Service rapide, sécurisé et fiable.',
+        'eta-apply-btn': 'Demander l\'ETA Kenya - 90 USD',
+        'feature-1-title': 'Demande Simplifiée',
+        'feature-1-text': 'Notre plateforme conviviale vous guide à chaque étape, garantissant un processus fluide et sans erreur.',
+        'feature-2-title': 'Sécurisé et Confidentiel',
+        'feature-2-text': 'Nous priorisons la sécurité de vos données et traitons toutes les informations avec le plus haut niveau de confidentialité.',
+        'feature-3-title': 'Assistance 24/7',
+        'feature-3-text': 'Notre équipe est disponible 24 heures sur 24, 7 jours sur 7 pour vous aider avec toutes les questions ou problèmes que vous pourriez avoir.',
+        'eta-service-card-title': 'Services ETA Kenya',
+        'eta-service-card-text': 'Traitement officiel et sécurisé de votre autorisation de voyage électronique pour un voyage sans encombre au Kenya.',
+        'eta-service-link': 'Postuler maintenant',
+        'footer-eta': 'Services ETA Kenya'
+      },
+      ar: {
+        'eta-banner-text': '🇰🇪 هل تسافر إلى كينيا؟ احصل على تصريح السفر الإلكتروني (ETA) الخاص بك من هنا - معالجة رسمية في غضون 72 ساعة',
+        'eta-banner-cta': 'التقديم على ETA - 90 دولار أمريكي',
+        'nav-eta': 'ETA كينيا',
+        'hero-eta-btn': 'احصل على ETA كينيا',
+        'floating-eta': 'ETA كينيا',
+        'eta-title': 'تصريح السفر الإلكتروني (ETA) لكينيا',
+        'eta-subtitle': 'معالجة رسمية لتصريح ETA للمسافرين الدوليين. مطلوب لجميع الزوار إلى كينيا منذ يناير 2024. خدمة سريعة وآمنة وموثوقة.',
+        'feature-1-title': 'تطبيق مبسط',
+        'feature-1-text': 'منصتنا سهلة الاستخدام ترشدك خلال كل خطوة، مما يضمن عملية سلسة وخالية من الأخطاء.',
+        'feature-2-title': 'آمن وسري',
+        'feature-2-text': 'نحن نعطي الأولوية لأمان بياناتك ونتعامل مع جميع المعلومات بأعلى مستوى من السرية.',
+        'feature-3-title': 'دعم 24/7',
+        'feature-3-text': 'فريقنا متاح على مدار الساعة لمساعدتك في أي أسئلة أو مشاكل قد تواجهها.',
+        'eta-service-card-title': 'خدمات ETA كينيا',
+        'eta-service-card-text': 'معالجة رسمية وآمنة لتصريح السفر الإلكتروني الخاص بك لرحلة سلسة إلى كينيا.',
+        'eta-service-link': 'قدم الآن',
+        'footer-eta': 'خدمات ETA كينيا'
+      }
+    };
 
-  <section id="login" class="section login-section">
-    <div class="section-container">
-      <div class="login-card fade-in">
-        <h2>Staff Portal Access</h2>
-        <p>Secure login for BTECH team members and authorized personnel.</p>
-        <button class="btn-primary" id="openModal" style="background: white; color: var(--primary-blue);">
-          <i class="fas fa-lock"></i>
-          Access Portal
-        </button>
-      </div>
-      </div>
-  </section>
+    // --- JavaScript Functions ---
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+      document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+    });
 
-  <footer>
-    <div class="footer-content">
-      <div class="footer-grid">
-        <div class="footer-section">
-          <h4>BTECH</h4>
-          <p>Empowering digital futures through innovative technology solutions, professional training, and comprehensive business services.</p>
-        </div>
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <div class="footer-section">
-          <h4>Services</h4>
-          <a href="#">Online Cyber Services</a>
-          <a href="#">Computer Training</a>
-          <a href="#">Business Solutions</a>
-          <a href="#">Tech Repair</a>
-          <a href="#eta-services" data-translate="footer-eta">Kenya ETA Services</a>
-        </div>
-        <div class="footer-section">
-          <h4>Contact Info</h4>
-          <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
-          <a href="tel:+254113996609">+254 113 996 609</a>
-          <a href="https://btechplus.com">www.btechplus.com</a>
-        </div>
-      </div>
-      <div class="social-links">
-        <a href="#" aria-label="Facebook">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#" aria-label="Twitter">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" aria-label="Instagram">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="#" aria-label="LinkedIn">
-          <i class="fab fa-linkedin-in"></i>
-        </a>
-        <a href="#" aria-label="YouTube">
-          <i class="fab fa-youtube"></i>
-        </a>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 BTECH. All rights reserved. Empowering digital futures across Kenya and beyond.</p>
-      </div>
-    </div>
-  </footer>
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuBtn.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
 
-  <div class="modal-overlay" id="loginModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Staff Authentication</h3>
-        <button class="close-modal" id="closeModal" aria-label="Close login modal">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div id="alertContainer"></div>
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="username">Staff ID</label>
-          <input type="text" id="username" name="username" placeholder="BTECH#1" required>
-          <small style="color: var(--text-light); font-size: 0.8rem;">Format: BTECH#1 through BTECH#10</small>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <button type="submit" class="submit-btn" id="submitBtn">
-          <i class="fas fa-sign-in-alt"></i>
-          Login to Portal
-        </button>
-      </form>
-    </div>
-  </div>
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        mobileMenuBtn.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
 
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">
-    <i class="fas fa-arrow-up"></i>
-  </button>
-  
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    // Typing effect
+    const typingElement = document.getElementById('typingText');
+    const phrases = [
+      "Innovate. Learn. Transform.",
+      "Empowering Digital Futures.",
+      "Your Tech Journey Starts Here.",
+      "Professional Training Programs.",
+      "Modern Business Solutions.",
+      "Reliable Tech Support."
+    ];
+    
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIndex];
+      
+      if (!isDeleting) {
+        typingElement.textContent = currentPhrase.slice(0, charIndex + 1);
+        charIndex++;
+        
+        if (charIndex === currentPhrase.length) {
+          isDeleting = true;
+          setTimeout(typeEffect, 2000);
+          return;
+        }
+      } else {
+        typingElement.textContent = currentPhrase.slice(0, charIndex - 1);
+        charIndex--;
+        
+        if (charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+      
+      setTimeout(typeEffect, isDeleting ? 50 : 100);
+    }
+    
+    typeEffect();
 
-  <script>
-    // --- Translations Data (Updated with new keys) ---
-    const translations = {
-      en: {
-        'eta-banner-text': '🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) here - Official processing in 72 hours',
-        'eta-banner-cta': 'Apply for ETA - $90 USD',
-        'nav-eta': 'Kenya ETA',
-        'hero-eta-btn': 'Get Kenya ETA',
-        'floating-eta': 'Kenya ETA',
-        'eta-title': 'Kenya Electronic Travel Authorization (ETA)',
-        'eta-subtitle': 'Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.',
-        'eta-apply-btn': 'Apply for Kenya ETA - $90 USD',
-        'feature-1-title': 'Simplified Application',
-        'feature-1-text': 'Our user-friendly platform guides you through every step, ensuring a smooth and error-free process.',
-        'feature-2-title': 'Secure & Confidential',
-        'feature-2-text': 'We prioritize your data security and handle all information with the highest level of confidentiality.',
-        'feature-3-title': '24/7 Support',
-        'feature-3-text': 'Our team is available around the clock to assist you with any questions or issues you may have.',
-        'eta-service-card-title': 'Kenya ETA Services',
-        'eta-service-card-text': 'Official and secure processing of your electronic travel authorization for a seamless journey to Kenya.',
-        'eta-service-link': 'Apply Now',
-        'footer-eta': 'Kenya ETA Services',
-        'traveler-title': 'International Traveler',
-        'eta-testimonial-text': 'Applying for the Kenya ETA was stress-free thanks to BTECH. The process was quick, and their support team was helpful and professional. Highly recommend this service.',
-        'eta-success-rate': 'ETA Applications'
-      },
-      es: {
-        'eta-banner-text': '🇰🇪 ¿Viajas a Kenia? Obtén tu Autorización Electrónica de Viaje (ETA) aquí - Procesamiento oficial en 72 horas',
-        'eta-banner-cta': 'Solicitar ETA - $90 USD',
-        'nav-eta': 'ETA Kenia',
-        'hero-eta-btn': 'Obtener ETA Kenia',
-        'floating-eta': 'ETA Kenia',
-        'eta-title': 'Autorización Electrónica de Viaje (ETA) de Kenia',
-        'eta-subtitle': 'Procesamiento oficial de ETA para viajeros internacionales. Requerido para todos los visitantes a Kenia desde enero de 2024. Servicio rápido, seguro y confiable.',
-        'eta-apply-btn': 'Solicitar ETA Kenia - $90 USD',
-        'feature-1-title': 'Solicitud Simplificada',
-        'feature-1-text': 'Nuestra plataforma fácil de usar te guía en cada paso, asegurando un proceso sin problemas y sin errores.',
-        'feature-2-title': 'Seguro y Confidencial',
-        'feature-2-text': 'Priorizamos la seguridad de tus datos y manejamos toda la información con el más alto nivel de confidencialidad.',
-        'feature-3-title': 'Soporte 24/7',
-        'feature-3-text': 'Nuestro equipo está disponible las 24 horas del día, los 7 días de la semana para ayudarte con cualquier pregunta o problema que puedas tener.',
-        'eta-service-card-title': 'Servicios de ETA Kenia',
-        'eta-service-card-text': 'Procesamiento oficial y seguro de tu autorización de viaje electrónica para un viaje sin contratiempos a Kenia.',
-        'eta-service-link': 'Aplicar Ahora',
-        'footer-eta': 'Servicios de ETA Kenia',
-        'traveler-title': 'Viajero Internacional',
-        'eta-testimonial-text': 'Solicitar la ETA de Kenia fue sin estrés gracias a BTECH. El proceso fue rápido y su equipo de soporte fue útil y profesional. Recomiendo encarecidamente este servicio.',
-        'eta-success-rate': 'Solicitudes ETA'
-      },
-      zh: {
-        'eta-banner-text': '🇰🇪 前往肯尼亚？在此获取您的电子旅行授权 (ETA) - 72 小时内官方处理',
-        'eta-banner-cta': '申请 ETA - 90 美元',
-        'nav-eta': '肯尼亚 ETA',
-        'hero-eta-btn': '获取肯尼亚 ETA',
-        'floating-eta': '肯尼亚 ETA',
-        'eta-title': '肯尼亚电子旅行授权 (ETA)',
-        'eta-subtitle': '为国际旅客提供官方 ETA 办理服务。自 2024 年 1 月起，所有前往肯尼亚的游客均需办理。服务快速、安全、可靠。',
-        'eta-apply-btn': '申请肯尼亚 ETA - 90 美元',
-        'feature-1-title': '简化申请',
-        'feature-1-text': '我们友好的平台将指导您完成每一步，确保流程顺畅且无误。',
-        'feature-2-title': '安全与保密',
-        'feature-2-text': '我们优先考虑您的数据安全，并以最高级别的保密性处理所有信息。',
-        'feature-3-title': '24/7 支持',
-        'feature-3-text': '我们的团队全天候待命，为您提供任何问题或疑虑的帮助。',
-        'eta-service-card-title': '肯尼亚 ETA 服务',
-        'eta-service-card-text': '官方安全地办理您的电子旅行授权，确保您前往肯尼亚的旅程无缝衔接。',
-        'eta-service-link': '立即申请',
-        'footer-eta': '肯尼亚 ETA 服务',
-        'traveler-title': '国际旅客',
-        'eta-testimonial-text': '多亏了 BTECH，申请肯尼亚 ETA 变得毫无压力。过程很快，他们的支持团队也很专业。强烈推荐这项服务。',
-        'eta-success-rate': 'ETA 申请量'
-      },
-      fr: {
-        'eta-banner-text': '🇰🇪 Vous voyagez au Kenya ? Obtenez votre Autorisation de Voyage Électronique (ETA) ici - Traitement officiel en 72 heures',
-        'eta-banner-cta': 'Demander l\'ETA - 90 USD',
-        'nav-eta': 'ETA Kenya',
-        'hero-eta-btn': 'Obtenir l\'ETA Kenya',
-        'floating-eta': 'ETA Kenya',
-        'eta-title': 'Autorisation de Voyage Électronique (ETA) pour le Kenya',
-        'eta-subtitle': 'Traitement officiel de l\'ETA pour les voyageurs internationaux. Requis pour tous les visiteurs au Kenya depuis janvier 2024. Service rapide, sécurisé et fiable.',
-        'eta-apply-btn': 'Demander l\'ETA Kenya - 90 USD',
-        'feature-1-title': 'Demande Simplifiée',
-        'feature-1-text': 'Notre plateforme conviviale vous guide à chaque étape, garantissant un processus fluide et sans erreur.',
-        'feature-2-title': 'Sécurisé et Confidentiel',
-        'feature-2-text': 'Nous priorisons la sécurité de vos données et traitons toutes les informations avec le plus haut niveau de confidentialité.',
-        'feature-3-title': 'Assistance 24/7',
-        'feature-3-text': 'Notre équipe est disponible 24 heures sur 24, 7 jours sur 7 pour vous aider avec toutes les questions ou problèmes que vous pourriez avoir.',
-        'eta-service-card-title': 'Services ETA Kenya',
-        'eta-service-card-text': 'Traitement officiel et sécurisé de votre autorisation de voyage électronique pour un voyage sans encombre au Kenya.',
-        'eta-service-link': 'Postuler maintenant',
-        'footer-eta': 'Services ETA Kenya',
-        'traveler-title': 'Voyageur International',
-        'eta-testimonial-text': 'La demande d\'ETA pour le Kenya a été sans stress grâce à BTECH. Le processus a été rapide et leur équipe de support est professionnelle. Je recommande fortement ce service.',
-        'eta-success-rate': 'Demandes ETA'
-      },
-      ar: {
-        'eta-banner-text': '🇰🇪 هل تسافر إلى كينيا؟ احصل على تصريح السفر الإلكتروني (ETA) الخاص بك من هنا - معالجة رسمية في غضون 72 ساعة',
-        'eta-banner-cta': 'التقديم على ETA - 90 دولار أمريكي',
-        'nav-eta': 'ETA كينيا',
-        'hero-eta-btn': 'احصل على ETA كينيا',
-        'floating-eta': 'ETA كينيا',
-        'eta-title': 'تصريح السفر الإلكتروني (ETA) لكينيا',
-        'eta-subtitle': 'معالجة رسمية لتصريح ETA للمسافرين الدوليين. مطلوب لجميع الزوار إلى كينيا منذ يناير 2024. خدمة سريعة وآمنة وموثوقة.',
-        'eta-apply-btn': 'التقديم على ETA كينيا - 90 دولار أمريكي',
-        'feature-1-title': 'تطبيق مبسط',
-        'feature-1-text': 'منصتنا سهلة الاستخدام ترشدك خلال كل خطوة، مما يضمن عملية سلسة وخالية من الأخطاء.',
-        'feature-2-title': 'آمن وسري',
-        'feature-2-text': 'نحن نعطي الأولوية لأمان بياناتك ونتعامل مع جميع المعلومات بأعلى مستوى من السرية.',
-        'feature-3-title': 'دعم 24/7',
-        'feature-3-text': 'فريقنا متاح على مدار الساعة لمساعدتك في أي أسئلة أو مشاكل قد تواجهها.',
-        'eta-service-card-title': 'خدمات ETA كينيا',
-        'eta-service-card-text': 'معالجة رسمية وآمنة لتصريح السفر الإلكتروني الخاص بك لرحلة سلسة إلى كينيا.',
-        'eta-service-link': 'قدم الآن',
-        'footer-eta': 'خدمات ETA كينيا',
-        'traveler-title': 'مسافر دولي',
-        'eta-testimonial-text': 'كان التقديم على ETA كينيا خالياً من الإجهاد بفضل BTECH. كانت العملية سريعة، وكان فريق الدعم الخاص بهم مفيداً ومحترفاً. أوصي بشدة بهذه الخدمة.',
-        'eta-success-rate': 'طلبات ETA'
-      }
-    };
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const etaBanner = document.getElementById('etaBanner');
+          const header = document.querySelector('header');
+          const bannerHeight = etaBanner && !etaBanner.classList.contains('hidden') ? etaBanner.offsetHeight : 0;
+          const headerHeight = header.offsetHeight;
+          const offsetTop = target.offsetTop - (bannerHeight + headerHeight) - 20;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // --- DOM Element Selectors ---
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileNav = document.getElementById('mobileNav');
-      const header = document.querySelector('header');
-      const etaBanner = document.getElementById('etaBanner');
-      const typingElement = document.getElementById('typingText');
-      const sections = document.querySelectorAll('section[id]');
-      const navLinks = document.querySelectorAll('.nav-menu a, .mobile-nav a');
-      const currentLang = document.getElementById('currentLang');
-      const loginModal = document.getElementById('loginModal');
-      const openModalBtn = document.getElementById('openModal');
-      const closeModalBtn = document.getElementById('closeModal');
-      const alertContainer = document.getElementById('alertContainer');
-      const loginForm = document.getElementById('loginForm');
-      const backToTopBtn = document.getElementById('backToTop');
-      const preloader = document.getElementById('preloader');
-      const progressBar = document.getElementById('progressBar');
-      const statsContainer = document.querySelector('.stats-banner'); // Adjusted selector
-      const newsletterForm = document.getElementById('newsletterForm');
-      const newsletterAlert = document.getElementById('newsletterAlert');
+    // Header background change on scroll
+    const header = document.querySelector('header');
+    const etaBanner = document.getElementById('etaBanner');
+    
+    function updateLayoutForBanner() {
+      const isBannerHidden = etaBanner.classList.contains('hidden');
+      header.classList.toggle('header-no-banner', isBannerHidden);
+      mobileNav.classList.toggle('mobile-nav-no-banner', isBannerHidden);
+      document.querySelector('.hero').classList.toggle('hero-no-banner', isBannerHidden);
+      if (isBannerHidden) {
+        document.getElementById('languageSelector').style.top = "2rem";
+      } else {
+        document.getElementById('languageSelector').style.top = "90px";
+      }
+    }
+    
+    // Automatically hide the banner after 5 seconds
+    setTimeout(() => {
+        document.getElementById('closeBanner').click();
+    }, 5000);
 
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 0) {
+            header.style.background = 'rgba(255, 255, 255, 0.98)';
+            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.boxShadow = 'none';
+        }
+    });
 
-      // --- 1. Preloader and Particle Background ---
+    // Active navigation highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-menu a, .mobile-nav a');
+    
+    window.addEventListener('scroll', () => {
+      let current = '';
+      const bannerHeight = etaBanner.classList.contains('hidden') ? 0 : etaBanner.offsetHeight;
+      const headerHeight = header.offsetHeight;
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - (headerHeight + bannerHeight);
+        if (window.pageYOffset >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
 
-      // Initialize Particles.js (Script tag is now external at the end of body)
-      if (window.particlesJS) {
-        particlesJS('particles-js', {
-          "particles": {
-            "number": {
-              "value": 50,
-              "density": {
-                "enable": true,
-                "value_area": 800
-              }
-            },
-            "color": {
-              "value": "#ffffff"
-            },
-            "shape": {
-              "type": "circle",
-            },
-            "opacity": {
-              "value": 0.5,
-              "random": false,
-            },
-            "size": {
-              "value": 4,
-              "random": true,
-            },
-            "line_linked": {
-              "enable": true,
-              "distance": 150,
-              "color": "#ffffff",
-              "opacity": 0.4,
-              "width": 1
-            },
-            "move": {
-              "enable": true,
-              "speed": 6,
-              "direction": "none",
-              "random": false,
-              "straight": false,
-              "out_mode": "out",
-              "bounce": false,
-            }
-          },
-          "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-              "onhover": {
-                "enable": true,
-                "mode": "repulse"
-              },
-              "onclick": {
-                "enable": true,
-                "mode": "push"
-              },
-            },
-          }
-        });
-      }
-      
-      // Hide preloader after a slight delay
-      setTimeout(() => {
-        preloader.classList.add('hidden');
-        document.body.style.overflow = '';
-      }, 1000);
+    // Language Translation
+    const currentLang = document.getElementById('currentLang');
 
-      // --- 2. Mobile Menu ---
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.toggle('active');
-        mobileNav.classList.toggle('active');
-        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-      });
+    function changeLanguage(lang) {
+      if (!translations[lang]) return;
 
-      document.querySelectorAll('.mobile-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenuBtn.classList.remove('active');
-          mobileNav.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
+      // Update ETA text content
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        el.textContent = translations[lang][key];
+      });
 
-      // --- 3. Typing Effect ---
-      const phrases = [
-        "Innovate. Learn. Transform.",
-        "Empowering Digital Futures.",
-        "Your Tech Journey Starts Here.",
-        "Official Kenya ETA Services.",
-        "Modern Business Solutions.",
-        "Reliable Tech Support."
-      ];
-      
-      let phraseIndex = 0;
-      let charIndex = 0;
-      let isDeleting = false;
-      
-      function typeEffect() {
-        const currentPhrase = phrases[phraseIndex];
-        
-        if (!isDeleting) {
-          typingElement.innerHTML = currentPhrase.slice(0, charIndex + 1) + '<span class="typing-cursor">|</span>';
-          charIndex++;
-          
-          if (charIndex === currentPhrase.length) {
-            isDeleting = true;
-            setTimeout(typeEffect, 2000);
-            return;
-          }
-        } else {
-          typingElement.innerHTML = currentPhrase.slice(0, charIndex - 1) + '<span class="typing-cursor">|</span>';
-          charIndex--;
-          
-          if (charIndex === 0) {
-            isDeleting = false;
-            phraseIndex = (phraseIndex + 1) % phrases.length;
-          }
-        }
-        
-        setTimeout(typeEffect, isDeleting ? 50 : 100);
-      }
-      
-      typeEffect();
+      // Update current language display
+      currentLang.textContent = lang === 'en' ? 'English' : lang === 'es' ? 'Español' : lang === 'zh' ? '中文' : lang === 'fr' ? 'Français' : 'العربية';
+      document.getElementById('languageMenu').classList.remove('active');
+    }
 
-      // --- 4. Smooth Scrolling ---
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            const bannerHeight = etaBanner && !etaBanner.classList.contains('hidden') ? etaBanner.offsetHeight : 0;
-            const headerHeight = header.offsetHeight;
-            const offsetTop = target.offsetTop - (bannerHeight + headerHeight) - 20;
-            window.scrollTo({
-              top: offsetTop > 0 ? offsetTop : 0,
-              behavior: 'smooth'
-            });
-          }
-        });
-      });
+    // Language Selector Toggle
+    document.getElementById('languageBtn').addEventListener('click', () => {
+      document.getElementById('languageMenu').classList.toggle('active');
+    });
 
-      // --- 5. Layout and Scroll Logic ---
-      function updateLayoutForBanner() {
-        const isBannerHidden = etaBanner.classList.contains('hidden');
-        header.classList.toggle('header-no-banner', isBannerHidden);
-        mobileNav.classList.toggle('mobile-nav-no-banner', isBannerHidden);
-        document.querySelector('.hero').classList.toggle('hero-no-banner', isBannerHidden);
-        
-        const languageSelector = document.getElementById('languageSelector');
-        if (languageSelector) {
-          languageSelector.style.top = isBannerHidden ? "2rem" : "90px";
-        }
-      }
-      
-      // Auto-hide the banner after 5 seconds
-      setTimeout(() => {
-        if (!etaBanner.classList.contains('hidden')) {
-          document.getElementById('closeBanner').click();
-        }
-      }, 5000);
+    // Close language menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const languageSelector = document.getElementById('languageSelector');
+      if (!languageSelector.contains(e.target)) {
+        document.getElementById('languageMenu').classList.remove('active');
+      }
+    });
 
-      document.getElementById('closeBanner').addEventListener('click', () => {
-        etaBanner.classList.add('hidden');
-        updateLayoutForBanner();
-      });
+    // Close banner button
+    document.getElementById('closeBanner').addEventListener('click', () => {
+      etaBanner.classList.add('hidden');
+      updateLayoutForBanner();
+    });
 
-      // Combined Scroll Listener for Header, Nav Active, Progress Bar, and Back to Top
-      window.addEventListener('scroll', () => {
-        // Header Stickiness
-        if (window.scrollY > 0) {
-          header.style.background = 'rgba(255, 255, 255, 0.98)';
-          header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-        } else {
-          header.style.background = 'rgba(255, 255, 255, 0.95)';
-          header.style.boxShadow = 'none';
-        }
+    // Modal functionality
+    const modal = document.getElementById('loginModal');
+    const openModalBtn = document.getElementById('openModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const alertContainer = document.getElementById('alertContainer');
+    
+    function showAlert(message, type = 'error') {
+      alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => {
+        alertContainer.innerHTML = '';
+      }, 5000);
+    }
+    
+    openModalBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        document.getElementById('username').focus();
+      }, 300);
+    });
+    
+    closeModalBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+      alertContainer.innerHTML = '';
+    });
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        alertContainer.innerHTML = '';
+      }
+    });
 
-        // Back to Top Visibility
-        backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+    // Form submission with loading state
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // Clear previous alerts
+      alertContainer.innerHTML = '';
+      
+      // Validate format
+      const validUsername = /^BTECH#([1-9]|10)$/.test(username);
+      const validPassword = password === 'btech.ke';
+      
+      if (!validUsername) {
+        showAlert('Invalid username format. Please use BTECH#1 through BTECH#10');
+        document.getElementById('username').focus();
+        return;
+      }
+      
+      if (!validPassword) {
+        showAlert('Incorrect password. Please try again.');
+        document.getElementById('password').focus();
+        return;
+      }
+      
+      // Show loading state
+      submitBtn.innerHTML = '<div class="spinner"></div> Authenticating...';
+      submitBtn.disabled = true;
+      
+      // Simulate authentication
+      setTimeout(() => {
+        showAlert('Login successful! Redirecting to dashboard...', 'success');
+        
+        setTimeout(() => {
+          // In real implementation, redirect to dashboard
+          window.location.href = 'dashboard.html';
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+          document.getElementById('loginForm').reset();
+          alertContainer.innerHTML = '';
+          submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Portal';
+          submitBtn.disabled = false;
+        }, 2000);
+      }, 1500);
+    });
 
-        // Reading Progress Bar
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = document.documentElement.scrollTop;
-        const progress = (scrolled / scrollHeight) * 100;
-        progressBar.style.width = `${progress}%`;
+    // Back to top button
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
 
-        // Active Navigation highlighting
-        let current = '';
-        const bannerHeight = etaBanner.classList.contains('hidden') ? 0 : etaBanner.offsetHeight;
-        const headerHeight = header.offsetHeight;
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop - (headerHeight + bannerHeight + 50); // Added extra buffer
-          if (window.pageYOffset >= sectionTop) {
-            current = section.getAttribute('id');
-          }
-        });
-        
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-          }
-        });
-      });
-      
-      // --- 6. Stats Counter Logic (Intersection Observer) ---
-      function animateCount(el) {
-        const target = parseInt(el.getAttribute('data-count'));
-        let count = 0;
-        const duration = 2000;
-        const step = target / (duration / 16); // ~60fps
-        
-        function update() {
-          count += step;
-          if (count < target) {
-            el.textContent = Math.ceil(count).toLocaleString();
-            requestAnimationFrame(update);
-          } else {
-            el.textContent = target.toLocaleString() + (target > 100 ? '+' : '');
-          }
-        }
-        update();
-      }
-      
-      const counterObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.stat-number').forEach(animateCount);
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.5 });
-      
-      if (statsContainer) {
-        counterObserver.observe(statsContainer);
-      }
+    // Scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe elements for scroll animations
+    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+      observer.observe(el);
+    });
 
-      // --- 7. Language Translation ---
-      window.changeLanguage = function(lang) {
-        if (!translations[lang]) return;
+    // Service card interactions
+    document.querySelectorAll('.service-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px) scale(1.02)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1)';
+      });
+    });
 
-        document.querySelectorAll('[data-translate]').forEach(el => {
-          const key = el.getAttribute('data-translate');
-          if (translations[lang][key]) {
-            el.textContent = translations[lang][key];
-          }
-        });
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modal.classList.contains('active')) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+          alertContainer.innerHTML = '';
+        }
+        if (mobileNav.classList.contains('active')) {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+    });
 
-        currentLang.textContent = lang === 'en' ? 'English' : lang === 'es' ? 'Español' : lang === 'zh' ? '中文' : lang === 'fr' ? 'Français' : 'العربية';
-        document.getElementById('languageMenu').classList.remove('active');
-      };
-
-      document.getElementById('languageBtn').addEventListener('click', () => {
-        document.getElementById('languageMenu').classList.toggle('active');
-      });
-
-      document.addEventListener('click', (e) => {
-        const languageSelector = document.getElementById('languageSelector');
-        if (languageSelector && !languageSelector.contains(e.target)) {
-          document.getElementById('languageMenu').classList.remove('active');
-        }
-      });
-
-      // --- 8. Staff Login Modal ---
-      function showAlert(message, type = 'error') {
-        alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-        setTimeout(() => {
-          alertContainer.innerHTML = '';
-        }, 5000);
-      }
-      
-      openModalBtn.addEventListener('click', () => {
-        loginModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => { document.getElementById('username').focus(); }, 300);
-      });
-      
-      closeModalBtn.addEventListener('click', () => {
-        loginModal.classList.remove('active');
-        document.body.style.overflow = '';
-        alertContainer.innerHTML = '';
-      });
-      
-      loginModal.addEventListener('click', (e) => {
-        if (e.target === loginModal) {
-          loginModal.classList.remove('active');
-          document.body.style.overflow = '';
-          alertContainer.innerHTML = '';
-        }
-      });
-
-      loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        alertContainer.innerHTML = '';
-        
-        const validUsername = /^BTECH#([1-9]|10)$/.test(username);
-        const validPassword = password === 'btech.ke';
-        
-        if (!validUsername) {
-          showAlert('Invalid username format. Please use BTECH#1 through BTECH#10');
-          document.getElementById('username').focus();
-          submitBtn.disabled = false;
-          return;
-        }
-        
-        if (!validPassword) {
-          showAlert('Incorrect password. Please try again.');
-          document.getElementById('password').focus();
-          submitBtn.disabled = false;
-          return;
-        }
-        
-        submitBtn.innerHTML = '<div class="spinner"></div> Authenticating...';
-        
-        // Simulate authentication
-        setTimeout(() => {
-          showAlert('Login successful! Redirecting to dashboard...', 'success');
-          
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-            loginModal.classList.remove('active');
-            document.body.style.overflow = '';
-            loginForm.reset();
-            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Portal';
-            submitBtn.disabled = false;
-          }, 2000);
-        }, 1500);
-      });
-
-      // --- 9. Newsletter Submission ---
-      newsletterForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailInput = e.target.querySelector('input[type="email"]');
-        const email = emailInput.value;
-        
-        newsletterAlert.innerHTML = `<div class="alert alert-success">Subscribing ${email}...</div>`;
-        
-        setTimeout(() => {
-          newsletterAlert.innerHTML = `<div class="alert alert-success">✅ Thank you for subscribing! Check your inbox for confirmation.</div>`;
-          emailInput.value = '';
-          setTimeout(() => {
-            newsletterAlert.innerHTML = '';
-          }, 5000);
-        }, 1500);
-      });
-
-
-      // --- 10. Scroll Animations (General Fade-In/Slide-In) ---
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-      
-      const generalObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            // Optional: Stop observing after it becomes visible
-            // generalObserver.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-      
-      document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-        generalObserver.observe(el);
-      });
-    
-      // --- 11. Final Cleanup ---
-      backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      if (window.history.replaceState) {
-        window.history.replaceState(null, null, window.location.href);
-      }
-    });
-  </script>
+    // Prevent form resubmission on page refresh
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
 </body>
 </html>
-
