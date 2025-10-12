@@ -78,8 +78,8 @@
 <script>
     // --- Global State and Constants ---
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
+    // Using the token directly from local storage.
     let AUTH_TOKEN = localStorage.getItem('btech_auth_token'); 
-    let USER_ID = 1; // Placeholder for the logged-in user's DB ID
     let cachedTasks = [];
 
     const appContainer = document.getElementById('app-container');
@@ -89,14 +89,13 @@
 
     function initializeApp() {
         // --- AUTH CHECK / SETUP ---
-        if (!AUTH_TOKEN || AUTH_TOKEN === 'DUMMY_FIREBASE_ID_TOKEN') {
-             console.warn("AUTH_TOKEN missing. Using placeholder token.");
-             AUTH_TOKEN = 'VALID_PLACEHOLDER_TOKEN_FOR_WEBVIEW'; 
-             localStorage.setItem('btech_auth_token', AUTH_TOKEN);
+        if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) { // Check length as a sanity check for a real Firebase token
+             showAlert("Authentication required. Please log in through the mobile app.", false);
+             // Prevent API calls if the token is clearly invalid/missing
+             return; 
         }
         
         // --- INITIAL ROUTING ---
-        // Ensure initial load defaults to /tasks if no hash is present
         if (!window.location.hash || window.location.hash === '#') {
             window.location.hash = '#tasks';
         } else {
@@ -153,8 +152,9 @@
             const data = await response.json();
             
             if (!response.ok) {
+                // Check for unauthorized errors and display specific message
                 if (response.status === 401 || response.status === 403) {
-                    showAlert('Authentication failed. Please re-login in the mobile app.', false);
+                    showAlert('Authentication failed (401). Please try logging in again.', false);
                 }
                 throw new Error(data.error || `Server responded with status ${response.status}`);
             }
@@ -166,7 +166,8 @@
             return data;
         } catch (error) {
             console.error('Fetch Error:', error.message);
-            showAlert(`API Error: ${error.message}`, false);
+            // This is the message the user is seeing in the app now.
+            showAlert(`API Error: ${error.message}`, false); 
             throw error;
         }
     }
@@ -466,9 +467,16 @@
             const taskId = hash.split('/')[1];
             // If cache is empty, reload tasks list first to populate cache
             if (cachedTasks.length === 0) {
-                 const data = await fetchData('/tasks/available');
-                 cachedTasks = data.tasks;
+                 try {
+                     const data = await fetchData('/tasks/available');
+                     cachedTasks = data.tasks;
+                 } catch (e) {
+                     // If fetching available tasks fails, stop here
+                     appContainer.innerHTML = '<p class="py-20 text-center text-red-600">Failed to fetch required task details.</p>';
+                     return;
+                 }
             }
+            
             // Check if the accepted task exists in the 'my-tasks' list to determine submission status
             const myTasksData = await fetchData('/tasks/my-tasks');
             const acceptedTask = myTasksData.tasks.find(t => t.taskId == taskId);
@@ -476,7 +484,7 @@
             const taskTitle = cachedTasks.find(t => t.id == taskId)?.title || `Task #${taskId}`;
             
             // Check if task exists and has been submitted (progress == 100)
-            const isSubmitted = acceptedTask && acceptedTask.progress === 100;
+            const isSubmitted = acceptedTask && acceptedTask.status === 'PENDING_VERIFICATION'; 
             
             renderTaskDetail(taskId, taskTitle, isSubmitted ? acceptedTask.accountsList : null);
 
