@@ -35,8 +35,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-indigo-700">BTECH <span class="text-gray-900">Tasks</span></h1>
             <nav class="flex items-center space-x-6 text-sm font-medium">
-                <a href="#tasks" class="text-gray-500 hover:text-indigo-600 transition">Available Tasks</a>
-                <a href="#my-tasks" class="text-gray-500 hover:text-indigo-600 transition">My Tasks</a>
+                <!-- Use JS routing method -->
+                <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-gray-500 hover:text-indigo-600 transition">Available Tasks</a>
+                <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-gray-500 hover:text-indigo-600 transition">My Tasks</a>
                 <span class="text-gray-400">|</span>
                 <button onclick="simulateLogout()" class="text-red-500 hover:text-red-700 transition flex items-center">
                     <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
@@ -89,7 +90,6 @@
     function initializeApp() {
         // --- AUTH CHECK / SETUP ---
         if (!AUTH_TOKEN || AUTH_TOKEN === 'DUMMY_FIREBASE_ID_TOKEN') {
-             // CRITICAL: We rely on the parent app for auth, but set a placeholder for loading logic
              console.warn("AUTH_TOKEN missing. Using placeholder token.");
              AUTH_TOKEN = 'VALID_PLACEHOLDER_TOKEN_FOR_WEBVIEW'; 
              localStorage.setItem('btech_auth_token', AUTH_TOKEN);
@@ -118,17 +118,14 @@
     }
     
     function simulateLogout() {
-        // This button assumes the Android app handles the actual sign-out logic
         localStorage.removeItem('btech_auth_token');
-        // NOTE: In a real WebView, you would trigger Android code here to close the WebView
         showAlert("Logged out. Please sign in again in the BTECH Plus App.", true);
-        window.location.hash = '#tasks'; 
+        setRoute('tasks'); 
     }
     
+    // CRITICAL FIX: Ensures navigation only updates the hash and doesn't trigger an unwanted file load.
     function setRoute(path) {
-        // Use history.pushState to ensure the browser doesn't try to load a new page,
-        // and only changes the internal route hash.
-        window.location.hash = path;
+        window.location.hash = `#${path}`;
     }
 
 
@@ -182,7 +179,7 @@
         appContainer.innerHTML = `
             <div class="mb-8">
                 <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Available Tasks</h2>
-                <a href="#my-tasks" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
+                <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
                      View Accepted Tasks <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
                 </a>
             </div>
@@ -294,7 +291,7 @@
                 </div>
             </div>
             
-            <a href="#tasks" class="mt-6 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition">
+            <a href="javascript:void(0)" onclick="setRoute('tasks')" class="mt-6 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition">
                 <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back to Available Tasks
             </a>
         `;
@@ -390,7 +387,7 @@
         appContainer.innerHTML = `
             <div class="mb-8">
                 <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">My Active Tasks</h2>
-                <a href="#tasks" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
+                <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
                      Browse Available Tasks <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
                 </a>
             </div>
