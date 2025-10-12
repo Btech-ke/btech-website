@@ -103,6 +103,8 @@
         } else { 
             // Token is missing or invalid
              showAlert("Authentication required. Please log in through the mobile app.", false);
+             // CRITICAL: Stop loading content if auth fails
+             appContainer.innerHTML = '<p class="py-20 text-center text-red-600 font-bold">Access Denied. Please ensure you are logged in via the BTECH Plus App.</p>';
              return; 
         }
         
@@ -146,7 +148,7 @@
 
     async function fetchData(endpoint, options = {}) {
         if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
-            // Don't even try to fetch if we know the token is bad
+            // Check again inside fetchData, just in case
             showAlert('Authentication token missing. Cannot connect to API.', false);
             throw new Error('No valid token.');
         }
@@ -174,7 +176,6 @@
             const data = await response.json();
             
             if (!response.ok) {
-                // Check for unauthorized errors and display specific message
                 if (response.status === 401 || response.status === 403) {
                     showAlert('Authentication failed (401). Please try logging in again.', false);
                 }
@@ -188,7 +189,6 @@
             return data;
         } catch (error) {
             console.error('Fetch Error:', error.message);
-            // This is the message the user is seeing in the app now.
             showAlert(`API Error: ${error.message}`, false); 
             throw error;
         }
