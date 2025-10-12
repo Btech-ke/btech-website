@@ -35,8 +35,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-indigo-700">BTECH <span class="text-gray-900">Tasks</span></h1>
             <nav class="flex items-center space-x-6 text-sm font-medium">
-                <a href="#" class="text-gray-500 hover:text-indigo-600 transition">Dashboard</a>
-                <a href="#" class="text-gray-500 hover:text-indigo-600 transition">Profile</a>
+                <a href="#tasks" class="text-gray-500 hover:text-indigo-600 transition">Available Tasks</a>
+                <a href="#my-tasks" class="text-gray-500 hover:text-indigo-600 transition">My Tasks</a>
                 <span class="text-gray-400">|</span>
                 <button onclick="simulateLogout()" class="text-red-500 hover:text-red-700 transition flex items-center">
                     <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
@@ -77,40 +77,60 @@
 <script>
     // --- Global State and Constants ---
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
-    // NOTE: In a real Android WebView environment, you would inject the actual Firebase token
-    // For this demonstration, we'll use a placeholder structure.
-    let AUTH_TOKEN = localStorage.getItem('btech_auth_token') || 'DUMMY_FIREBASE_ID_TOKEN';
+    let AUTH_TOKEN = localStorage.getItem('btech_auth_token'); 
     let USER_ID = 1; // Placeholder for the logged-in user's DB ID
+    let cachedTasks = [];
 
     const appContainer = document.getElementById('app-container');
     const statusAlert = document.getElementById('status-alert');
 
+    // --- Core Initialization ---
+
+    function initializeApp() {
+        // --- AUTH CHECK / SETUP ---
+        if (!AUTH_TOKEN || AUTH_TOKEN === 'DUMMY_FIREBASE_ID_TOKEN') {
+             // CRITICAL: We rely on the parent app for auth, but set a placeholder for loading logic
+             console.warn("AUTH_TOKEN missing. Using placeholder token.");
+             AUTH_TOKEN = 'VALID_PLACEHOLDER_TOKEN_FOR_WEBVIEW'; 
+             localStorage.setItem('btech_auth_token', AUTH_TOKEN);
+        }
+        
+        // --- INITIAL ROUTING ---
+        // Ensure initial load defaults to /tasks if no hash is present
+        if (!window.location.hash || window.location.hash === '#') {
+            window.location.hash = '#tasks';
+        } else {
+            loadContent();
+        }
+    }
+
     // --- Utility Functions ---
 
     function showAlert(message, isSuccess = true) {
-        statusAlert.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
-        statusAlert.classList.add(isSuccess ? 'bg-green-500' : 'bg-red-500');
+        statusAlert.classList.remove('hidden', 'bg-green-500', 'bg-red-500', 'opacity-0');
+        statusAlert.classList.add(isSuccess ? 'bg-green-500' : 'bg-red-500', 'opacity-100');
         statusAlert.textContent = message;
         setTimeout(() => {
-            statusAlert.classList.add('hidden');
+            statusAlert.classList.remove('opacity-100');
+            statusAlert.classList.add('opacity-0');
+            setTimeout(() => { statusAlert.classList.add('hidden'); }, 300);
         }, 5000);
     }
-
-    function showModal(title, message, isSuccess = true) {
-        const modal = document.getElementById('action-modal');
-        document.getElementById('modal-title').textContent = title;
-        document.getElementById('modal-message').textContent = message;
-        
-        const icon = lucide.createIcons()['check-circle'];
-        
-        modal.classList.remove('hidden');
+    
+    function simulateLogout() {
+        // This button assumes the Android app handles the actual sign-out logic
+        localStorage.removeItem('btech_auth_token');
+        // NOTE: In a real WebView, you would trigger Android code here to close the WebView
+        showAlert("Logged out. Please sign in again in the BTECH Plus App.", true);
+        window.location.hash = '#tasks'; 
+    }
+    
+    function setRoute(path) {
+        // Use history.pushState to ensure the browser doesn't try to load a new page,
+        // and only changes the internal route hash.
+        window.location.hash = path;
     }
 
-    function closeModal() {
-        document.getElementById('action-modal').classList.add('hidden');
-        // Reload to the task list after any action
-        window.location.hash = '#tasks';
-    }
 
     async function fetchData(endpoint, options = {}) {
         const headers = {
@@ -136,11 +156,9 @@
             const data = await response.json();
             
             if (!response.ok) {
-                // If 401/403, suggest re-login
                 if (response.status === 401 || response.status === 403) {
                     showAlert('Authentication failed. Please re-login in the mobile app.', false);
                 }
-                // Handle the specific backend error message
                 throw new Error(data.error || `Server responded with status ${response.status}`);
             }
 
@@ -159,10 +177,14 @@
     // --- Renderer Functions ---
 
     function renderTasksList(tasks) {
+        cachedTasks = tasks; 
+        
         appContainer.innerHTML = `
             <div class="mb-8">
                 <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Available Tasks</h2>
-                <p class="text-lg text-gray-500 mt-2">Pick a task to start earning. Your profile is synced with the backend.</p>
+                <a href="#my-tasks" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
+                     View Accepted Tasks <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
+                </a>
             </div>
             
             <!-- Filters (Basic Placeholder) -->
@@ -209,55 +231,79 @@
         lucide.createIcons();
     }
 
-    function renderTaskDetail(taskId, taskTitle, accountsList = null, commonPassword = null) {
-        const isSubmitted = accountsList !== null;
+    function renderTaskDetail(taskId) {
+        const task = cachedTasks.find(t => t.id == taskId);
         
-        let detailContent;
-        if (taskId == 1000) {
-            detailContent = `
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">${taskTitle}</h2>
-                <p class="text-lg text-indigo-600 mb-6">Status: <span class="font-semibold">${isSubmitted ? 'PENDING VERIFICATION' : 'IN PROGRESS'}</span></p>
+        if (!task) {
+             appContainer.innerHTML = '<p class="py-10 text-center text-red-600">Task details not found. Please reload the Available Tasks list.</p>';
+             lucide.createIcons();
+             return;
+        }
 
-                ${isSubmitted ? `
-                    <div class="bg-green-50 text-green-700 p-4 rounded-lg mb-6 card-shadow border border-green-200">
-                        <p class="font-bold flex items-center"><i data-lucide="check-circle" class="w-5 h-5 mr-2"></i> Submission Logged</p>
-                        <p class="text-sm mt-1">Your accounts list has been successfully submitted and is awaiting verification by the BTECH team.</p>
-                    </div>
-                ` : `
-                    <div class="bg-white p-8 rounded-xl card-shadow">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4">Submission Form</h3>
-                        
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Common Password Used (Must Match):</label>
-                            <input type="password" id="common-password" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter the password used for all 50 accounts" required>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">List of 50 Gmail Accounts (One per line):</label>
-                            <textarea id="accounts-list" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter one email address per line..." required></textarea>
-                            <p class="text-xs text-gray-500 mt-1" id="count-indicator">0 accounts entered (Requires 50)</p>
-                        </div>
+        const isGmailTask = taskId == 1000;
+        
+        let formContent;
 
-                        <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition disabled:bg-gray-400">
-                            Submit Task for Verification
-                        </button>
+        if (isGmailTask) {
+            formContent = `
+                <div class="bg-white p-8 rounded-xl card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Submission Form</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Common Password Used (Confirmation):</label>
+                        <input type="password" id="common-password" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter the password used for all 50 accounts" required>
                     </div>
-                `}
-                <button onclick="window.location.hash = '#tasks'" class="mt-6 text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back to Task List
-                </button>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">List of 50 Gmail Accounts (One per line):</label>
+                        <textarea id="accounts-list" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter one email address per line..." required></textarea>
+                        <p class="text-xs text-gray-500 mt-1" id="count-indicator">0 accounts entered (Requires 50)</p>
+                    </div>
+
+                    <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition disabled:bg-gray-400">
+                        Submit Task for Verification
+                    </button>
+                </div>
             `;
         } else {
-            detailContent = `<p class="py-10 text-center text-gray-500">Task details not available for ID: ${taskId}</p>`;
+            formContent = `<div class="bg-white p-8 rounded-xl card-shadow"><p>This task requires a different submission method.</p></div>`;
         }
+
+        appContainer.innerHTML = `
+            <div class="mb-8 flex justify-between items-center">
+                <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">${task.title}</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Task Info Card -->
+                <div class="lg:col-span-1 bg-white p-6 rounded-xl card-shadow">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Task Details</h3>
+                    <p class="text-4xl font-extrabold text-gray-900 mb-4">KES ${task.payment.toFixed(2)}</p>
+                    <p class="text-gray-600 mb-4">${task.description}</p>
+                    
+                    <ul class="text-sm space-y-2 text-gray-700">
+                        <li class="flex items-center"><i data-lucide="hash" class="w-4 h-4 mr-2 text-gray-400"></i> Task ID: ${task.id}</li>
+                        <li class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-2 text-gray-400"></i> Est. Time: ${task.estimatedTime}</li>
+                        <li class="flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-gray-400"></i> Deadline: ${task.deadline}</li>
+                    </ul>
+                </div>
+
+                <!-- Submission Form/Logic -->
+                <div class="lg:col-span-2">
+                    ${formContent}
+                </div>
+            </div>
+            
+            <a href="#tasks" class="mt-6 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back to Available Tasks
+            </a>
+        `;
         
-        appContainer.innerHTML = detailContent;
-        
-        // Attach event listener for textarea validation
+        // Re-attach listener for the new form
         const accountsTextarea = document.getElementById('accounts-list');
         if (accountsTextarea) {
             accountsTextarea.addEventListener('input', updateCountIndicator);
-            updateCountIndicator(); // Initial call
+            updateCountIndicator();
         }
 
         lucide.createIcons();
@@ -270,6 +316,7 @@
 
         if (!textarea || !indicator || !submitBtn) return;
 
+        // Count lines that are not empty
         const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
         const count = accounts.length;
 
@@ -295,8 +342,8 @@
             
             if (data.success) {
                 showAlert(data.message, true);
-                // Immediately switch to the detail view upon acceptance
-                window.location.hash = `#tasks/${taskId}`;
+                // After successful acceptance, show the detail view
+                setRoute(`tasks/${taskId}`);
             } else {
                 showAlert(data.message || 'Failed to accept task.', false);
             }
@@ -329,8 +376,8 @@
 
             if (data.success) {
                 showAlert(data.message, true);
-                // After successful submission, navigate to the submitted detail view (or My Tasks)
-                window.location.hash = '#my-tasks'; 
+                // After successful submission, navigate to My Tasks to see the status update
+                setRoute('my-tasks');
             } else {
                 showAlert(data.error || 'Submission failed. Please check inputs.', false);
             }
@@ -343,15 +390,32 @@
         appContainer.innerHTML = `
             <div class="mb-8">
                 <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">My Active Tasks</h2>
-                <p class="text-lg text-gray-500 mt-2">View your progress and status updates for tasks you've accepted.</p>
+                <a href="#tasks" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
+                     Browse Available Tasks <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
+                </a>
             </div>
             <div id="my-tasks-list" class="space-y-6">
                 ${tasks.length === 0 ? '<p class="text-gray-500 p-8 bg-white rounded-xl card-shadow">You have no active tasks. Accept one from the list!</p>' : tasks.map(task => {
-                    const progressColor = task.progress >= 100 ? 'bg-green-500' : 'bg-indigo-500';
-                    const statusText = task.status === 'PENDING_VERIFICATION' ? 'AWAITING BTECH REVIEW' : 
-                                       task.status === 'IN_PROGRESS' ? 'IN PROGRESS' : 
-                                       task.status === 'COMPLETED' ? 'PAID & COMPLETE' : task.status;
-                    const statusClass = task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-indigo-100 text-indigo-800';
+                    const progress = Math.min(100, task.progress);
+                    let statusText, statusClass, progressBarClass;
+
+                    if (task.status === 'PENDING_VERIFICATION') {
+                        statusText = 'AWAITING BTECH REVIEW';
+                        statusClass = 'bg-yellow-100 text-yellow-800';
+                        progressBarClass = 'bg-yellow-500';
+                    } else if (task.status === 'IN_PROGRESS') {
+                        statusText = 'IN PROGRESS';
+                        statusClass = 'bg-indigo-100 text-indigo-800';
+                        progressBarClass = 'bg-indigo-500';
+                    } else if (task.status === 'COMPLETED') {
+                        statusText = 'PAID & COMPLETE';
+                        statusClass = 'bg-green-100 text-green-800';
+                        progressBarClass = 'bg-green-600';
+                    } else {
+                        statusText = task.status;
+                        statusClass = 'bg-gray-100 text-gray-800';
+                        progressBarClass = 'bg-gray-500';
+                    }
 
                     return `
                         <div class="bg-white p-6 rounded-xl card-shadow flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -362,11 +426,11 @@
                                     <span class="${statusClass} text-xs font-semibold px-2 py-0.5 rounded-full">${statusText}</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="${progressColor} h-2.5 rounded-full progress-bar" style="width: ${Math.min(100, task.progress)}%"></div>
+                                    <div class="${progressBarClass} h-2.5 rounded-full progress-bar" style="width: ${progress}%"></div>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">${Math.min(100, task.progress)}% Complete (Started: ${task.startedDate})</p>
+                                <p class="text-xs text-gray-500 mt-1">${progress}% Complete (Started: ${task.startedDate})</p>
                             </div>
-                            <button onclick="window.location.hash = '#tasks/${task.taskId}'" class="mt-4 md:mt-0 md:ml-6 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-4 rounded-lg transition">
+                            <button onclick="setRoute('tasks/${task.taskId}')" class="mt-4 md:mt-0 md:ml-6 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-4 rounded-lg transition">
                                 View Details
                             </button>
                         </div>
@@ -383,7 +447,7 @@
     async function loadContent() {
         const hash = window.location.hash.slice(1);
         appContainer.innerHTML = document.getElementById('loading-spinner').outerHTML;
-        lucide.createIcons(); // Ensure spinner icon renders
+        lucide.createIcons(); 
 
         if (hash === 'tasks' || hash === '') {
             try {
@@ -403,24 +467,28 @@
             }
         } else if (hash.startsWith('tasks/')) {
             const taskId = hash.split('/')[1];
-            // In a real app, you'd fetch the specific task details here.
-            // For now, we rely on hardcoded mock task detail data.
-            renderTaskDetail(taskId, `Task #${taskId} Details`);
+            // If cache is empty, reload tasks list first to populate cache
+            if (cachedTasks.length === 0) {
+                 const data = await fetchData('/tasks/available');
+                 cachedTasks = data.tasks;
+            }
+            // Check if the accepted task exists in the 'my-tasks' list to determine submission status
+            const myTasksData = await fetchData('/tasks/my-tasks');
+            const acceptedTask = myTasksData.tasks.find(t => t.taskId == taskId);
+
+            const taskTitle = cachedTasks.find(t => t.id == taskId)?.title || `Task #${taskId}`;
+            
+            // Check if task exists and has been submitted (progress == 100)
+            const isSubmitted = acceptedTask && acceptedTask.progress === 100;
+            
+            renderTaskDetail(taskId, taskTitle, isSubmitted ? acceptedTask.accountsList : null);
+
         }
     }
 
     // Initialize routing based on hash
     window.addEventListener('hashchange', loadContent);
-    window.onload = () => {
-        if (!window.location.hash) {
-            window.location.hash = '#tasks';
-        } else {
-            loadContent();
-        }
-    };
-    
-    // Final check to load icons after the entire script runs
-    lucide.createIcons(); 
+    window.onload = initializeApp; 
 </script>
 </body>
 </html>
