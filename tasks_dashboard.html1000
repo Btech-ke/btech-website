@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTECH Earning Network | Tasks</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Custom Styles for Professional Aesthetic */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc; /* Light background for professionalism */
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-shadow:hover {
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.1), 0 10px 12px -7px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        .progress-bar {
+            transition: width 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <!-- Navbar/Header -->
+    <header class="bg-white card-shadow sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-700">BTECH <span class="text-gray-900">Tasks</span></h1>
+            <nav class="flex items-center space-x-6 text-sm font-medium">
+                <a href="#" class="text-gray-500 hover:text-indigo-600 transition">Dashboard</a>
+                <a href="#" class="text-gray-500 hover:text-indigo-600 transition">Profile</a>
+                <span class="text-gray-400">|</span>
+                <button onclick="simulateLogout()" class="text-red-500 hover:text-red-700 transition flex items-center">
+                    <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
+                    Logout
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Status / Alert Area -->
+        <div id="status-alert" class="hidden fixed top-16 right-4 z-50 p-4 rounded-lg text-white font-medium card-shadow" role="alert"></div>
+
+        <!-- Dynamic Content Container -->
+        <div id="app-container">
+            <!-- Content will be injected here based on URL -->
+            <div id="loading-spinner" class="text-center py-20 text-indigo-600">
+                <i data-lucide="loader-2" class="w-10 h-10 animate-spin mx-auto"></i>
+                <p class="mt-4 text-lg">Loading Tasks...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Dynamic Actions (Accept/Submit Success) -->
+    <div id="action-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-xl card-shadow max-w-sm w-full text-center">
+            <i id="modal-icon" data-lucide="check-circle" class="w-12 h-12 text-green-500 mx-auto mb-4"></i>
+            <h3 id="modal-title" class="text-xl font-bold mb-2 text-gray-800">Success</h3>
+            <p id="modal-message" class="text-gray-600 mb-6">Task accepted successfully!</p>
+            <button onclick="closeModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                Close
+            </button>
+        </div>
+    </div>
+
+
+<script>
+    // --- Global State and Constants ---
+    const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
+    // NOTE: In a real Android WebView environment, you would inject the actual Firebase token
+    // For this demonstration, we'll use a placeholder structure.
+    let AUTH_TOKEN = localStorage.getItem('btech_auth_token') || 'DUMMY_FIREBASE_ID_TOKEN';
+    let USER_ID = 1; // Placeholder for the logged-in user's DB ID
+
+    const appContainer = document.getElementById('app-container');
+    const statusAlert = document.getElementById('status-alert');
+
+    // --- Utility Functions ---
+
+    function showAlert(message, isSuccess = true) {
+        statusAlert.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
+        statusAlert.classList.add(isSuccess ? 'bg-green-500' : 'bg-red-500');
+        statusAlert.textContent = message;
+        setTimeout(() => {
+            statusAlert.classList.add('hidden');
+        }, 5000);
+    }
+
+    function showModal(title, message, isSuccess = true) {
+        const modal = document.getElementById('action-modal');
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-message').textContent = message;
+        
+        const icon = lucide.createIcons()['check-circle'];
+        
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('action-modal').classList.add('hidden');
+        // Reload to the task list after any action
+        window.location.hash = '#tasks';
+    }
+
+    async function fetchData(endpoint, options = {}) {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AUTH_TOKEN}`,
+            ...options.headers
+        };
+
+        const config = {
+            method: options.method || 'GET',
+            headers: headers,
+            ...options
+        };
+
+        if (options.body) {
+            config.body = JSON.stringify(options.body);
+        }
+
+        const url = `${BACKEND_URL}${endpoint}`;
+        
+        try {
+            const response = await fetch(url, config);
+            const data = await response.json();
+            
+            if (!response.ok) {
+                // If 401/403, suggest re-login
+                if (response.status === 401 || response.status === 403) {
+                    showAlert('Authentication failed. Please re-login in the mobile app.', false);
+                }
+                // Handle the specific backend error message
+                throw new Error(data.error || `Server responded with status ${response.status}`);
+            }
+
+            if (!data.success && data.error) {
+                throw new Error(data.error);
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('Fetch Error:', error.message);
+            showAlert(`API Error: ${error.message}`, false);
+            throw error;
+        }
+    }
+
+    // --- Renderer Functions ---
+
+    function renderTasksList(tasks) {
+        appContainer.innerHTML = `
+            <div class="mb-8">
+                <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Available Tasks</h2>
+                <p class="text-lg text-gray-500 mt-2">Pick a task to start earning. Your profile is synced with the backend.</p>
+            </div>
+            
+            <!-- Filters (Basic Placeholder) -->
+            <div class="bg-white p-4 rounded-xl card-shadow mb-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="list-filter" class="w-5 h-5 text-indigo-600"></i>
+                    <span class="text-sm font-medium text-gray-700">Filter:</span>
+                </div>
+                <select id="category-filter" class="p-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="">All Categories</option>
+                    <option value="Account Creation">Account Creation</option>
+                    <option value="Data Entry">Data Entry</option>
+                </select>
+            </div>
+
+            <!-- Task Grid -->
+            <div id="tasks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${tasks.map(task => `
+                    <div class="bg-white rounded-xl p-6 card-shadow flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">${task.title}</h3>
+                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                                task.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
+                                task.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-red-100 text-red-800'
+                            }">${task.difficulty}</span>
+                        </div>
+                        <p class="text-3xl font-extrabold text-indigo-600 mb-2">KES ${task.payment.toFixed(2)}</p>
+                        <p class="text-sm text-gray-500 mb-4 flex-grow">${task.description}</p>
+                        
+                        <div class="text-xs text-gray-400 mb-4 space-y-1">
+                            <p class="flex items-center"><i data-lucide="clock" class="w-3 h-3 mr-1"></i> Est. Time: ${task.estimatedTime}</p>
+                            <p class="flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> Deadline: ${task.deadline}</p>
+                        </div>
+
+                        <button onclick="acceptTask(${task.id})" class="mt-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg transition flex items-center justify-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i> Accept Task
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        // Rerender icons after updating HTML
+        lucide.createIcons();
+    }
+
+    function renderTaskDetail(taskId, taskTitle, accountsList = null, commonPassword = null) {
+        const isSubmitted = accountsList !== null;
+        
+        let detailContent;
+        if (taskId == 1000) {
+            detailContent = `
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">${taskTitle}</h2>
+                <p class="text-lg text-indigo-600 mb-6">Status: <span class="font-semibold">${isSubmitted ? 'PENDING VERIFICATION' : 'IN PROGRESS'}</span></p>
+
+                ${isSubmitted ? `
+                    <div class="bg-green-50 text-green-700 p-4 rounded-lg mb-6 card-shadow border border-green-200">
+                        <p class="font-bold flex items-center"><i data-lucide="check-circle" class="w-5 h-5 mr-2"></i> Submission Logged</p>
+                        <p class="text-sm mt-1">Your accounts list has been successfully submitted and is awaiting verification by the BTECH team.</p>
+                    </div>
+                ` : `
+                    <div class="bg-white p-8 rounded-xl card-shadow">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Submission Form</h3>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Common Password Used (Must Match):</label>
+                            <input type="password" id="common-password" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter the password used for all 50 accounts" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">List of 50 Gmail Accounts (One per line):</label>
+                            <textarea id="accounts-list" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter one email address per line..." required></textarea>
+                            <p class="text-xs text-gray-500 mt-1" id="count-indicator">0 accounts entered (Requires 50)</p>
+                        </div>
+
+                        <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition disabled:bg-gray-400">
+                            Submit Task for Verification
+                        </button>
+                    </div>
+                `}
+                <button onclick="window.location.hash = '#tasks'" class="mt-6 text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back to Task List
+                </button>
+            `;
+        } else {
+            detailContent = `<p class="py-10 text-center text-gray-500">Task details not available for ID: ${taskId}</p>`;
+        }
+        
+        appContainer.innerHTML = detailContent;
+        
+        // Attach event listener for textarea validation
+        const accountsTextarea = document.getElementById('accounts-list');
+        if (accountsTextarea) {
+            accountsTextarea.addEventListener('input', updateCountIndicator);
+            updateCountIndicator(); // Initial call
+        }
+
+        lucide.createIcons();
+    }
+    
+    function updateCountIndicator() {
+        const textarea = document.getElementById('accounts-list');
+        const indicator = document.getElementById('count-indicator');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (!textarea || !indicator || !submitBtn) return;
+
+        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
+        const count = accounts.length;
+
+        indicator.textContent = `${count} accounts entered (Requires 50)`;
+
+        if (count === 50) {
+            indicator.classList.remove('text-red-500');
+            indicator.classList.add('text-green-600');
+            submitBtn.disabled = false;
+        } else {
+            indicator.classList.remove('text-green-600');
+            indicator.classList.add('text-red-500');
+            submitBtn.disabled = true;
+        }
+    }
+
+
+    // --- Action Functions ---
+
+    async function acceptTask(taskId) {
+        try {
+            const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
+            
+            if (data.success) {
+                showAlert(data.message, true);
+                // Immediately switch to the detail view upon acceptance
+                window.location.hash = `#tasks/${taskId}`;
+            } else {
+                showAlert(data.message || 'Failed to accept task.', false);
+            }
+        } catch (error) {
+            console.error('Acceptance failed:', error);
+        }
+    }
+
+    async function submitGmailTask(taskId) {
+        const passwordInput = document.getElementById('common-password').value.trim();
+        const accountsTextarea = document.getElementById('accounts-list').value.trim();
+        const accountsList = accountsTextarea.split('\n').filter(line => line.trim() !== '');
+
+        if (accountsList.length !== 50 || passwordInput.length === 0) {
+            showAlert('Please ensure exactly 50 accounts are listed and the password field is filled.', false);
+            return;
+        }
+
+        const payload = {
+            taskId: taskId,
+            accountsList: accountsList,
+            commonPassword: passwordInput
+        };
+
+        try {
+            const data = await fetchData(`/tasks/submit-gmail-accounts`, {
+                method: 'POST',
+                body: payload
+            });
+
+            if (data.success) {
+                showAlert(data.message, true);
+                // After successful submission, navigate to the submitted detail view (or My Tasks)
+                window.location.hash = '#my-tasks'; 
+            } else {
+                showAlert(data.error || 'Submission failed. Please check inputs.', false);
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+        }
+    }
+    
+    function renderMyTasks(tasks) {
+        appContainer.innerHTML = `
+            <div class="mb-8">
+                <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">My Active Tasks</h2>
+                <p class="text-lg text-gray-500 mt-2">View your progress and status updates for tasks you've accepted.</p>
+            </div>
+            <div id="my-tasks-list" class="space-y-6">
+                ${tasks.length === 0 ? '<p class="text-gray-500 p-8 bg-white rounded-xl card-shadow">You have no active tasks. Accept one from the list!</p>' : tasks.map(task => {
+                    const progressColor = task.progress >= 100 ? 'bg-green-500' : 'bg-indigo-500';
+                    const statusText = task.status === 'PENDING_VERIFICATION' ? 'AWAITING BTECH REVIEW' : 
+                                       task.status === 'IN_PROGRESS' ? 'IN PROGRESS' : 
+                                       task.status === 'COMPLETED' ? 'PAID & COMPLETE' : task.status;
+                    const statusClass = task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 'bg-indigo-100 text-indigo-800';
+
+                    return `
+                        <div class="bg-white p-6 rounded-xl card-shadow flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex-grow">
+                                <h3 class="text-xl font-bold text-gray-800 mb-1">${task.title}</h3>
+                                <div class="text-sm text-gray-500 mb-3">
+                                    <span class="font-medium text-indigo-600">Payout: KES ${task.payment.toFixed(2)}</span> | 
+                                    <span class="${statusClass} text-xs font-semibold px-2 py-0.5 rounded-full">${statusText}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="${progressColor} h-2.5 rounded-full progress-bar" style="width: ${Math.min(100, task.progress)}%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">${Math.min(100, task.progress)}% Complete (Started: ${task.startedDate})</p>
+                            </div>
+                            <button onclick="window.location.hash = '#tasks/${task.taskId}'" class="mt-4 md:mt-0 md:ml-6 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-4 rounded-lg transition">
+                                View Details
+                            </button>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
+
+    // --- Routing and Initialization ---
+
+    async function loadContent() {
+        const hash = window.location.hash.slice(1);
+        appContainer.innerHTML = document.getElementById('loading-spinner').outerHTML;
+        lucide.createIcons(); // Ensure spinner icon renders
+
+        if (hash === 'tasks' || hash === '') {
+            try {
+                const data = await fetchData('/tasks/available');
+                renderTasksList(data.tasks);
+            } catch (error) {
+                // Handled in fetchData
+                appContainer.innerHTML = '<p class="py-20 text-center text-red-600">Failed to load available tasks. Check console for details.</p>';
+            }
+        } else if (hash === 'my-tasks') {
+             try {
+                const data = await fetchData('/tasks/my-tasks');
+                renderMyTasks(data.tasks);
+            } catch (error) {
+                // Handled in fetchData
+                appContainer.innerHTML = '<p class="py-20 text-center text-red-600">Failed to load your active tasks. Please try again later.</p>';
+            }
+        } else if (hash.startsWith('tasks/')) {
+            const taskId = hash.split('/')[1];
+            // In a real app, you'd fetch the specific task details here.
+            // For now, we rely on hardcoded mock task detail data.
+            renderTaskDetail(taskId, `Task #${taskId} Details`);
+        }
+    }
+
+    // Initialize routing based on hash
+    window.addEventListener('hashchange', loadContent);
+    window.onload = () => {
+        if (!window.location.hash) {
+            window.location.hash = '#tasks';
+        } else {
+            loadContent();
+        }
+    };
+    
+    // Final check to load icons after the entire script runs
+    lucide.createIcons(); 
+</script>
+</body>
+</html>
