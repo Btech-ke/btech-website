@@ -67,17 +67,6 @@
             overflow: hidden;
         }
 
-        .ultra-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.6s;
-        }
-
         .ultra-card:hover {
             transform: translateY(-12px) scale(1.02);
             box-shadow: 0 35px 70px -15px rgba(102, 126, 234, 0.4);
@@ -496,26 +485,15 @@
     async function checkAuthToken() {
         // Use a simple, lightweight endpoint to test the validity of the current token
         try {
+            // We use the same fetch logic, which handles 401/403 errors internally
             await fetchData('/earnings/summary', { method: 'GET' });
             return true; // Token is valid/working
         } catch (error) {
             // If fetchData throws (due to 401, 403, or network error), it already showed an alert.
-            // We just need to stop the rest of the application load.
+            // We just need to stop the rest of the application load by returning false.
             console.error("AUTH_VALIDATION_FAILED: Stopping content load.", error.message);
-            appContainer.innerHTML = `
-                 <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                    <div class="empty-state-icon mb-6">
-                        <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Session Invalid</h3>
-                    <p class="text-gray-600 text-sm md:text-base mb-6">Your authentication session has expired. Please retry login via the BTECH Plus App.</p>
-                    <button onclick="location.reload()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                        Re-sync App
-                    </button>
-                 </div>
-             `;
-             lucide.createIcons();
-             return false;
+            // The Access Denied modal from initializeApp will be shown next.
+            return false;
         }
     }
 
@@ -605,9 +583,8 @@
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
                     console.error('FETCH_DEBUG: 401/403 - Token rejected by server. Response:', JSON.stringify(data));
-                    // Force user to get a fresh token by reloading
-                    showAlert('Session expired. Please log in again in the app.', false);
-                    setTimeout(() => window.location.reload(), 1000); 
+                    // CRITICAL: Throw error to force reload in main init logic
+                    throw new Error("Token expired or invalid.");
                 }
                 throw new Error(data.error || `Error: ${response.status}`);
             }
