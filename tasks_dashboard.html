@@ -3,152 +3,531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTECH Earning Network | Tasks</title>
-    <!-- Load Tailwind CSS -->
+    <title>BTECH Earning Network | Elite Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
-        /* Custom Styles for Professional Aesthetic */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f9fc; /* Light background for professionalism */
+            background: #0a0e27;
+            position: relative;
+            overflow-x: hidden;
         }
-        .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            opacity: 0.9;
         }
-        .card-shadow:hover {
-            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.1), 0 10px 12px -7px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
         }
-        .progress-bar {
-            transition: width 0.5s ease-out;
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ultra Modern Cards */
+        .ultra-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ultra-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .ultra-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 35px 70px -15px rgba(102, 126, 234, 0.4);
+        }
+
+        .ultra-card:hover::before {
+            left: 100%;
+        }
+
+        /* Glassmorphism Header */
+        .glass-header {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Premium Buttons */
+        .btn-premium {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 40px -10px rgba(102, 126, 234, 0.6);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-premium::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-premium:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px -10px rgba(102, 126, 234, 0.8);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Progress Bar */
+        .progress-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-glow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        /* Mobile Bottom Nav */
+        .mobile-nav {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        /* Stats Card Animation */
+        .stats-shine {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Fade In Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Badge Styles */
+        .badge-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(102, 126, 234, 0.8); }
+        }
+
+        /* Input Focus */
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            transform: scale(1.02);
+        }
+
+        /* Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .ultra-card {
+                border-radius: 20px;
+            }
+            
+            .btn-premium {
+                padding: 14px 24px;
+                font-size: 15px;
+            }
+
+            .mobile-header-title {
+                font-size: 20px;
+            }
+        }
+
+        /* Alert Animation */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-slide {
+            animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        /* Task Category Icons */
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+        }
+
+        /* Difficulty Badge */
+        .difficulty-easy { background: linear-gradient(135deg, #10b981, #34d399); }
+        .difficulty-medium { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .difficulty-hard { background: linear-gradient(135deg, #ef4444, #f87171); }
+
+        /* Status Badge */
+        .status-pending { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .status-progress { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .status-completed { background: linear-gradient(135deg, #10b981, #34d399); }
+
+        /* Empty State */
+        .empty-state-icon {
+            animation: float 3s ease-in-out infinite;
         }
     </style>
 </head>
 
 <body class="min-h-screen">
+    <div class="animated-bg"></div>
+    
+    <div class="content-wrapper">
+        <!-- Mobile-Optimized Header -->
+        <header class="glass-header sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 py-3">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+                            <i data-lucide="zap" class="w-7 h-7 text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl md:text-2xl font-black text-white mobile-header-title">BTECH</h1>
+                            <p class="text-xs text-gray-300 font-medium">Earning Pro</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Desktop Nav -->
+                    <nav class="hidden md:flex items-center space-x-6">
+                        <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition">
+                            Tasks
+                        </a>
+                        <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition">
+                            My Tasks
+                        </a>
+                        <a href="javascript:void(0)" onclick="setRoute('earnings')" class="text-gray-300 hover:text-white font-medium text-sm transition">
+                            Earnings
+                        </a>
+                        <button onclick="simulateLogout()" class="px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold text-sm transition">
+                            Logout
+                        </button>
+                    </nav>
 
-    <!-- Navbar/Header -->
-    <header class="bg-white card-shadow sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-indigo-700">BTECH <span class="text-gray-900">Tasks</span></h1>
-            <nav class="flex items-center space-x-6 text-sm font-medium">
-                <!-- Use JS routing method -->
-                <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-gray-500 hover:text-indigo-600 transition">Available Tasks</a>
-                <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-gray-500 hover:text-indigo-600 transition">My Tasks</a>
-                <span class="text-gray-400">|</span>
-                <button onclick="simulateLogout()" class="text-red-500 hover:text-red-700 transition flex items-center">
-                    <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
-                    Logout
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
-        <!-- Status / Alert Area -->
-        <div id="status-alert" class="hidden fixed top-16 right-4 z-50 p-4 rounded-lg text-white font-medium card-shadow" role="alert"></div>
-
-        <!-- Dynamic Content Container -->
-        <div id="app-container">
-            <!-- Content will be injected here based on URL -->
-            <div id="loading-spinner" class="text-center py-20 text-indigo-600">
-                <i data-lucide="loader-2" class="w-10 h-10 animate-spin mx-auto"></i>
-                <p class="mt-4 text-lg">Loading Tasks...</p>
+                    <!-- Mobile Menu Button -->
+                    <button onclick="simulateLogout()" class="md:hidden p-2 rounded-xl bg-red-500 text-white">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </main>
+        </header>
 
-    <!-- Modal for Dynamic Actions (Accept/Submit Success) -->
-    <div id="action-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-        <div class="bg-white p-8 rounded-xl card-shadow max-w-sm w-full text-center">
-            <i id="modal-icon" data-lucide="check-circle" class="w-12 h-12 text-green-500 mx-auto mb-4"></i>
-            <h3 id="modal-title" class="text-xl font-bold mb-2 text-gray-800">Success</h3>
-            <p id="modal-message" class="text-gray-600 mb-6">Task accepted successfully!</p>
-            <button onclick="closeModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">
-                Close
+        <main class="max-w-7xl mx-auto px-4 py-6 pb-24 md:pb-8">
+            <!-- Floating Alert -->
+            <div id="status-alert" class="hidden fixed top-20 right-4 left-4 md:left-auto md:right-4 z-50 max-w-md alert-slide" role="alert">
+                <div class="ultra-card p-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" id="alert-icon-bg">
+                            <i data-lucide="check-circle" class="w-6 h-6" id="alert-icon"></i>
+                        </div>
+                        <p class="font-semibold text-gray-800 flex-1" id="alert-message"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Container -->
+            <div id="app-container"></div>
+        </main>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-nav fixed bottom-0 left-0 right-0 z-40 md:hidden">
+            <div class="flex justify-around items-center py-3 px-2">
+                <button onclick="setRoute('tasks')" class="nav-item flex flex-col items-center space-y-1 py-2 px-4 rounded-xl transition" id="nav-tasks">
+                    <i data-lucide="briefcase" class="w-6 h-6"></i>
+                    <span class="text-xs font-medium">Tasks</span>
+                </button>
+                <button onclick="setRoute('my-tasks')" class="nav-item flex flex-col items-center space-y-1 py-2 px-4 rounded-xl transition" id="nav-my-tasks">
+                    <i data-lucide="list-checks" class="w-6 h-6"></i>
+                    <span class="text-xs font-medium">My Tasks</span>
+                </button>
+                <button onclick="setRoute('earnings')" class="nav-item flex flex-col items-center space-y-1 py-2 px-4 rounded-xl transition" id="nav-earnings">
+                    <i data-lucide="wallet" class="w-6 h-6"></i>
+                    <span class="text-xs font-medium">Earnings</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Enhanced Modal -->
+    <div id="action-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="ultra-card p-8 max-w-md w-full text-center fade-in-up">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" id="modal-icon-bg">
+                <i id="modal-icon" data-lucide="check-circle" class="w-12 h-12"></i>
+            </div>
+            <h3 id="modal-title" class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Success!</h3>
+            <p id="modal-message" class="text-gray-600 text-sm md:text-base mb-6 leading-relaxed">Your action was completed successfully!</p>
+            <button onclick="closeModal()" class="btn-premium text-white font-bold py-4 px-8 rounded-2xl w-full ripple">
+                Continue
             </button>
         </div>
     </div>
 
-
 <script>
-    // --- Global State and Constants ---
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
-    let AUTH_TOKEN; // Will be set by init function immediately
+    let AUTH_TOKEN = null;
     let cachedTasks = [];
+    let userStats = { totalEarned: 0, tasksCompleted: 0, activeTasks: 0 };
 
     const appContainer = document.getElementById('app-container');
     const statusAlert = document.getElementById('status-alert');
 
-    // --- Core Initialization Logic ---
-
     function initializeApp() {
-        // 1. Check URL for token passed by Android
         const params = new URLSearchParams(window.location.search);
         const urlToken = params.get('token');
         
         if (urlToken && urlToken.length > 100) {
-            // Found a valid token in the URL: use it and save it.
             AUTH_TOKEN = urlToken;
-            localStorage.setItem('btech_auth_token', AUTH_TOKEN);
-            console.log("Token successfully initialized from URL.");
-        } else if (localStorage.getItem('btech_auth_token')) {
-             // Token exists in local storage 
-             AUTH_TOKEN = localStorage.getItem('btech_auth_token');
-             console.log("Token loaded from local storage.");
-        } else { 
-            // Token is missing 
-             showAlert("Authentication required. Please log in through the mobile app.", false);
-             appContainer.innerHTML = '<p class="py-20 text-center text-red-600 font-bold">Access Denied. Please ensure you are logged in via the BTECH Plus App.</p>';
-             return; 
+            storeToken(urlToken);
+        } else {
+            const stored = getStoredToken();
+            if (stored && stored.length > 100) {
+                AUTH_TOKEN = stored;
+            } else {
+                showAlert("Authentication required. Please log in through the app.", false);
+                appContainer.innerHTML = `
+                    <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                        <div class="empty-state-icon mb-6">
+                            <i data-lucide="shield-alert" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Access Denied</h3>
+                        <p class="text-gray-600 text-sm md:text-base mb-6">Please log in through the BTECH Plus App to continue.</p>
+                        <button onclick="location.reload()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                            Retry
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
         }
         
-        // 2. Clear query parameters to clean up the URL for routing
-        // This stops the token from showing up in history/logs after the initial transfer
         if (window.location.search) {
-             window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+            window.history.replaceState(null, null, window.location.pathname + window.location.hash);
         }
 
-        // 3. Initial Routing
         if (!window.location.hash || window.location.hash === '#') {
-            setRoute('tasks');
+            window.location.hash = '#tasks';
         } else {
             loadContent();
         }
     }
 
-    // --- Utility Functions ---
+    let tokenMemory = null;
+    function getStoredToken() { return tokenMemory; }
+    function storeToken(token) { tokenMemory = token; }
+    function clearStoredToken() { tokenMemory = null; }
 
     function showAlert(message, isSuccess = true) {
-        statusAlert.classList.remove('hidden', 'bg-green-500', 'bg-red-500', 'opacity-0');
-        statusAlert.classList.add(isSuccess ? 'bg-green-500' : 'bg-red-500', 'opacity-100');
-        statusAlert.textContent = message;
+        const iconBg = document.getElementById('alert-icon-bg');
+        const icon = document.getElementById('alert-icon');
+        const msg = document.getElementById('alert-message');
+        
+        iconBg.className = isSuccess ? 
+            'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-green-100' : 
+            'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-red-100';
+        
+        icon.className = isSuccess ? 'w-6 h-6 text-green-600' : 'w-6 h-6 text-red-600';
+        icon.setAttribute('data-lucide', isSuccess ? 'check-circle' : 'alert-circle');
+        
+        msg.textContent = message;
+        statusAlert.classList.remove('hidden');
+        lucide.createIcons();
+        
         setTimeout(() => {
-            statusAlert.classList.remove('opacity-100');
-            statusAlert.classList.add('opacity-0');
-            setTimeout(() => { statusAlert.classList.add('hidden'); }, 300);
+            statusAlert.style.opacity = '0';
+            setTimeout(() => {
+                statusAlert.classList.add('hidden');
+                statusAlert.style.opacity = '1';
+            }, 300);
         }, 5000);
     }
     
     function simulateLogout() {
-        localStorage.removeItem('btech_auth_token');
-        showAlert("Logged out. Please sign in again in the BTECH Plus App.", true);
-        setRoute('tasks'); 
+        clearStoredToken();
+        AUTH_TOKEN = null;
+        showAlert("Logged out successfully!", true);
+        setTimeout(() => window.location.reload(), 1500);
     }
     
-    // CRITICAL FIX: Ensures navigation only updates the hash and doesn't trigger an unwanted file load.
     function setRoute(path) {
         window.location.hash = `#${path}`;
+        updateMobileNav(path);
     }
 
+    function updateMobileNav(route) {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.classList.remove('active', 'text-indigo-500');
+            item.classList.add('text-gray-400');
+        });
+        
+        const activeNav = document.getElementById(`nav-${route}`);
+        if (activeNav) {
+            activeNav.classList.add('active', 'text-indigo-500');
+            activeNav.classList.remove('text-gray-400');
+        }
+    }
 
     async function fetchData(endpoint, options = {}) {
         if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
-            showAlert('Authentication token missing. Cannot connect to API.', false);
+            showAlert('Authentication required.', false);
             throw new Error('No valid token.');
         }
 
@@ -168,17 +547,15 @@
             config.body = JSON.stringify(options.body);
         }
 
-        const url = `${BACKEND_URL}${endpoint}`;
-        
         try {
-            const response = await fetch(url, config);
+            const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
             const data = await response.json();
             
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
-                    showAlert('Authentication failed (401). Please try logging in again.', false);
+                    showAlert('Session expired. Please log in again.', false);
                 }
-                throw new Error(data.error || `Server responded with status ${response.status}`);
+                throw new Error(data.error || `Error: ${response.status}`);
             }
 
             if (!data.success && data.error) {
@@ -187,66 +564,105 @@
             
             return data;
         } catch (error) {
-            console.error('Fetch Error:', error.message);
-            showAlert(`API Error: ${error.message}`, false); 
+            console.error('API Error:', error.message);
+            showAlert(`Error: ${error.message}`, false);
             throw error;
         }
     }
 
-    // --- Renderer Functions ---
-
     function renderTasksList(tasks) {
-        cachedTasks = tasks; 
+        cachedTasks = tasks;
         
         appContainer.innerHTML = `
-            <div class="mb-8">
-                <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Available Tasks</h2>
-                <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
-                     View Accepted Tasks <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
-                </a>
-            </div>
-            
-            <!-- Filters (Basic Placeholder) -->
-            <div class="bg-white p-4 rounded-xl card-shadow mb-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                <div class="flex items-center space-x-3">
-                    <i data-lucide="list-filter" class="w-5 h-5 text-indigo-600"></i>
-                    <span class="text-sm font-medium text-gray-700">Filter:</span>
-                </div>
-                <select id="category-filter" class="p-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="">All Categories</option>
-                    <option value="Account Creation">Account Creation</option>
-                    <option value="Data Entry">Data Entry</option>
-                </select>
-            </div>
-
-            <!-- Task Grid -->
-            <div id="tasks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                ${tasks.map(task => `
-                    <div class="bg-white rounded-xl p-6 card-shadow flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-bold text-gray-800">${task.title}</h3>
-                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                                task.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
-                                task.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800'
-                            }">${task.difficulty}</span>
-                        </div>
-                        <p class="text-3xl font-extrabold text-indigo-600 mb-2">KES ${task.payment.toFixed(2)}</p>
-                        <p class="text-sm text-gray-500 mb-4 flex-grow">${task.description}</p>
-                        
-                        <div class="text-xs text-gray-400 mb-4 space-y-1">
-                            <p class="flex items-center"><i data-lucide="clock" class="w-3 h-3 mr-1"></i> Est. Time: ${task.estimatedTime}</p>
-                            <p class="flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> Deadline: ${task.deadline}</p>
-                        </div>
-
-                        <button onclick="acceptTask(${task.id})" class="mt-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg transition flex items-center justify-center">
-                            <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i> Accept Task
-                        </button>
+            <div class="fade-in-up">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-6">
+                    <div class="ultra-card p-4 md:p-6 stats-shine text-white">
+                        <i data-lucide="dollar-sign" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Total Earned</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">KES ${userStats.totalEarned.toFixed(2)}</p>
                     </div>
-                `).join('')}
+                    <div class="ultra-card p-4 md:p-6 stats-shine text-white">
+                        <i data-lucide="check-circle-2" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Completed</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">${userStats.tasksCompleted}</p>
+                    </div>
+                    <div class="ultra-card p-4 md:p-6 stats-shine text-white col-span-2 md:col-span-1">
+                        <i data-lucide="activity" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Active</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">${userStats.activeTasks}</p>
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">Available Tasks</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Choose your next earning opportunity</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="ultra-card p-4 md:p-6 mb-6">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center space-y-3 md:space-y-0">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="sliders" class="w-5 h-5 text-indigo-600"></i>
+                            <span class="font-bold text-gray-800 text-sm md:text-base">Filters</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <select class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
+                                <option>All Categories</option>
+                                <option>Account Creation</option>
+                                <option>Data Entry</option>
+                            </select>
+                            <select class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
+                                <option>All Difficulties</option>
+                                <option>Easy</option>
+                                <option>Medium</option>
+                                <option>Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    ${tasks.map((task, i) => `
+                        <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="category-icon">
+                                    <i data-lucide="briefcase" class="w-6 h-6 text-indigo-600"></i>
+                                </div>
+                                <span class="difficulty-${task.difficulty.toLowerCase()} text-white text-xs font-bold px-3 py-1 rounded-full">
+                                    ${task.difficulty}
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-lg md:text-xl font-black text-gray-800 mb-3 leading-tight">${task.title}</h3>
+                            
+                            <div class="mb-4">
+                                <p class="text-3xl md:text-4xl font-black gradient-text mb-2">KES ${task.payment.toFixed(2)}</p>
+                                <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description}</p>
+                            </div>
+                            
+                            <div class="space-y-2 mb-5 text-xs md:text-sm text-gray-600">
+                                <div class="flex items-center space-x-2">
+                                    <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
+                                    <span>${task.estimatedTime}</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
+                                    <span>Due: ${task.deadline}</span>
+                                </div>
+                            </div>
+
+                            <button onclick="acceptTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 md:py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
+                                <i data-lucide="play-circle" class="w-5 h-5"></i>
+                                <span>Accept Task</span>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         `;
-        // Rerender icons after updating HTML
         lucide.createIcons();
     }
 
@@ -254,74 +670,111 @@
         const task = cachedTasks.find(t => t.id == taskId);
         
         if (!task) {
-             appContainer.innerHTML = '<p class="py-10 text-center text-red-600">Task details not found. Please reload the Available Tasks list.</p>';
-             lucide.createIcons();
-             return;
+            appContainer.innerHTML = `
+                <div class="ultra-card p-8 md:p-12 text-center">
+                    <div class="empty-state-icon mb-6">
+                        <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
+                    <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
+                    <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                        Back to Tasks
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+            return;
         }
 
         const isGmailTask = taskId == 1000;
         
-        let formContent;
-
-        if (isGmailTask) {
-            formContent = `
-                <div class="bg-white p-8 rounded-xl card-shadow">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Submission Form</h3>
-                    
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Common Password Used (Confirmation):</label>
-                        <input type="password" id="common-password" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter the password used for all 50 accounts" required>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">List of 50 Gmail Accounts (One per line):</label>
-                        <textarea id="accounts-list" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter one email address per line..." required></textarea>
-                        <p class="text-xs text-gray-500 mt-1" id="count-indicator">0 accounts entered (Requires 50)</p>
-                    </div>
-
-                    <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition disabled:bg-gray-400">
-                        Submit Task for Verification
-                    </button>
-                </div>
-            `;
-        } else {
-            formContent = `<div class="bg-white p-8 rounded-xl card-shadow"><p>This task requires a different submission method.</p></div>`;
-        }
-
         appContainer.innerHTML = `
-            <div class="mb-8 flex justify-between items-center">
-                <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">${task.title}</h2>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Task Info Card -->
-                <div class="lg:col-span-1 bg-white p-6 rounded-xl card-shadow">
-                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Task Details</h3>
-                    <p class="text-4xl font-extrabold text-gray-900 mb-4">KES ${task.payment.toFixed(2)}</p>
-                    <p class="text-gray-600 mb-4">${task.description}</p>
-                    
-                    <ul class="text-sm space-y-2 text-gray-700">
-                        <li class="flex items-center"><i data-lucide="hash" class="w-4 h-4 mr-2 text-gray-400"></i> Task ID: ${task.id}</li>
-                        <li class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-2 text-gray-400"></i> Est. Time: ${task.estimatedTime}</li>
-                        <li class="flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-gray-400"></i> Deadline: ${task.deadline}</li>
-                    </ul>
-                </div>
+            <div class="fade-in-up">
+                <button onclick="setRoute('tasks')" class="mb-6 flex items-center space-x-2 text-white hover:opacity-80 transition font-medium">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span>Back</span>
+                </button>
 
-                <!-- Submission Form/Logic -->
-                <div class="lg:col-span-2">
-                    ${formContent}
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">${task.title}</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Complete to earn your reward</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Task Info -->
+                    <div class="lg:col-span-1 ultra-card p-5 md:p-6">
+                        <h3 class="text-lg md:text-xl font-black gradient-text mb-4 flex items-center">
+                            <i data-lucide="info" class="w-5 h-5 mr-2"></i>
+                            Details
+                        </h3>
+                        
+                        <div class="mb-6 p-4 md:p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
+                            <p class="text-xs md:text-sm text-gray-600 mb-1">Your Reward</p>
+                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${task.payment.toFixed(2)}</p>
+                        </div>
+                        
+                        <p class="text-sm md:text-base text-gray-600 mb-6 leading-relaxed">${task.description}</p>
+                        
+                        <div class="space-y-2 md:space-y-3 text-sm">
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="hash" class="w-4 h-4 text-indigo-600"></i>
+                                <span class="font-semibold">ID: ${task.id}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="clock" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.estimatedTime}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.deadline}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="award" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.difficulty}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submission Form -->
+                    <div class="lg:col-span-2 ultra-card p-5 md:p-8">
+                        ${isGmailTask ? `
+                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                                <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                                Submit Your Work
+                            </h3>
+                            
+                            <div class="mb-5 md:mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Password (All Accounts):</label>
+                                <input type="password" id="common-password" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Enter password" required>
+                            </div>
+                            
+                            <div class="mb-5 md:mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Gmail Accounts (50):</label>
+                                <textarea id="accounts-list" rows="10" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition font-mono text-xs md:text-sm" placeholder="One email per line..." required></textarea>
+                                <div class="flex items-center justify-between mt-2">
+                                    <p class="text-xs md:text-sm" id="count-indicator">0 accounts</p>
+                                    <span class="text-xs font-semibold text-gray-400">Need: 50</span>
+                                </div>
+                            </div>
+
+                            <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl disabled:opacity-50 flex items-center justify-center space-x-2 ripple" disabled>
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                <span>Submit Task</span>
+                            </button>
+                        ` : `
+                            <div class="text-center py-12">
+                                <i data-lucide="info" class="w-16 h-16 text-indigo-600 mx-auto mb-4"></i>
+                                <p class="text-gray-600">Different submission method required.</p>
+                            </div>
+                        `}
+                    </div>
                 </div>
             </div>
-            
-            <a href="javascript:void(0)" onclick="setRoute('tasks')" class="mt-6 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back to Available Tasks
-            </a>
         `;
         
-        // Re-attach listener for the new form
-        const accountsTextarea = document.getElementById('accounts-list');
-        if (accountsTextarea) {
-            accountsTextarea.addEventListener('input', updateCountIndicator);
+        const textarea = document.getElementById('accounts-list');
+        if (textarea) {
+            textarea.addEventListener('input', updateCountIndicator);
             updateCountIndicator();
         }
 
@@ -335,186 +788,330 @@
 
         if (!textarea || !indicator || !submitBtn) return;
 
-        // Count lines that are not empty
         const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
         const count = accounts.length;
 
-        indicator.textContent = `${count} accounts entered (Requires 50)`;
+        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-gray-600'}">${count} accounts</span>`;
 
+        submitBtn.disabled = count !== 50;
         if (count === 50) {
-            indicator.classList.remove('text-red-500');
-            indicator.classList.add('text-green-600');
-            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50');
         } else {
-            indicator.classList.remove('text-green-600');
-            indicator.classList.add('text-red-500');
-            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50');
         }
     }
-
-
-    // --- Action Functions ---
 
     async function acceptTask(taskId) {
         try {
             const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
             
             if (data.success) {
-                showAlert(data.message, true);
-                // After successful acceptance, show the detail view
-                setRoute(`tasks/${taskId}`);
+                showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
+                setTimeout(() => {
+                    closeModal();
+                    setRoute(`tasks/${taskId}`);
+                }, 2000);
             } else {
                 showAlert(data.message || 'Failed to accept task.', false);
             }
         } catch (error) {
-            console.error('Acceptance failed:', error);
+            console.error('Error:', error);
         }
     }
 
     async function submitGmailTask(taskId) {
-        const passwordInput = document.getElementById('common-password').value.trim();
-        const accountsTextarea = document.getElementById('accounts-list').value.trim();
-        const accountsList = accountsTextarea.split('\n').filter(line => line.trim() !== '');
+        const password = document.getElementById('common-password').value.trim();
+        const accountsText = document.getElementById('accounts-list').value.trim();
+        const accountsList = accountsText.split('\n').filter(line => line.trim() !== '');
 
-        if (accountsList.length !== 50 || passwordInput.length === 0) {
-            showAlert('Please ensure exactly 50 accounts are listed and the password field is filled.', false);
+        if (accountsList.length !== 50 || !password) {
+            showAlert('Ensure 50 accounts and password are provided.', false);
             return;
         }
 
-        const payload = {
-            taskId: taskId,
-            accountsList: accountsList,
-            commonPassword: passwordInput
-        };
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+        lucide.createIcons();
 
         try {
-            const data = await fetchData(`/tasks/submit-gmail-accounts`, {
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
                 method: 'POST',
-                body: payload
+                body: { taskId, accountsList, commonPassword: password }
             });
 
             if (data.success) {
-                showAlert(data.message, true);
-                // After successful submission, navigate to My Tasks to see the status update
-                setRoute('my-tasks');
+                showModal('Submitted!', 'Your task is under review. Check My Tasks for updates.', 'success');
+                setTimeout(() => {
+                    closeModal();
+                    setRoute('my-tasks');
+                }, 2500);
             } else {
-                showAlert(data.error || 'Submission failed. Please check inputs.', false);
+                showAlert(data.error || 'Submission failed.', false);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
+                lucide.createIcons();
             }
         } catch (error) {
-            console.error('Submission error:', error);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
+            lucide.createIcons();
         }
     }
     
     function renderMyTasks(tasks) {
         appContainer.innerHTML = `
-            <div class="mb-8">
-                <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">My Active Tasks</h2>
-                <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition flex items-center mt-2">
-                     Browse Available Tasks <i data-lucide="chevrons-right" class="w-4 h-4 ml-1"></i>
-                </a>
-            </div>
-            <div id="my-tasks-list" class="space-y-6">
-                ${tasks.length === 0 ? '<p class="text-gray-500 p-8 bg-white rounded-xl card-shadow">You have no active tasks. Accept one from the list!</p>' : tasks.map(task => {
-                    const progress = Math.min(100, task.progress);
-                    let statusText, statusClass, progressBarClass;
+            <div class="fade-in-up">
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">My Active Tasks</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Track your progress and earnings</p>
+                </div>
 
-                    if (task.status === 'PENDING_VERIFICATION') {
-                        statusText = 'AWAITING BTECH REVIEW';
-                        statusClass = 'bg-yellow-100 text-yellow-800';
-                        progressBarClass = 'bg-yellow-500';
-                    } else if (task.status === 'IN_PROGRESS') {
-                        statusText = 'IN PROGRESS';
-                        statusClass = 'bg-indigo-100 text-indigo-800';
-                        progressBarClass = 'bg-indigo-500';
-                    } else if (task.status === 'COMPLETED') {
-                        statusText = 'PAID & COMPLETE';
-                        statusClass = 'bg-green-100 text-green-800';
-                        progressBarClass = 'bg-green-600';
-                    } else {
-                        statusText = task.status;
-                        statusClass = 'bg-gray-100 text-gray-800';
-                        progressBarClass = 'bg-gray-500';
-                    }
-
-                    return `
-                        <div class="bg-white p-6 rounded-xl card-shadow flex flex-col md:flex-row justify-between items-start md:items-center">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-bold text-gray-800 mb-1">${task.title}</h3>
-                                <div class="text-sm text-gray-500 mb-3">
-                                    <span class="font-medium text-indigo-600">Payout: KES ${task.payment.toFixed(2)}</span> | 
-                                    <span class="${statusClass} text-xs font-semibold px-2 py-0.5 rounded-full">${statusText}</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="${progressBarClass} h-2.5 rounded-full progress-bar" style="width: ${progress}%"></div>
-                                </div>
-                                <p class="text-xs text-gray-500 mt-1">${progress}% Complete (Started: ${task.startedDate})</p>
+                <div class="space-y-3 md:space-y-4">
+                    ${tasks.length === 0 ? `
+                        <div class="ultra-card p-8 md:p-12 text-center">
+                            <div class="empty-state-icon mb-6">
+                                <i data-lucide="inbox" class="w-20 h-20 md:w-24 md:h-24 text-gray-400 mx-auto"></i>
                             </div>
-                            <button onclick="setRoute('tasks/${task.taskId}')" class="mt-4 md:mt-0 md:ml-6 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-4 rounded-lg transition">
-                                View Details
+                            <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">No Active Tasks</h3>
+                            <p class="text-gray-600 text-sm md:text-base mb-6">Start earning by accepting tasks!</p>
+                            <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                                Browse Tasks
                             </button>
                         </div>
-                    `;
-                }).join('')}
+                    ` : tasks.map((task, i) => {
+                        const progress = Math.min(100, task.progress);
+                        let statusText, statusClass, progressClass, icon;
+
+                        if (task.status === 'PENDING_VERIFICATION') {
+                            statusText = 'UNDER REVIEW';
+                            statusClass = 'status-pending';
+                            progressClass = 'bg-gradient-to-r from-yellow-400 to-orange-500';
+                            icon = 'clock';
+                        } else if (task.status === 'IN_PROGRESS') {
+                            statusText = 'IN PROGRESS';
+                            statusClass = 'status-progress';
+                            progressClass = 'bg-gradient-to-r from-indigo-500 to-purple-600';
+                            icon = 'activity';
+                        } else if (task.status === 'COMPLETED') {
+                            statusText = 'COMPLETED';
+                            statusClass = 'status-completed';
+                            progressClass = 'bg-gradient-to-r from-green-500 to-emerald-600';
+                            icon = 'check-circle-2';
+                        } else {
+                            statusText = task.status;
+                            statusClass = 'bg-gray-500';
+                            progressClass = 'bg-gray-500';
+                            icon = 'info';
+                        }
+
+                        return `
+                            <div class="ultra-card p-4 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
+                                <div class="flex flex-col space-y-4">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2">${task.title}</h3>
+                                            <div class="flex flex-wrap items-center gap-2 text-xs md:text-sm">
+                                                <span class="${statusClass} text-white font-bold px-3 py-1 rounded-full flex items-center space-x-1">
+                                                    <i data-lucide="${icon}" class="w-3 h-3"></i>
+                                                    <span>${statusText}</span>
+                                                </span>
+                                                <span class="font-bold text-indigo-600">KES ${task.payment.toFixed(2)}</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="setRoute('tasks/${task.taskId}')" class="btn-premium px-4 py-2 rounded-xl text-white text-sm font-semibold ml-2 flex-shrink-0">
+                                            View
+                                        </button>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between text-xs md:text-sm mb-2">
+                                            <span class="font-semibold text-gray-700">Progress</span>
+                                            <span class="font-black text-indigo-600">${progress}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                                            <div class="${progressClass} h-3 rounded-full progress-glow" style="width: ${progress}%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">Started: ${task.startedDate}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
             </div>
         `;
         lucide.createIcons();
     }
 
+    function renderEarnings() {
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">Earnings Overview</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Your income at a glance</p>
+                </div>
 
-    // --- Routing and Initialization ---
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6">
+                    <div class="ultra-card p-5 md:p-6">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center mb-3">
+                            <i data-lucide="wallet" class="w-6 h-6 text-indigo-600"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-600 mb-1">Total Earnings</p>
+                        <p class="text-2xl md:text-3xl font-black gradient-text">KES ${userStats.totalEarned.toFixed(2)}</p>
+                    </div>
+                    <div class="ultra-card p-5 md:p-6">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center mb-3">
+                            <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-600 mb-1">This Month</p>
+                        <p class="text-2xl md:text-3xl font-black text-green-600">KES ${(userStats.totalEarned * 0.3).toFixed(2)}</p>
+                    </div>
+                    <div class="ultra-card p-5 md:p-6">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center mb-3">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-purple-600"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-600 mb-1">Completed</p>
+                        <p class="text-2xl md:text-3xl font-black text-purple-600">${userStats.tasksCompleted}</p>
+                    </div>
+                    <div class="ultra-card p-5 md:p-6">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center mb-3">
+                            <i data-lucide="zap" class="w-6 h-6 text-orange-600"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-600 mb-1">Avg/Task</p>
+                        <p class="text-2xl md:text-3xl font-black text-orange-600">KES ${userStats.tasksCompleted > 0 ? (userStats.totalEarned / userStats.tasksCompleted).toFixed(2) : '0.00'}</p>
+                    </div>
+                </div>
+
+                <div class="ultra-card p-6 md:p-8">
+                    <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                        Recent Activity
+                    </h3>
+                    <div class="text-center py-12">
+                        <div class="empty-state-icon mb-4">
+                            <i data-lucide="activity" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm md:text-base">Detailed history coming soon!</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
+    function showModal(title, message, type = 'success') {
+        const modal = document.getElementById('action-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalIcon = document.getElementById('modal-icon');
+        const modalIconBg = document.getElementById('modal-icon-bg');
+        
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        
+        if (type === 'success') {
+            modalIcon.setAttribute('data-lucide', 'check-circle');
+            modalIconBg.className = 'w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-green-400 to-emerald-600';
+            modalIcon.className = 'w-12 h-12 text-white';
+        } else {
+            modalIcon.setAttribute('data-lucide', 'alert-circle');
+            modalIconBg.className = 'w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-red-400 to-red-600';
+            modalIcon.className = 'w-12 h-12 text-white';
+        }
+        
+        modal.classList.remove('hidden');
+        lucide.createIcons();
+    }
+
+    function closeModal() {
+        document.getElementById('action-modal').classList.add('hidden');
+    }
 
     async function loadContent() {
         const hash = window.location.hash.slice(1);
-        appContainer.innerHTML = document.getElementById('loading-spinner').outerHTML;
-        lucide.createIcons(); 
+        appContainer.innerHTML = `
+            <div class="flex items-center justify-center py-20">
+                <div class="text-center">
+                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
+                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
 
         if (hash === 'tasks' || hash === '') {
             try {
                 const data = await fetchData('/tasks/available');
                 renderTasksList(data.tasks);
             } catch (error) {
-                // Handled in fetchData
-                appContainer.innerHTML = '<p class="py-20 text-center text-red-600">Failed to load available tasks. Check console for details.</p>';
+                appContainer.innerHTML = `
+                    <div class="ultra-card p-8 md:p-12 text-center">
+                        <div class="empty-state-icon mb-6">
+                            <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
+                        <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks.</p>
+                        <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                            Retry
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
             }
         } else if (hash === 'my-tasks') {
-             try {
+            try {
                 const data = await fetchData('/tasks/my-tasks');
+                userStats.activeTasks = data.tasks.filter(t => t.status !== 'COMPLETED').length;
+                userStats.tasksCompleted = data.tasks.filter(t => t.status === 'COMPLETED').length;
+                userStats.totalEarned = data.tasks.filter(t => t.status === 'COMPLETED').reduce((sum, t) => sum + t.payment, 0);
                 renderMyTasks(data.tasks);
             } catch (error) {
-                // Handled in fetchData
-                appContainer.innerHTML = '<p class="py-20 text-center text-red-600">Failed to load your active tasks. Please try again later.</p>';
+                appContainer.innerHTML = `
+                    <div class="ultra-card p-8 md:p-12 text-center">
+                        <div class="empty-state-icon mb-6">
+                            <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
+                        <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load your tasks.</p>
+                        <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                            Retry
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
             }
+        } else if (hash === 'earnings') {
+            renderEarnings();
         } else if (hash.startsWith('tasks/')) {
             const taskId = hash.split('/')[1];
-            // If cache is empty, reload tasks list first to populate cache
             if (cachedTasks.length === 0) {
-                 try {
-                     const data = await fetchData('/tasks/available');
-                     cachedTasks = data.tasks;
-                 } catch (e) {
-                     // If fetching available tasks fails, stop here
-                     appContainer.innerHTML = '<p class="py-20 text-center text-red-600">Failed to fetch required task details.</p>';
-                     return;
-                 }
+                try {
+                    const data = await fetchData('/tasks/available');
+                    cachedTasks = data.tasks;
+                } catch (e) {
+                    appContainer.innerHTML = `
+                        <div class="ultra-card p-8 md:p-12 text-center">
+                            <div class="empty-state-icon mb-6">
+                                <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Load Failed</h3>
+                            <p class="text-gray-600 text-sm md:text-base mb-6">Could not fetch task details.</p>
+                            <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                                Back
+                            </button>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                    return;
+                }
             }
-            
-            // Check if the accepted task exists in the 'my-tasks' list to determine submission status
-            const myTasksData = await fetchData('/tasks/my-tasks');
-            const acceptedTask = myTasksData.tasks.find(t => t.taskId == taskId);
-
-            const taskTitle = cachedTasks.find(t => t.id == taskId)?.title || `Task #${taskId}`;
-            
-            // Check if task exists and has been submitted (progress == 100)
-            const isSubmitted = acceptedTask && acceptedTask.status === 'PENDING_VERIFICATION'; 
-            
-            renderTaskDetail(taskId, taskTitle, isSubmitted ? acceptedTask.accountsList : null);
-
+            renderTaskDetail(taskId);
         }
     }
 
-    // Initialize routing based on hash
     window.addEventListener('hashchange', loadContent);
-    window.onload = initializeApp; 
+    window.onload = initializeApp;
 </script>
 </body>
 </html>
