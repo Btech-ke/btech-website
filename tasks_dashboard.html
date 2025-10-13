@@ -469,6 +469,14 @@
              return; 
         }
         
+        // CRITICAL FIX: Run a health check to validate the token is alive before loading content
+        const authValid = await checkAuthToken();
+        if (!authValid) {
+             // The checkAuthToken function handles the error message and reload prompt
+             return; 
+        }
+
+
         // 2. Clean up the URL (Removes ?token=... for cleaner display/routing)
         if (window.location.search) {
              window.history.replaceState(null, null, window.location.pathname + window.location.hash);
@@ -482,6 +490,35 @@
             loadContent(); // Direct deep link load
         }
     }
+
+    // --- Authentication Validation Helper ---
+
+    async function checkAuthToken() {
+        // Use a simple, lightweight endpoint to test the validity of the current token
+        try {
+            await fetchData('/earnings/summary', { method: 'GET' });
+            return true; // Token is valid/working
+        } catch (error) {
+            // If fetchData throws (due to 401, 403, or network error), it already showed an alert.
+            // We just need to stop the rest of the application load.
+            console.error("AUTH_VALIDATION_FAILED: Stopping content load.", error.message);
+            appContainer.innerHTML = `
+                 <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                    <div class="empty-state-icon mb-6">
+                        <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Session Invalid</h3>
+                    <p class="text-gray-600 text-sm md:text-base mb-6">Your authentication session has expired. Please retry login via the BTECH Plus App.</p>
+                    <button onclick="location.reload()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                        Re-sync App
+                    </button>
+                 </div>
+             `;
+             lucide.createIcons();
+             return false;
+        }
+    }
+
 
     // --- Utility Functions ---
 
@@ -567,7 +604,7 @@
             
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
-                    console.error('FETCH_DEBUG: 401/403 - Token rejected by server.');
+                    console.error('FETCH_DEBUG: 401/403 - Token rejected by server. Response:', JSON.stringify(data));
                     // Force user to get a fresh token by reloading
                     showAlert('Session expired. Please log in again in the app.', false);
                     setTimeout(() => window.location.reload(), 1000); 
@@ -974,7 +1011,7 @@
                         <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center mb-3">
                             <i data-lucide="wallet" class="w-6 h-6 text-indigo-600"></i>
                         </div>
-                        <p class="text-xs md:text-sm text-gray-600 mb-1">Total Earnings</p>
+                        <p class="text-xs md:text-sm text-gray-600 mb-1">Total Earned</p>
                         <p class="text-2xl md:text-3xl font-black gradient-text">KES ${userStats.totalEarned.toFixed(2)}</p>
                     </div>
                     <div class="ultra-card p-5 md:p-6">
