@@ -78,14 +78,13 @@
 <script>
     // --- Global State and Constants ---
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
-    // Using the token directly from local storage.
-    let AUTH_TOKEN = localStorage.getItem('btech_auth_token'); 
+    let AUTH_TOKEN; // Will be set by init function immediately
     let cachedTasks = [];
 
     const appContainer = document.getElementById('app-container');
     const statusAlert = document.getElementById('status-alert');
 
-    // --- Core Initialization ---
+    // --- Core Initialization Logic ---
 
     function initializeApp() {
         // 1. Check URL for token passed by Android
@@ -93,30 +92,30 @@
         const urlToken = params.get('token');
         
         if (urlToken && urlToken.length > 100) {
-            // Found a valid token in the URL: save it and use it.
+            // Found a valid token in the URL: use it and save it.
             AUTH_TOKEN = urlToken;
             localStorage.setItem('btech_auth_token', AUTH_TOKEN);
             console.log("Token successfully initialized from URL.");
-        } else if (AUTH_TOKEN && AUTH_TOKEN.length > 100) {
-             // Token exists in local storage and is long enough
+        } else if (localStorage.getItem('btech_auth_token')) {
+             // Token exists in local storage 
+             AUTH_TOKEN = localStorage.getItem('btech_auth_token');
              console.log("Token loaded from local storage.");
         } else { 
-            // Token is missing or invalid
+            // Token is missing 
              showAlert("Authentication required. Please log in through the mobile app.", false);
-             // CRITICAL: Stop loading content if auth fails
              appContainer.innerHTML = '<p class="py-20 text-center text-red-600 font-bold">Access Denied. Please ensure you are logged in via the BTECH Plus App.</p>';
              return; 
         }
         
         // 2. Clear query parameters to clean up the URL for routing
-        // This is necessary so subsequent reloads don't try to parse the token again unnecessarily.
+        // This stops the token from showing up in history/logs after the initial transfer
         if (window.location.search) {
              window.history.replaceState(null, null, window.location.pathname + window.location.hash);
         }
 
         // 3. Initial Routing
         if (!window.location.hash || window.location.hash === '#') {
-            window.location.hash = '#tasks';
+            setRoute('tasks');
         } else {
             loadContent();
         }
@@ -149,7 +148,6 @@
 
     async function fetchData(endpoint, options = {}) {
         if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
-            // Check again inside fetchData, just in case
             showAlert('Authentication token missing. Cannot connect to API.', false);
             throw new Error('No valid token.');
         }
