@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTECH Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        body { font-family: sans-serif; background-color: #f8fafc; }
+        .card-shadow { box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08); }
+        .header-bg { background-color: #1e293b; }
+        .text-accent { color: #6366f1; }
+        .btn-action { transition: background-color 0.15s; }
+        
+        /* Custom scrollbar for pre-formatted content */
+        .scroll-json::-webkit-scrollbar { height: 8px; }
+        .scroll-json::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    
+    <!-- Admin Header -->
+    <header class="header-bg text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center">
+                <i data-lucide="shield-check" class="w-6 h-6 mr-3 text-green-400"></i>
+                BTECH <span class="font-normal ml-1 text-gray-400">Admin Panel</span>
+            </h1>
+            <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="text-gray-300 hover:text-white transition text-sm font-medium">
+                <i data-lucide="key" class="w-4 h-4 mr-1 inline-block"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Login Modal (Security Gate) -->
+        <div id="login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-xl card-shadow w-full max-w-md">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Admin Login</h2>
+                <input type="password" id="admin-key-input" placeholder="Enter Admin Secret Key" class="w-full p-3 border border-gray-300 rounded-lg focus:border-accent focus:ring-accent mb-4">
+                <button onclick="loginAdmin()" class="w-full bg-accent hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition">
+                    Access Dashboard
+                </button>
+                <p id="login-error" class="text-red-500 text-sm mt-3 hidden">Invalid Key. Please try again.</p>
+            </div>
+        </div>
+
+        <!-- Floating Alert -->
+        <div id="status-alert" class="hidden fixed top-4 right-4 z-50 p-4 rounded-lg text-white font-medium card-shadow alert-slide max-w-xs"></div>
+        
+        <div id="dashboard-content" class="space-y-12 hidden">
+
+            <!-- Title Section -->
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Review Queues</h2>
+                <p class="text-gray-500">Manual verification and task finalization required.</p>
+            </div>
+
+            <!-- Verification Queue -->
+            <section>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i data-lucide="scan-face" class="w-6 h-6 mr-2 text-red-500"></i>
+                    ID Verification Queue (<span id="verification-count">0</span>)
+                </h3>
+                <div id="verification-list" class="space-y-4">
+                    <!-- Verification cards injected here -->
+                </div>
+            </section>
+
+            <!-- Task Review Queue -->
+            <section>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i data-lucide="file-check" class="w-6 h-6 mr-2 text-green-500"></i>
+                    Task Submission Review (<span id="task-review-count">0</span>)
+                </h3>
+                <div id="task-review-list" class="space-y-4">
+                    <!-- Task submission cards injected here -->
+                </div>
+            </section>
+
+        </div>
+        
+    </main>
+
+<script>
+    // --- Configuration ---
+    const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
+    // NOTE: REPLACE THIS KEY WITH YOUR ACTUAL RENDER ADMIN SECRET KEY VALUE
+    const ADMIN_SECRET_KEY = "YOUR_ADMIN_SECRET_KEY_HERE"; 
+    
+    let IS_LOGGED_IN = false;
+    const loginModal = document.getElementById('login-modal');
+    const dashboardContent = document.getElementById('dashboard-content');
+    const statusAlert = document.getElementById('status-alert');
+
+    // --- Authentication and Utility ---
+
+    function showAlert(message, isSuccess = true) {
+        statusAlert.textContent = message;
+        statusAlert.className = `fixed top-4 right-4 z-50 p-4 rounded-lg font-medium card-shadow alert-slide max-w-xs ${isSuccess ? 'bg-green-500' : 'bg-red-500'}`;
+        setTimeout(() => {
+            statusAlert.classList.add('hidden');
+        }, 5000);
+    }
+
+    function loginAdmin() {
+        const input = document.getElementById('admin-key-input');
+        const error = document.getElementById('login-error');
+        
+        if (input.value === ADMIN_SECRET_KEY && ADMIN_SECRET_KEY !== "YOUR_ADMIN_SECRET_KEY_HERE") {
+            IS_LOGGED_IN = true;
+            loginModal.classList.add('hidden');
+            dashboardContent.classList.remove('hidden');
+            loadQueues();
+        } else {
+            error.classList.remove('hidden');
+            showAlert("Login failed. Check your key.", false);
+        }
+    }
+    
+    async function fetchAdminData(endpoint) {
+        if (!IS_LOGGED_IN) {
+            showAlert("Admin access required.", false);
+            return null;
+        }
+
+        try {
+            const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Admin-Secret': ADMIN_SECRET_KEY 
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                 showAlert(`API Error: ${data.error || 'Check server logs.'}`, false);
+                 return null;
+            }
+            return data;
+
+        } catch (error) {
+            showAlert(`Network Error: Cannot connect to backend.`, false);
+            console.error('Fetch error:', error);
+            return null;
+        }
+    }
+
+    // --- Rendering Functions ---
+
+    function renderEmptyState(containerId, message) {
+        document.getElementById(containerId).innerHTML = `
+            <div class="ultra-card p-6 text-center text-gray-500">
+                <i data-lucide="thumbs-up" class="w-8 h-8 mx-auto mb-2 text-green-500"></i>
+                <p class="text-sm">${message}</p>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
+    async function loadQueues() {
+        const data = await fetchAdminData('/admin/pending-submissions');
+        
+        if (!data) return;
+
+        // 1. Render Verification Queue
+        const verificationList = document.getElementById('verification-list');
+        document.getElementById('verification-count').textContent = data.verificationQueue.length;
+        verificationList.innerHTML = '';
+
+        if (data.verificationQueue.length === 0) {
+            renderEmptyState('verification-list', 'No new IDs awaiting review.');
+        } else {
+            data.verificationQueue.forEach(item => {
+                verificationList.innerHTML += createVerificationCard(item);
+            });
+        }
+
+        // 2. Render Task Review Queue
+        const taskReviewList = document.getElementById('task-review-list');
+        document.getElementById('task-review-count').textContent = data.taskReviewQueue.length;
+        taskReviewList.innerHTML = '';
+        
+        if (data.taskReviewQueue.length === 0) {
+            renderEmptyState('task-review-list', 'No tasks submitted for review.');
+        } else {
+            data.taskReviewQueue.forEach(item => {
+                taskReviewList.innerHTML += createTaskReviewCard(item);
+            });
+        }
+        
+        lucide.createIcons();
+    }
+
+    function createVerificationCard(item) {
+        const fileUrl = `${BACKEND_URL}/uploads/${item.document_path}`; // Note: This URL will only work briefly before Render deletes the file.
+        
+        return `
+            <div class="ultra-card p-4 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div class="flex-1 space-y-1 mb-4 md:mb-0">
+                    <p class="text-gray-800 font-bold">${item.email}</p>
+                    <p class="text-sm text-gray-600">User ID: ${item.user_id} | Document: ${item.document_type}</p>
+                    <a href="${fileUrl}" target="_blank" class="text-xs text-accent hover:underline">
+                        View Document (Temporary Link)
+                    </a>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="finalizeTask(${item.user_id}, 9999, 'APPROVED', true)" class="btn-action bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-xl text-sm">
+                        <i data-lucide="check" class="w-4 h-4 inline-block"></i> Approve
+                    </button>
+                    <button onclick="finalizeTask(${item.user_id}, 9999, 'REJECTED', true)" class="btn-action bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl text-sm">
+                        <i data-lucide="x" class="w-4 h-4 inline-block"></i> Reject
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    function createTaskReviewCard(item) {
+        const details = item.details;
+        
+        return `
+            <div class="ultra-card p-4 md:p-6 space-y-3">
+                <div class="flex justify-between items-center border-b pb-3 mb-3">
+                    <p class="text-gray-800 font-bold">${item.email} (Task ID: ${item.task_id})</p>
+                    <span class="text-xs text-gray-500">${new Date(item.submitted_at).toLocaleDateString()}</span>
+                </div>
+                
+                <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-6 text-sm">
+                    <div class="flex-1">
+                        <p class="font-semibold text-gray-700 mb-1">Common Password:</p>
+                        <span class="text-gray-800 font-mono">${details.commonPassword}</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-gray-700 mb-1">Accounts Submitted:</p>
+                        <span class="text-gray-800 font-mono">${details.accounts_count || 50}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t text-sm">
+                    <p class="font-semibold text-gray-700 mb-2">Submitted Email List:</p>
+                    <pre class="bg-gray-100 p-3 rounded-lg text-xs scroll-json overflow-x-auto">${details.accounts_list.substring(0, 300)}...</pre>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-3">
+                    <button onclick="finalizeTask(${item.user_id}, ${item.task_id}, 'APPROVED', false)" class="btn-action bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-xl text-sm">
+                        Approve Task
+                    </button>
+                    <button onclick="finalizeTask(${item.user_id}, ${item.task_id}, 'REJECTED', false)" class="btn-action bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl text-sm">
+                        Reject Task
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    async function finalizeTask(userId, taskId, status, isVerification) {
+        const endpoint = '/admin/finalize-task';
+        const body = { userId, taskId, status };
+
+        try {
+            const data = await fetchAdminData(endpoint, {
+                method: 'POST',
+                headers: { 'X-Admin-Secret': ADMIN_SECRET_KEY, 'Content-Type': 'application/json' },
+                body
+            });
+            
+            if (data && data.success) {
+                showAlert(`${isVerification ? 'Verification' : 'Task'} finalized as ${status}.`, true);
+                loadQueues(); // Reload the queues immediately
+            }
+
+        } catch (error) {
+            showAlert(`Finalization failed: ${error.message}`, false);
+        }
+    }
+
+
+    // --- Initialization ---
+    
+    // Check if user is logged in via the URL (on initial page load)
+    document.addEventListener('DOMContentLoaded', () => {
+        // If the key is already present in localStorage, try logging in instantly
+        if (localStorage.getItem('admin_key')) {
+             ADMIN_SECRET_KEY = localStorage.getItem('admin_key');
+             IS_LOGGED_IN = true;
+             loginModal.classList.add('hidden');
+             dashboardContent.classList.remove('hidden');
+             loadQueues();
+        } else {
+            // Show login modal otherwise
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+        lucide.createIcons();
+    });
+    
+    window.onload = lucide.createIcons;
+
+</script>
+</body>
+</html>
