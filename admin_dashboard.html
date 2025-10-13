@@ -24,7 +24,7 @@
 <body class="min-h-screen">
     
     <!-- Admin Header -->
-    <header class="header-bg text-white shadow-lg sticky top-0 z-10">
+    <header class="glass-header text-white shadow-lg sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold flex items-center">
                 <i data-lucide="shield-check" class="w-6 h-6 mr-3 text-green-400"></i>
@@ -90,8 +90,8 @@
 <script>
     // --- Configuration ---
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
-    // CRITICAL: REPLACE THIS VALUE with the key you set in your Render environment variables.
-    const ADMIN_SECRET_KEY = "YOUR_ADMIN_SECRET_KEY_HERE"; 
+    // CRITICAL FIX: The key must be hardcoded here to match the Render ENV variable exactly.
+    const ADMIN_SECRET_KEY = "s3cr3t-k3y-F0r-Adm1n-B7ECH-2025"; 
     const GEMINI_API_KEY = ""; // Injected by the platform
     
     let IS_LOGGED_IN = false;
@@ -113,7 +113,7 @@
         const input = document.getElementById('admin-key-input');
         const error = document.getElementById('login-error');
         
-        if (input.value === ADMIN_SECRET_KEY && ADMIN_SECRET_KEY !== "s3cr3t-k3y-F0r-Adm1n-B7ECH-2025") {
+        if (input.value === ADMIN_SECRET_KEY) {
             // Save key to memory/session for subsequent fetches
             sessionStorage.setItem('admin_key_token', input.value);
             IS_LOGGED_IN = true;
@@ -279,7 +279,7 @@
         const submissionId = item.id; 
 
         return `
-            <div class="ultra-card p-4 md:p-6 space-y-3">
+            <div class="ultra-card p-4 md:p-6 space-y-3" id="task-card-${submissionId}">
                 <div class="flex justify-between items-center border-b pb-3 mb-3">
                     <p class="text-gray-800 font-bold">${item.email} (Task ID: ${item.task_id})</p>
                     <span class="text-xs text-gray-500">${new Date(item.submitted_at).toLocaleDateString()}</span>
