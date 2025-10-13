@@ -109,6 +109,7 @@
         }
         
         // 2. Clear query parameters to clean up the URL for routing
+        // This is necessary so subsequent reloads don't try to parse the token again unnecessarily.
         if (window.location.search) {
              window.history.replaceState(null, null, window.location.pathname + window.location.hash);
         }
