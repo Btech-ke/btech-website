@@ -433,7 +433,7 @@
 
     // --- Core Initialization Logic ---
 
-    function initializeApp() {
+    async function initializeApp() {
         // 1. Get token from URL query parameters (passed from Android Kotlin code)
         const params = new URLSearchParams(window.location.search);
         const urlToken = params.get('token');
