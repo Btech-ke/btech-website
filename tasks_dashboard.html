@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BTECH Earning Network | Tasks</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         /* Custom Styles for Professional Aesthetic */
@@ -323,7 +321,6 @@
     <div class="animated-bg"></div>
     
     <div class="content-wrapper">
-        <!-- Mobile-Optimized Header -->
         <header class="glass-header sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-3">
                 <div class="flex justify-between items-center">
@@ -337,7 +334,6 @@
                         </div>
                     </div>
                     
-                    <!-- Desktop Nav -->
                     <nav class="hidden md:flex items-center space-x-6">
                         <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition">
                             Tasks
@@ -353,7 +349,6 @@
                         </button>
                     </nav>
 
-                    <!-- Mobile Menu Button -->
                     <button onclick="simulateLogout()" class="md:hidden p-2 rounded-xl bg-red-500 text-white">
                         <i data-lucide="log-out" class="w-5 h-5"></i>
                     </button>
@@ -362,7 +357,6 @@
         </header>
 
         <main class="max-w-7xl mx-auto px-4 py-6 pb-24 md:pb-8">
-            <!-- Floating Alert -->
             <div id="status-alert" class="hidden fixed top-20 right-4 left-4 md:left-auto md:right-4 z-50 max-w-md alert-slide" role="alert">
                 <div class="ultra-card p-4">
                     <div class="flex items-center space-x-3">
@@ -374,11 +368,9 @@
                 </div>
             </div>
 
-            <!-- Dynamic Content Container -->
             <div id="app-container"></div>
         </main>
 
-        <!-- Mobile Bottom Navigation -->
         <nav class="mobile-nav fixed bottom-0 left-0 right-0 z-40 md:hidden">
             <div class="flex justify-around items-center py-3 px-2">
                 <button onclick="setRoute('tasks')" class="nav-item flex flex-col items-center space-y-1 py-2 px-4 rounded-xl transition" id="nav-tasks">
@@ -397,7 +389,6 @@
         </nav>
     </div>
 
-    <!-- Enhanced Modal -->
     <div id="action-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex items-center justify-center z-50 p-4">
         <div class="ultra-card p-8 max-w-md w-full text-center fade-in-up">
             <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" id="modal-icon-bg">
@@ -415,7 +406,7 @@
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
     let AUTH_TOKEN; 
     let cachedTasks = [];
-    let userStats = { totalEarned: 0, tasksCompleted: 0, activeTasks: 0 };
+    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
 
     const appContainer = document.getElementById('app-container');
     const statusAlert = document.getElementById('status-alert');
@@ -485,12 +476,11 @@
     async function checkAuthToken() {
         // Use a simple, lightweight endpoint to test the validity of the current token
         try {
-            // We use the same fetch logic, which handles 401/403 errors internally
+            // We use a safe endpoint, fetchData handles 401/403 errors
             await fetchData('/earnings/summary', { method: 'GET' });
             return true; // Token is valid/working
         } catch (error) {
             // If fetchData throws (due to 401, 403, or network error), it already showed an alert.
-            // We just need to stop the rest of the application load by returning false.
             console.error("AUTH_VALIDATION_FAILED: Stopping content load.", error.message);
             // The Access Denied modal from initializeApp will be shown next.
             return false;
@@ -569,22 +559,19 @@
         const config = {
             method: options.method || 'GET',
             headers: headers,
-            ...options
+            // Only add body if it exists, prevents GET requests from erroring
+            ...(options.body && { body: JSON.stringify(options.body) }),
         };
-
-        if (options.body) {
-            config.body = JSON.stringify(options.body);
-        }
 
         try {
             const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
-            const data = await response.json();
+            const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
             
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
                     console.error('FETCH_DEBUG: 401/403 - Token rejected by server. Response:', JSON.stringify(data));
-                    // CRITICAL: Throw error to force reload in main init logic
-                    throw new Error("Token expired or invalid.");
+                    // CRITICAL: Throw error to be caught by checkAuthToken
+                    throw new Error("Token expired or invalid. Please re-login.");
                 }
                 throw new Error(data.error || `Error: ${response.status}`);
             }
@@ -601,13 +588,93 @@
             throw error;
         }
     }
+    
+    // --- NEW HELPER FUNCTION TO FETCH DAILY TASK ---
+    async function fetchDailyTask() {
+        try {
+            const data = await fetchData('/tasks/daily', { method: 'GET' });
+            return data.task;
+        } catch (error) {
+            console.error("Failed to fetch daily task:", error);
+            // Return null if the daily task route fails for any reason (e.g., today's task doesn't exist)
+            return null;
+        }
+    }
 
-    function renderTasksList(tasks) {
+    // --- MAIN RENDER TASKS FUNCTION (UPDATED) ---
+    function renderTasksList(tasks, dailyTask) {
         cachedTasks = tasks;
         
+        // 1. Daily Task Rendering
+        const dailyTaskHtml = dailyTask ? `
+            <div class="ultra-card p-4 md:p-6 mb-6 border-2 border-indigo-400 bg-indigo-50">
+                <h3 class="text-lg md:text-xl font-black text-indigo-700 mb-2 flex items-center space-x-2">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                    <span>Today's Microtask: ${dailyTask.title}</span>
+                </h3>
+                <p class="text-sm text-gray-700 mb-3">Category: ${dailyTask.category} | Payout: KES ${dailyTask.payout.toFixed(2)}</p>
+                
+                ${dailyTask.isCompleted ? `
+                    <button class="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 opacity-70" disabled>
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                        <span>COMPLETED TODAY</span>
+                    </button>
+                ` : `
+                    <button onclick="acceptTask(${dailyTask.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 ripple">
+                        <i data-lucide="play" class="w-5 h-5"></i>
+                        <span>Start Task</span>
+                    </button>
+                `}
+            </div>
+        ` : `
+             <div class="ultra-card p-4 md:p-6 mb-6 text-center text-gray-500">
+                <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
+                <p class="text-sm">No new microtasks available today. Check back tomorrow!</p>
+             </div>
+        `;
+
+
+        // 2. Main Tasks Rendering
+        const mainTasksHtml = tasks.map((task, i) => `
+            <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="category-icon">
+                        <i data-lucide="briefcase" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <span class="difficulty-${task.difficulty.toLowerCase()} text-white text-xs font-bold px-3 py-1 rounded-full">
+                        ${task.difficulty}
+                    </span>
+                </div>
+                
+                <h3 class="text-lg md:text-xl font-black text-gray-800 mb-3 leading-tight">${task.title}</h3>
+                
+                <div class="mb-4">
+                    <p class="text-3xl md:text-4xl font-black gradient-text mb-2">KES ${task.payment.toFixed(2)}</p>
+                    <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description}</p>
+                </div>
+                
+                <div class="space-y-2 mb-5 text-xs md:text-sm text-gray-600">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
+                        <span>${task.estimatedTime}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
+                        <span>Due: ${task.deadline}</span>
+                    </div>
+                </div>
+
+                <button onclick="acceptTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 md:py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i>
+                    <span>Accept Task</span>
+                </button>
+            </div>
+        `).join('');
+
+
+        // 3. Final Render
         appContainer.innerHTML = `
             <div class="fade-in-up">
-                <!-- Stats Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-6">
                     <div class="ultra-card p-4 md:p-6 stats-shine text-white">
                         <i data-lucide="dollar-sign" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
@@ -626,13 +693,13 @@
                     </div>
                 </div>
 
-                <!-- Header -->
-                <div class="mb-6">
-                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">Available Tasks</h2>
-                    <p class="text-gray-300 text-sm md:text-base">Choose your next earning opportunity</p>
-                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-2">Today's Micro Task</h2>
+                <p class="text-gray-300 text-sm md:text-base mb-6">A quick way to boost your balance daily.</p>
+                ${dailyTaskHtml}
                 
-                <!-- Filters -->
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-2 mt-8">Major Tasks Available</h2>
+                <p class="text-gray-300 text-sm md:text-base mb-6">High-value, long-term earning opportunities.</p>
+
                 <div class="ultra-card p-4 md:p-6 mb-6">
                     <div class="flex flex-col md:flex-row md:justify-between md:items-center space-y-3 md:space-y-0">
                         <div class="flex items-center space-x-2">
@@ -655,63 +722,50 @@
                     </div>
                 </div>
 
-                <!-- Tasks Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    ${tasks.map((task, i) => `
-                        <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="category-icon">
-                                    <i data-lucide="briefcase" class="w-6 h-6 text-indigo-600"></i>
-                                </div>
-                                <span class="difficulty-${task.difficulty.toLowerCase()} text-white text-xs font-bold px-3 py-1 rounded-full">
-                                    ${task.difficulty}
-                                </span>
-                            </div>
-                            
-                            <h3 class="text-lg md:text-xl font-black text-gray-800 mb-3 leading-tight">${task.title}</h3>
-                            
-                            <div class="mb-4">
-                                <p class="text-3xl md:text-4xl font-black gradient-text mb-2">KES ${task.payment.toFixed(2)}</p>
-                                <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description}</p>
-                            </div>
-                            
-                            <div class="space-y-2 mb-5 text-xs md:text-sm text-gray-600">
-                                <div class="flex items-center space-x-2">
-                                    <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
-                                    <span>${task.estimatedTime}</span>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
-                                    <span>Due: ${task.deadline}</span>
-                                </div>
-                            </div>
-
-                            <button onclick="acceptTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 md:py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
-                                <i data-lucide="play-circle" class="w-5 h-5"></i>
-                                <span>Accept Task</span>
-                            </button>
+                    ${mainTasksHtml.length > 0 ? mainTasksHtml : `
+                        <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
+                             <i data-lucide="inbox" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
+                             <h3 class="text-xl font-black text-gray-800">No Major Tasks Right Now</h3>
+                             <p class="text-gray-600 text-sm mt-2">All major tasks are currently assigned or unavailable.</p>
                         </div>
-                    `).join('')}
+                    `}
                 </div>
             </div>
         `;
         lucide.createIcons();
     }
+    
+    // ... (rest of the action and rendering functions remain the same) ...
 
     function renderTaskDetail(taskId) {
-        const task = cachedTasks.find(t => t.id == taskId);
+        // Find the task either in cached major tasks OR assume it's the daily task if the ID matches.
+        let task = cachedTasks.find(t => t.id == taskId);
         
+        // If not found in major tasks, check if it was the daily task.
+        if (!task && localStorage.getItem('dailyTask')) {
+             const dailyTask = JSON.parse(localStorage.getItem('dailyTask'));
+             if (dailyTask && dailyTask.id == taskId) {
+                 task = {
+                     ...dailyTask,
+                     description: "This is a quick microtask provided for today only. Completion is immediate upon submission.",
+                     estimatedTime: "2 minutes",
+                     deadline: "Today"
+                 };
+             }
+        }
+
         if (!task) {
              appContainer.innerHTML = `
                  <div class="ultra-card p-8 md:p-12 text-center">
-                    <div class="empty-state-icon mb-6">
-                        <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
-                    </div>
-                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
-                    <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
-                    <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
-                        Back to Tasks
-                    </button>
+                     <div class="empty-state-icon mb-6">
+                         <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
+                     </div>
+                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
+                     <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
+                     <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                         Back to Tasks
+                     </button>
                  </div>
              `;
              lucide.createIcons();
@@ -719,6 +773,7 @@
         }
 
         const isGmailTask = taskId == 1000;
+        const isDailyTask = task.category === 'Survey'; // Simple check based on your mock data
         
         appContainer.innerHTML = `
             <div class="fade-in-up">
@@ -733,7 +788,6 @@
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                    <!-- Task Info -->
                     <div class="lg:col-span-1 ultra-card p-5 md:p-6">
                         <h3 class="text-lg md:text-xl font-black gradient-text mb-4 flex items-center">
                             <i data-lucide="info" class="w-5 h-5 mr-2"></i>
@@ -742,7 +796,7 @@
                         
                         <div class="mb-6 p-4 md:p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
                             <p class="text-xs md:text-sm text-gray-600 mb-1">Your Reward</p>
-                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${task.payment.toFixed(2)}</p>
+                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${task.payment ? task.payment.toFixed(2) : (task.payout ? task.payout.toFixed(2) : '0.00')}</p>
                         </div>
                         
                         <p class="text-sm md:text-base text-gray-600 mb-6 leading-relaxed">${task.description}</p>
@@ -754,16 +808,15 @@
                             </div>
                             <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
                                 <i data-lucide="clock" class="w-4 h-4 text-indigo-600"></i>
-                                <span>${task.estimatedTime}</span>
+                                <span>${task.estimatedTime || 'N/A'}</span>
                             </div>
                             <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
                                 <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
-                                <span>${task.deadline}</span>
+                                <span>${task.deadline || 'N/A'}</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Submission Form -->
                     <div class="lg:col-span-2 ultra-card p-5 md:p-8">
                         ${isGmailTask ? `
                             <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
@@ -789,10 +842,23 @@
                                 <i data-lucide="send" class="w-5 h-5"></i>
                                 <span>Submit Task</span>
                             </button>
+                        ` : isDailyTask ? `
+                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                                <i data-lucide="help-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                                Start Your Daily Task
+                            </h3>
+                            <div class="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
+                                <i data-lucide="zap" class="w-10 h-10 text-indigo-600 mx-auto mb-3"></i>
+                                <p class="text-gray-600 text-base">This is a quick, internal survey/trivia task.</p>
+                                <p class="text-gray-600 text-sm mt-1">Completion is instant once you finish the external form.</p>
+                                <button onclick="showAlert('Launching Daily Task Interface... (Simulated)')" class="btn-premium mt-4 text-white font-bold py-3 px-8 rounded-xl ripple">
+                                    Go to Survey
+                                </button>
+                            </div>
                         ` : `
                             <div class="text-center py-12">
                                 <i data-lucide="info" class="w-16 h-16 text-indigo-600 mx-auto mb-4"></i>
-                                <p class="text-gray-600">Different submission method required.</p>
+                                <p class="text-gray-600">No specific submission form configured for this task ID.</p>
                             </div>
                         `}
                     </div>
@@ -838,6 +904,7 @@
             
             if (data.success) {
                 showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
+                // Reload data and navigate to My Tasks/Detail page
                 setTimeout(() => {
                     closeModal();
                     setRoute(`tasks/${taskId}`);
@@ -890,7 +957,7 @@
         }
     }
     
-    function renderMyTasks(tasks) {
+    async function renderMyTasks(tasks) {
         appContainer.innerHTML = `
             <div class="fade-in-up">
                 <div class="mb-6">
@@ -975,7 +1042,10 @@
         lucide.createIcons();
     }
 
-    function renderEarnings() {
+    async function renderEarnings() {
+        // Re-fetch stats to ensure they are current
+        await fetchUserStats(); 
+
         appContainer.innerHTML = `
             <div class="fade-in-up">
                 <div class="mb-6">
@@ -1074,11 +1144,9 @@
         }
     }
 
+    // --- MAIN LOAD CONTENT FUNCTION (UPDATED) ---
     async function loadContent() {
-        // Fetch stats first, then render content
-        await fetchUserStats();
-
-        const hash = window.location.hash.slice(1);
+        // Show loading state first
         appContainer.innerHTML = `
             <div class="flex items-center justify-center py-20">
                 <div class="text-center">
@@ -1087,27 +1155,44 @@
                 </div>
             </div>
         `;
-        lucide.createIcons(); 
+        lucide.createIcons();
 
+        // Fetch stats and all task data simultaneously
+        const [tasksData, dailyTaskData] = await Promise.all([
+            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
+            fetchDailyTask(),
+            fetchUserStats(),
+        ]);
+        
+        // CRITICAL: Cache the daily task for detail view.
+        if (dailyTaskData) {
+            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
+        } else {
+             localStorage.removeItem('dailyTask');
+        }
+
+
+        const hash = window.location.hash.slice(1);
+        
         if (hash === 'tasks' || hash === '') {
-            try {
-                const data = await fetchData('/tasks/available');
-                renderTasksList(data.tasks);
-            } catch (error) {
-                appContainer.innerHTML = `
-                    <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                        <div class="empty-state-icon mb-6">
-                            <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                        </div>
-                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
-                        <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
-                        <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                            Retry
-                        </button>
-                    </div>
-                `;
-                lucide.createIcons();
-            }
+             if (tasksData) {
+                 renderTasksList(tasksData.tasks, dailyTaskData);
+             } else {
+                 // Handle major task load failure
+                 appContainer.innerHTML = `
+                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                         <div class="empty-state-icon mb-6">
+                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                         </div>
+                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
+                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
+                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                             Retry
+                         </button>
+                     </div>
+                 `;
+                 lucide.createIcons();
+             }
         } else if (hash === 'my-tasks') {
             const data = await fetchData('/tasks/my-tasks');
             if (data) renderMyTasks(data.tasks);
@@ -1115,9 +1200,9 @@
             renderEarnings();
         } else if (hash.startsWith('tasks/')) {
             const taskId = hash.split('/')[1];
-            if (cachedTasks.length === 0) {
-                 const data = await fetchData('/tasks/available');
-                 cachedTasks = data.tasks;
+            // Ensure cachedTasks has the data before rendering detail
+            if (cachedTasks.length === 0 && tasksData) {
+                cachedTasks = tasksData.tasks;
             }
             renderTaskDetail(taskId);
         }
