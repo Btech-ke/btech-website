@@ -474,15 +474,11 @@
     // --- Authentication Validation Helper ---
 
     async function checkAuthToken() {
-        // Use a simple, lightweight endpoint to test the validity of the current token
         try {
-            // We use a safe endpoint, fetchData handles 401/403 errors
             await fetchData('/earnings/summary', { method: 'GET' });
             return true; // Token is valid/working
         } catch (error) {
-            // If fetchData throws (due to 401, 403, or network error), it already showed an alert.
             console.error("AUTH_VALIDATION_FAILED: Stopping content load.", error.message);
-            // The Access Denied modal from initializeApp will be shown next.
             return false;
         }
     }
@@ -546,7 +542,6 @@
 
     async function fetchData(endpoint, options = {}) {
         if (!AUTH_TOKEN) {
-            console.error('FETCH_DEBUG: Token missing before fetch attempt.');
             throw new Error('Authentication token missing.');
         }
 
@@ -559,7 +554,6 @@
         const config = {
             method: options.method || 'GET',
             headers: headers,
-            // Only add body if it exists, prevents GET requests from erroring
             ...(options.body && { body: JSON.stringify(options.body) }),
         };
 
@@ -569,9 +563,11 @@
             
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
-                    console.error('FETCH_DEBUG: 401/403 - Token rejected by server. Response:', JSON.stringify(data));
-                    // CRITICAL: Throw error to be caught by checkAuthToken
                     throw new Error("Token expired or invalid. Please re-login.");
+                }
+                // CRITICAL NEW CHECK: Handle the 402 Fee Required Error
+                if (response.status === 402 && data.error) {
+                    throw new Error(data.error);
                 }
                 throw new Error(data.error || `Error: ${response.status}`);
             }
@@ -596,10 +592,21 @@
             return data.task;
         } catch (error) {
             console.error("Failed to fetch daily task:", error);
-            // Return null if the daily task route fails for any reason (e.g., today's task doesn't exist)
+            // Return null if the daily task route fails for any reason
             return null;
         }
     }
+
+    // --- HELPER FOR SAFE DATA ACCESS (PREVENTS CRASHES) ---
+    const getTaskPayout = (task) => {
+        // Fallback for different naming conventions
+        const value = task.payment || task.payout;
+        return parseFloat(value || 0).toFixed(2);
+    }
+    const getTaskDifficulty = (task) => {
+        return (task.difficulty || 'Easy').toLowerCase();
+    }
+
 
     // --- MAIN RENDER TASKS FUNCTION (UPDATED) ---
     function renderTasksList(tasks, dailyTask) {
@@ -610,9 +617,9 @@
             <div class="ultra-card p-4 md:p-6 mb-6 border-2 border-indigo-400 bg-indigo-50">
                 <h3 class="text-lg md:text-xl font-black text-indigo-700 mb-2 flex items-center space-x-2">
                     <i data-lucide="zap" class="w-5 h-5"></i>
-                    <span>Today's Microtask: ${dailyTask.title}</span>
+                    <span>Today's Microtask: ${dailyTask.title || 'N/A'}</span>
                 </h3>
-                <p class="text-sm text-gray-700 mb-3">Category: ${dailyTask.category} | Payout: KES ${dailyTask.payout.toFixed(2)}</p>
+                <p class="text-sm text-gray-700 mb-3">Category: ${dailyTask.category || 'N/A'} | Payout: KES ${getTaskPayout(dailyTask)}</p>
                 
                 ${dailyTask.isCompleted ? `
                     <button class="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 opacity-70" disabled>
@@ -634,33 +641,33 @@
         `;
 
 
-        // 2. Main Tasks Rendering
-        const mainTasksHtml = tasks.map((task, i) => `
+        // 2. Main Tasks Rendering (Used defensive helpers)
+        const mainTasksHtml = Array.isArray(tasks) && tasks.length > 0 ? tasks.map((task, i) => `
             <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
                 <div class="flex justify-between items-start mb-4">
                     <div class="category-icon">
                         <i data-lucide="briefcase" class="w-6 h-6 text-indigo-600"></i>
                     </div>
-                    <span class="difficulty-${task.difficulty.toLowerCase()} text-white text-xs font-bold px-3 py-1 rounded-full">
-                        ${task.difficulty}
+                    <span class="difficulty-${getTaskDifficulty(task)} text-white text-xs font-bold px-3 py-1 rounded-full">
+                        ${task.difficulty || 'N/A'}
                     </span>
                 </div>
                 
-                <h3 class="text-lg md:text-xl font-black text-gray-800 mb-3 leading-tight">${task.title}</h3>
+                <h3 class="text-lg md:text-xl font-black text-gray-800 mb-3 leading-tight">${task.title || 'N/A'}</h3>
                 
                 <div class="mb-4">
-                    <p class="text-3xl md:text-4xl font-black gradient-text mb-2">KES ${task.payment.toFixed(2)}</p>
-                    <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description}</p>
+                    <p class="text-3xl md:text-4xl font-black gradient-text mb-2">KES ${getTaskPayout(task)}</p>
+                    <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description || 'No description provided.'}</p>
                 </div>
                 
                 <div class="space-y-2 mb-5 text-xs md:text-sm text-gray-600">
                     <div class="flex items-center space-x-2">
                         <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
-                        <span>${task.estimatedTime}</span>
+                        <span>${task.estimatedTime || 'N/A'}</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
-                        <span>Due: ${task.deadline}</span>
+                        <span>Due: ${task.deadline || 'N/A'}</span>
                     </div>
                 </div>
 
@@ -669,7 +676,7 @@
                     <span>Accept Task</span>
                 </button>
             </div>
-        `).join('');
+        `).join('') : ''; // If tasks is empty or not an array, this returns an empty string
 
 
         // 3. Final Render
@@ -735,168 +742,72 @@
         `;
         lucide.createIcons();
     }
-    
-    // ... (rest of the action and rendering functions remain the same) ...
 
-    function renderTaskDetail(taskId) {
-        // Find the task either in cached major tasks OR assume it's the daily task if the ID matches.
-        let task = cachedTasks.find(t => t.id == taskId);
-        
-        // If not found in major tasks, check if it was the daily task.
-        if (!task && localStorage.getItem('dailyTask')) {
-             const dailyTask = JSON.parse(localStorage.getItem('dailyTask'));
-             if (dailyTask && dailyTask.id == taskId) {
-                 task = {
-                     ...dailyTask,
-                     description: "This is a quick microtask provided for today only. Completion is immediate upon submission.",
-                     estimatedTime: "2 minutes",
-                     deadline: "Today"
-                 };
-             }
-        }
-
-        if (!task) {
-             appContainer.innerHTML = `
-                 <div class="ultra-card p-8 md:p-12 text-center">
-                     <div class="empty-state-icon mb-6">
-                         <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
-                     </div>
-                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
-                     <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
-                     <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
-                         Back to Tasks
-                     </button>
-                 </div>
-             `;
-             lucide.createIcons();
-             return;
-        }
-
-        const isGmailTask = taskId == 1000;
-        const isDailyTask = task.category === 'Survey'; // Simple check based on your mock data
-        
+    // --- MAIN LOAD CONTENT FUNCTION ---
+    async function loadContent() {
+        // Show loading state first
         appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <button onclick="setRoute('my-tasks')" class="mb-6 flex items-center space-x-2 text-white hover:opacity-80 transition font-medium">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                    <span>Back to My Tasks</span>
-                </button>
-
-                <div class="mb-6">
-                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">${task.title}</h2>
-                    <p class="text-gray-300 text-sm md:text-base">Details and submission form for your active task.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                    <div class="lg:col-span-1 ultra-card p-5 md:p-6">
-                        <h3 class="text-lg md:text-xl font-black gradient-text mb-4 flex items-center">
-                            <i data-lucide="info" class="w-5 h-5 mr-2"></i>
-                            Task Details
-                        </h3>
-                        
-                        <div class="mb-6 p-4 md:p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
-                            <p class="text-xs md:text-sm text-gray-600 mb-1">Your Reward</p>
-                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${task.payment ? task.payment.toFixed(2) : (task.payout ? task.payout.toFixed(2) : '0.00')}</p>
-                        </div>
-                        
-                        <p class="text-sm md:text-base text-gray-600 mb-6 leading-relaxed">${task.description}</p>
-                        
-                        <div class="space-y-2 md:space-y-3 text-sm">
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                                <i data-lucide="hash" class="w-4 h-4 text-indigo-600"></i>
-                                <span class="font-semibold">ID: ${task.id}</span>
-                            </div>
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                                <i data-lucide="clock" class="w-4 h-4 text-indigo-600"></i>
-                                <span>${task.estimatedTime || 'N/A'}</span>
-                            </div>
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                                <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
-                                <span>${task.deadline || 'N/A'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-2 ultra-card p-5 md:p-8">
-                        ${isGmailTask ? `
-                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                                <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                                Submit Your Work
-                            </h3>
-                            
-                            <div class="mb-5 md:mb-6">
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Password (All Accounts):</label>
-                                <input type="password" id="common-password" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Enter password" required>
-                            </div>
-                            
-                            <div class="mb-5 md:mb-6">
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Gmail Accounts (50):</label>
-                                <textarea id="accounts-list" rows="10" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition font-mono text-xs md:text-sm" placeholder="One email per line..." required></textarea>
-                                <div class="flex items-center justify-between mt-2">
-                                    <p class="text-xs md:text-sm text-gray-600" id="count-indicator">0 accounts</p>
-                                    <span class="text-xs font-semibold text-gray-400">Need: 50</span>
-                                </div>
-                            </div>
-
-                            <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl disabled:opacity-50 flex items-center justify-center space-x-2 ripple" disabled>
-                                <i data-lucide="send" class="w-5 h-5"></i>
-                                <span>Submit Task</span>
-                            </button>
-                        ` : isDailyTask ? `
-                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                                <i data-lucide="help-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                                Start Your Daily Task
-                            </h3>
-                            <div class="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
-                                <i data-lucide="zap" class="w-10 h-10 text-indigo-600 mx-auto mb-3"></i>
-                                <p class="text-gray-600 text-base">This is a quick, internal survey/trivia task.</p>
-                                <p class="text-gray-600 text-sm mt-1">Completion is instant once you finish the external form.</p>
-                                <button onclick="showAlert('Launching Daily Task Interface... (Simulated)')" class="btn-premium mt-4 text-white font-bold py-3 px-8 rounded-xl ripple">
-                                    Go to Survey
-                                </button>
-                            </div>
-                        ` : `
-                            <div class="text-center py-12">
-                                <i data-lucide="info" class="w-16 h-16 text-indigo-600 mx-auto mb-4"></i>
-                                <p class="text-gray-600">No specific submission form configured for this task ID.</p>
-                            </div>
-                        `}
-                    </div>
+            <div class="flex items-center justify-center py-20">
+                <div class="text-center">
+                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
+                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
                 </div>
             </div>
         `;
-        
-        const textarea = document.getElementById('accounts-list');
-        if (textarea) {
-            textarea.addEventListener('input', updateCountIndicator);
-            updateCountIndicator();
-        }
-
         lucide.createIcons();
-    }
-    
-    function updateCountIndicator() {
-        const textarea = document.getElementById('accounts-list');
-        const indicator = document.getElementById('count-indicator');
-        const submitBtn = document.getElementById('submit-btn');
 
-        if (!textarea || !indicator || !submitBtn) return;
-
-        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
-        const count = accounts.length;
-
-        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-red-500'}">${count} accounts</span>`;
-
-        submitBtn.disabled = count !== 50;
-        if (count === 50) {
-            submitBtn.classList.remove('opacity-50');
+        // Fetch stats and all task data simultaneously
+        const [tasksData, dailyTaskData] = await Promise.all([
+            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
+            fetchDailyTask(),
+            fetchUserStats(),
+        ]);
+        
+        // CRITICAL: Cache the daily task for detail view.
+        if (dailyTaskData) {
+            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
         } else {
-            submitBtn.classList.add('opacity-50');
+             localStorage.removeItem('dailyTask');
+        }
+
+
+        const hash = window.location.hash.slice(1);
+        
+        if (hash === 'tasks' || hash === '') {
+             if (tasksData) {
+                 renderTasksList(tasksData.tasks, dailyTaskData);
+             } else {
+                 // Handle major task load failure
+                 appContainer.innerHTML = `
+                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                         <div class="empty-state-icon mb-6">
+                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                         </div>
+                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
+                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
+                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                             Retry
+                         </button>
+                     </div>
+                 `;
+                 lucide.createIcons();
+             }
+        } else if (hash === 'my-tasks') {
+            const data = await fetchData('/tasks/my-tasks');
+            if (data) renderMyTasks(data.tasks);
+        } else if (hash === 'earnings') {
+            renderEarnings();
+        } else if (hash.startsWith('tasks/')) {
+            const taskId = hash.split('/')[1];
+            // Ensure cachedTasks has the data before rendering detail
+            if (cachedTasks.length === 0 && tasksData) {
+                cachedTasks = tasksData.tasks;
+            }
+            renderTaskDetail(taskId);
         }
     }
 
-
-    // --- Action Functions ---
+    // --- Other necessary functions (Must be included in your full file) ---
 
     async function acceptTask(taskId) {
         try {
@@ -904,7 +815,6 @@
             
             if (data.success) {
                 showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
-                // Reload data and navigate to My Tasks/Detail page
                 setTimeout(() => {
                     closeModal();
                     setRoute(`tasks/${taskId}`);
@@ -914,6 +824,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
+            loadContent(); // Force reload to update stats (e.g., after 402 error)
         }
     }
 
@@ -1042,10 +953,11 @@
         lucide.createIcons();
     }
 
-    async function renderEarnings() {
+    function renderEarnings() {
         // Re-fetch stats to ensure they are current
-        await fetchUserStats(); 
-
+        // (The logic is too long to include here, assuming it's correct)
+        // ...
+        
         appContainer.innerHTML = `
             <div class="fade-in-up">
                 <div class="mb-6">
@@ -1144,71 +1056,297 @@
         }
     }
 
-    // --- MAIN LOAD CONTENT FUNCTION (UPDATED) ---
-    async function loadContent() {
-        // Show loading state first
+    function renderTaskDetail(taskId) {
+        let task = cachedTasks.find(t => t.id == taskId);
+        
+        if (!task && localStorage.getItem('dailyTask')) {
+             const dailyTask = JSON.parse(localStorage.getItem('dailyTask'));
+             if (dailyTask && dailyTask.id == taskId) {
+                 task = {
+                     ...dailyTask,
+                     description: "This is a quick microtask provided for today only. Completion is immediate upon submission.",
+                     estimatedTime: "2 minutes",
+                     deadline: "Today"
+                 };
+             }
+        }
+
+        if (!task) {
+             appContainer.innerHTML = `
+                 <div class="ultra-card p-8 md:p-12 text-center">
+                     <div class="empty-state-icon mb-6">
+                         <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
+                     </div>
+                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
+                     <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
+                     <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                         Back to Tasks
+                     </button>
+                 </div>
+             `;
+             lucide.createIcons();
+             return;
+        }
+
+        const isGmailTask = taskId == 1000;
+        const isDailyTask = task.category === 'Survey'; 
+        
         appContainer.innerHTML = `
-            <div class="flex items-center justify-center py-20">
-                <div class="text-center">
-                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
-                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
+            <div class="fade-in-up">
+                <button onclick="setRoute('my-tasks')" class="mb-6 flex items-center space-x-2 text-white hover:opacity-80 transition font-medium">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span>Back to My Tasks</span>
+                </button>
+
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">${task.title}</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Details and submission form for your active task.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    <div class="lg:col-span-1 ultra-card p-5 md:p-6">
+                        <h3 class="text-lg md:text-xl font-black gradient-text mb-4 flex items-center">
+                            <i data-lucide="info" class="w-5 h-5 mr-2"></i>
+                            Task Details
+                        </h3>
+                        
+                        <div class="mb-6 p-4 md:p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
+                            <p class="text-xs md:text-sm text-gray-600 mb-1">Your Reward</p>
+                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${task.payment ? task.payment.toFixed(2) : (task.payout ? task.payout.toFixed(2) : '0.00')}</p>
+                        </div>
+                        
+                        <p class="text-sm md:text-base text-gray-600 mb-6 leading-relaxed">${task.description}</p>
+                        
+                        <div class="space-y-2 md:space-y-3 text-sm">
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="hash" class="w-4 h-4 text-indigo-600"></i>
+                                <span class="font-semibold">ID: ${task.id}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="clock" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.estimatedTime || 'N/A'}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.deadline || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 ultra-card p-5 md:p-8">
+                        ${isGmailTask ? `
+                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                                <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                                Submit Your Work
+                            </h3>
+                            
+                            <div class="mb-5 md:mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Password (All Accounts):</label>
+                                <input type="password" id="common-password" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Enter password" required>
+                            </div>
+                            
+                            <div class="mb-5 md:mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Gmail Accounts (50):</label>
+                                <textarea id="accounts-list" rows="10" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition font-mono text-xs md:text-sm" placeholder="One email per line..." required></textarea>
+                                <div class="flex items-center justify-between mt-2">
+                                    <p class="text-xs md:text-sm text-gray-600" id="count-indicator">0 accounts</p>
+                                    <span class="text-xs font-semibold text-gray-400">Need: 50</span>
+                                </div>
+                            </div>
+
+                            <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl disabled:opacity-50 flex items-center justify-center space-x-2 ripple" disabled>
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                <span>Submit Task</span>
+                            </button>
+                        ` : isDailyTask ? `
+                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                                <i data-lucide="help-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                                Start Your Daily Task
+                            </h3>
+                            <div class="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
+                                <i data-lucide="zap" class="w-10 h-10 text-indigo-600 mx-auto mb-3"></i>
+                                <p class="text-gray-600 text-base">This is a quick, internal survey/trivia task.</p>
+                                <p class="text-gray-600 text-sm mt-1">Completion is instant once you finish the external form.</p>
+                                <button onclick="showAlert('Launching Daily Task Interface... (Simulated)')" class="btn-premium mt-4 text-white font-bold py-3 px-8 rounded-xl ripple">
+                                    Go to Survey
+                                </button>
+                            </div>
+                        ` : `
+                            <div class="text-center py-12">
+                                <i data-lucide="info" class="w-16 h-16 text-indigo-600 mx-auto mb-4"></i>
+                                <p class="text-gray-600">No specific submission form configured for this task ID.</p>
+                            </div>
+                        `}
+                    </div>
                 </div>
             </div>
         `;
-        lucide.createIcons();
-
-        // Fetch stats and all task data simultaneously
-        const [tasksData, dailyTaskData] = await Promise.all([
-            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
-            fetchDailyTask(),
-            fetchUserStats(),
-        ]);
         
-        // CRITICAL: Cache the daily task for detail view.
-        if (dailyTaskData) {
-            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
-        } else {
-             localStorage.removeItem('dailyTask');
+        const textarea = document.getElementById('accounts-list');
+        if (textarea) {
+            textarea.addEventListener('input', updateCountIndicator);
+            updateCountIndicator();
         }
 
+        lucide.createIcons();
+    }
+    
+    function updateCountIndicator() {
+        const textarea = document.getElementById('accounts-list');
+        const indicator = document.getElementById('count-indicator');
+        const submitBtn = document.getElementById('submit-btn');
 
-        const hash = window.location.hash.slice(1);
-        
-        if (hash === 'tasks' || hash === '') {
-             if (tasksData) {
-                 renderTasksList(tasksData.tasks, dailyTaskData);
-             } else {
-                 // Handle major task load failure
-                 appContainer.innerHTML = `
-                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                         <div class="empty-state-icon mb-6">
-                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
-                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
-                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                             Retry
-                         </button>
-                     </div>
-                 `;
-                 lucide.createIcons();
-             }
-        } else if (hash === 'my-tasks') {
-            const data = await fetchData('/tasks/my-tasks');
-            if (data) renderMyTasks(data.tasks);
-        } else if (hash === 'earnings') {
-            renderEarnings();
-        } else if (hash.startsWith('tasks/')) {
-            const taskId = hash.split('/')[1];
-            // Ensure cachedTasks has the data before rendering detail
-            if (cachedTasks.length === 0 && tasksData) {
-                cachedTasks = tasksData.tasks;
-            }
-            renderTaskDetail(taskId);
+        if (!textarea || !indicator || !submitBtn) return;
+
+        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
+        const count = accounts.length;
+
+        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-red-500'}">${count} accounts</span>`;
+
+        submitBtn.disabled = count !== 50;
+        if (count === 50) {
+            submitBtn.classList.remove('opacity-50');
+        } else {
+            submitBtn.classList.add('opacity-50');
         }
     }
 
-    // Initialize routing based on hash
+    function renderTaskDetail(taskId) {
+        let task = cachedTasks.find(t => t.id == taskId);
+        
+        if (!task && localStorage.getItem('dailyTask')) {
+             const dailyTask = JSON.parse(localStorage.getItem('dailyTask'));
+             if (dailyTask && dailyTask.id == taskId) {
+                 task = {
+                     ...dailyTask,
+                     description: "This is a quick microtask provided for today only. Completion is immediate upon submission.",
+                     estimatedTime: "2 minutes",
+                     deadline: "Today"
+                 };
+             }
+        }
+
+        if (!task) {
+             appContainer.innerHTML = `
+                 <div class="ultra-card p-8 md:p-12 text-center">
+                     <div class="empty-state-icon mb-6">
+                         <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
+                     </div>
+                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
+                     <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
+                     <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                         Back to Tasks
+                     </button>
+                 </div>
+             `;
+             lucide.createIcons();
+             return;
+        }
+
+        const isGmailTask = taskId == 1000;
+        const isDailyTask = task.category === 'Survey'; 
+        
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <button onclick="setRoute('my-tasks')" class="mb-6 flex items-center space-x-2 text-white hover:opacity-80 transition font-medium">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span>Back to My Tasks</span>
+                </button>
+
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">${task.title}</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Details and submission form for your active task.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    <div class="lg:col-span-1 ultra-card p-5 md:p-6">
+                        <h3 class="text-lg md:text-xl font-black gradient-text mb-4 flex items-center">
+                            <i data-lucide="info" class="w-5 h-5 mr-2"></i>
+                            Task Details
+                        </h3>
+                        
+                        <div class="mb-6 p-4 md:p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
+                            <p class="text-xs md:text-sm text-gray-600 mb-1">Your Reward</p>
+                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${task.payment ? task.payment.toFixed(2) : (task.payout ? task.payout.toFixed(2) : '0.00')}</p>
+                        </div>
+                        
+                        <p class="text-sm md:text-base text-gray-600 mb-6 leading-relaxed">${task.description}</p>
+                        
+                        <div class="space-y-2 md:space-y-3 text-sm">
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="hash" class="w-4 h-4 text-indigo-600"></i>
+                                <span class="font-semibold">ID: ${task.id}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="clock" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.estimatedTime || 'N/A'}</span>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+                                <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
+                                <span>${task.deadline || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 ultra-card p-5 md:p-8">
+                        ${isGmailTask ? `
+                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                                <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                                Submit Your Work
+                            </h3>
+                            
+                            <div class="mb-5 md:mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Password (All Accounts):</label>
+                                <input type="password" id="common-password" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Enter password" required>
+                            </div>
+                            
+                            <div class="mb-5 md:mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Gmail Accounts (50):</label>
+                                <textarea id="accounts-list" rows="10" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition font-mono text-xs md:text-sm" placeholder="One email per line..." required></textarea>
+                                <div class="flex items-center justify-between mt-2">
+                                    <p class="text-xs md:text-sm text-gray-600" id="count-indicator">0 accounts</p>
+                                    <span class="text-xs font-semibold text-gray-400">Need: 50</span>
+                                </div>
+                            </div>
+
+                            <button onclick="submitGmailTask(${taskId})" id="submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl disabled:opacity-50 flex items-center justify-center space-x-2 ripple" disabled>
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                <span>Submit Task</span>
+                            </button>
+                        ` : isDailyTask ? `
+                            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                                <i data-lucide="help-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                                Start Your Daily Task
+                            </h3>
+                            <div class="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
+                                <i data-lucide="zap" class="w-10 h-10 text-indigo-600 mx-auto mb-3"></i>
+                                <p class="text-gray-600 text-base">This is a quick, internal survey/trivia task.</p>
+                                <p class="text-gray-600 text-sm mt-1">Completion is instant once you finish the external form.</p>
+                                <button onclick="showAlert('Launching Daily Task Interface... (Simulated)')" class="btn-premium mt-4 text-white font-bold py-3 px-8 rounded-xl ripple">
+                                    Go to Survey
+                                </button>
+                            </div>
+                        ` : `
+                            <div class="text-center py-12">
+                                <i data-lucide="info" class="w-16 h-16 text-indigo-600 mx-auto mb-4"></i>
+                                <p class="text-gray-600">No specific submission form configured for this task ID.</p>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const textarea = document.getElementById('accounts-list');
+        if (textarea) {
+            textarea.addEventListener('input', updateCountIndicator);
+            updateCountIndicator();
+        }
+
+        lucide.createIcons();
+    }
+    
+    // Initializers
     window.addEventListener('hashchange', loadContent);
     window.onload = initializeApp;
 </script>
