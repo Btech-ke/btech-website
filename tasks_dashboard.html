@@ -345,6 +345,9 @@
                         <a href="javascript:void(0)" onclick="setRoute('earnings')" class="text-gray-300 hover:text-white font-medium text-sm transition">
                             Earnings
                         </a>
+                        <a href="javascript:void(0)" onclick="setRoute('affiliate')" class="text-gray-300 hover:text-white font-medium text-sm transition">
+                             Affiliate
+                        </a>
                         <button onclick="simulateLogout()" class="px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold text-sm transition">
                             Logout
                         </button>
@@ -411,11 +414,11 @@
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; 
     const REFERRAL_BONUS = 80.00; // KES 80.00
-    let AUTH_TOKEN; 
+    let AUTH_TOKEN; 
     let cachedTasks = [];
-    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
-    let currentUserEmail = ""; 
-    let userProfile = {}; 
+    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
+    let currentUserEmail = ""; 
+    let userProfile = {}; 
 
     const appContainer = document.getElementById('app-container');
     const statusAlert = document.getElementById('status-alert');
@@ -440,14 +443,14 @@
              showAlert("Authentication required. Please log in through the mobile app.", false);
              appContainer.innerHTML = `
                  <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                     <div class="empty-state-icon mb-6">
-                         <i data-lucide="shield-alert" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                     </div>
-                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Access Denied</h3>
-                     <p class="text-gray-600 text-sm md:text-base mb-6">Please log in through the BTECH Plus App to continue.</p>
-                     <button onclick="location.reload()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                         Retry Connection
-                     </button>
+                    <div class="empty-state-icon mb-6">
+                        <i data-lucide="shield-alert" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Access Denied</h3>
+                    <p class="text-gray-600 text-sm md:text-base mb-6">Please log in through the BTECH Plus App to continue.</p>
+                    <button onclick="location.reload()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                        Retry Connection
+                    </button>
                  </div>
              `;
              lucide.createIcons();
@@ -465,7 +468,6 @@
             fetchUserStats()
         ]);
         
-
         if (window.location.search) {
              window.history.replaceState(null, null, window.location.pathname + window.location.hash);
         }
@@ -483,7 +485,7 @@
             const result = await fetchData('/user/profile', { method: 'GET' });
             if (result.success && result.user) {
                 currentUserEmail = result.user.email;
-                userProfile = result.user; // Store full profile data
+                userProfile = result.user; 
                 console.log(`User Profile & Referral data fetched.`);
             }
         } catch (error) {
@@ -647,7 +649,6 @@
             case 'Content Creation':
                 return 'edit';
             case 'Market Research':
-            case 'Survey/Profiling':
                 return 'trending-up';
             case 'Account Creation':
                 return 'users';
@@ -794,11 +795,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     ${mainTasksHtml.length > 0 ? mainTasksHtml : `
                         <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
-                            <div class="empty-state-icon mb-6">
-                                <i data-lucide="inbox" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto"></i>
-                            </div>
-                            <h3 class="text-xl font-black text-gray-800">No Major Tasks Right Now</h3>
-                            <p class="text-gray-600 text-sm mt-2">All major tasks are currently assigned or unavailable.</p>
+                             <i data-lucide="inbox" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
+                             <h3 class="text-xl font-black text-gray-800">No Major Tasks Right Now</h3>
+                             <p class="text-gray-600 text-sm mt-2">All major tasks are currently assigned or unavailable.</p>
                         </div>
                     `}
                 </div>
@@ -806,36 +805,245 @@
         `;
         lucide.createIcons();
     }
-    
-    // --- TASK DETAIL/SUBMISSION LOGIC ---
 
-    function getCategoryIcon(category) {
-        switch (category) {
-            case 'Data Entry':
-            case 'Data Quality Assurance':
-                return 'database';
-            case 'Transcription':
-                return 'mic';
-            case 'QA Testing':
-                return 'bug';
-            case 'Content Creation':
-                return 'edit';
-            case 'Market Research':
-            case 'Survey/Profiling':
-                return 'trending-up';
-            case 'Account Creation':
-                return 'users';
-            case 'Local Data Verification':
-                return 'map-pin';
-            case 'AI Training/Labeling':
-                return 'sparkles';
-            case 'Translation':
-                return 'globe';
-            default:
-                return 'briefcase';
+    function renderSubmissionForm(task) {
+        if (task.id == 1000 || task.category === 'Account Creation') {
+            return `
+                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="mail" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                    Gmail Account Submission (50 Accounts)
+                </h3>
+                <form onsubmit="event.preventDefault(); submitGmailTask(${task.id});">
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Password (All Accounts):</label>
+                        <input type="password" id="common-password" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Enter common password" required>
+                    </div>
+                    
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Gmail Accounts (50 required):</label>
+                        <textarea id="accounts-list" rows="10" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition font-mono text-xs md:text-sm" placeholder="One email per line (e.g., john.doe1@gmail.com)"></textarea>
+                        <div class="flex items-center justify-between mt-2">
+                            <p class="text-xs md:text-sm text-gray-600" id="count-indicator">0 accounts</p>
+                            <span class="text-xs font-semibold text-gray-400">Need: 50</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl disabled:opacity-50 flex items-center justify-center space-x-2 ripple" disabled>
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        <span>Submit Task</span>
+                    </button>
+                </form>
+            `;
+        }
+        
+        else if (task.category === 'Survey') {
+            return renderDailySurveyForm(task.id);
+        }
+
+        else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription' || task.category === 'Data Quality Assurance' || task.category === 'AI Training/Labeling') {
+            const outputLabel = task.category === 'Transcription' ? 'Transcription Output (Full Text):' :
+                                task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
+                                task.category === 'Data Quality Assurance' ? 'Error Report Summary:' :
+                                'Final Output/Data Paste:';
+
+            return `
+                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="edit" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                    ${task.category} Output Submission
+                </h3>
+                <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">${outputLabel}</label>
+                        <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Paste your final output here. Be precise and thorough..." required></textarea>
+                        <p class="text-xs text-gray-600 mt-1">${task.category} tasks require careful review. Ensure quality.</p>
+                    </div>
+
+                    <button type="submit" id="submit-text-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        <span>Submit Final Output</span>
+                    </button>
+                </form>
+            `;
+        }
+        
+        else if (task.category === 'Local Data Verification' || task.category === 'QA Testing') {
+            const fileDescription = task.category === 'QA Testing' ? 'detailed report/screenshot' : 'photo proof';
+            return `
+                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                    File/Image Upload Required
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">This task requires submitting a single file (${fileDescription}) for verification.</p>
+                <form onsubmit="event.preventDefault(); submitFileTask(${task.id});">
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Attached File (Max 5MB):</label>
+                        <input type="file" id="submission-file-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" required accept="image/*, application/pdf, .zip">
+                        <p class="text-xs text-gray-600 mt-1">Accepted formats: JPEG, PNG, PDF, or ZIP.</p>
+                    </div>
+
+                    <button type="submit" id="submit-file-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
+                        <i data-lucide="upload" class="w-5 h-5"></i>
+                        <span>Upload & Submit for Review</span>
+                    </button>
+                </form>
+            `;
+        }
+        
+        else if (task.category === 'Survey/Profiling') {
+            return `
+                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="form-input" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                    Complete Survey Externally
+                </h3>
+                <p class="text-gray-600 text-sm mb-6">This is a high-value survey hosted on an external partner site. Click the link below, complete the survey, and then return here to confirm completion.</p>
+                 <a href="javascript:void(0)" onclick="showModal('External Link', 'Imagine this links to a SurveyMonkey or Typeform URL.', 'info')" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
+                    <i data-lucide="external-link" class="w-5 h-5"></i>
+                    <span>Go to Survey Partner Site</span>
+                </a>
+                <button onclick="submitTextTask(${task.id})" class="bg-gray-300 text-gray-800 font-bold py-3 rounded-xl mt-3 w-full ripple">
+                    Confirm Completion
+                </button>
+                `;
+        }
+        
+        else {
+            return `<div class="text-center py-12 text-gray-600"><i data-lucide="box" class="w-16 h-16 mx-auto mb-4"></i><p>No defined submission method for this task category yet.</p></div>`;
         }
     }
 
+
+    async function renderAffiliateProfile() {
+        const profile = userProfile;
+        const totalReferralEarnings = (profile.totalReferrals || 0) * REFERRAL_BONUS; // KES 80 payout
+        
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <div class="mb-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">Affiliate Dashboard</h2>
+                    <p class="text-gray-300 text-sm md:text-base">Your referral code and earnings.</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="ultra-card p-4 md:p-6">
+                        <div class="flex justify-between items-center mb-3 border-b pb-3">
+                            <h3 class="text-lg font-black text-gray-800 flex items-center space-x-2">
+                                <i data-lucide="link" class="w-5 h-5 text-indigo-600"></i>
+                                <span>Your Unique Code</span>
+                            </h3>
+                            <span class="text-sm font-medium text-gray-500">Share & Earn</span>
+                        </div>
+                        
+                        <div class="text-center py-4">
+                            <p id="tvReferralCode" class="text-4xl md:text-5xl font-black text-indigo-600 tracking-widest mb-4">${profile.referralCode || 'N/A'}</p>
+                            <button onclick="copyToClipboard('${profile.referralCode || 'CODE ERROR'}')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-xl text-sm ripple">
+                                <i data-lucide="copy" class="w-4 h-4 inline-block mr-1"></i> Copy Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ultra-card p-4 md:p-6">
+                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center space-x-2">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
+                            <span>Performance</span>
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3 bg-gray-50 rounded-xl text-center">
+                                <p class="text-sm text-gray-600">Total Referrals</p>
+                                <p class="text-3xl font-black text-gray-800">${profile.totalReferrals || 0}</p>
+                            </div>
+                            <div class="p-3 bg-gray-50 rounded-xl text-center">
+                                <p class="text-sm text-gray-600">Bonus Per Signup</p>
+                                <p class="text-2xl font-black text-green-600">KES ${REFERRAL_BONUS.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                             <h4 class="font-semibold text-gray-800 mb-2">Earnings Flow:</h4>
+                             <ul class="text-sm text-gray-600 list-disc list-inside space-y-1">
+                                 <li>Referred user registers (pays KES 400).</li>
+                                 <li>KES ${REFERRAL_BONUS.toFixed(2)} is instantly added to your Available Balance.</li>
+                                 <li>KES ${(400 - REFERRAL_BONUS).toFixed(2)} profit retained by BTECH.</li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
+
+    async function loadContent() {
+        appContainer.innerHTML = `
+            <div class="flex items-center justify-center py-20">
+                <div class="text-center">
+                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
+                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+
+        // 1. Fetch ALL necessary initial data concurrently
+        await Promise.all([
+            fetchUserProfile(),
+            fetchUserStats()
+        ]);
+        
+        // 2. Fetch Tasks only after profile/stats are done
+        const [tasksData, dailyTaskData] = await Promise.all([
+            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
+            fetchDailyTask(),
+        ]);
+        
+        if (dailyTaskData) {
+            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
+        } else {
+            localStorage.removeItem('dailyTask');
+        }
+
+
+        const hash = window.location.hash.slice(1);
+        
+        // 3. Route Handling
+        if (hash === 'tasks' || hash === '') {
+             if (tasksData) {
+                 renderTasksList(tasksData.tasks, dailyTaskData);
+             } else {
+                 appContainer.innerHTML = `
+                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                         <div class="empty-state-icon mb-6">
+                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                         </div>
+                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
+                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
+                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                             Retry
+                         </button>
+                     </div>
+                 `;
+                 lucide.createIcons();
+             }
+        } else if (hash === 'my-tasks') {
+            const data = await fetchData('/tasks/my-tasks');
+            if (data) renderMyTasks(data.tasks);
+        } else if (hash === 'earnings') {
+            renderEarnings();
+        } else if (hash === 'affiliate') {
+            renderAffiliateProfile();
+        }
+         else if (hash.startsWith('tasks/')) {
+            const taskId = hash.split('/')[1];
+            if (cachedTasks.length === 0 && tasksData) {
+                cachedTasks = tasksData.tasks;
+            }
+            renderTaskDetail(taskId);
+        }
+    }
+
+
+    // --- Other necessary functions ---
 
     async function acceptTask(taskId) {
         try {
@@ -845,7 +1053,7 @@
                 showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
                 setTimeout(() => {
                     closeModal();
-                    setRoute(`my-tasks`); // Navigate directly to My Tasks
+                    setRoute(`my-tasks`);
                 }, 2000);
             } else {
                 showAlert(data.message || 'Failed to accept task.', false);
@@ -856,17 +1064,138 @@
         }
     }
 
-    function acceptAndNavigateToSurvey(taskId) {
-        acceptTask(taskId); 
-        setRoute(`tasks/${taskId}`);
+    async function submitGmailTask(taskId) {
+        const password = document.getElementById('common-password').value.trim();
+        const accountsText = document.getElementById('accounts-list').value.trim();
+        const accountsList = accountsText.split('\n').filter(line => line.trim() !== '');
+
+        if (accountsList.length !== 50 || !password) {
+            showAlert('Ensure 50 accounts and password are provided.', false);
+            return;
+        }
+
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+        lucide.createIcons();
+
+        try {
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
+                method: 'POST',
+                body: { taskId, accountsList, commonPassword: password }
+            });
+
+            if (data.success) {
+                showModal('Submitted!', 'Your task is under review. Check My Tasks for updates.', 'success');
+                setTimeout(() => {
+                    closeModal();
+                    setRoute('my-tasks');
+                }, 2500);
+            } else {
+                showAlert(data.error || 'Submission failed.', false);
+            }
+        } catch (error) {
+            showAlert('Submission failed due to internal error.', false);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
+            lucide.createIcons();
+        }
+    }
+    
+    // --- New Submission Logic for Text/File based tasks ---
+    async function submitTextTask(taskId) {
+        const outputText = document.getElementById('task-output-text')?.value?.trim();
+        const submitBtn = document.getElementById(`submit-text-btn-${taskId}`);
+
+        if (!outputText) {
+            showAlert('Submission field cannot be empty.', false);
+            return;
+        }
+
+        if(submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+            lucide.createIcons();
+        }
+
+        try {
+            // Re-using the /submit-gmail-accounts endpoint structure for all text-based submissions
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
+                method: 'POST',
+                // Using outputText as the single element in the array, N/A password
+                body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
+            });
+
+            if (data.success) {
+                showModal('Submitted!', 'Your output is under review. Check My Tasks for updates.', 'success');
+                setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
+            } else {
+                showAlert(data.error || 'Submission failed.', false);
+            }
+        } catch (error) {
+            showAlert('Submission failed due to internal error.', false);
+        } finally {
+            if(submitBtn) {
+                 submitBtn.disabled = false;
+                 submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
+                 lucide.createIcons();
+            }
+        }
     }
 
+    async function submitFileTask(taskId) {
+        const fileInput = document.getElementById(`submission-file-${taskId}`);
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            showAlert('Please select a file to upload.', false);
+            return;
+        }
+
+        const submitBtn = document.getElementById(`submit-file-btn-${taskId}`);
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading...</span>';
+        lucide.createIcons();
+        
+        const formData = new FormData();
+        formData.append('document', file);
+        formData.append('documentType', `Task-ID-${taskId} Submission`); // Required text field
+
+        const headers = { 'Authorization': `Bearer ${AUTH_TOKEN}` };
+        
+        try {
+             const response = await fetch(`${BACKEND_URL}/user/verify`, {
+                 method: 'POST',
+                 headers: headers,
+                 body: formData,
+             });
+
+             const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
+
+             if (response.ok && data.success) {
+                 showModal('Submitted!', 'Your file is under review. Check My Tasks for updates.', 'success');
+                 setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
+             } else {
+                 showAlert(data.error || 'File submission failed.', false);
+             }
+        } catch (error) {
+            showAlert('Upload failed due to network error.', false);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="upload" class="w-5 h-5"></i><span>Upload & Submit for Review</span>';
+            lucide.createIcons();
+        }
+    }
+
+    // --- Daily Survey Submission Logic ---
     async function submitDailySurvey(taskId) {
         const submitBtn = document.getElementById('survey-submit-btn');
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
         lucide.createIcons();
 
+        // 1. Collect survey data
         const surveyQuestions = [
             "q1_app_rating", "q2_task_clarity", "q3_payout_fairness", "q4_ease_of_use",
             "q5_task_variety", "q6_referral_usage", "q7_favorite_feature", "q8_improvement_area",
@@ -898,17 +1227,20 @@
         }
 
         try {
+            // 2. Send data to Formspree using Axios
             await axios.post(FORMSPREE_SURVEY_URL, surveyData, {
                 headers: { 'Accept': 'application/json' }
             });
             console.log("Survey data sent to Formspree successfully.");
 
+            // 3. Mark task as COMPLETED in the backend and receive instant credit
+            // This relies on the new server.js endpoint added previously.
             await fetchData('/tasks/submit-daily-task', {
-                method: 'POST',
-                body: { taskId: taskId }
+                 method: 'POST',
+                 body: { taskId: taskId }
             });
 
-
+            // 4. Show success and navigate
             showModal('Survey Complete!', 'Thank you! Your KES 50 has been instantly credited. Check "My Tasks".', 'success');
             setTimeout(() => {
                 closeModal();
@@ -918,6 +1250,7 @@
         } catch (error) {
             showAlert('Submission failed. Check your connection or refresh the page.', false);
             console.error("Survey submission failure:", error);
+        } finally {
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Survey</span>';
             lucide.createIcons();
@@ -925,241 +1258,7 @@
     }
 
 
-    const renderDailySurveyForm = (taskId) => {
-        const questions = [
-            { id: "q1_app_rating", q: "On a scale of 1-5, how satisfied are you with the app's performance?", type: "select", options: ["5 - Very Satisfied", "4 - Satisfied", "3 - Neutral", "2 - Dissatisfied", "1 - Very Dissatisfied"] },
-            { id: "q2_task_clarity", q: "How clear were the instructions for the last major task you attempted?", type: "select", options: ["Very Clear", "Clear", "Neutral", "Unclear", "Very Unclear"] },
-            { id: "q3_payout_fairness", q: "Do you feel the payout rates are fair for the effort required?", type: "select", options: ["Very Fair", "Fair", "Neutral", "Unfair", "Very Unfair"] },
-            { id: "q4_ease_of_use", q: "How easy is it to navigate between the Tasks and Earnings tabs?", type: "select", options: ["Very Easy", "Easy", "Neutral", "Difficult", "Very Difficult"] },
-            { id: "q5_task_variety", q: "Are you satisfied with the current variety of tasks offered?", type: "select", options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"] },
-            { id: "q6_referral_usage", q: "Have you used the referral code system?", type: "select", options: ["Yes, actively", "Yes, once or twice", "No, but I plan to", "No, not interested"] },
-            { id: "q7_favorite_feature", q: "What is your favorite feature of the BTECH Earning Network?", type: "text", placeholder: "e.g., Daily tasks, quick withdrawals, etc." },
-            { id: "q8_improvement_area", q: "What is the single most important area that needs improvement?", type: "text", placeholder: "e.g., More high-paying tasks, faster UI, etc." },
-            { id: "q9_recommendation", q: "How likely are you to recommend this app to a friend? (1-10)", type: "select", options: ["10 - Highly Likely", "8-9 - Likely", "5-7 - Neutral", "1-4 - Unlikely"] },
-            { id: "q10_age_group", q: "Which age group do you belong to?", type: "select", options: ["18-24", "25-34", "35-44", "45+"] }
-        ];
-
-        return `
-            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                <i data-lucide="clipboard-list" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                Daily User Feedback Survey (10 Questions)
-            </h3>
-            <form onsubmit="event.preventDefault(); submitDailySurvey(${taskId});">
-                <p class="text-sm text-gray-600 mb-6">Help us improve the network and earn KES ${getTaskPayout({payout: 50})} instantly.</p>
-                ${questions.map((item, index) => `
-                    <div class="mb-5">
-                        <label for="${item.id}" class="block text-sm font-bold text-gray-700 mb-2">${index + 1}. ${item.q}</label>
-                        ${item.type === 'select' ? `
-                            <select id="${item.id}" required class="w-full p-3 border-2 border-gray-200 rounded-xl transition text-sm focus:border-indigo-500">
-                                <option value="" disabled selected>Select an option</option>
-                                ${item.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                            </select>
-                        ` : `
-                            <input type="text" id="${item.id}" required class="w-full p-3 border-2 border-gray-200 rounded-xl transition text-sm focus:border-indigo-500" placeholder="${item.placeholder}">
-                        `}
-                    </div>
-                `).join('')}
-                <button type="submit" id="survey-submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
-                    <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>Submit Survey</span>
-                </button>
-            </form>
-        `;
-    };
-
-    const renderSubmissionForm = (task) => {
-        if (task.id == 1000 || task.category === 'Account Creation') {
-            return `
-                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="mail" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    Gmail Account Submission (50 Accounts)
-                </h3>
-                <form onsubmit="event.preventDefault(); submitGmailTask(${task.id});">
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Password (All Accounts):</label>
-                        <input type="password" id="common-password" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Enter common password" required>
-                    </div>
-                    
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Gmail Accounts (50 required):</label>
-                        <textarea id="accounts-list" rows="10" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition font-mono text-xs md:text-sm" placeholder="One email per line (e.g., john.doe1@gmail.com)"></textarea>
-                        <div class="flex items-center justify-between mt-2">
-                            <p class="text-xs md:text-sm text-gray-600" id="count-indicator">0 accounts</p>
-                            <span class="text-xs font-semibold text-gray-400">Need: 50</span>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="btn-premium w-full text-white font-bold py-4 rounded-xl disabled:opacity-50 flex items-center justify-center space-x-2 ripple" disabled>
-                        <i data-lucide="send" class="w-5 h-5"></i>
-                        <span>Submit Task</span>
-                    </button>
-                </form>
-            `;
-        } 
-        
-        else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription' || task.category === 'Data Quality Assurance' || task.category === 'AI Training/Labeling') {
-            const outputLabel = task.category === 'Transcription' ? 'Transcription Output (Full Text):' :
-                                task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
-                                task.category === 'Data Quality Assurance' ? 'Error Report Summary:' :
-                                'Final Output/Data Paste:';
-
-            return `
-                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="edit" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    ${task.category} Output Submission
-                </h3>
-                <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">${outputLabel}</label>
-                        <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Paste your final output here. Be precise and thorough..." required></textarea>
-                        <p class="text-xs text-gray-600 mt-1">${task.category} tasks require careful review. Ensure quality.</p>
-                    </div>
-
-                    <button type="submit" id="submit-text-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
-                        <i data-lucide="send" class="w-5 h-5"></i>
-                        <span>Submit Final Output</span>
-                    </button>
-                </form>
-            `;
-        } 
-        
-        else if (task.category === 'Local Data Verification' || task.category === 'QA Testing') {
-             const acceptedFiles = task.category === 'QA Testing' ? 'image/*, application/pdf' : 'image/*';
-             return `
-                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    File/Image Upload Required
-                </h3>
-                <p class="text-gray-600 text-sm mb-4">This task requires submitting a single file (photo proof or detailed report/screenshot) for verification.</p>
-                <form onsubmit="event.preventDefault(); submitFileTask(${task.id});">
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Attached File (Max 5MB):</label>
-                        <input type="file" id="submission-file-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" required accept="image/*, application/pdf, .zip">
-                        <p class="text-xs text-gray-600 mt-1">Accepted formats: JPEG, PNG, PDF, or ZIP.</p>
-                    </div>
-
-                    <button type="submit" id="submit-file-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
-                        <i data-lucide="upload" class="w-5 h-5"></i>
-                        <span>Upload & Submit for Review</span>
-                    </button>
-                </form>
-            `;
-        }
-        
-        else if (task.category === 'Survey/Profiling') {
-             return `
-                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="form-input" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    Complete Survey Externally
-                </h3>
-                <p class="text-gray-600 text-sm mb-6">This is a high-value survey hosted on an external partner site. Click the link below, complete the survey, and then return here to confirm completion.</p>
-                 <a href="javascript:void(0)" onclick="showModal('External Link', 'Imagine this links to a SurveyMonkey or Typeform URL.', 'info')" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 ripple">
-                    <i data-lucide="external-link" class="w-5 h-5"></i>
-                    <span>Go to Survey Partner Site</span>
-                </a>
-                <button onclick="submitTextTask(${task.id})" class="bg-gray-300 text-gray-800 font-bold py-3 rounded-xl mt-3 w-full ripple">
-                    Confirm Completion
-                </button>
-             `;
-        }
-        
-        else {
-            return `<div class="text-center py-12 text-gray-600"><i data-lucide="box" class="w-16 h-16 mx-auto mb-4"></i><p>No defined submission method for this task category yet.</p></div>`;
-        }
-    }
-
-
-    async function submitTextTask(taskId) {
-        const outputText = document.getElementById('task-output-text')?.value?.trim();
-
-        if (!outputText) {
-            showAlert('Submission field cannot be empty.', false);
-            return;
-        }
-
-        const submitBtn = document.getElementById(`submit-text-btn-${taskId}`);
-        if(submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-            lucide.createIcons();
-        }
-
-
-        try {
-            const data = await fetchData('/tasks/submit-gmail-accounts', {
-                method: 'POST',
-                body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
-            });
-
-            if (data.success) {
-                showModal('Submitted!', 'Your output is under review. Check My Tasks for updates.', 'success');
-                setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
-            } else {
-                showAlert(data.error || 'Submission failed.', false);
-                if(submitBtn) {
-                     submitBtn.disabled = false;
-                     submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
-                     lucide.createIcons();
-                }
-            }
-        } catch (error) {
-             showAlert('Submission failed due to internal error.', false);
-        } finally {
-             if(submitBtn) {
-                 submitBtn.disabled = false;
-                 submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
-                 lucide.createIcons();
-             }
-        }
-    }
-    
-    async function submitFileTask(taskId) {
-        const fileInput = document.getElementById(`submission-file-${taskId}`);
-        const file = fileInput.files[0];
-        
-        if (!file) {
-            showAlert('Please select a file to upload.', false);
-            return;
-        }
-
-        const submitBtn = document.getElementById(`submit-file-btn-${taskId}`);
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading...</span>';
-        lucide.createIcons();
-        
-        const formData = new FormData();
-        formData.append('document', file);
-        formData.append('documentType', `Task-ID-${taskId} Submission`);
-
-        // CRITICAL FIX: We must remove the default Content-Type header when sending FormData
-        const headers = { 'Authorization': `Bearer ${AUTH_TOKEN}` };
-        
-        try {
-             const response = await fetch(`${BACKEND_URL}/user/verify`, {
-                 method: 'POST',
-                 // NOTE: Content-Type header must be omitted when sending FormData with Fetch API
-                 headers: headers,
-                 body: formData,
-             });
-
-             const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
-
-             if (response.ok && data.success) {
-                 showModal('Submitted!', 'Your file is under review. Check My Tasks for updates.', 'success');
-                 setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
-             } else {
-                 showAlert(data.error || 'File submission failed.', false);
-             }
-        } catch (error) {
-            showAlert('Upload failed due to network error.', false);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i data-lucide="upload" class="w-5 h-5"></i><span>Upload & Submit for Review</span>';
-            lucide.createIcons();
-        }
-    }
-
-
+    // 4. Detail Page Rendering Logic
     function renderTaskDetail(taskId) {
         let task = cachedTasks.find(t => t.id == taskId);
         
@@ -1168,7 +1267,7 @@
              if (dailyTask && (dailyTask.id == taskId || dailyTask.task_id == taskId)) {
                  task = {
                      ...dailyTask,
-                     id: dailyTask.id || dailyTask.task_id,
+                     id: dailyTask.id || dailyTask.task_id, 
                      title: dailyTask.title,
                      description: "Participate in this 10-question user experience survey to help us improve.",
                      category: dailyTask.category,
@@ -1179,7 +1278,7 @@
                  };
              }
         }
-        
+
         if (!task) {
              appContainer.innerHTML = `
                  <div class="ultra-card p-8 md:p-12 text-center">
@@ -1236,13 +1335,13 @@
                             </div>
                             <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
                                 <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
-                                <span>Due: ${task.deadline || 'N/A'}</span>
+                                <span>${task.deadline || 'N/A'}</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-2 ultra-card p-5 md:p-8">
-                         ${isDailyTask ? renderDailySurveyForm(task.id) : renderSubmissionForm(task)}
+                        ${renderSubmissionForm(task)}
                     </div>
                 </div>
             </div>
@@ -1257,138 +1356,6 @@
         lucide.createIcons();
     }
 
-
-    async function loadContent() {
-        appContainer.innerHTML = `
-            <div class="flex items-center justify-center py-20">
-                <div class="text-center">
-                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
-                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
-                </div>
-            </div>
-        `;
-        lucide.createIcons();
-
-        // 1. Fetch ALL necessary initial data concurrently
-        // This addresses the Affiliate/Profile data not loading in time.
-        await Promise.all([
-            fetchUserProfile(),
-            fetchUserStats()
-        ]);
-        
-        // 2. Fetch Tasks only after profile/stats are done
-        const [tasksData, dailyTaskData] = await Promise.all([
-            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
-            fetchDailyTask(),
-        ]);
-        
-        if (dailyTaskData) {
-            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
-        } else {
-            localStorage.removeItem('dailyTask');
-        }
-
-
-        const hash = window.location.hash.slice(1);
-        
-        // 3. Route Handling
-        if (hash === 'tasks' || hash === '') {
-             if (tasksData) {
-                 renderTasksList(tasksData.tasks, dailyTaskData);
-             } else {
-                 appContainer.innerHTML = `
-                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                         <div class="empty-state-icon mb-6">
-                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
-                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
-                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                             Retry
-                         </button>
-                     </div>
-                 `;
-                 lucide.createIcons();
-             }
-        } else if (hash === 'my-tasks') {
-            const data = await fetchData('/tasks/my-tasks');
-            if (data) renderMyTasks(data.tasks);
-        } else if (hash === 'earnings') {
-            renderEarnings();
-        } else if (hash === 'affiliate') {
-            renderAffiliateProfile(); 
-        }
-         else if (hash.startsWith('tasks/')) {
-            const taskId = hash.split('/')[1];
-            if (cachedTasks.length === 0 && tasksData) {
-                 cachedTasks = tasksData.tasks;
-            }
-            renderTaskDetail(taskId);
-        }
-    }
-
-
-    // --- Other necessary functions (Assume Working) ---
-
-    async function acceptTask(taskId) {
-        try {
-            const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
-            
-            if (data.success) {
-                showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
-                setTimeout(() => {
-                    closeModal();
-                    setRoute(`my-tasks`); // Navigate directly to My Tasks
-                }, 2000);
-            } else {
-                showAlert(data.message || 'Failed to accept task.', false);
-            }
-        } catch (error) {
-            console.error('Error accepting task:', error);
-            loadContent();
-        }
-    }
-
-    async function submitGmailTask(taskId) {
-        const password = document.getElementById('common-password').value.trim();
-        const accountsText = document.getElementById('accounts-list').value.trim();
-        const accountsList = accountsText.split('\n').filter(line => line.trim() !== '');
-
-        if (accountsList.length !== 50 || !password) {
-            showAlert('Ensure 50 accounts and password are provided.', false);
-            return;
-        }
-
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-        lucide.createIcons();
-
-        try {
-            const data = await fetchData('/tasks/submit-gmail-accounts', {
-                method: 'POST',
-                body: { taskId, accountsList, commonPassword: password }
-            });
-
-            if (data.success) {
-                showModal('Submitted!', 'Your task is under review. Check My Tasks for updates.', 'success');
-                setTimeout(() => {
-                    closeModal();
-                    setRoute('my-tasks');
-                }, 2500);
-            } else {
-                showAlert(data.error || 'Submission failed.', false);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
-                lucide.createIcons();
-            }
-        } catch (error) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
-            lucide.createIcons();
-        }
-    }
-    
     function updateCountIndicator() {
         const textarea = document.getElementById('accounts-list');
         const indicator = document.getElementById('count-indicator');
@@ -1407,91 +1374,6 @@
         } else {
             submitBtn.classList.add('opacity-50');
         }
-    }
-    
-    async function renderMyTasks(tasks) {
-        appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <div class="mb-6">
-                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">My Active Tasks</h2>
-                    <p class="text-gray-300 text-sm md:text-base">Track your progress and earnings</p>
-                </div>
-
-                <div class="space-y-3 md:space-y-4">
-                    ${tasks.length === 0 ? `
-                        <div class="ultra-card p-8 md:p-12 text-center">
-                            <div class="empty-state-icon mb-6">
-                                <i data-lucide="inbox" class="w-20 h-20 md:w-24 md:h-24 text-gray-400 mx-auto"></i>
-                            </div>
-                            <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">No Active Tasks</h3>
-                            <p class="text-gray-600 text-sm md:text-base mb-6">Start earning by accepting tasks!</p>
-                            <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
-                                Browse Tasks
-                            </button>
-                        </div>
-                    ` : tasks.map((task, i) => {
-                        const progress = Math.min(100, task.progress);
-                        let statusText, statusClass, progressClass, icon;
-
-                        if (task.status === 'PENDING_VERIFICATION') {
-                            statusText = 'UNDER REVIEW';
-                            statusClass = 'status-pending';
-                            progressClass = 'bg-gradient-to-r from-yellow-400 to-orange-500';
-                            icon = 'clock';
-                        } else if (task.status === 'IN_PROGRESS') {
-                            statusText = 'IN PROGRESS';
-                            statusClass = 'status-progress';
-                            progressClass = 'bg-gradient-to-r from-indigo-500 to-purple-600';
-                            icon = 'activity';
-                        } else if (task.status === 'COMPLETED') {
-                            statusText = 'COMPLETED';
-                            statusClass = 'status-completed';
-                            progressClass = 'bg-gradient-to-r from-green-500 to-emerald-600';
-                            icon = 'check-circle-2';
-                        } else {
-                            statusText = task.status;
-                            statusClass = 'bg-gray-500';
-                            progressClass = 'bg-gray-500';
-                            icon = 'info';
-                        }
-
-                        return `
-                            <div class="ultra-card p-4 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
-                                <div class="flex flex-col space-y-4">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex-1">
-                                            <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2">${task.title}</h3>
-                                            <div class="flex flex-wrap items-center gap-2 text-xs md:text-sm">
-                                                <span class="${statusClass} text-white font-bold px-3 py-1 rounded-full flex items-center space-x-1">
-                                                    <i data-lucide="${icon}" class="w-3 h-3"></i>
-                                                    <span>${statusText}</span>
-                                                </span>
-                                                <span class="font-bold text-indigo-600">KES ${task.payment.toFixed(2)}</span>
-                                            </div>
-                                        </div>
-                                        <button onclick="setRoute('tasks/${task.taskId}')" class="btn-premium px-4 py-2 rounded-xl text-white text-sm font-semibold ml-2 flex-shrink-0">
-                                            View
-                                        </button>
-                                    </div>
-                                    
-                                    <div>
-                                        <div class="flex justify-between text-xs md:text-sm mb-2">
-                                            <span class="font-semibold text-gray-700">Progress</span>
-                                            <span class="font-black text-indigo-600">${progress}%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                                            <div class="${progressClass} h-3 rounded-full progress-glow" style="width: ${progress}%"></div>
-                                        </div>
-                                        <p class="text-xs text-gray-500 mt-1">Started: ${task.startedDate}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            </div>
-        `;
-        lucide.createIcons();
     }
 
     function renderEarnings() {
@@ -1550,146 +1432,37 @@
         lucide.createIcons();
     }
     
-    function renderAffiliateProfile() {
-        const profile = userProfile;
-        const totalReferralEarnings = (profile.totalReferrals || 0) * REFERRAL_BONUS; // KES 80 payout
+    function showModal(title, message, type = 'success') {
+        const modal = document.getElementById('action-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalIcon = document.getElementById('modal-icon');
+        const modalIconBg = document.getElementById('modal-icon-bg');
         
-        appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <div class="mb-6">
-                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">Affiliate Dashboard</h2>
-                    <p class="text-gray-300 text-sm md:text-base">Your referral code and earnings.</p>
-                </div>
-                
-                <div class="space-y-6">
-                    <!-- Referral Code Card -->
-                    <div class="ultra-card p-4 md:p-6">
-                        <div class="flex justify-between items-center mb-3 border-b pb-3">
-                            <h3 class="text-lg font-black text-gray-800 flex items-center space-x-2">
-                                <i data-lucide="link" class="w-5 h-5 text-indigo-600"></i>
-                                <span>Your Unique Code</span>
-                            </h3>
-                            <span class="text-sm font-medium text-gray-500">Share & Earn</span>
-                        </div>
-                        
-                        <div class="text-center py-4">
-                            <p id="tvReferralCode" class="text-4xl md:text-5xl font-black text-indigo-600 tracking-widest mb-4">${profile.referralCode || 'N/A'}</p>
-                            <button onclick="copyToClipboard('${profile.referralCode || 'CODE ERROR'}')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-xl text-sm ripple">
-                                <i data-lucide="copy" class="w-4 h-4 inline-block mr-1"></i> Copy Code
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Referral Stats Card -->
-                    <div class="ultra-card p-4 md:p-6">
-                        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center space-x-2">
-                            <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
-                            <span>Performance</span>
-                        </h3>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="p-3 bg-gray-50 rounded-xl text-center">
-                                <p class="text-sm text-gray-600">Total Referrals</p>
-                                <p class="text-3xl font-black text-gray-800">${profile.totalReferrals || 0}</p>
-                            </div>
-                            <div class="p-3 bg-gray-50 rounded-xl text-center">
-                                <p class="text-sm text-gray-600">Bonus Per Signup</p>
-                                <p class="text-2xl font-black text-green-600">KES ${REFERRAL_BONUS.toFixed(2)}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                             <h4 class="font-semibold text-gray-800 mb-2">Earnings Flow:</h4>
-                             <ul class="text-sm text-gray-600 list-disc list-inside space-y-1">
-                                 <li>Referred user registers (pays KES 400).</li>
-                                 <li>KES ${REFERRAL_BONUS.toFixed(2)} is instantly added to your Available Balance.</li>
-                                 <li>KES ${(400 - REFERRAL_BONUS).toFixed(2)} profit retained by BTECH.</li>
-                             </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        lucide.createIcons();
-    }
-
-
-    async function loadContent() {
-        appContainer.innerHTML = `
-            <div class="flex items-center justify-center py-20">
-                <div class="text-center">
-                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
-                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
-                </div>
-            </div>
-        `;
-        lucide.createIcons();
-
-        // 1. Fetch ALL necessary initial data concurrently
-        // This addresses the Affiliate/Profile data not loading in time.
-        await Promise.all([
-            fetchUserProfile(),
-            fetchUserStats()
-        ]);
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
         
-        // 2. Fetch Tasks only after profile/stats are done
-        const [tasksData, dailyTaskData] = await Promise.all([
-            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
-            fetchDailyTask(),
-        ]);
-        
-        if (dailyTaskData) {
-            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
+        if (type === 'success') {
+            modalIcon.setAttribute('data-lucide', 'check-circle');
+            modalIconBg.className = 'w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-green-400 to-emerald-600';
+            modalIcon.className = 'w-12 h-12 text-white';
         } else {
-            localStorage.removeItem('dailyTask');
+            modalIcon.setAttribute('data-lucide', 'alert-circle');
+            modalIconBg.className = 'w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-red-400 to-red-600';
+            modalIcon.className = 'w-12 h-12 text-white';
         }
-
-
-        const hash = window.location.hash.slice(1);
         
-        // 3. Route Handling
-        if (hash === 'tasks' || hash === '') {
-             if (tasksData) {
-                 renderTasksList(tasksData.tasks, dailyTaskData);
-             } else {
-                 appContainer.innerHTML = `
-                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                         <div class="empty-state-icon mb-6">
-                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
-                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
-                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                             Retry
-                         </button>
-                     </div>
-                 `;
-                 lucide.createIcons();
-             }
-        } else if (hash === 'my-tasks') {
-            const data = await fetchData('/tasks/my-tasks');
-            if (data) renderMyTasks(data.tasks);
-        } else if (hash === 'earnings') {
-            renderEarnings();
-        } else if (hash === 'affiliate') {
-            renderAffiliateProfile(); // Affilliate data is now guaranteed to be in userProfile
-        }
-         else if (hash.startsWith('tasks/')) {
-            const taskId = hash.split('/')[1];
-            if (cachedTasks.length === 0 && tasksData) {
-                 cachedTasks = tasksData.tasks;
-            }
-            renderTaskDetail(taskId);
-        }
+        modal.classList.remove('hidden');
+        lucide.createIcons();
     }
 
-    // --- Other necessary functions (Assume Working) ---
-    // ... (renderMyTasks, renderEarnings, showModal, closeModal, fetchUserStats, etc. are defined elsewhere in the full file)
+    function closeModal() {
+        document.getElementById('action-modal').classList.add('hidden');
+    }
     
     // Initializers
     window.addEventListener('hashchange', loadContent);
     window.onload = initializeApp;
-
 </script>
 </body>
 </html>
