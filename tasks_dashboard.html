@@ -410,11 +410,12 @@
 <script>
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; // Your Formspree URL
+    const REFERRAL_BONUS = 80.00; // KES 80.00
     let AUTH_TOKEN; 
     let cachedTasks = [];
     let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
-    let currentUserEmail = ""; // To be fetched and used for Formspree submission identity
-    let userProfile = {}; // Store full user profile data
+    let currentUserEmail = ""; 
+    let userProfile = {}; 
 
     const appContainer = document.getElementById('app-container');
     const statusAlert = document.getElementById('status-alert');
@@ -776,6 +777,9 @@
                                 <option>Content Creation</option>
                                 <option>Market Research</option>
                                 <option>Survey/Profiling</option>
+                                <option>Local Data Verification</option>
+                                <option>AI Training/Labeling</option>
+                                <option>Translation</option>
                             </select>
                             <select class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
                                 <option>All Difficulties</option>
@@ -968,7 +972,7 @@
             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                     <i data-lucide="mail" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    Gmail Account Submission
+                    Gmail Account Submission (50 Accounts)
                 </h3>
                 <form onsubmit="event.preventDefault(); submitGmailTask(${task.id});">
                     <div class="mb-5 md:mb-6">
@@ -993,7 +997,12 @@
             `;
         } 
         
-        else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription') {
+        else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription' || task.category === 'Data Quality Assurance' || task.category === 'AI Training/Labeling') {
+            const outputLabel = task.category === 'Transcription' ? 'Transcription Output (Full Text):' :
+                                task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
+                                task.category === 'Data Quality Assurance' ? 'Error Report Summary:' :
+                                'Final Output/Data Paste:';
+
             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                     <i data-lucide="edit" class="w-6 h-6 mr-3 text-indigo-600"></i>
@@ -1001,8 +1010,8 @@
                 </h3>
                 <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
                     <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Final Output/Data Paste:</label>
-                        <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Paste your final text output (translation, transcription, market data, or content draft) here..." required></textarea>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">${outputLabel}</label>
+                        <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base" placeholder="Paste your final output here. Be precise and thorough..." required></textarea>
                         <p class="text-xs text-gray-600 mt-1">${task.category} tasks require careful review. Ensure quality.</p>
                     </div>
 
@@ -1014,14 +1023,14 @@
             `;
         } 
         
-        else if (task.category === 'Local Data Verification' || task.category === 'QA Testing' || task.category === 'AI Training/Labeling') {
+        else if (task.category === 'Local Data Verification' || task.category === 'QA Testing') {
              const acceptedFiles = task.category === 'QA Testing' ? 'image/*, application/pdf' : 'image/*';
              return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                     <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
                     File/Image Upload Required
                 </h3>
-                <p class="text-gray-600 text-sm mb-4">This task requires submitting a single file (e.g., photo proof, screenshot collage, or detailed report) for verification.</p>
+                <p class="text-gray-600 text-sm mb-4">This task requires submitting a single file (photo proof or detailed report/screenshot) for verification.</p>
                 <form onsubmit="event.preventDefault(); submitFileTask(${task.id});">
                     <div class="mb-5 md:mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-2">Attached File (Max 5MB):</label>
@@ -1079,7 +1088,7 @@
         try {
             const data = await fetchData('/tasks/submit-gmail-accounts', {
                 method: 'POST',
-                body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } // Send output as the first item in accountsList
+                body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
             });
 
             if (data.success) {
@@ -1087,13 +1096,10 @@
                 setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
             } else {
                 showAlert(data.error || 'Submission failed.', false);
-                if(submitBtn) {
-                     submitBtn.disabled = false;
-                     submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
-                     lucide.createIcons();
-                }
             }
         } catch (error) {
+             showAlert('Submission failed due to internal error.', false);
+        } finally {
              if(submitBtn) {
                  submitBtn.disabled = false;
                  submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
@@ -1121,6 +1127,7 @@
         formData.append('documentType', `Task-ID-${taskId} Submission`);
 
         try {
+             // The /user/verify endpoint is reused here for generic file uploads
              const response = await fetch(`${BACKEND_URL}/user/verify`, {
                  method: 'POST',
                  headers: {
@@ -1245,74 +1252,10 @@
     }
 
 
-    // --- LOAD AND RENDER LOGIC ---
-    
-    async function loadContent() {
-        appContainer.innerHTML = `
-            <div class="flex items-center justify-center py-20">
-                <div class="text-center">
-                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
-                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
-                </div>
-            </div>
-        `;
-        lucide.createIcons();
-
-        const [tasksData, dailyTaskData] = await Promise.all([
-            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
-            fetchDailyTask(),
-            fetchUserStats(),
-        ]);
-        
-        if (dailyTaskData) {
-            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
-        } else {
-            localStorage.removeItem('dailyTask');
-        }
-
-
-        const hash = window.location.hash.slice(1);
-        
-        if (hash === 'tasks' || hash === '') {
-             if (tasksData) {
-                 renderTasksList(tasksData.tasks, dailyTaskData);
-             } else {
-                 appContainer.innerHTML = `
-                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                         <div class="empty-state-icon mb-6">
-                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
-                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
-                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
-                             Retry
-                         </button>
-                     </div>
-                 `;
-                 lucide.createIcons();
-             }
-        } else if (hash === 'my-tasks') {
-            const data = await fetchData('/tasks/my-tasks');
-            if (data) renderMyTasks(data.tasks);
-        } else if (hash === 'earnings') {
-            renderEarnings();
-        } else if (hash === 'affiliate') {
-            renderAffiliateProfile(); // NEW AFFILIATE RENDERER
-        }
-         else if (hash.startsWith('tasks/')) {
-            const taskId = hash.split('/')[1];
-            if (cachedTasks.length === 0 && tasksData) {
-                 cachedTasks = tasksData.tasks;
-            }
-            renderTaskDetail(taskId);
-        }
-    }
-
-
     // 7. Affiliate Profile Renderer (NEW)
     function renderAffiliateProfile() {
         const profile = userProfile;
-        const totalReferralEarnings = (profile.totalReferrals || 0) * 200;
+        const totalReferralEarnings = (profile.totalReferrals || 0) * 80; // KES 80 payout
         
         appContainer.innerHTML = `
             <div class="fade-in-up">
@@ -1354,7 +1297,7 @@
                             </div>
                             <div class="p-3 bg-gray-50 rounded-xl text-center">
                                 <p class="text-sm text-gray-600">Bonus Per Signup</p>
-                                <p class="text-2xl font-black text-green-600">KES 200.00</p>
+                                <p class="text-2xl font-black text-green-600">KES 80.00</p>
                             </div>
                         </div>
                         
@@ -1362,8 +1305,8 @@
                              <h4 class="font-semibold text-gray-800 mb-2">Earnings Flow:</h4>
                              <ul class="text-sm text-gray-600 list-disc list-inside space-y-1">
                                  <li>Referred user registers (pays KES 400).</li>
-                                 <li>KES 200 is instantly added to your Available Balance.</li>
-                                 <li>KES 200 profit retained by BTECH.</li>
+                                 <li>KES 80 is instantly added to your Available Balance.</li>
+                                 <li>KES 320 profit retained by BTECH.</li>
                              </ul>
                         </div>
                     </div>
@@ -1385,6 +1328,80 @@
         }
     }
 
+
+    async function loadContent() {
+        appContainer.innerHTML = `
+            <div class="flex items-center justify-center py-20">
+                <div class="text-center">
+                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
+                    <p class="text-white font-bold text-sm md:text-base">Loading...</p>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+
+        // 1. Fetch ALL necessary initial data concurrently
+        // We fetch profile and stats data needed globally
+        await Promise.all([
+            fetchUserProfile(),
+            fetchUserStats()
+        ]);
+        
+        // 2. Fetch Tasks only after profile/stats are done
+        const [tasksData, dailyTaskData] = await Promise.all([
+            fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
+            fetchDailyTask(),
+        ]);
+        
+        if (dailyTaskData) {
+            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
+        } else {
+            localStorage.removeItem('dailyTask');
+        }
+
+
+        const hash = window.location.hash.slice(1);
+        
+        // 3. Route Handling
+        if (hash === 'tasks' || hash === '') {
+             if (tasksData) {
+                 renderTasksList(tasksData.tasks, dailyTaskData);
+             } else {
+                 appContainer.innerHTML = `
+                     <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                         <div class="empty-state-icon mb-6">
+                             <i data-lucide="wifi-off" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                         </div>
+                         <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Connection Error</h3>
+                         <p class="text-gray-600 text-sm md:text-base mb-6">Unable to load tasks. Please retry.</p>
+                         <button onclick="loadContent()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                             Retry
+                         </button>
+                     </div>
+                 `;
+                 lucide.createIcons();
+             }
+        } else if (hash === 'my-tasks') {
+            const data = await fetchData('/tasks/my-tasks');
+            if (data) renderMyTasks(data.tasks);
+        } else if (hash === 'earnings') {
+            renderEarnings();
+        } else if (hash === 'affiliate') {
+            renderAffiliateProfile(); 
+        }
+         else if (hash.startsWith('tasks/')) {
+            const taskId = hash.split('/')[1];
+            if (cachedTasks.length === 0 && tasksData) {
+                 cachedTasks = tasksData.tasks;
+            }
+            renderTaskDetail(taskId);
+        }
+    }
+
+
+    // --- Other necessary functions (Assume Working) ---
+    // ... (renderMyTasks, renderEarnings, showModal, closeModal, fetchUserStats, etc. are defined elsewhere in the full file)
+    
     // Initializers
     window.addEventListener('hashchange', loadContent);
     window.onload = initializeApp;
