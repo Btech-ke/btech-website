@@ -413,14 +413,15 @@
 
 <script>
     // --- GLOBAL CONSTANTS AND VARIABLES ---
-    const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
+    // FIX 1: REMOVE /api from the BACKEND_URL constant
+    const BACKEND_URL = "https://btech-earning-api.onrender.com"; 
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; 
     const REFERRAL_BONUS = 200.00; 
-    let AUTH_TOKEN; 
+    let AUTH_TOKEN; 
     let cachedTasks = [];
-    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
-    let currentUserEmail = ""; 
-    let userProfile = {}; 
+    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
+    let currentUserEmail = ""; 
+    let userProfile = {}; 
 
     // --- UTILITY AND MODAL FUNCTIONS (Defined first) ---
 
@@ -617,8 +618,9 @@
     }
     
     async function fetchDailyTask() {
+        // FIX 2b: Added /api prefix
         try {
-            const data = await fetchData('/tasks/daily', { method: 'GET' });
+            const data = await fetchData('/api/tasks/daily', { method: 'GET' });
             return data.task;
         } catch (error) {
             return null;
@@ -626,8 +628,9 @@
     }
 
     async function fetchUserProfile() {
+        // FIX 2c: Added /api prefix
         try {
-            const result = await fetchData('/user/profile', { method: 'GET' });
+            const result = await fetchData('/api/user/profile', { method: 'GET' });
             if (result.success && result.user) {
                 currentUserEmail = result.user.email;
                 userProfile = result.user; 
@@ -638,8 +641,9 @@
     }
     
     async function checkAuthToken() {
+        // FIX 2d: Added /api prefix
         try {
-            await fetchData('/earnings/summary', { method: 'GET' });
+            await fetchData('/api/earnings/summary', { method: 'GET' });
             return true;
         } catch (error) {
             return false;
@@ -647,9 +651,10 @@
     }
 
     async function fetchUserStats() {
+        // FIX 2e: Added /api prefixes
         try {
-            const earningsData = await fetchData('/earnings/summary');
-            const myTasksData = await fetchData('/tasks/my-tasks');
+            const earningsData = await fetchData('/api/earnings/summary');
+            const myTasksData = await fetchData('/api/tasks/my-tasks');
 
             userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
             userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
@@ -670,8 +675,9 @@
     }
 
     async function acceptTask(taskId) {
+        // FIX 2f: Added /api prefix
         try {
-            const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
+            const data = await fetchData(`/api/tasks/${taskId}/accept`, { method: 'POST' });
             
             if (data.success) {
                 showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
@@ -703,7 +709,8 @@
         lucide.createIcons();
 
         try {
-            const data = await fetchData('/tasks/submit-gmail-accounts', {
+            // FIX 2g: Added /api prefix
+            const data = await fetchData('/api/tasks/submit-gmail-accounts', {
                 method: 'POST',
                 body: { taskId, accountsList, commonPassword: password }
             });
@@ -742,7 +749,8 @@
         }
 
         try {
-            const data = await fetchData('/tasks/submit-gmail-accounts', {
+            // FIX 2h: Added /api prefix
+            const data = await fetchData('/api/tasks/submit-gmail-accounts', {
                 method: 'POST',
                 body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
             });
@@ -792,6 +800,8 @@
         const headers = { 'Authorization': `Bearer ${AUTH_TOKEN}` };
         
         try {
+             // NOTE: This endpoint appears to be for general user verification (/api/user/verify) 
+             // but is used here for file task submission. Assuming this is intentional per backend design.
              const response = await fetch(`${BACKEND_URL}/api/user/verify`, {
                  method: 'POST',
                  headers: headers,
@@ -856,7 +866,8 @@
                 headers: { 'Accept': 'application/json' }
             });
 
-            await fetchData('/tasks/submit-daily-task', {
+            // FIX 2i: Added /api prefix
+            await fetchData('/api/tasks/submit-daily-task', {
                  method: 'POST',
                  body: { taskId: taskId }
             });
@@ -886,7 +897,8 @@
         showModal('Generating Secure Token...', 'Please wait while we create a single-use login link.', 'info');
 
         try {
-            const result = await fetchData('/auth/generate-scan-token', { method: 'POST' });
+            // FIX 2j: Added /api prefix
+            const result = await fetchData('/api/auth/generate-scan-token', { method: 'POST' });
 
             if (result.success && result.tempToken) {
                 const scanURL = `${window.location.origin}${window.location.pathname}?scan_token=${result.tempToken}#tasks`;
@@ -924,7 +936,8 @@
 
     async function redeemScanToken(scanToken) {
         try {
-            const result = await fetchData('/auth/redeem-scan-token', { 
+            // FIX 2k: Added /api prefix
+            const result = await fetchData('/api/auth/redeem-scan-token', { 
                 method: 'POST',
                 body: { scanToken: scanToken }
             });
@@ -1019,14 +1032,14 @@
                     <span>Accept Task</span>
                 </button>
             </div>
+            `;
+        }).join('') : `
+            <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
+                 <i data-lucide="inbox" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
+                 <h3 class="text-xl font-black text-gray-800">No Major Tasks Right Now</h3>
+                 <p class="text-gray-600 text-sm mt-2">All major tasks are currently assigned or unavailable.</p>
+            </div>
         `;
-    }).join('') : `
-        <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
-             <i data-lucide="inbox" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
-             <h3 class="text-xl font-black text-gray-800">No Major Tasks Right Now</h3>
-             <p class="text-gray-600 text-sm mt-2">All major tasks are currently assigned or unavailable.</p>
-        </div>
-    `;
 
 
         // 3. Final Render
@@ -1163,8 +1176,8 @@
         // --- Text/Data Submission (Translation, Data Entry, etc.) ---
         else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription' || task.category === 'Data Quality Assurance' || task.category === 'AI Training/Labeling') {
             const outputLabel = task.category === 'Transcription' ? 'Transcription Output (Full Text):' :
-                                task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
-                                'Final Output/Data Paste:';
+                                 task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
+                                 'Final Output/Data Paste:';
 
             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
@@ -1587,7 +1600,8 @@
         ]).then(() => {
             // 2. Fetch Tasks only after profile/stats are done
             return Promise.all([
-                fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
+                // FIX 2a: Added /api prefix here! This was the critical issue for task loading.
+                fetchData('/api/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
                 fetchDailyTask(),
             ]);
         }).then(([tasksData, dailyTaskData]) => {
@@ -1620,7 +1634,8 @@
                      lucide.createIcons();
                  }
             } else if (hash === 'my-tasks') {
-                fetchData('/tasks/my-tasks').then(data => {
+                // FIX 2l: Added /api prefix
+                fetchData('/api/tasks/my-tasks').then(data => {
                     if (data) renderMyTasks(data.tasks);
                 });
             } else if (hash === 'earnings') {
@@ -1693,6 +1708,36 @@
     }
     
     // Initializers
+    function initializeApp() {
+        AUTH_TOKEN = localStorage.getItem('btech_auth_token');
+        const urlParams = new URLSearchParams(window.location.search);
+        const scanToken = urlParams.get('scan_token');
+
+        if (scanToken) {
+            // Priority: Redeem scan token first
+            redeemScanToken(scanToken);
+        } else if (AUTH_TOKEN) {
+            // User has a token, proceed to load content
+            loadContent();
+        } else {
+            // No token, simulate a redirect to login page (or show a login error)
+            const appContainer = document.getElementById('app-container');
+             appContainer.innerHTML = `
+                 <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                     <div class="empty-state-icon mb-6">
+                         <i data-lucide="lock" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                     </div>
+                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Authentication Required</h3>
+                     <p class="text-gray-600 text-sm md:text-base mb-6">Please log in via the mobile application to access this dashboard.</p>
+                     <button onclick="simulateLogout()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
+                         Go to Login
+                     </button>
+                 </div>
+             `;
+             lucide.createIcons();
+        }
+    }
+
     window.addEventListener('hashchange', loadContent);
     window.onload = initializeApp;
 </script>
