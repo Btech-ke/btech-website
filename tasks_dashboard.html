@@ -1684,7 +1684,13 @@
     const statusAlert = document.getElementById('status-alert');
 
     window.addEventListener('hashchange', loadContent);
-    window.onload = initializeApp;
+    // At the very end of the <script> block:
+
+// This function starts the application when the entire window has loaded
+window.onload = function() {
+    // This calls the main entry point after all functions are defined.
+    initializeApp();
+};
 </script>
 </body>
 </html>
