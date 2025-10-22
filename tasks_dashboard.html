@@ -424,8 +424,65 @@
     let currentUserEmail = ""; 
     let userProfile = {}; 
 
-    // --- UTILITY AND MODAL FUNCTIONS ---
+    // --- GLOBAL FUNCTIONS (Made globally accessible for onclick attributes) ---
 
+    // Utility functions for rendering/data
+    const getTaskPayout = (task) => {
+        const value = task.payment || task.payout;
+        return parseFloat(value || 0).toFixed(2);
+    }
+    const getTaskDifficulty = (task) => {
+        return (task.difficulty || 'Easy').toLowerCase();
+    }
+    
+    function getCategoryIcon(category) {
+        switch (category) {
+            case 'Data Entry':
+            case 'Data Quality Assurance':
+                return 'database';
+            case 'Transcription':
+                return 'mic';
+            case 'QA Testing':
+                return 'bug';
+            case 'Content Creation':
+                return 'edit';
+            case 'Survey':
+            case 'Survey/Profiling':
+                return 'trending-up';
+            case 'Account Creation':
+                return 'users';
+            case 'Local Data Verification':
+                return 'map-pin';
+            case 'AI Training/Labeling':
+                return 'sparkles';
+            case 'Translation':
+                return 'globe';
+            default:
+                return 'briefcase';
+        }
+    }
+    
+    function updateCountIndicator() {
+        const textarea = document.getElementById('accounts-list');
+        const indicator = document.getElementById('count-indicator');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (!textarea || !indicator || !submitBtn) return;
+
+        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
+        const count = accounts.length;
+
+        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-red-500'}">${count} accounts</span>`;
+
+        submitBtn.disabled = count !== 50;
+        if (count === 50) {
+            submitBtn.classList.remove('opacity-50');
+        } else {
+            submitBtn.classList.add('opacity-50');
+        }
+    }
+
+    // Modal/Alert functions
     function showAlert(message, isSuccess = true) {
         const statusAlert = document.getElementById('status-alert');
         const iconBg = document.getElementById('alert-icon-bg');
@@ -499,6 +556,7 @@
         setTimeout(() => window.location.reload(), 1500);
     }
     
+    // Core routing functions
     function setRoute(path) {
         window.location.hash = `#${path}`;
         updateMobileNav(path);
@@ -520,62 +578,6 @@
             activeNav.classList.remove('text-gray-400');
         }
     }
-
-    const getTaskPayout = (task) => {
-        const value = task.payment || task.payout;
-        return parseFloat(value || 0).toFixed(2);
-    }
-    const getTaskDifficulty = (task) => {
-        return (task.difficulty || 'Easy').toLowerCase();
-    }
-    
-    function getCategoryIcon(category) {
-        switch (category) {
-            case 'Data Entry':
-            case 'Data Quality Assurance':
-                return 'database';
-            case 'Transcription':
-                return 'mic';
-            case 'QA Testing':
-                return 'bug';
-            case 'Content Creation':
-                return 'edit';
-            case 'Survey':
-            case 'Survey/Profiling':
-                return 'trending-up';
-            case 'Account Creation':
-                return 'users';
-            case 'Local Data Verification':
-                return 'map-pin';
-            case 'AI Training/Labeling':
-                return 'sparkles';
-            case 'Translation':
-                return 'globe';
-            default:
-                return 'briefcase';
-        }
-    }
-    
-    function updateCountIndicator() {
-        const textarea = document.getElementById('accounts-list');
-        const indicator = document.getElementById('count-indicator');
-        const submitBtn = document.getElementById('submit-btn');
-
-        if (!textarea || !indicator || !submitBtn) return;
-
-        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
-        const count = accounts.length;
-
-        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-red-500'}">${count} accounts</span>`;
-
-        submitBtn.disabled = count !== 50;
-        if (count === 50) {
-            submitBtn.classList.remove('opacity-50');
-        } else {
-            submitBtn.classList.add('opacity-50');
-        }
-    }
-
 
     // --- ASYNCHRONOUS DATA FETCHERS ---
 
@@ -642,8 +644,10 @@
                 currentUserEmail = result.user.email;
                 userProfile = result.user; 
             }
+            return result;
         } catch (error) {
             console.error("Failed to fetch user profile.", error);
+            throw error;
         }
     }
     
@@ -656,11 +660,13 @@
             userStats.pendingEarnings = parseFloat(earningsData.earnings.pendingEarnings || 0);
             userStats.tasksCompleted = parseInt(earningsData.earnings.completedTasks || 0);
             userStats.activeTasks = 0; 
+
+            return earningsData;
         } catch (e) {
             console.error("Failed to load core user stats:", e);
+            throw e;
         }
     }
-
 
     // --- SUBMISSION HANDLERS ---
     
@@ -802,7 +808,7 @@
     }
 
 
-    // --- Scan-to-Web Functions (UNCHANGED) ---
+    // --- Scan-to-Web Functions ---
 
     async function requestScanToken() {
         const modalId = 'action-modal';
@@ -1126,13 +1132,12 @@
                 </div>
             </div>
         `;
-        // CRITICAL FIX: Update active tasks count for the dashboard stats
         userStats.activeTasks = tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION').length;
         lucide.createIcons();
     }
     
     // CRITICAL FIX: Implementation of renderTaskDetail function
-    async function renderTaskDetail(taskId) {
+    function renderTaskDetail(taskId) {
         const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
             <div class="ultra-card p-8 md:p-12 text-center mt-12">
@@ -1142,178 +1147,177 @@
         `;
         lucide.createIcons();
 
-        try {
-            const data = await fetchData(`/tasks/${taskId}`); 
-            const task = data.task;
+        fetchData(`/tasks/${taskId}`)
+            .then(data => {
+                const task = data.task;
 
-            if (!task) {
-                appContainer.innerHTML = `<p class="text-white text-center mt-12">Task details not found.</p>`;
-                return;
-            }
+                if (!task) {
+                    appContainer.innerHTML = `<p class="text-white text-center mt-12">Task details not found.</p>`;
+                    return;
+                }
 
-            const isAccepted = task.status !== 'AVAILABLE';
-            const isCompleted = task.status === 'COMPLETED' || task.status === 'PENDING_VERIFICATION';
-            const isDailySurvey = task.id === 1;
-            const isGmailTask = task.id === 1000;
+                const isAccepted = task.status !== 'AVAILABLE';
+                const isCompleted = task.status === 'COMPLETED' || task.status === 'PENDING_VERIFICATION';
+                const isDailySurvey = task.id === 1;
+                const isGmailTask = task.id === 1000;
 
-            let statusText, statusClass, submitFormHtml;
+                let statusText, statusClass, submitFormHtml;
 
-            if (task.status === 'PENDING_VERIFICATION') {
-                statusText = 'UNDER REVIEW';
-                statusClass = 'status-pending badge-glow';
-                submitFormHtml = `
-                    <div class="ultra-card p-4 md:p-6 mt-6 bg-yellow-50 text-center">
-                        <i data-lucide="clock" class="w-8 h-8 text-yellow-600 mx-auto mb-2"></i>
-                        <p class="font-bold text-yellow-800">Submission Sent!</p>
-                        <p class="text-sm text-gray-700">Your work is currently being verified by an admin. Payout will be processed upon approval.</p>
-                    </div>
-                `;
-            } else if (task.status === 'COMPLETED') {
-                statusText = 'COMPLETED';
-                statusClass = 'status-completed badge-glow';
-                submitFormHtml = `
-                    <div class="ultra-card p-4 md:p-6 mt-6 bg-green-50 text-center">
-                        <i data-lucide="check-circle-2" class="w-8 h-8 text-green-600 mx-auto mb-2"></i>
-                        <p class="font-bold text-green-800">COMPLETED</p>
-                        <p class="text-sm text-gray-700">You earned KES ${getTaskPayout(task)} for this task.</p>
-                    </div>
-                `;
-            } else if (isAccepted || isDailySurvey) {
-                statusText = 'IN PROGRESS';
-                statusClass = 'status-progress badge-glow';
-                
-                if (isGmailTask) {
-                     submitFormHtml = `
-                        <div class="ultra-card p-6 md:p-8 mt-6">
-                            <h4 class="text-lg font-black text-gray-800 mb-4 border-b pb-3 flex items-center space-x-2">
-                                <i data-lucide="file-text" class="w-5 h-5 text-indigo-600"></i>
-                                <span>Submission: 50 Accounts</span>
-                            </h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Common Password Used</label>
-                                    <input type="password" id="common-password" placeholder="Enter the password used for all accounts" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">List 50 Accounts (One per line)</label>
-                                    <textarea id="accounts-list" oninput="updateCountIndicator()" rows="10" placeholder="e.g. account1@gmail.com&#10;account2@gmail.com&#10;..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition"></textarea>
-                                    <p class="text-xs mt-1 text-gray-600">Current count: <span id="count-indicator">0 accounts</span></p>
-                                </div>
-                                <button id="submit-btn" onclick="submitGmailTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl ripple" disabled>
-                                    Submit Task
-                                </button>
-                            </div>
-                        </div>
-                        <script>updateCountIndicator();</script>
-                     `;
-                } else if (isDailySurvey) {
+                if (task.status === 'PENDING_VERIFICATION') {
+                    statusText = 'UNDER REVIEW';
+                    statusClass = 'status-pending badge-glow';
                     submitFormHtml = `
-                        <div class="ultra-card p-6 md:p-8 mt-6 bg-indigo-50">
-                            <h4 class="text-lg font-black text-indigo-700 mb-4">Complete Your Daily Survey (External Link)</h4>
-                            <p class="text-sm text-gray-700 mb-4">Click below to be redirected to the quick survey. You must return here and click 'Complete' after filling it out.</p>
-                            <a href="${FORMSPREE_SURVEY_URL}" target="_blank" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl text-center block mb-4 ripple">
-                                <i data-lucide="external-link" class="w-4 h-4 inline-block mr-2"></i> Go to Survey
-                            </a>
-                            <button id="survey-submit-btn" onclick="submitDailySurvey(${task.id})" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl w-full ripple">
-                                Complete Survey
-                            </button>
+                        <div class="ultra-card p-4 md:p-6 mt-6 bg-yellow-50 text-center">
+                            <i data-lucide="clock" class="w-8 h-8 text-yellow-600 mx-auto mb-2"></i>
+                            <p class="font-bold text-yellow-800">Submission Sent!</p>
+                            <p class="text-sm text-gray-700">Your work is currently being verified by an admin. Payout will be processed upon approval.</p>
                         </div>
                     `;
-                } else {
-                    // Generic submission form for other text-based tasks
+                } else if (task.status === 'COMPLETED') {
+                    statusText = 'COMPLETED';
+                    statusClass = 'status-completed badge-glow';
                     submitFormHtml = `
-                         <div class="ultra-card p-6 md:p-8 mt-6">
-                            <h4 class="text-lg font-black text-gray-800 mb-4 border-b pb-3 flex items-center space-x-2">
-                                <i data-lucide="file-text" class="w-5 h-5 text-indigo-600"></i>
-                                <span>Submission Form</span>
-                            </h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Task Output/Notes</label>
-                                    <textarea id="task-output-text" rows="8" placeholder="Enter your final submission data or link here..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition" required></textarea>
+                        <div class="ultra-card p-4 md:p-6 mt-6 bg-green-50 text-center">
+                            <i data-lucide="check-circle-2" class="w-8 h-8 text-green-600 mx-auto mb-2"></i>
+                            <p class="font-bold text-green-800">COMPLETED</p>
+                            <p class="text-sm text-gray-700">You earned KES ${getTaskPayout(task)} for this task.</p>
+                        </div>
+                    `;
+                } else if (isAccepted || isDailySurvey) {
+                    statusText = 'IN PROGRESS';
+                    statusClass = 'status-progress badge-glow';
+                    
+                    if (isGmailTask) {
+                         submitFormHtml = `
+                            <div class="ultra-card p-6 md:p-8 mt-6">
+                                <h4 class="text-lg font-black text-gray-800 mb-4 border-b pb-3 flex items-center space-x-2">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-indigo-600"></i>
+                                    <span>Submission: 50 Accounts</span>
+                                </h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Common Password Used</label>
+                                        <input type="password" id="common-password" placeholder="Enter the password used for all accounts" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">List 50 Accounts (One per line)</label>
+                                        <textarea id="accounts-list" oninput="updateCountIndicator()" rows="10" placeholder="e.g. account1@gmail.com&#10;account2@gmail.com&#10;..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition"></textarea>
+                                        <p class="text-xs mt-1 text-gray-600">Current count: <span id="count-indicator">0 accounts</span></p>
+                                    </div>
+                                    <button id="submit-btn" onclick="submitGmailTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl ripple" disabled>
+                                        Submit Task
+                                    </button>
                                 </div>
-                                <button id="submit-btn-${task.id}" onclick="submitTextTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl ripple">
-                                    Submit Work
+                            </div>
+                            <script>updateCountIndicator();</script>
+                         `;
+                    } else if (isDailySurvey) {
+                        submitFormHtml = `
+                            <div class="ultra-card p-6 md:p-8 mt-6 bg-indigo-50">
+                                <h4 class="text-lg font-black text-indigo-700 mb-4">Complete Your Daily Survey (External Link)</h4>
+                                <p class="text-sm text-gray-700 mb-4">Click below to be redirected to the quick survey. You must return here and click 'Complete' after filling it out.</p>
+                                <a href="${FORMSPREE_SURVEY_URL}" target="_blank" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl text-center block mb-4 ripple">
+                                    <i data-lucide="external-link" class="w-4 h-4 inline-block mr-2"></i> Go to Survey
+                                </a>
+                                <button id="survey-submit-btn" onclick="submitDailySurvey(${task.id})" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl w-full ripple">
+                                    Complete Survey
                                 </button>
                             </div>
+                        `;
+                    } else {
+                        // Generic submission form for other text-based tasks
+                        submitFormHtml = `
+                             <div class="ultra-card p-6 md:p-8 mt-6">
+                                <h4 class="text-lg font-black text-gray-800 mb-4 border-b pb-3 flex items-center space-x-2">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-indigo-600"></i>
+                                    <span>Submission Form</span>
+                                </h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Task Output/Notes</label>
+                                        <textarea id="task-output-text" rows="8" placeholder="Enter your final submission data or link here..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition" required></textarea>
+                                    </div>
+                                    <button id="submit-btn-${task.id}" onclick="submitTextTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl ripple">
+                                        Submit Work
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                } else {
+                    statusText = 'AVAILABLE';
+                    statusClass = 'bg-green-500';
+                    submitFormHtml = `
+                         <div class="ultra-card p-6 md:p-8 mt-6 bg-green-50 text-center">
+                            <p class="font-bold text-green-800 mb-4">This task is available!</p>
+                            <button onclick="acceptTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 ripple">
+                                <i data-lucide="play-circle" class="w-5 h-5"></i>
+                                <span>Accept Task</span>
+                            </button>
                         </div>
                     `;
                 }
 
-            } else {
-                statusText = 'AVAILABLE';
-                statusClass = 'bg-green-500';
-                submitFormHtml = `
-                     <div class="ultra-card p-6 md:p-8 mt-6 bg-green-50 text-center">
-                        <p class="font-bold text-green-800 mb-4">This task is available!</p>
-                        <button onclick="acceptTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 ripple">
-                            <i data-lucide="play-circle" class="w-5 h-5"></i>
-                            <span>Accept Task</span>
+
+                // Final Detail Page HTML
+                appContainer.innerHTML = `
+                    <div class="fade-in-up max-w-4xl mx-auto">
+                        <button onclick="setRoute('my-tasks')" class="text-white text-sm font-semibold mb-4 flex items-center space-x-2 hover:text-indigo-400 transition">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            <span>Back to My Tasks</span>
                         </button>
+
+                        <div class="ultra-card p-6 md:p-8">
+                            <div class="flex justify-between items-start mb-4 border-b pb-4">
+                                <h2 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h2>
+                                <span class="${statusClass} text-white text-sm font-bold px-4 py-2 rounded-full flex-shrink-0">${statusText}</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <h3 class="text-xl font-black gradient-text mb-2">KES ${getTaskPayout(task)}</h3>
+                                    <p class="text-xs text-gray-600 font-medium">Payout for successful completion</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-700">Category: <span class="text-indigo-600">${task.category}</span></p>
+                                    <p class="text-sm font-semibold text-gray-700">Difficulty: <span class="difficulty-${getTaskDifficulty(task)} text-white px-2 py-0.5 rounded-full text-xs">${task.difficulty}</span></p>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-bold text-gray-800 mb-2 mt-4">Task Description</h4>
+                            <p class="text-gray-600 text-sm mb-6">${task.description}</p>
+
+                            <div class="bg-gray-50 p-4 rounded-xl space-y-2 text-sm">
+                                 <p class="text-gray-700 flex items-center space-x-2">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-gray-500"></i> 
+                                    <span>Deadline: <span class="font-semibold">${task.deadline || 'N/A'}</span></span>
+                                 </p>
+                                 <p class="text-gray-700 flex items-center space-x-2">
+                                    <i data-lucide="clock" class="w-4 h-4 text-gray-500"></i>
+                                    <span>Estimated Time: <span class="font-semibold">${task.estimatedTime || 'N/A'}</span></span>
+                                 </p>
+                                 ${task.requiresVerification ? `<p class="text-red-500 flex items-center space-x-2 font-semibold"><i data-lucide="shield-alert" class="w-4 h-4"></i> Requires manual verification</p>` : `<p class="text-green-500 flex items-center space-x-2 font-semibold"><i data-lucide="zap" class="w-4 h-4"></i> Automated Payout / Quick Check</p>`}
+                            </div>
+                            
+                            ${submitFormHtml}
+
+                        </div>
                     </div>
                 `;
-            }
+                lucide.createIcons();
+                if (isGmailTask && isAccepted && !isCompleted) updateCountIndicator();
 
-
-            // Final Detail Page HTML
-            appContainer.innerHTML = `
-                <div class="fade-in-up max-w-4xl mx-auto">
-                    <button onclick="setRoute('my-tasks')" class="text-white text-sm font-semibold mb-4 flex items-center space-x-2 hover:text-indigo-400 transition">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                        <span>Back to My Tasks</span>
-                    </button>
-
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="flex justify-between items-start mb-4 border-b pb-4">
-                            <h2 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h2>
-                            <span class="${statusClass} text-white text-sm font-bold px-4 py-2 rounded-full flex-shrink-0">${statusText}</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <h3 class="text-xl font-black gradient-text mb-2">KES ${getTaskPayout(task)}</h3>
-                                <p class="text-xs text-gray-600 font-medium">Payout for successful completion</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-gray-700">Category: <span class="text-indigo-600">${task.category}</span></p>
-                                <p class="text-sm font-semibold text-gray-700">Difficulty: <span class="difficulty-${getTaskDifficulty(task)} text-white px-2 py-0.5 rounded-full text-xs">${task.difficulty}</span></p>
-                            </div>
-                        </div>
-
-                        <h4 class="text-lg font-bold text-gray-800 mb-2 mt-4">Task Description</h4>
-                        <p class="text-gray-600 text-sm mb-6">${task.description}</p>
-
-                        <div class="bg-gray-50 p-4 rounded-xl space-y-2 text-sm">
-                             <p class="text-gray-700 flex items-center space-x-2">
-                                <i data-lucide="calendar" class="w-4 h-4 text-gray-500"></i> 
-                                <span>Deadline: <span class="font-semibold">${task.deadline || 'N/A'}</span></span>
-                             </p>
-                             <p class="text-gray-700 flex items-center space-x-2">
-                                <i data-lucide="clock" class="w-4 h-4 text-gray-500"></i>
-                                <span>Estimated Time: <span class="font-semibold">${task.estimatedTime || 'N/A'}</span></span>
-                             </p>
-                             ${task.requiresVerification ? `<p class="text-red-500 flex items-center space-x-2 font-semibold"><i data-lucide="shield-alert" class="w-4 h-4"></i> Requires manual verification</p>` : `<p class="text-green-500 flex items-center space-x-2 font-semibold"><i data-lucide="zap" class="w-4 h-4"></i> Automated Payout / Quick Check</p>`}
-                        </div>
-                        
-                        ${submitFormHtml}
-
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-            if (isGmailTask && isAccepted && !isCompleted) updateCountIndicator();
-
-        } catch (error) {
-            appContainer.innerHTML = `<p class="text-white text-center mt-12">Error loading task details: ${error.message}</p>`;
-            lucide.createIcons();
-        }
+            })
+            .catch(error => {
+                appContainer.innerHTML = `<p class="text-white text-center mt-12">Error loading task details: ${error.message}</p>`;
+                lucide.createIcons();
+            });
     }
-
 
     function renderEarnings() {
         const appContainer = document.getElementById('app-container');
         const profile = userProfile;
-        const totalReferralEarnings = (profile.totalReferrals || 0) * REFERRAL_BONUS; 
         
         appContainer.innerHTML = `
              <div class="fade-in-up">
@@ -1440,7 +1444,7 @@
     }
 
 
-    // --- Core Routing Logic ---
+    // --- Core Application Logic ---
 
     async function loadContent() {
         const appContainer = document.getElementById('app-container');
@@ -1466,9 +1470,6 @@
              // Update cache and stats
              cachedTasks = availableTasksResult.tasks || [];
              userProfile = profileResult.user || {};
-             if (statsResult.earnings) {
-                // Stats fetched successfully, proceed
-             }
 
              // Fetch My Tasks specifically for the My Tasks tab/logic
              let myTasks = [];
@@ -1477,8 +1478,7 @@
                  myTasks = myTasksData.tasks;
                  userStats.activeTasks = myTasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION').length;
              } catch (e) {
-                // This is where the 404/500 error was occurring; log and continue
-                console.error("Failed to load My Tasks for active count:", e);
+                console.error("Failed to load My Tasks for active count/rendering:", e);
              }
 
 
