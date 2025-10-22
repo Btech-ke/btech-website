@@ -422,7 +422,7 @@
     let currentUserEmail = ""; 
     let userProfile = {}; 
 
-    // --- UTILITY AND MODAL FUNCTIONS ---
+    // --- UTILITY AND MODAL FUNCTIONS (Defined first) ---
 
     function showAlert(message, isSuccess = true) {
         const statusAlert = document.getElementById('status-alert');
@@ -1234,7 +1234,7 @@
         `;
     };
 
-    // --- RENDER FUNCTIONS ---
+    // --- Render Functions ---
 
     function renderMyTasks(tasks) {
         const appContainer = document.getElementById('app-container');
@@ -1566,7 +1566,7 @@
     }
 
 
-    // --- Load/Routing Logic ---
+    // --- Core Routing Logic ---
 
     async function loadContent() {
         const appContainer = document.getElementById('app-container');
@@ -1678,19 +1678,23 @@
     function closeModal() {
         document.getElementById('action-modal').classList.add('hidden');
     }
+
+    // --- Other utility functions ---
+    function copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Code copied to clipboard!', true);
+            }, (err) => {
+                showAlert('Failed to copy text: ' + err, false);
+            });
+        } else {
+            showAlert('Clipboard access not supported by your browser.', false);
+        }
+    }
     
     // Initializers
-    const appContainer = document.getElementById('app-container');
-    const statusAlert = document.getElementById('status-alert');
-
     window.addEventListener('hashchange', loadContent);
-    // At the very end of the <script> block:
-
-// This function starts the application when the entire window has loaded
-window.onload = function() {
-    // This calls the main entry point after all functions are defined.
-    initializeApp();
-};
+    window.onload = initializeApp;
 </script>
 </body>
 </html>
