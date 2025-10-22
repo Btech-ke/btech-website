@@ -413,8 +413,8 @@
 
 <script>
     // --- GLOBAL CONSTANTS AND VARIABLES ---
-    // FIX 1: REMOVE /api from the BACKEND_URL constant
-    const BACKEND_URL = "https://btech-earning-api.onrender.com"; 
+    // FIX: RESTORING BACKEND_URL to include /api, matching the server.js routing definition.
+    const BACKEND_URL = "https://btech-earning-api.onrender.com/api"; 
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; 
     const REFERRAL_BONUS = 200.00; 
     let AUTH_TOKEN; 
@@ -593,6 +593,8 @@
         };
 
         try {
+            // BACKEND_URL now includes /api. Endpoint starts with / (e.g., /tasks/available)
+            // Final URL: https://.../api/tasks/available (Correct path based on server.js)
             const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
             const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
             
@@ -618,9 +620,9 @@
     }
     
     async function fetchDailyTask() {
-        // FIX 2b: Added /api prefix
         try {
-            const data = await fetchData('/api/tasks/daily', { method: 'GET' });
+            // Corrected endpoint: Removed redundant /api
+            const data = await fetchData('/tasks/daily', { method: 'GET' });
             return data.task;
         } catch (error) {
             return null;
@@ -628,9 +630,9 @@
     }
 
     async function fetchUserProfile() {
-        // FIX 2c: Added /api prefix
         try {
-            const result = await fetchData('/api/user/profile', { method: 'GET' });
+            // Corrected endpoint: Removed redundant /api
+            const result = await fetchData('/user/profile', { method: 'GET' });
             if (result.success && result.user) {
                 currentUserEmail = result.user.email;
                 userProfile = result.user; 
@@ -641,9 +643,9 @@
     }
     
     async function checkAuthToken() {
-        // FIX 2d: Added /api prefix
         try {
-            await fetchData('/api/earnings/summary', { method: 'GET' });
+            // Corrected endpoint: Removed redundant /api
+            await fetchData('/earnings/summary', { method: 'GET' });
             return true;
         } catch (error) {
             return false;
@@ -651,10 +653,10 @@
     }
 
     async function fetchUserStats() {
-        // FIX 2e: Added /api prefixes
         try {
-            const earningsData = await fetchData('/api/earnings/summary');
-            const myTasksData = await fetchData('/api/tasks/my-tasks');
+            // Corrected endpoints: Removed redundant /api
+            const earningsData = await fetchData('/earnings/summary');
+            const myTasksData = await fetchData('/tasks/my-tasks');
 
             userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
             userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
@@ -675,9 +677,9 @@
     }
 
     async function acceptTask(taskId) {
-        // FIX 2f: Added /api prefix
         try {
-            const data = await fetchData(`/api/tasks/${taskId}/accept`, { method: 'POST' });
+            // Corrected endpoint: Removed redundant /api
+            const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
             
             if (data.success) {
                 showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
@@ -709,8 +711,8 @@
         lucide.createIcons();
 
         try {
-            // FIX 2g: Added /api prefix
-            const data = await fetchData('/api/tasks/submit-gmail-accounts', {
+            // Corrected endpoint: Removed redundant /api
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
                 method: 'POST',
                 body: { taskId, accountsList, commonPassword: password }
             });
@@ -749,8 +751,8 @@
         }
 
         try {
-            // FIX 2h: Added /api prefix
-            const data = await fetchData('/api/tasks/submit-gmail-accounts', {
+            // Corrected endpoint: Removed redundant /api
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
                 method: 'POST',
                 body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
             });
@@ -800,9 +802,8 @@
         const headers = { 'Authorization': `Bearer ${AUTH_TOKEN}` };
         
         try {
-             // NOTE: This endpoint appears to be for general user verification (/api/user/verify) 
-             // but is used here for file task submission. Assuming this is intentional per backend design.
-             const response = await fetch(`${BACKEND_URL}/api/user/verify`, {
+             // This endpoint already includes /api, so it works fine with the corrected BACKEND_URL
+             const response = await fetch(`${BACKEND_URL}/user/verify`, {
                  method: 'POST',
                  headers: headers,
                  body: formData,
@@ -866,8 +867,8 @@
                 headers: { 'Accept': 'application/json' }
             });
 
-            // FIX 2i: Added /api prefix
-            await fetchData('/api/tasks/submit-daily-task', {
+            // Corrected endpoint: Removed redundant /api
+            await fetchData('/tasks/submit-daily-task', {
                  method: 'POST',
                  body: { taskId: taskId }
             });
@@ -897,8 +898,8 @@
         showModal('Generating Secure Token...', 'Please wait while we create a single-use login link.', 'info');
 
         try {
-            // FIX 2j: Added /api prefix
-            const result = await fetchData('/api/auth/generate-scan-token', { method: 'POST' });
+            // Corrected endpoint: Removed redundant /api
+            const result = await fetchData('/auth/generate-scan-token', { method: 'POST' });
 
             if (result.success && result.tempToken) {
                 const scanURL = `${window.location.origin}${window.location.pathname}?scan_token=${result.tempToken}#tasks`;
@@ -936,8 +937,8 @@
 
     async function redeemScanToken(scanToken) {
         try {
-            // FIX 2k: Added /api prefix
-            const result = await fetchData('/api/auth/redeem-scan-token', { 
+            // Corrected endpoint: Removed redundant /api
+            const result = await fetchData('/auth/redeem-scan-token', { 
                 method: 'POST',
                 body: { scanToken: scanToken }
             });
@@ -1600,8 +1601,8 @@
         ]).then(() => {
             // 2. Fetch Tasks only after profile/stats are done
             return Promise.all([
-                // FIX 2a: Added /api prefix here! This was the critical issue for task loading.
-                fetchData('/api/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
+                // Corrected endpoint: Removed redundant /api
+                fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
                 fetchDailyTask(),
             ]);
         }).then(([tasksData, dailyTaskData]) => {
@@ -1634,8 +1635,8 @@
                      lucide.createIcons();
                  }
             } else if (hash === 'my-tasks') {
-                // FIX 2l: Added /api prefix
-                fetchData('/api/tasks/my-tasks').then(data => {
+                // Corrected endpoint: Removed redundant /api
+                fetchData('/tasks/my-tasks').then(data => {
                     if (data) renderMyTasks(data.tasks);
                 });
             } else if (hash === 'earnings') {
