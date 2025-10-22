@@ -414,7 +414,7 @@
 <script>
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; 
-    const REFERRAL_BONUS = 200.00; // 🛠️ FINAL VALUE: KES 200
+    const REFERRAL_BONUS = 200.00; 
     let AUTH_TOKEN; 
     let cachedTasks = [];
     let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
@@ -488,6 +488,7 @@
 
     async function fetchUserProfile() {
         try {
+            // Note: The /user/profile endpoint now returns referralCode and totalReferrals from server.js
             const result = await fetchData('/user/profile', { method: 'GET' });
             if (result.success && result.user) {
                 currentUserEmail = result.user.email;
@@ -1173,7 +1174,7 @@
             lucide.createIcons();
         }
     }
-    
+
     // 🛠️ Scan-to-Web Functions
 
     // 1. New function to request a temporary token and show QR Code
@@ -1363,19 +1364,6 @@
 
     function closeModal() {
         document.getElementById('action-modal').classList.add('hidden');
-    }
-
-    // --- Other utility functions ---
-    function copyToClipboard(text) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showAlert('Code copied to clipboard!', true);
-            }, (err) => {
-                showAlert('Failed to copy text: ' + err, false);
-            });
-        } else {
-            showAlert('Clipboard access not supported by your browser.', false);
-        }
     }
     
     // Initializers
