@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script> 
     <style>
         /* Custom Styles for Professional Aesthetic */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
@@ -412,18 +411,98 @@
     </div>
 
 <script>
-    // --- GLOBAL CONSTANTS AND VARIABLES ---
-    // FIX: RESTORING BACKEND_URL to include /api, matching the server.js routing definition.
-    const BACKEND_URL = "https://btech-earning-api.onrender.com/api"; 
+    const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; 
-    const REFERRAL_BONUS = 200.00; 
-    let AUTH_TOKEN; 
+    const REFERRAL_BONUS = 200.00; // 🛠️ FINAL VALUE: KES 200
+    let AUTH_TOKEN; 
     let cachedTasks = [];
-    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
-    let currentUserEmail = ""; 
-    let userProfile = {}; 
+    let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
+    let currentUserEmail = ""; 
+    let userProfile = {}; 
 
-    // --- UTILITY AND MODAL FUNCTIONS (Defined first) ---
+    // --- Core Initialization Logic ---
+
+    async function initializeApp() {
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get('token');
+        
+        if (urlToken) {
+            AUTH_TOKEN = urlToken;
+            localStorage.setItem('btech_auth_token', AUTH_TOKEN);
+            console.log("AUTH_DEBUG: Token initialized from URL query parameter.");
+        } else if (localStorage.getItem('btech_auth_token')) {
+             AUTH_TOKEN = localStorage.getItem('btech_auth_token');
+             console.log("AUTH_DEBUG: Token loaded from local storage.");
+        } 
+        
+        if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
+             console.error("AUTH_DEBUG: Token is missing or invalid. Access Denied.");
+             showAlert("Authentication required. Please log in through the mobile app.", false);
+             const appContainer = document.getElementById('app-container');
+             appContainer.innerHTML = `
+                 <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                    <div class="empty-state-icon mb-6">
+                        <i data-lucide="shield-alert" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Access Denied</h3>
+                    <p class="text-gray-600 text-sm md:text-base mb-6">Please log in through the BTECH Plus App to continue.</p>
+                    <button onclick="location.reload()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl ripple">
+                        Retry Connection
+                    </button>
+                 </div>
+             `;
+             lucide.createIcons();
+             return; 
+        }
+        
+        const authValid = await checkAuthToken();
+        if (!authValid) {
+             return; 
+        }
+
+        // 🛠️ Fetch user profile (including referral data) and stats
+        await Promise.all([
+            fetchUserProfile(),
+            fetchUserStats()
+        ]);
+        
+        if (window.location.search) {
+             window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+        }
+
+        const hash = window.location.hash.slice(1);
+        if (!hash || hash === 'tasks' || hash === 'my-tasks' || hash === 'earnings' || hash === 'affiliate') {
+            setRoute(hash || 'tasks');
+        } else if (hash.startsWith('tasks/')) {
+            loadContent();
+        }
+    }
+
+    async function fetchUserProfile() {
+        try {
+            const result = await fetchData('/user/profile', { method: 'GET' });
+            if (result.success && result.user) {
+                currentUserEmail = result.user.email;
+                userProfile = result.user; 
+                console.log(`User Profile & Referral data fetched.`);
+            }
+        } catch (error) {
+            console.error("Failed to fetch user profile.", error);
+        }
+    }
+    
+    async function checkAuthToken() {
+        try {
+            await fetchData('/earnings/summary', { method: 'GET' });
+            return true;
+        } catch (error) {
+            console.error("AUTH_VALIDATION_FAILED: Stopping content load.", error.message);
+            return false;
+        }
+    }
+
+
+    // --- Utility Functions ---
 
     function showAlert(message, isSuccess = true) {
         const statusAlert = document.getElementById('status-alert');
@@ -448,46 +527,6 @@
         }, 5000);
     }
     
-    function showModal(title, message, type = 'success') {
-        const modal = document.getElementById('action-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        const modalIcon = document.getElementById('modal-icon');
-        const modalIconBg = document.getElementById('modal-icon-bg');
-        
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        
-        if (type === 'success') {
-            modalIcon.setAttribute('data-lucide', 'check-circle');
-            modalIconBg.className = 'w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-green-400 to-emerald-600';
-            modalIcon.className = 'w-12 h-12 text-white';
-        } else {
-            modalIcon.setAttribute('data-lucide', 'alert-circle');
-            modalIconBg.className = 'w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-gradient-to-br from-red-400 to-red-600';
-            modalIcon.className = 'w-12 h-12 text-white';
-        }
-        
-        modal.classList.remove('hidden');
-        lucide.createIcons();
-    }
-
-    function closeModal() {
-        document.getElementById('action-modal').classList.add('hidden');
-    }
-
-    function copyToClipboard(text) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showAlert('Code copied to clipboard!', true);
-            }, (err) => {
-                showAlert('Failed to copy text: ' + err, false);
-            });
-        } else {
-            showAlert('Clipboard access not supported by your browser.', false);
-        }
-    }
-
     function simulateLogout() {
         localStorage.removeItem('btech_auth_token');
         showAlert("Logged out successfully!", true);
@@ -516,7 +555,76 @@
         }
     }
 
-    // --- Data Calculation Helpers ---
+    async function fetchData(endpoint, options = {}) {
+        if (!AUTH_TOKEN) {
+            throw new Error('Authentication token missing.');
+        }
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AUTH_TOKEN}`,
+            ...options.headers
+        };
+
+        const config = {
+            method: options.method || 'GET',
+            headers: headers,
+            ...(options.body && { body: JSON.stringify(options.body) }),
+        };
+
+        try {
+            const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
+            const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
+            
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error("Token expired or invalid. Please re-login.");
+                }
+                if (response.status === 402 && data.error) {
+                    throw new Error(data.error);
+                }
+                throw new Error(data.error || `Error: ${response.status}`);
+            }
+
+            if (!data.success && data.error) {
+                throw new Error(data.error);
+            }
+            
+            console.log('FETCH_DEBUG: Request successful.');
+            return data;
+        } catch (error) {
+            console.error('API Error:', error.message);
+            showAlert(`Error: ${error.message}`, false);
+            throw error;
+        }
+    }
+    
+    async function fetchDailyTask() {
+        try {
+            const data = await fetchData('/tasks/daily', { method: 'GET' });
+            return data.task;
+        } catch (error) {
+            console.error("Failed to fetch daily task:", error);
+            return null;
+        }
+    }
+
+    async function fetchUserStats() {
+        try {
+            const earningsData = await fetchData('/earnings/summary');
+            const myTasksData = await fetchData('/tasks/my-tasks');
+
+            userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
+            userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
+            userStats.pendingEarnings = parseFloat(earningsData.earnings.pendingEarnings || 0);
+            userStats.tasksCompleted = parseInt(earningsData.earnings.completedTasks || 0);
+            userStats.activeTasks = myTasksData.tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION').length;
+        } catch (e) {
+            console.error("Failed to load user stats for dashboard:", e);
+        }
+    }
+
+
     const getTaskPayout = (task) => {
         const value = task.payment || task.payout;
         return parseFloat(value || 0).toFixed(2);
@@ -524,6 +632,9 @@
     const getTaskDifficulty = (task) => {
         return (task.difficulty || 'Easy').toLowerCase();
     }
+
+
+    // --- MAIN RENDER LOGIC ---
     
     function getCategoryIcon(category) {
         switch (category) {
@@ -551,416 +662,7 @@
                 return 'briefcase';
         }
     }
-    
-    function updateCountIndicator() {
-        const textarea = document.getElementById('accounts-list');
-        const indicator = document.getElementById('count-indicator');
-        const submitBtn = document.getElementById('submit-btn');
 
-        if (!textarea || !indicator || !submitBtn) return;
-
-        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
-        const count = accounts.length;
-
-        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-red-500'}">${count} accounts</span>`;
-
-        submitBtn.disabled = count !== 50;
-        if (count === 50) {
-            submitBtn.classList.remove('opacity-50');
-        } else {
-            submitBtn.classList.add('opacity-50');
-        }
-    }
-
-
-    // --- ASYNCHRONOUS DATA FETCHERS ---
-
-    async function fetchData(endpoint, options = {}) {
-        if (!AUTH_TOKEN) {
-            throw new Error('Authentication token missing.');
-        }
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${AUTH_TOKEN}`,
-            ...options.headers
-        };
-
-        const config = {
-            method: options.method || 'GET',
-            headers: headers,
-            ...(options.body && { body: JSON.stringify(options.body) }),
-        };
-
-        try {
-            // BACKEND_URL now includes /api. Endpoint starts with / (e.g., /tasks/available)
-            // Final URL: https://.../api/tasks/available (Correct path based on server.js)
-            const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
-            const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
-            
-            if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
-                    throw new Error("Token expired or invalid. Please re-login.");
-                }
-                if (response.status === 402 && data.error) {
-                    throw new Error(data.error);
-                }
-                throw new Error(data.error || `Error: ${response.status}`);
-            }
-
-            if (!data.success && data.error) {
-                throw new Error(data.error);
-            }
-            
-            return data;
-        } catch (error) {
-            showAlert(`Error: ${error.message}`, false);
-            throw error;
-        }
-    }
-    
-    async function fetchDailyTask() {
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const data = await fetchData('/tasks/daily', { method: 'GET' });
-            return data.task;
-        } catch (error) {
-            return null;
-        }
-    }
-
-    async function fetchUserProfile() {
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const result = await fetchData('/user/profile', { method: 'GET' });
-            if (result.success && result.user) {
-                currentUserEmail = result.user.email;
-                userProfile = result.user; 
-            }
-        } catch (error) {
-            console.error("Failed to fetch user profile.", error);
-        }
-    }
-    
-    async function checkAuthToken() {
-        try {
-            // Corrected endpoint: Removed redundant /api
-            await fetchData('/earnings/summary', { method: 'GET' });
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    async function fetchUserStats() {
-        try {
-            // Corrected endpoints: Removed redundant /api
-            const earningsData = await fetchData('/earnings/summary');
-            const myTasksData = await fetchData('/tasks/my-tasks');
-
-            userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
-            userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
-            userStats.pendingEarnings = parseFloat(earningsData.earnings.pendingEarnings || 0);
-            userStats.tasksCompleted = parseInt(earningsData.earnings.completedTasks || 0);
-            userStats.activeTasks = myTasksData.tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION').length;
-        } catch (e) {
-            console.error("Failed to load user stats for dashboard:", e);
-        }
-    }
-
-
-    // --- SUBMISSION HANDLERS ---
-    
-    function acceptAndNavigateToSurvey(taskId) {
-        acceptTask(taskId); 
-        setRoute(`tasks/${taskId}`);
-    }
-
-    async function acceptTask(taskId) {
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
-            
-            if (data.success) {
-                showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
-                setTimeout(() => {
-                    closeModal();
-                    setRoute(`my-tasks`);
-                }, 2000);
-            } else {
-                showAlert(data.message || 'Failed to accept task.', false);
-            }
-        } catch (error) {
-            loadContent();
-        }
-    }
-
-    async function submitGmailTask(taskId) {
-        const password = document.getElementById('common-password').value.trim();
-        const accountsText = document.getElementById('accounts-list').value.trim();
-        const accountsList = accountsText.split('\n').filter(line => line.trim() !== '');
-
-        if (accountsList.length !== 50 || !password) {
-            showAlert('Ensure 50 accounts and password are provided.', false);
-            return;
-        }
-
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-        lucide.createIcons();
-
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const data = await fetchData('/tasks/submit-gmail-accounts', {
-                method: 'POST',
-                body: { taskId, accountsList, commonPassword: password }
-            });
-
-            if (data.success) {
-                showModal('Submitted!', 'Your task is under review. Check My Tasks for updates.', 'success');
-                setTimeout(() => {
-                    closeModal();
-                    setRoute('my-tasks');
-                }, 2500);
-            } else {
-                showAlert(data.error || 'Submission failed.', false);
-            }
-        } catch (error) {
-            showAlert('Submission failed due to internal error.', false);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
-            lucide.createIcons();
-        }
-    }
-    
-    async function submitTextTask(taskId) {
-        const outputText = document.getElementById('task-output-text')?.value?.trim();
-        const submitBtn = document.getElementById(`submit-text-btn-${taskId}`);
-
-        if (!outputText) {
-            showAlert('Submission field cannot be empty.', false);
-            return;
-        }
-
-        if(submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-            lucide.createIcons();
-        }
-
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const data = await fetchData('/tasks/submit-gmail-accounts', {
-                method: 'POST',
-                body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
-            });
-
-            if (data.success) {
-                showModal('Submitted!', 'Your output is under review. Check My Tasks for updates.', 'success');
-                setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
-            } else {
-                showAlert(data.error || 'Submission failed.', false);
-            }
-        } catch (error) {
-            showAlert('Submission failed due to internal error.', false);
-        } finally {
-            if(submitBtn) {
-                 submitBtn.disabled = false;
-                 submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
-                 lucide.createIcons();
-            }
-        }
-    }
-
-    async function submitFileTask(taskId) {
-        const fileInput = document.getElementById(`submission-file-${taskId}`);
-        const documentTypeInput = document.getElementById(`document-type-field-${taskId}`);
-        const file = fileInput.files[0];
-        const documentType = documentTypeInput.value.trim();
-        
-        if (!file) {
-            showAlert('Please select a file to upload.', false);
-            return;
-        }
-        if (!documentType) {
-            showAlert('Please specify the document description/type.', false);
-            documentTypeInput.focus();
-            return;
-        }
-
-        const submitBtn = document.getElementById(`submit-file-btn-${taskId}`);
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading...</span>';
-        lucide.createIcons();
-        
-        const formData = new FormData();
-        formData.append('document', file);
-        formData.append('documentType', documentType); 
-
-        const headers = { 'Authorization': `Bearer ${AUTH_TOKEN}` };
-        
-        try {
-             // This endpoint already includes /api, so it works fine with the corrected BACKEND_URL
-             const response = await fetch(`${BACKEND_URL}/user/verify`, {
-                 method: 'POST',
-                 headers: headers,
-                 body: formData,
-             });
-
-             const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
-
-             if (response.ok && data.success) {
-                 showModal('Submitted!', 'Your file is under review. Check My Tasks for updates.', 'success');
-                 setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
-             } else {
-                 showAlert(data.error || 'File submission failed.', false);
-             }
-        } catch (error) {
-            showAlert('Upload failed due to network error.', false);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i data-lucide="upload" class="w-5 h-5"></i><span>Upload & Submit for Review</span>';
-            lucide.createIcons();
-        }
-    }
-
-    async function submitDailySurvey(taskId) {
-        const submitBtn = document.getElementById('survey-submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-        lucide.createIcons();
-
-        const surveyQuestions = [
-            "q1_app_rating", "q2_task_clarity", "q3_payout_fairness", "q4_ease_of_use",
-            "q5_task_variety", "q6_referral_usage", "q7_favorite_feature", "q8_improvement_area",
-            "q9_recommendation", "q10_age_group"
-        ];
-        
-        let surveyData = {
-            'User Email': currentUserEmail || 'N/A',
-            'Task ID': taskId,
-            '_subject': `BTECH Daily Survey Submission (ID: ${taskId})`
-        };
-        let allAnswered = true;
-
-        surveyQuestions.forEach(q => {
-            const element = document.getElementById(q);
-            if (element && element.value) {
-                surveyData[q] = element.value;
-            } else {
-                allAnswered = false;
-            }
-        });
-        
-        if (!allAnswered) {
-            showAlert('Please answer all 10 questions before submitting.', false);
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Survey</span>';
-            lucide.createIcons();
-            return;
-        }
-
-        try {
-            await axios.post(FORMSPREE_SURVEY_URL, surveyData, {
-                headers: { 'Accept': 'application/json' }
-            });
-
-            // Corrected endpoint: Removed redundant /api
-            await fetchData('/tasks/submit-daily-task', {
-                 method: 'POST',
-                 body: { taskId: taskId }
-            });
-
-            showModal('Survey Complete!', 'Thank you! Your KES 50 has been instantly credited. Check "My Tasks".', 'success');
-            setTimeout(() => {
-                closeModal();
-                setRoute('my-tasks');
-            }, 3000);
-
-        } catch (error) {
-            showAlert('Submission failed. Check your connection or refresh the page.', false);
-            console.error("Survey submission failure:", error);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Survey</span>';
-            lucide.createIcons();
-        }
-    }
-
-    // --- Scan-to-Web Functions ---
-
-    async function requestScanToken() {
-        const modalId = 'action-modal';
-        const modal = document.getElementById(modalId);
-        
-        showModal('Generating Secure Token...', 'Please wait while we create a single-use login link.', 'info');
-
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const result = await fetchData('/auth/generate-scan-token', { method: 'POST' });
-
-            if (result.success && result.tempToken) {
-                const scanURL = `${window.location.origin}${window.location.pathname}?scan_token=${result.tempToken}#tasks`;
-                
-                const qrContainer = document.createElement('canvas');
-                
-                await new Promise((resolve, reject) => {
-                    QRCode.toCanvas(qrContainer, scanURL, { width: 256, margin: 2 }, function (error) {
-                        if (error) return reject(error);
-                        resolve();
-                    });
-                });
-
-                const expirationTime = new Date(result.expiresAt).toLocaleTimeString();
-                
-                document.getElementById('modal-icon-bg').style.display = 'none';
-                document.getElementById('modal-title').textContent = 'Scan to Login';
-                document.getElementById('modal-message').innerHTML = `
-                    <p class="mb-4">Scan this code on your desktop or another device to continue your session.</p>
-                    <div class="mx-auto w-64 h-64 border-4 border-indigo-500 p-2 rounded-lg mb-4">
-                        ${qrContainer.outerHTML}
-                    </div>
-                    <p class="text-red-500 font-semibold text-sm">Expires in 5 minutes (at ${expirationTime})</p>
-                `;
-                document.querySelector(`#${modalId} .btn-premium`).textContent = 'Close';
-                modal.classList.remove('hidden');
-
-            } else {
-                showAlert(result.error || 'Failed to generate token.', false);
-            }
-        } catch (error) {
-            showAlert('Failed to connect to token service.', false);
-        }
-    }
-
-    async function redeemScanToken(scanToken) {
-        try {
-            // Corrected endpoint: Removed redundant /api
-            const result = await fetchData('/auth/redeem-scan-token', { 
-                method: 'POST',
-                body: { scanToken: scanToken }
-            });
-
-            if (result.success && result.firebaseUid) {
-                alert(`Scan Successful! Session confirmed for user ${result.firebaseUid}. Please log in again to sync the session.`);
-                
-                window.history.replaceState(null, null, window.location.pathname + '#tasks');
-                location.reload(); 
-            } else {
-                showAlert(result.error || 'Token redemption failed.', false);
-                window.history.replaceState(null, null, window.location.pathname + '#tasks');
-                location.reload();
-            }
-        } catch (error) {
-            showAlert('Token expired or invalid.', false);
-            window.history.replaceState(null, null, window.location.pathname + '#tasks');
-            location.reload();
-        }
-    }
-
-    // --- Render Logic ---
 
     function renderTasksList(tasks, dailyTask) {
         const appContainer = document.getElementById('app-container');
@@ -997,6 +699,7 @@
 
         // 2. Main Tasks Rendering
         const mainTasksHtml = Array.isArray(tasks) && tasks.length > 0 ? tasks.map((task, i) => {
+            // CRITICAL FIX: Skip the daily task from the main list if it exists in both data sources
             if (dailyTask && task.id === dailyTask.id) return ''; 
 
             return `
@@ -1033,14 +736,8 @@
                     <span>Accept Task</span>
                 </button>
             </div>
-            `;
-        }).join('') : `
-            <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
-                 <i data-lucide="inbox" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
-                 <h3 class="text-xl font-black text-gray-800">No Major Tasks Right Now</h3>
-                 <p class="text-gray-600 text-sm mt-2">All major tasks are currently assigned or unavailable.</p>
-            </div>
         `;
+    }).join('') : '';
 
 
         // 3. Final Render
@@ -1177,8 +874,9 @@
         // --- Text/Data Submission (Translation, Data Entry, etc.) ---
         else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription' || task.category === 'Data Quality Assurance' || task.category === 'AI Training/Labeling') {
             const outputLabel = task.category === 'Transcription' ? 'Transcription Output (Full Text):' :
-                                 task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
-                                 'Final Output/Data Paste:';
+                                task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
+                                task.category === 'Data Quality Assurance' ? 'Error Report Summary:' :
+                                'Final Output/Data Paste:';
 
             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
@@ -1212,7 +910,7 @@
             { id: "q2_task_clarity", q: "How clear were the instructions for the last major task you attempted?", type: "select", options: ["Very Clear", "Clear", "Neutral", "Unclear", "Very Unclear"] },
             { id: "q3_payout_fairness", q: "Do you feel the payout rates are fair for the effort required?", type: "select", options: ["Very Fair", "Fair", "Neutral", "Unfair", "Very Unfair"] },
             { id: "q4_ease_of_use", q: "How easy is it to navigate between the Tasks and Earnings tabs?", type: "select", options: ["Very Easy", "Easy", "Neutral", "Difficult", "Very Difficult"] },
-            { id: "q5_task_variety", q: "Are you satisfied with the current variety of tasks offered?", type: "select", options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "1 - Very Dissatisfied"] },
+            { id: "q5_task_variety", q: "Are you satisfied with the current variety of tasks offered?", type: "select", options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"] },
             { id: "q6_referral_usage", q: "Have you used the referral code system?", type: "select", options: ["Yes, actively", "Yes, once or twice", "No, but I plan to", "No, not interested"] },
             { id: "q7_favorite_feature", q: "What is your favorite feature of the BTECH Earning Network?", type: "text", placeholder: "e.g., Daily tasks, quick withdrawals, etc." },
             { id: "q8_improvement_area", q: "What is the single most important area that needs improvement?", type: "text", placeholder: "e.g., More high-paying tasks, faster UI, etc." },
@@ -1248,7 +946,8 @@
         `;
     };
 
-    // --- Render Functions ---
+
+    // --- Other necessary functions ---
 
     function renderMyTasks(tasks) {
         const appContainer = document.getElementById('app-container');
@@ -1353,103 +1052,6 @@
                 </div>
             </div>
         `;
-        lucide.createIcons();
-    }
-    
-    function renderTaskDetail(taskId) {
-        let task = cachedTasks.find(t => t.id == taskId);
-        
-        if (!task && localStorage.getItem('dailyTask')) {
-             const dailyTask = JSON.parse(localStorage.getItem('dailyTask'));
-             if (dailyTask && (dailyTask.id == taskId || dailyTask.task_id == taskId)) {
-                 task = {
-                     ...dailyTask,
-                     id: dailyTask.id || dailyTask.task_id, 
-                     title: dailyTask.title,
-                     description: "Participate in this 10-question user experience survey to help us improve.",
-                     category: dailyTask.category,
-                     estimatedTime: "2 minutes",
-                     deadline: "Today",
-                     payment: dailyTask.payout || 50,
-                     difficulty: 'Easy'
-                 };
-             }
-        }
-
-        if (!task) {
-             const appContainer = document.getElementById('app-container');
-             appContainer.innerHTML = `
-                 <div class="ultra-card p-8 md:p-12 text-center">
-                     <div class="empty-state-icon mb-6">
-                         <i data-lucide="alert-triangle" class="w-20 h-20 md:w-24 md:h-24 text-orange-500 mx-auto"></i>
-                     </div>
-                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Task Not Found</h3>
-                     <p class="text-gray-600 text-sm md:text-base mb-6">This task could not be loaded.</p>
-                     <button onclick="setRoute('tasks')" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
-                         Back to Tasks
-                     </button>
-                 </div>
-             `;
-             lucide.createIcons();
-             return;
-        }
-
-        const appContainer = document.getElementById('app-container');
-        appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <button onclick="setRoute('my-tasks')" class="mb-6 flex items-center space-x-2 text-white hover:opacity-80 transition font-medium">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                    <span>Back to My Tasks</span>
-                </button>
-
-                <div class="mb-6">
-                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">${task.title}</h2>
-                    <p class="text-gray-300 text-sm md:text-base">Details and submission form for your active task.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                    <div class="lg:col-span-1 ultra-card p-5 md:p-6">
-                        <h3 class="text-lg md:text-xl font-black gradient-text mb-4 flex items-center">
-                            <i data-lucide="info" class="w-5 h-5 mr-2"></i>
-                            Task Details
-                        </h3>
-                        
-                        <div class="mb-6 p-4 md:p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
-                            <p class="text-xs md:text-sm text-gray-600 mb-1">Your Reward</p>
-                            <p class="text-3xl md:text-4xl font-black gradient-text">KES ${getTaskPayout(task)}</p>
-                        </div>
-                        
-                        <p class="text-sm md:text-base text-gray-600 mb-6 leading-relaxed">${task.description}</p>
-                        
-                        <div class="space-y-2 md:space-y-3 text-sm">
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                                <i data-lucide="hash" class="w-4 h-4 text-indigo-600"></i>
-                                <span class="font-semibold">ID: ${task.id}</span>
-                            </div>
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                                <i data-lucide="clock" class="w-4 h-4 text-indigo-600"></i>
-                                <span>${task.estimatedTime || 'N/A'}</span>
-                            </div>
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                                <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
-                                <span>Due: ${task.deadline || 'N/A'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-2 ultra-card p-5 md:p-8">
-                        ${renderSubmissionForm(task)}
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        const textarea = document.getElementById('accounts-list');
-        if (textarea) {
-            textarea.addEventListener('input', updateCountIndicator);
-            updateCountIndicator();
-        }
-
         lucide.createIcons();
     }
     
@@ -1566,23 +1168,25 @@
                              </ul>
                         </div>
                     </div>
-                    
-                    <div class="ultra-card p-4 md:p-6 text-center">
-                        <button onclick="requestScanToken()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 ripple">
-                            <i data-lucide="qr-code" class="w-5 h-5"></i>
-                            <span>Generate Scan-to-Web QR</span>
-                        </button>
-                    </div>
                 </div>
             </div>
         `;
         lucide.createIcons();
     }
 
+    function copyToClipboard(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Code copied to clipboard!', true);
+            }, (err) => {
+                showAlert('Failed to copy text: ' + err, false);
+            });
+        } else {
+            showAlert('Clipboard access not supported by your browser.', false);
+        }
+    }
 
-    // --- Core Routing Logic ---
-
-    async function loadContent() {
+    function loadContent() {
         const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
             <div class="flex items-center justify-center py-20">
@@ -1601,7 +1205,6 @@
         ]).then(() => {
             // 2. Fetch Tasks only after profile/stats are done
             return Promise.all([
-                // Corrected endpoint: Removed redundant /api
                 fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
                 fetchDailyTask(),
             ]);
@@ -1635,7 +1238,6 @@
                      lucide.createIcons();
                  }
             } else if (hash === 'my-tasks') {
-                // Corrected endpoint: Removed redundant /api
                 fetchData('/tasks/my-tasks').then(data => {
                     if (data) renderMyTasks(data.tasks);
                 });
@@ -1666,7 +1268,7 @@
         });
     }
 
-    // --- Modal Functions (for completeness)
+    // 6. Modal Functions (for completeness)
     function showModal(title, message, type = 'success') {
         const modal = document.getElementById('action-modal');
         const modalTitle = document.getElementById('modal-title');
@@ -1694,51 +1296,8 @@
     function closeModal() {
         document.getElementById('action-modal').classList.add('hidden');
     }
-
-    // --- Other utility functions ---
-    function copyToClipboard(text) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showAlert('Code copied to clipboard!', true);
-            }, (err) => {
-                showAlert('Failed to copy text: ' + err, false);
-            });
-        } else {
-            showAlert('Clipboard access not supported by your browser.', false);
-        }
-    }
     
     // Initializers
-    function initializeApp() {
-        AUTH_TOKEN = localStorage.getItem('btech_auth_token');
-        const urlParams = new URLSearchParams(window.location.search);
-        const scanToken = urlParams.get('scan_token');
-
-        if (scanToken) {
-            // Priority: Redeem scan token first
-            redeemScanToken(scanToken);
-        } else if (AUTH_TOKEN) {
-            // User has a token, proceed to load content
-            loadContent();
-        } else {
-            // No token, simulate a redirect to login page (or show a login error)
-            const appContainer = document.getElementById('app-container');
-             appContainer.innerHTML = `
-                 <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                     <div class="empty-state-icon mb-6">
-                         <i data-lucide="lock" class="w-20 h-20 md:w-24 md:h-24 text-red-500 mx-auto"></i>
-                     </div>
-                     <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Authentication Required</h3>
-                     <p class="text-gray-600 text-sm md:text-base mb-6">Please log in via the mobile application to access this dashboard.</p>
-                     <button onclick="simulateLogout()" class="btn-premium text-white font-bold py-3 px-8 rounded-2xl">
-                         Go to Login
-                     </button>
-                 </div>
-             `;
-             lucide.createIcons();
-        }
-    }
-
     window.addEventListener('hashchange', loadContent);
     window.onload = initializeApp;
 </script>
