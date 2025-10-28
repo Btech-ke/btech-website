@@ -8,9 +8,8 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        /* Custom Styles (Tailwind/CSS is kept consistent) */
+        /* CSS STYLES (Kept consistent with your design) */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-        
         * { font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: #0a0e27; position: relative; overflow-x: hidden; }
         .animated-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); opacity: 0.9; }
@@ -127,7 +126,7 @@
 
 <script>
     // --- GLOBAL CONSTANTS AND VARIABLES ---
-    // FIX 1: Correct URL (must include /api to match server.js routing)
+    // Correct URL (must include /api to match server.js routing)
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api"; 
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava"; 
     const REFERRAL_BONUS = 200.00; 
@@ -136,7 +135,8 @@
     let userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 }; 
     let currentUserEmail = ""; 
     let userProfile = {}; 
-    let cache = { profileLoaded: false, statsLoaded: false }; // FIX 3: Add cache object
+    // Added cache object for efficient API usage (Fix for 429 errors)
+    let cache = { profileLoaded: false, statsLoaded: false }; 
 
     // --- Core Initialization Logic ---
 
@@ -173,12 +173,13 @@
              return; 
         }
         
+        // This initial check prevents content loading if the token is bad
         const authValid = await checkAuthToken();
         if (!authValid) {
              return; 
         }
 
-        // Fetch essential data once on initialization
+        // Fetch essential data only once on initialization
         await Promise.all([
             fetchUserProfile(),
             fetchUserStats()
@@ -196,19 +197,14 @@
         }
     }
 
-    // FIX 3: Implement caching to prevent repeat calls on navigation/429 errors
     async function fetchUserProfile() {
-        if (cache.profileLoaded) {
-            console.log("CACHE_DEBUG: User profile skipped, already loaded.");
-            return;
-        }
+        if (cache.profileLoaded) { return; }
         try {
             const result = await fetchData('/user/profile', { method: 'GET' });
             if (result.success && result.user) {
                 currentUserEmail = result.user.email;
                 userProfile = result.user; 
                 cache.profileLoaded = true;
-                console.log(`CACHE_DEBUG: User Profile & Referral data fetched.`);
             }
         } catch (error) {
             console.error("Failed to fetch user profile.", error);
@@ -303,7 +299,6 @@
                 if (response.status === 401 || response.status === 403) {
                     throw new Error("Token expired or invalid. Please re-login.");
                 }
-                // Check for 429 and provide a helpful error
                 if (response.status === 429) {
                      throw new Error("Rate limit exceeded. Please wait a moment and try again.");
                 }
@@ -336,15 +331,9 @@
         }
     }
 
-    // FIX 3: Use caching to prevent repeat calls on navigation
     async function fetchUserStats() {
-        if (cache.statsLoaded) {
-            console.log("CACHE_DEBUG: User stats skipped, already loaded.");
-            return;
-        }
+        if (cache.statsLoaded) { return; }
         try {
-            // Note: These calls re-fetch the raw data, which is fine, 
-            // but the overall function only runs once due to the cache guard above.
             const earningsData = await fetchData('/earnings/summary');
             const myTasksData = await fetchData('/tasks/my-tasks');
 
@@ -544,7 +533,7 @@
     }
 
     function renderSubmissionForm(task) {
-        // --- Gmail/Account Creation Submission ---
+        // --- Submission Forms (Remains the same as your stable version) ---
         if (task.id == 1000 || task.category === 'Account Creation') {
             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
@@ -574,12 +563,10 @@
             `;
         }
         
-        // --- Daily Survey Submission (Internal Form) ---
         else if (task.category === 'Survey') {
             return renderDailySurveyForm(task.id);
         }
         
-        // --- File Upload Submissions (Photo Proof, QA Testing) ---
         else if (task.category === 'Local Data Verification' || task.category === 'QA Testing') {
             const fileDescription = task.category === 'QA Testing' ? 'detailed report/screenshot' : 'photo proof';
             return `
@@ -608,7 +595,6 @@
             `;
         }
 
-        // --- Text/Data Submission (Translation, Data Entry, etc.) ---
         else if (task.category === 'Translation' || task.category === 'Data Entry' || task.category === 'Market Research' || task.category === 'Content Creation' || task.category === 'Transcription' || task.category === 'Data Quality Assurance' || task.category === 'AI Training/Labeling') {
             const outputLabel = task.category === 'Transcription' ? 'Transcription Output (Full Text):' :
                                  task.category === 'Translation' ? 'Translated Text (Swahili to English):' :
@@ -635,13 +621,13 @@
             `;
         }
         
-        // --- Fallback for uncategorized tasks ---
         else {
             return `<div class="text-center py-12 text-gray-600"><i data-lucide="box" class="w-16 h-16 mx-auto mb-4"></i><p>No defined submission method for this task category yet.</p></div>`;
         }
     }
 
     const renderDailySurveyForm = (taskId) => {
+        // ... (Daily Survey HTML rendering logic remains the same) ...
         const questions = [
             { id: "q1_app_rating", q: "On a scale of 1-5, how satisfied are you with the app's performance?", type: "select", options: ["5 - Very Satisfied", "4 - Satisfied", "3 - Neutral", "2 - Dissatisfied", "1 - Very Dissatisfied"] },
             { id: "q2_task_clarity", q: "How clear were the instructions for the last major task you attempted?", type: "select", options: ["Very Clear", "Clear", "Neutral", "Unclear", "Very Unclear"] },
@@ -682,6 +668,255 @@
             </form>
         `;
     };
+
+
+    function updateCountIndicator() {
+        const textarea = document.getElementById('accounts-list');
+        const indicator = document.getElementById('count-indicator');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (!textarea || !indicator || !submitBtn) return;
+
+        const accounts = textarea.value.trim().split('\n').filter(line => line.trim() !== '');
+        const count = accounts.length;
+
+        indicator.innerHTML = `<span class="${count === 50 ? 'text-green-600 font-bold' : 'text-red-500'}">${count} accounts</span>`;
+
+        submitBtn.disabled = count !== 50;
+        if (count === 50) {
+            submitBtn.classList.remove('opacity-50');
+        } else {
+            submitBtn.classList.add('opacity-50');
+        }
+    }
+
+    // --- Submission Handlers (Re-added for functionality) ---
+
+    function acceptAndNavigateToSurvey(taskId) {
+        acceptTask(taskId); 
+        setRoute(`tasks/${taskId}`);
+    }
+
+    async function acceptTask(taskId) {
+        try {
+            const data = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
+            
+            if (data.success) {
+                showModal('Task Accepted!', 'Start working and earn your reward.', 'success');
+                setTimeout(() => {
+                    closeModal();
+                    // Clear cache to force My Tasks to fetch the new list next time
+                    cache.statsLoaded = false; 
+                    setRoute(`my-tasks`);
+                }, 2000);
+            } else {
+                showAlert(data.message || 'Failed to accept task.', false);
+            }
+        } catch (error) {
+            loadContent();
+        }
+    }
+
+    async function submitGmailTask(taskId) {
+        const password = document.getElementById('common-password').value.trim();
+        const accountsText = document.getElementById('accounts-list').value.trim();
+        const accountsList = accountsText.split('\n').filter(line => line.trim() !== '');
+
+        if (accountsList.length !== 50 || !password) {
+            showAlert('Ensure 50 accounts and password are provided.', false);
+            return;
+        }
+
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+        lucide.createIcons();
+
+        try {
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
+                method: 'POST',
+                body: { taskId, accountsList, commonPassword: password }
+            });
+
+            if (data.success) {
+                showModal('Submitted!', 'Your task is under review. Check My Tasks for updates.', 'success');
+                setTimeout(() => {
+                    closeModal();
+                    cache.statsLoaded = false; 
+                    setRoute('my-tasks');
+                }, 2500);
+            } else {
+                showAlert(data.error || 'Submission failed.', false);
+            }
+        } catch (error) {
+            showAlert('Submission failed due to internal error.', false);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task</span>';
+            lucide.createIcons();
+        }
+    }
+    
+    async function submitTextTask(taskId) {
+        const outputText = document.getElementById('task-output-text')?.value?.trim();
+        const submitBtn = document.getElementById(`submit-text-btn-${taskId}`);
+
+        if (!outputText) {
+            showAlert('Submission field cannot be empty.', false);
+            return;
+        }
+
+        if(submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+            lucide.createIcons();
+        }
+
+        try {
+            const data = await fetchData('/tasks/submit-gmail-accounts', {
+                method: 'POST',
+                body: { taskId, accountsList: [outputText], commonPassword: 'N/A' } 
+            });
+
+            if (data.success) {
+                showModal('Submitted!', 'Your output is under review. Check My Tasks for updates.', 'success');
+                setTimeout(() => { 
+                    closeModal(); 
+                    cache.statsLoaded = false; 
+                    setRoute('my-tasks'); 
+                }, 2500);
+            } else {
+                showAlert(data.error || 'Submission failed.', false);
+            }
+        } catch (error) {
+            showAlert('Submission failed due to internal error.', false);
+        } finally {
+            if(submitBtn) {
+                 submitBtn.disabled = false;
+                 submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
+                 lucide.createIcons();
+            }
+        }
+    }
+
+    async function submitFileTask(taskId) {
+        const fileInput = document.getElementById(`submission-file-${taskId}`);
+        const documentTypeInput = document.getElementById(`document-type-field-${taskId}`);
+        const file = fileInput.files[0];
+        const documentType = documentTypeInput.value.trim();
+        
+        if (!file) {
+            showAlert('Please select a file to upload.', false);
+            return;
+        }
+        if (!documentType) {
+            showAlert('Please specify the document description/type.', false);
+            documentTypeInput.focus();
+            return;
+        }
+
+        const submitBtn = document.getElementById(`submit-file-btn-${taskId}`);
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading...</span>';
+        lucide.createIcons();
+        
+        const formData = new FormData();
+        formData.append('document', file);
+        formData.append('documentType', documentType); 
+
+        const headers = { 'Authorization': `Bearer ${AUTH_TOKEN}` };
+        
+        try {
+             // Endpoint is '/api/user/verify'
+             const response = await fetch(`${BACKEND_URL}/user/verify`, {
+                 method: 'POST',
+                 headers: headers,
+                 body: formData,
+             });
+
+             const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
+
+             if (response.ok && data.success) {
+                 showModal('Submitted!', 'Your file is under review. Check My Tasks for updates.', 'success');
+                 setTimeout(() => { 
+                    closeModal(); 
+                    cache.statsLoaded = false;
+                    setRoute('my-tasks'); 
+                 }, 2500);
+             } else {
+                 showAlert(data.error || 'File submission failed.', false);
+             }
+        } catch (error) {
+            showAlert('Upload failed due to network error.', false);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="upload" class="w-5 h-5"></i><span>Upload & Submit for Review</span>';
+            lucide.createIcons();
+        }
+    }
+
+    async function submitDailySurvey(taskId) {
+        const submitBtn = document.getElementById('survey-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+        lucide.createIcons();
+
+        const surveyQuestions = [
+            "q1_app_rating", "q2_task_clarity", "q3_payout_fairness", "q4_ease_of_use",
+            "q5_task_variety", "q6_referral_usage", "q7_favorite_feature", "q8_improvement_area",
+            "q9_recommendation", "q10_age_group"
+        ];
+        
+        let surveyData = {
+            'User Email': currentUserEmail || 'N/A',
+            'Task ID': taskId,
+            '_subject': `BTECH Daily Survey Submission (ID: ${taskId})`
+        };
+        let allAnswered = true;
+
+        surveyQuestions.forEach(q => {
+            const element = document.getElementById(q);
+            if (element && element.value) {
+                surveyData[q] = element.value;
+            } else {
+                allAnswered = false;
+            }
+        });
+        
+        if (!allAnswered) {
+            showAlert('Please answer all 10 questions before submitting.', false);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Survey</span>';
+            lucide.createIcons();
+            return;
+        }
+
+        try {
+            await axios.post(FORMSPREE_SURVEY_URL, surveyData, {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            await fetchData('/tasks/submit-daily-task', {
+                 method: 'POST',
+                 body: { taskId: taskId }
+            });
+
+            showModal('Survey Complete!', 'Thank you! Your KES 50 has been instantly credited. Check "My Tasks".', 'success');
+            setTimeout(() => {
+                closeModal();
+                cache.statsLoaded = false;
+                setRoute('my-tasks');
+            }, 3000);
+
+        } catch (error) {
+            showAlert('Submission failed. Check your connection or refresh the page.', false);
+            console.error("Survey submission failure:", error);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Survey</span>';
+            lucide.createIcons();
+        }
+    }
 
 
     function renderMyTasks(tasks) {
@@ -803,7 +1038,6 @@
                      description: "Participate in this 10-question user experience survey to help us improve.",
                      category: dailyTask.category,
                      estimatedTime: "2 minutes",
-                     deadline: "Today",
                      payment: dailyTask.payout || 50,
                      difficulty: 'Easy'
                  };
@@ -1030,12 +1264,12 @@
         `;
         lucide.createIcons();
 
-        // 1. Fetch data. Note: Profile/Stats only run if cache is false.
+        // 1. Fetch data. (Cache prevents redundant calls here)
         Promise.all([
             fetchUserProfile(),
             fetchUserStats()
         ]).then(() => {
-            // 2. Fetch Tasks only after essential user data is loaded
+            // 2. Fetch Tasks after essential user data is loaded
             return Promise.all([
                 fetchData('/tasks/available').catch(e => { console.error("Major tasks failed:", e); return null; }),
                 fetchDailyTask(),
@@ -1092,8 +1326,8 @@
             const appContainer = document.getElementById('app-container');
             appContainer.innerHTML = `
                 <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                    <h3 class="text-2xl font-black text-red-600 mb-3">Server Connection Lost or Rate Limit Exceeded</h3>
-                    <p class="text-gray-600">Could not retrieve necessary user data. Please check your network or wait a moment and try again.</p>
+                    <h3 class="text-2xl font-black text-red-600 mb-3">Server Connection Error</h3>
+                    <p class="text-gray-600">Could not retrieve necessary data. Please check your network or wait a moment and try again.</p>
                 </div>
             `;
             lucide.createIcons();
