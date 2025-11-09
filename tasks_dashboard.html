@@ -508,9 +508,85 @@
         search: ''
     };
 
-    // Mock Task Definitions (Enhanced)
-    // ALL TASKS REMOVED AS REQUESTED
-    const MOCK_TASK_DEFINITIONS = [];
+    // Mock Task Definitions (INCLUDING NEW LINKEDIN AND WECHAT TASKS)
+    const MOCK_TASK_DEFINITIONS = [
+        // 1. Daily Task Placeholder (ID 1)
+        { 
+            id: 1, 
+            title: 'Daily User Experience Survey', 
+            description: 'Quick 2-minute feedback survey about your platform experience. Instant KES 50 reward.', 
+            category: 'Survey', 
+            payment: 50.00, 
+            estimatedTime: '2 minutes', 
+            difficulty: 'Easy', 
+            requiresVerification: false, 
+            deadline: '2025-11-30', 
+            tasksAvailable: 1, 
+            completionRate: 99, 
+            clientName: 'BTECH Internal', 
+            featured: true
+        },
+        // 2. New: LinkedIn Connection Task (ID 1501)
+        {
+            id: 1501,
+            title: 'LinkedIn Network Builder: Connect to Liam Lee',
+            description: 'Connect your existing or new LinkedIn account to the specified target profile. Submission requires a screenshot of the sent request.',
+            category: 'Account Connection', // New category for connection tasks
+            payment: 'Not Specified (TBD)', // Per User Request
+            estimatedTime: '10 minutes',
+            difficulty: 'Easy',
+            requiresVerification: true,
+            deadline: '2025-12-31',
+            tasksAvailable: 50,
+            completionRate: 90,
+            clientName: 'BTECH HR',
+            featured: true
+        },
+        // 3. New: WeChat Account Acquisition Task (ID 1502)
+        {
+            id: 1502,
+            title: 'WeChat Account Acquisition: KES 1,000 Payout',
+            description: 'Sell us a valid, existing, or new WeChat account. Instant KES 1,000 credited upon successful validation by the admin.',
+            category: 'Account Procurement', // New category for buying accounts
+            payment: 1000.00,
+            estimatedTime: '5 minutes',
+            difficulty: 'Easy',
+            requiresVerification: true,
+            deadline: '2025-12-31',
+            tasksAvailable: 20,
+            completionRate: 80,
+            clientName: 'BTECH Acquisitions'
+        },
+        // 4. Other Mock Tasks (Example to populate grid)
+        {
+            id: 1000,
+            title: 'Create 50 Gmail Accounts',
+            description: 'Create 50 new Gmail accounts using the required common password. Submit the list of emails and the password.',
+            category: 'Account Creation',
+            payment: 500.00,
+            estimatedTime: '4 hours',
+            difficulty: 'Medium',
+            requiresVerification: true,
+            deadline: '2025-10-31',
+            tasksAvailable: 5,
+            completionRate: 75,
+            clientName: 'Internal BTECH'
+        },
+        {
+            id: 1001,
+            title: 'E-commerce Product Data Entry',
+            description: 'Enter product details including names, descriptions, and prices into spreadsheet. Requires attention to detail.',
+            category: 'Data Entry',
+            payment: 300.00,
+            estimatedTime: '1 hour',
+            difficulty: 'Easy',
+            requiresVerification: false,
+            deadline: '2025-11-15',
+            tasksAvailable: 5,
+            completionRate: 95,
+            clientName: 'ShopKenya Ltd'
+        }
+    ];
 
     // ============================================
     // INITIALIZATION
@@ -854,14 +930,16 @@
             'Account Creation': 'user-plus',
             'Local Data Verification': 'map-pin',
             'AI Training/Labeling': 'sparkles',
-            'Translation': 'globe'
+            'Translation': 'globe',
+            'Account Connection': 'linkedin', // NEW
+            'Account Procurement': 'message-circle-code' // NEW
         };
         return icons[category] || 'briefcase';
     }
 
     function getTaskPayout(task) {
         const value = task.payment || task.payout;
-        return parseFloat(value || 0).toFixed(2);
+        return typeof value === 'string' ? value : parseFloat(value || 0).toFixed(2);
     }
 
     function getTaskDifficulty(task) {
@@ -949,6 +1027,8 @@
         const dailyTask = JSON.parse(localStorage.getItem('dailyTask') || 'null');
         if (dailyTask && task.id === dailyTask.id) return '';
         
+        const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
+        
         return `
             <div class="ultra-card p-5 md:p-6 fade-in-up task-card" style="animation-delay: ${index * 0.1}s">
                 ${task.featured ? '<div class="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1"><i data-lucide="star" class="w-3 h-3"></i><span>FEATURED</span></div>' : ''}
@@ -965,7 +1045,7 @@
                 <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2 leading-tight line-clamp-2">${task.title || 'N/A'}</h3>
                 
                 <div class="mb-4">
-                    <p class="text-3xl md:text-4xl font-black gradient-text mb-2">KES ${getTaskPayout(task)}</p>
+                    <p class="text-3xl md:text-4xl font-black gradient-text mb-2">${payoutText}</p>
                     <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description || 'No description.'}</p>
                 </div>
                 
@@ -1106,6 +1186,8 @@
                                 <option value="Market Research">Market Research</option>
                                 <option value="AI Training/Labeling">AI Training</option>
                                 <option value="Translation">Translation</option>
+                                <option value="Account Connection">Account Connection</option>
+                                <option value="Account Procurement">Account Procurement</option>
                             </select>
                             <select id="difficulty-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
                                 <option value="all">All Difficulties</option>
@@ -1581,6 +1663,8 @@
             return;
         }
         
+        const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
+        
         const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
             <div class="fade-in-up">
@@ -1603,7 +1687,7 @@
                             </div>
                         </div>
                         <div class="text-left md:text-right">
-                            <p class="text-4xl md:text-5xl font-black gradient-text mb-2">KES ${getTaskPayout(task)}</p>
+                            <p class="text-4xl md:text-5xl font-black gradient-text mb-2">${payoutText}</p>
                             <span class="difficulty-${getTaskDifficulty(task)} text-white text-sm font-bold px-4 py-2 rounded-full inline-block">
                                 ${task.difficulty}
                             </span>
@@ -1660,31 +1744,86 @@
     }
 
     function renderSubmissionForm(task) {
-        if (task.id === 1500 && task.category === 'AI Training/Labeling') {
+        if (task.category === 'Survey') {
+            return renderDailySurveyForm(task.id);
+        }
+        
+        // NEW: LinkedIn Account Connection (File Upload for Screenshot)
+        if (task.category === 'Account Connection') {
             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="cpu" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    AI Sentiment Annotation Form
+                    <i data-lucide="linkedin" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                    LinkedIn Connection Submission
                 </h3>
-                <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
+                <p class="text-gray-600 text-sm mb-4">
+                    Target Profile: 
+                    <a href="https://www.linkedin.com/in/liam-lee-245a9736a" target="_blank" class="text-indigo-600 font-semibold hover:underline">Liam Lee Profile</a>. 
+                    Please ensure the request has been sent and take a screenshot.
+                </p>
+                <form onsubmit="event.preventDefault(); submitFileTask(${task.id});">
                     <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Sentiment Output (All 100 segments):</label>
-                        <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Paste your annotated data here (e.g., [ID 1: POSITIVE, INQUIRY], [ID 2: NEGATIVE, COMPLAINT]...)" required></textarea>
-                        <p class="text-xs text-gray-600 mt-1">Ensure all 100 segments are annotated with both Sentiment and Intent.</p>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">1. Your LinkedIn Profile URL:</label>
+                        <input type="url" id="document-type-field-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="e.g., https://www.linkedin.com/in/your-name" required>
+                        <p class="text-xs text-gray-600 mt-1">This field is used for `documentType` in file submission for reference.</p>
                     </div>
-                    <button type="submit" id="submit-text-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
-                        <i data-lucide="send" class="w-5 h-5"></i>
-                        <span>Submit Final Output</span>
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">2. Screenshot of SENT Request (Max 5MB, JPEG/PNG):</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-400 transition">
+                            <input type="file" id="submission-file-${task.id}" name="document" class="hidden" required accept="image/jpeg,image/png" onchange="handleFileSelect(${task.id})">
+                            <label for="submission-file-${task.id}" class="cursor-pointer">
+                                <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-2"></i>
+                                <p class="text-sm text-gray-600">Click to upload your screenshot proof</p>
+                                <p class="text-xs text-gray-500 mt-1">JPEG, PNG only (max 5MB)</p>
+                            </label>
+                            <div id="file-preview-${task.id}" class="mt-4 hidden">
+                                <p class="text-sm font-semibold text-gray-800" id="file-name-${task.id}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="submit-file-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
+                        <i data-lucide="upload" class="w-5 h-5"></i>
+                        <span>Submit Connection Proof</span>
                     </button>
                 </form>
             `;
         }
-        else if (task.category === 'Survey') {
-            return renderDailySurveyForm(task.id);
-        }
-        else if (task.category === 'Local Data Verification' || task.category === 'QA Testing') {
-            const fileDescription = task.category === 'QA Testing' ? 'detailed report/screenshot' : 'photo proof';
+        
+        // NEW: WeChat Account Procurement (Text/Credential Submission)
+        if (task.category === 'Account Procurement') {
             return `
+                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="message-circle-code" class="w-6 h-6 mr-3 text-green-600"></i>
+                    WeChat Account Sale (KES 1,000)
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                    Submit your valid WeChat account credentials. KES 1,000 will be credited instantly upon successful verification by the admin.
+                </p>
+                <form onsubmit="event.preventDefault(); submitWeChatTask(${task.id});">
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">1. Phone Number linked to WeChat:</label>
+                        <input type="tel" id="wechat-phone-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="e.g., +2547XXXXXXXX" required>
+                    </div>
+                    <div class="mb-5 md:mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">2. WeChat Account Password:</label>
+                        <input type="password" id="wechat-password-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Enter password used for WeChat" required>
+                        <p class="text-xs text-red-600 mt-1 font-semibold">WARNING: By submitting, you agree to sell the account and credentials to the administrator.</p>
+                    </div>
+                    <button type="submit" id="submit-wechat-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
+                        <i data-lucide="key" class="w-5 h-5"></i>
+                        <span>Submit Account for Sale</span>
+                    </button>
+                </form>
+            `;
+        }
+
+
+        // Fallback for generic text/file submissions
+        const fileUploadCategories = ['Local Data Verification', 'QA Testing'];
+        const isFileUpload = fileUploadCategories.includes(task.category);
+        const fileDescription = task.category === 'QA Testing' ? 'detailed report/screenshot' : 'photo proof';
+        
+        if (isFileUpload) {
+             return `
                 <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                     <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
                     File Upload Required
@@ -1694,7 +1833,7 @@
                     <div class="mb-5 md:mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-2">Upload File (Max 5MB):</label>
                         <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-400 transition">
-                            <input type="file" id="submission-file-${task.id}" class="hidden" required accept="image/*,application/pdf,.zip" onchange="handleFileSelect(${task.id})">
+                            <input type="file" id="submission-file-${task.id}" name="document" class="hidden" required accept="image/*,application/pdf,.zip" onchange="handleFileSelect(${task.id})">
                             <label for="submission-file-${task.id}" class="cursor-pointer">
                                 <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-2"></i>
                                 <p class="text-sm text-gray-600">Click to upload or drag & drop</p>
@@ -1716,44 +1855,33 @@
                 </form>
             `;
         }
-        else if (['Translation', 'Data Entry', 'Market Research', 'Content Creation', 'Transcription', 'Data Quality Assurance'].includes(task.category)) {
-            const outputLabels = {
-                'Transcription': 'Transcription Output (Full Text):',
-                'Translation': 'Translated Text:',
-                'Data Quality Assurance': 'Error Report Summary:',
-                'default': 'Final Output/Data:'
-            };
-            const outputLabel = outputLabels[task.category] || outputLabels['default'];
-            
-            return `
-                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="edit" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    ${task.category} Submission
-                </h3>
-                <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">${outputLabel}</label>
-                        <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Paste your final output here. Be precise and thorough..." required></textarea>
-                        <p class="text-xs text-gray-600 mt-1">${task.category} tasks require careful review. Ensure quality.</p>
-                    </div>
-                    <button type="submit" id="submit-text-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
-                        <i data-lucide="send" class="w-5 h-5"></i>
-                        <span>Submit Final Output</span>
-                    </button>
-                </form>
-            `;
-        }
-        else {
-            return `
-                <div class="text-center py-12 text-gray-600">
-                    <i data-lucide="box" class="w-16 h-16 mx-auto mb-4"></i>
-                    <p>Submission method not yet configured for this task category.</p>
-                    <button onclick="setRoute('tasks')" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
-                        Back to Tasks
-                    </button>
+        
+        const outputLabels = {
+            'Transcription': 'Transcription Output (Full Text):',
+            'Translation': 'Translated Text:',
+            'Data Quality Assurance': 'Error Report Summary:',
+            'default': 'Final Output/Data:'
+        };
+        const outputLabel = outputLabels[task.category] || outputLabels['default'];
+        
+        // Default to Text Submission
+        return `
+            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
+                <i data-lucide="edit" class="w-6 h-6 mr-3 text-indigo-600"></i>
+                ${task.category} Submission
+            </h3>
+            <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
+                <div class="mb-5 md:mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">${outputLabel}</label>
+                    <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Paste your final output here. Be precise and thorough..." required></textarea>
+                    <p class="text-xs text-gray-600 mt-1">${task.category} tasks require careful review. Ensure quality.</p>
                 </div>
-            `;
-        }
+                <button type="submit" id="submit-text-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>Submit Final Output</span>
+                </button>
+            </form>
+        `;
     }
 
     function renderDailySurveyForm(taskId) {
@@ -1852,9 +1980,10 @@
                 lucide.createIcons();
             }
             
-            await fetchData(`/tasks/${taskId}/submit`, {
+            // Re-using submit-gmail-accounts for generic text submissions
+            await fetchData(`/tasks/submit-gmail-accounts`, {
                 method: 'POST',
-                body: { output: outputText, submissionType: 'text' }
+                body: { taskId: taskId, accountsList: [outputText], commonPassword: 'N/A' }
             });
             
             showModal('Task Submitted!', 'Your work has been submitted for review. You\'ll be notified once it\'s approved.', 'success');
@@ -1884,7 +2013,7 @@
         }
         
         if (!docType || docType.trim().length < 5) {
-            showAlert('Please provide a description (minimum 5 characters).', false);
+            showAlert('Please provide a description or reference URL (minimum 5 characters).', false);
             return;
         }
         
@@ -1906,14 +2035,15 @@
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
-                    await fetchData(`/tasks/${taskId}/submit`, {
+                    // Re-using submit-gmail-accounts for file-based submissions
+                    await fetchData(`/tasks/submit-gmail-accounts`, {
                         method: 'POST',
                         body: {
-                            output: docType,
-                            submissionType: 'file',
-                            fileData: e.target.result,
-                            fileName: file.name,
-                            fileType: file.type
+                            taskId: taskId,
+                            // Send description/URL as accountsList entry
+                            accountsList: [`Reference/URL: ${docType}`, `File: ${file.name}`], 
+                            // Send Base64 data in commonPassword field (Hacky, but works with current backend structure)
+                            commonPassword: e.target.result.split(',')[1] 
                         }
                     });
                     
@@ -1932,11 +2062,61 @@
                     }
                 }
             };
+            // Read file as Base64 data URL
             reader.readAsDataURL(file);
+
         } catch (error) {
             showAlert(error.message, false);
         }
     }
+
+    async function submitWeChatTask(taskId) {
+        const phone = document.getElementById(`wechat-phone-${taskId}`)?.value;
+        const password = document.getElementById(`wechat-password-${taskId}`)?.value;
+
+        if (!phone || !password || phone.trim().length < 5 || password.trim().length < 6) {
+            showAlert('Please provide valid phone number and password.', false);
+            return;
+        }
+        
+        // Combine data into a structured string for the 'output' field
+        const outputText = `Phone: ${phone}\nPassword: ${password}\nAgreed Price: KES 1000.00`;
+
+        try {
+            const submitBtn = document.getElementById(`submit-wechat-btn-${taskId}`);
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
+                lucide.createIcons();
+            }
+            
+            // Use the generic submission endpoint
+            await fetchData(`/tasks/submit-gmail-accounts`, {
+                method: 'POST',
+                body: {
+                    taskId: taskId, 
+                    accountsList: [outputText], // Wrap the output in an array for the backend format
+                    commonPassword: password // Use password for quick admin reference
+                }
+            });
+            
+            showModal('Account Submitted!', 'Your WeChat account details are being verified. KES 1000.00 will be credited once confirmed.', 'success');
+            
+            setTimeout(() => {
+                closeModal();
+                setRoute('my-tasks');
+            }, 3500);
+        } catch (error) {
+            showAlert(error.message, false);
+            const submitBtn = document.getElementById(`submit-wechat-btn-${taskId}`);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="key" class="w-5 h-5"></i><span>Submit Account for Sale</span>';
+                lucide.createIcons();
+            }
+        }
+    }
+
 
     async function submitDailySurvey(taskId) {
         const form = document.getElementById(`survey-form-${taskId}`);
@@ -1959,9 +2139,9 @@
             });
             
             // Submit to backend
-            await fetchData(`/tasks/${taskId}/submit`, {
+            await fetchData(`/tasks/submit-daily-task`, {
                 method: 'POST',
-                body: { output: JSON.stringify(surveyData), submissionType: 'survey' }
+                body: { taskId: taskId }
             });
             
             showModal('Survey Submitted!', 'Thank you for your feedback! Your reward has been credited.', 'success');
@@ -2072,6 +2252,7 @@
     window.submitTextTask = submitTextTask;
     window.submitFileTask = submitFileTask;
     window.submitDailySurvey = submitDailySurvey;
+    window.submitWeChatTask = submitWeChatTask; // NEW
     window.handleFileSelect = handleFileSelect;
     window.applyFilters = applyFilters;
     window.resetFilters = resetFilters;
