@@ -366,11 +366,11 @@
                     </div>
                     
                     <nav class="hidden md:flex items-center space-x-6">
-                        <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
+                        <a href="javascript:void(0)" onclick="setRoute('tasks')" class class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
                             <i data-lucide="briefcase" class="w-4 h-4"></i>
                             <span>Tasks</span>
                         </a>
-                        <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
+                        <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
                             <i data-lucide="list-checks" class="w-4 h-4"></i>
                             <span>My Tasks</span>
                         </a>
@@ -508,12 +508,12 @@
         search: ''
     };
 
-    // Mock Task Definitions (INCLUDING NEW LINKEDIN AND WECHAT TASKS)
+    // Mock Task Definitions (ONLY IDs 1, 1501, and 1502)
     const MOCK_TASK_DEFINITIONS = [
         // 1. Daily Task Placeholder (ID 1)
         { 
             id: 1, 
-            title: 'Daily User Experience Survey', 
+            title: 'Daily App Feedback Survey', 
             description: 'Quick 2-minute feedback survey about your platform experience. Instant KES 50 reward.', 
             category: 'Survey', 
             payment: 50.00, 
@@ -556,35 +556,6 @@
             tasksAvailable: 20,
             completionRate: 80,
             clientName: 'BTECH Acquisitions'
-        },
-        // 4. Other Mock Tasks (Example to populate grid)
-        {
-            id: 1000,
-            title: 'Create 50 Gmail Accounts',
-            description: 'Create 50 new Gmail accounts using the required common password. Submit the list of emails and the password.',
-            category: 'Account Creation',
-            payment: 500.00,
-            estimatedTime: '4 hours',
-            difficulty: 'Medium',
-            requiresVerification: true,
-            deadline: '2025-10-31',
-            tasksAvailable: 5,
-            completionRate: 75,
-            clientName: 'Internal BTECH'
-        },
-        {
-            id: 1001,
-            title: 'E-commerce Product Data Entry',
-            description: 'Enter product details including names, descriptions, and prices into spreadsheet. Requires attention to detail.',
-            category: 'Data Entry',
-            payment: 300.00,
-            estimatedTime: '1 hour',
-            difficulty: 'Easy',
-            requiresVerification: false,
-            deadline: '2025-11-15',
-            tasksAvailable: 5,
-            completionRate: 95,
-            clientName: 'ShopKenya Ltd'
         }
     ];
 
@@ -1179,16 +1150,9 @@
                             <select id="category-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
                                 <option value="all">All Categories</option>
                                 <option value="Survey">Survey</option>
-                                <option value="Data Entry">Data Entry</option>
-                                <option value="Transcription">Transcription</option>
-                                <option value="QA Testing">QA Testing</option>
-                                <option value="Content Creation">Content Creation</option>
-                                <option value="Market Research">Market Research</option>
-                                <option value="AI Training/Labeling">AI Training</option>
-                                <option value="Translation">Translation</option>
                                 <option value="Account Connection">Account Connection</option>
                                 <option value="Account Procurement">Account Procurement</option>
-                            </select>
+                                </select>
                             <select id="difficulty-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
                                 <option value="all">All Difficulties</option>
                                 <option value="easy">Easy</option>
@@ -1764,7 +1728,7 @@
                     <div class="mb-5 md:mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-2">1. Your LinkedIn Profile URL:</label>
                         <input type="url" id="document-type-field-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="e.g., https://www.linkedin.com/in/your-name" required>
-                        <p class="text-xs text-gray-600 mt-1">This field is used for `documentType` in file submission for reference.</p>
+                        <p class="text-xs text-gray-600 mt-1">This field is used for reference in the submission.</p>
                     </div>
                     <div class="mb-5 md:mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-2">2. Screenshot of SENT Request (Max 5MB, JPEG/PNG):</label>
@@ -1818,69 +1782,13 @@
 
 
         // Fallback for generic text/file submissions
-        const fileUploadCategories = ['Local Data Verification', 'QA Testing'];
-        const isFileUpload = fileUploadCategories.includes(task.category);
-        const fileDescription = task.category === 'QA Testing' ? 'detailed report/screenshot' : 'photo proof';
-        
-        if (isFileUpload) {
-             return `
-                <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                    <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                    File Upload Required
-                </h3>
-                <p class="text-gray-600 text-sm mb-4">Submit a ${fileDescription} for verification.</p>
-                <form onsubmit="event.preventDefault(); submitFileTask(${task.id});">
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Upload File (Max 5MB):</label>
-                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-400 transition">
-                            <input type="file" id="submission-file-${task.id}" name="document" class="hidden" required accept="image/*,application/pdf,.zip" onchange="handleFileSelect(${task.id})">
-                            <label for="submission-file-${task.id}" class="cursor-pointer">
-                                <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-2"></i>
-                                <p class="text-sm text-gray-600">Click to upload or drag & drop</p>
-                                <p class="text-xs text-gray-500 mt-1">JPEG, PNG, PDF, or ZIP (max 5MB)</p>
-                            </label>
-                            <div id="file-preview-${task.id}" class="mt-4 hidden">
-                                <p class="text-sm font-semibold text-gray-800" id="file-name-${task.id}"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-5 md:mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Description/Proof Type:</label>
-                        <input type="text" id="document-type-field-${task.id}" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="e.g., Photo proof of pricing" required>
-                    </div>
-                    <button type="submit" id="submit-file-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
-                        <i data-lucide="upload" class="w-5 h-5"></i>
-                        <span>Upload & Submit for Review</span>
-                    </button>
-                </form>
-            `;
-        }
-        
-        const outputLabels = {
-            'Transcription': 'Transcription Output (Full Text):',
-            'Translation': 'Translated Text:',
-            'Data Quality Assurance': 'Error Report Summary:',
-            'default': 'Final Output/Data:'
-        };
-        const outputLabel = outputLabels[task.category] || outputLabels['default'];
-        
-        // Default to Text Submission
+        // NOTE: Since you removed all generic tasks, this fallback might not be needed 
+        // unless other tasks are added later, but leaving the survey logic is necessary.
         return `
-            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                <i data-lucide="edit" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                ${task.category} Submission
-            </h3>
-            <form onsubmit="event.preventDefault(); submitTextTask(${task.id});">
-                <div class="mb-5 md:mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">${outputLabel}</label>
-                    <textarea id="task-output-text" rows="15" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Paste your final output here. Be precise and thorough..." required></textarea>
-                    <p class="text-xs text-gray-600 mt-1">${task.category} tasks require careful review. Ensure quality.</p>
-                </div>
-                <button type="submit" id="submit-text-btn-${task.id}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
-                    <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>Submit Final Output</span>
-                </button>
-            </form>
+            <div class="text-center py-12 text-gray-600">
+                <i data-lucide="box" class="w-16 h-16 mx-auto mb-4"></i>
+                <p>Submission method for this task is not configured. Please contact support.</p>
+            </div>
         `;
     }
 
