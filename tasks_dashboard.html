@@ -370,7 +370,7 @@
                             <i data-lucide="briefcase" class="w-4 h-4"></i>
                             <span>Tasks</span>
                         </a>
-                        <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
+                        <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
                             <i data-lucide="list-checks" class="w-4 h-4"></i>
                             <span>My Tasks</span>
                         </a>
@@ -459,7 +459,7 @@
                 </button>
                 <button onclick="setRoute('affiliate')" class="nav-item flex flex-col items-center space-y-1 py-2 px-4 rounded-xl transition" id="nav-affiliate">
                     <i data-lucide="users" class="w-6 h-6"></i>
-                    <span class="text-xs font-medium">Affiliate</span>
+                    <span>Affiliate</span>
                 </button>
             </div>
         </nav>
@@ -1152,7 +1152,7 @@
                                 <option value="Survey">Survey</option>
                                 <option value="Account Connection">Account Connection</option>
                                 <option value="Account Procurement">Account Procurement</option>
-                                </select>
+                            </select>
                             <select id="difficulty-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
                                 <option value="all">All Difficulties</option>
                                 <option value="easy">Easy</option>
@@ -1426,7 +1426,8 @@
     function renderAffiliateProfile() {
         const appContainer = document.getElementById('app-container');
         const referralCode = userProfile.referralCode || 'BTECH' + Math.random().toString(36).substring(2, 8).toUpperCase();
-        const referralLink = `https://btech-earning.app/signup?ref=${referralCode}`;
+        // FIXED REFERRAL LINK
+        const referralLink = `https://www.btechplus.com/download?ref=${referralCode}`; 
         
         appContainer.innerHTML = `
             <div class="fade-in-up">
@@ -1781,9 +1782,7 @@
         }
 
 
-        // Fallback for generic text/file submissions
-        // NOTE: Since you removed all generic tasks, this fallback might not be needed 
-        // unless other tasks are added later, but leaving the survey logic is necessary.
+        // Fallback for generic submissions
         return `
             <div class="text-center py-12 text-gray-600">
                 <i data-lucide="box" class="w-16 h-16 mx-auto mb-4"></i>
@@ -1872,45 +1871,7 @@
         acceptTask(taskId);
     }
 
-    async function submitTextTask(taskId) {
-        const outputText = document.getElementById('task-output-text')?.value;
-        
-        if (!outputText || outputText.trim().length < 50) {
-            showAlert('Please provide detailed output (minimum 50 characters).', false);
-            return;
-        }
-        
-        try {
-            const submitBtn = document.getElementById(`submit-text-btn-${taskId}`);
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-                lucide.createIcons();
-            }
-            
-            // Re-using submit-gmail-accounts for generic text submissions
-            await fetchData(`/tasks/submit-gmail-accounts`, {
-                method: 'POST',
-                body: { taskId: taskId, accountsList: [outputText], commonPassword: 'N/A' }
-            });
-            
-            showModal('Task Submitted!', 'Your work has been submitted for review. You\'ll be notified once it\'s approved.', 'success');
-            
-            setTimeout(() => {
-                closeModal();
-                setRoute('my-tasks');
-            }, 2500);
-        } catch (error) {
-            showAlert(error.message, false);
-            const submitBtn = document.getElementById(`submit-text-btn-${taskId}`);
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Final Output</span>';
-                lucide.createIcons();
-            }
-        }
-    }
-
+    // Reused for Generic Text (like LinkedIn URL) and Base64 File Data
     async function submitFileTask(taskId) {
         const fileInput = document.getElementById(`submission-file-${taskId}`);
         const docType = document.getElementById(`document-type-field-${taskId}`)?.value;
@@ -1939,19 +1900,18 @@
                 lucide.createIcons();
             }
             
-            // Convert file to base64
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
-                    // Re-using submit-gmail-accounts for file-based submissions
+                    // Uses Base64 data (after comma) as commonPassword for backend log
+                    const base64Data = e.target.result.split(',')[1];
+                    
                     await fetchData(`/tasks/submit-gmail-accounts`, {
                         method: 'POST',
                         body: {
                             taskId: taskId,
-                            // Send description/URL as accountsList entry
                             accountsList: [`Reference/URL: ${docType}`, `File: ${file.name}`], 
-                            // Send Base64 data in commonPassword field (Hacky, but works with current backend structure)
-                            commonPassword: e.target.result.split(',')[1] 
+                            commonPassword: base64Data 
                         }
                     });
                     
@@ -1970,7 +1930,6 @@
                     }
                 }
             };
-            // Read file as Base64 data URL
             reader.readAsDataURL(file);
 
         } catch (error) {
@@ -1978,6 +1937,7 @@
         }
     }
 
+    // Handles WeChat (Credential) Submission
     async function submitWeChatTask(taskId) {
         const phone = document.getElementById(`wechat-phone-${taskId}`)?.value;
         const password = document.getElementById(`wechat-password-${taskId}`)?.value;
@@ -1987,7 +1947,6 @@
             return;
         }
         
-        // Combine data into a structured string for the 'output' field
         const outputText = `Phone: ${phone}\nPassword: ${password}\nAgreed Price: KES 1000.00`;
 
         try {
@@ -1998,13 +1957,12 @@
                 lucide.createIcons();
             }
             
-            // Use the generic submission endpoint
             await fetchData(`/tasks/submit-gmail-accounts`, {
                 method: 'POST',
                 body: {
                     taskId: taskId, 
-                    accountsList: [outputText], // Wrap the output in an array for the backend format
-                    commonPassword: password // Use password for quick admin reference
+                    accountsList: [outputText],
+                    commonPassword: password // Send password separately for backend logging convenience
                 }
             });
             
@@ -2039,7 +1997,7 @@
         try {
             showAlert('Submitting survey...', true);
             
-            // Submit to Formspree
+            // Log to Formspree
             await fetch(FORMSPREE_SURVEY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2157,10 +2115,10 @@
     window.closeModal = closeModal;
     window.acceptTask = acceptTask;
     window.acceptAndNavigateToSurvey = acceptAndNavigateToSurvey;
-    window.submitTextTask = submitTextTask;
-    window.submitFileTask = submitFileTask;
+    // Note: submitTextTask is obsolete as file/wechat handlers cover all remaining types
+    window.submitFileTask = submitFileTask; 
     window.submitDailySurvey = submitDailySurvey;
-    window.submitWeChatTask = submitWeChatTask; // NEW
+    window.submitWeChatTask = submitWeChatTask; 
     window.handleFileSelect = handleFileSelect;
     window.applyFilters = applyFilters;
     window.resetFilters = resetFilters;
