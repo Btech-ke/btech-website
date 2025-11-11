@@ -139,6 +139,17 @@
             background: rgba(99, 102, 241, 0.5);
             border-radius: 4px;
         }
+
+        /* Difficulty Badges */
+        .difficulty-easy { background: linear-gradient(135deg, #10b981, #34d399); }
+        .difficulty-medium { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .difficulty-hard { background: linear-gradient(135deg, #ef4444, #f87171); }
+        
+        /* Status Badges */
+        .status-pending { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .status-progress { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .status-completed { background: linear-gradient(135deg, #10b981, #34d399); }
+
     </style>
 </head>
 
@@ -190,7 +201,7 @@
             </div>
         </header>
 
-        <div id="notifications-dropdown" class="hidden fixed top-20 right-4 z-50 w-80 max-w-[calc(100vw-2rem)] fade-in-up">
+        <div id="notifications-dropdown" class="hidden fixed top-20 right-4 z-50 w-80 max-w-[calc(100vw-2rem)]">
             <div class="ultra-card p-4">
                 <h3 class="font-bold text-gray-800 mb-3 flex items-center justify-between">
                     <span>Notifications</span>
@@ -215,7 +226,7 @@
             </div>
         </div>
 
-        <div id="status-alert" class="hidden fixed top-20 right-4 left-4 md:left-auto md:right-4 z-50 max-w-md fade-in-up" role="alert">
+        <div id="status-alert" class="hidden fixed top-20 right-4 left-4 md:left-auto md:right-4 z-50 max-w-md" role="alert">
             <div class="ultra-card p-4">
                 <div class="flex items-center space-x-3">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" id="alert-icon-bg">
@@ -260,7 +271,7 @@
     </div>
 
     <div id="action-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div class="ultra-card p-8 max-w-md w-full text-center fade-in-up">
+        <div class="ultra-card p-8 max-w-md w-full text-center">
             <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" id="modal-icon-bg">
                 <i id="modal-icon" data-lucide="check-circle" class="w-12 h-12"></i>
             </div>
@@ -308,90 +319,58 @@
     ];
 
     // ============================================
-    // API HELPERS & DATA FETCHING
+    // GOOGLE AUTH HANDLER (Must be in global scope)
     // ============================================
     
-    async function fetchData(endpoint, options = {}) {
-        if (!AUTH_TOKEN) throw new Error('Authentication token missing.');
-
-        const config = {
-            method: options.method || 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${AUTH_TOKEN}`,
-                ...options.headers
-            },
-            ...(options.body && { body: JSON.stringify(options.body) }),
-        };
-
-        try {
-            const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
-            const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
+    async function handleCredentialResponse(response) {
+        if (response.credential) {
+            showAlert('Google Sign-In successful. Syncing account...', true);
             
-            if (!response.ok || !data.success) {
-                if (response.status === 401 || response.status === 403) {
-                    // Force re-login on token expiration
-                    simulateLogout(true); 
+            try {
+                const apiResponse = await fetch(`${BACKEND_URL}/auth/provision`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${response.credential}`
+                    }
+                });
+
+                const data = await apiResponse.json();
+
+                if (apiResponse.ok && data.success) {
+                    showAlert(`Welcome, ${data.user.fullName || data.user.email}!`, true);
+                    location.reload();
+                } else {
+                    showAlert(data.error || 'Account provisioning failed.', false);
                 }
-                throw new Error(data.error || `API Error: ${response.status}`);
+            } catch (error) {
+                showAlert('Network error during provisioning.', false);
+                console.error("Provisioning error:", error);
             }
-            return data;
-        } catch (error) {
-            console.error('API Error:', error.message);
-            throw error;
         }
     }
 
-    async function fetchUserProfile() {
-        if (cache.profileLoaded) return;
-        try {
-            const result = await fetchData('/user/profile', { method: 'GET' });
-            if (result.success && result.user) {
-                userProfile = result.user;
-                cache.profileLoaded = true;
-            }
-        } catch (error) {
-            console.warn("Profile fetch failed:", error.message);
-        }
-    }
-    
-    async function fetchUserStats() {
-        if (cache.statsLoaded) return;
-        try {
-            const earningsData = await fetchData('/earnings/summary');
-            const myTasksData = await fetchData('/tasks/my-tasks');
-
-            userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
-            userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
-            userStats.pendingEarnings = parseFloat(earningsData.earnings.pendingEarnings || 0);
-            userStats.tasksCompleted = parseInt(earningsData.earnings.completedTasks || 0);
-            userStats.activeTasks = myTasksData.tasks.filter(t => 
-                t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION'
-            ).length;
-            
-            cache.statsLoaded = true;
-        } catch (e) {
-            console.warn("Stats fetch failed, using defaults:", e.message);
-            userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 };
-        }
-    }
-
-    async function fetchDailyTask() {
-        try {
-            const data = await fetchData('/tasks/daily', { method: 'GET' });
-            return data.task;
-        } catch (error) {
-            console.warn("Daily task fetch failed, using mock:", error.message);
-            return MOCK_TASK_DEFINITIONS.find(t => t.id === 1) || null;
-        }
-    }
 
     // ============================================
-    // UI UTILITIES
+    // CORE UTILITIES (Must be defined early)
     // ============================================
     
+    // Function required by initializeApp to run immediately
+    function createStarField() {
+        const container = document.getElementById('stars-container');
+        if (!container) return;
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 3}s`;
+            container.appendChild(star);
+        }
+    }
+
+    // Function required by HTML onclicks
     function showAlert(message, isSuccess = true) {
-        // Implementation remains as in original code
         const statusAlert = document.getElementById('status-alert');
         const iconBg = document.getElementById('alert-icon-bg');
         const icon = document.getElementById('alert-icon');
@@ -462,12 +441,6 @@
         setTimeout(() => window.location.reload(), 1500);
     }
     
-    function setRoute(path) {
-        window.location.hash = `#${path}`;
-        updateMobileNav(path);
-        loadContent();
-    }
-
     function updateMobileNav(route) {
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => {
@@ -482,7 +455,7 @@
             activeNav.querySelector('span').classList.add('text-indigo-500');
         }
     }
-
+    
     // --- Data Rendering Helpers ---
     function getCategoryIcon(category) {
         const icons = { 'Survey': 'clipboard-list', 'Account Connection': 'linkedin', 'Account Procurement': 'message-circle-code', 'Data Entry': 'database' };
@@ -498,56 +471,87 @@
         return (task.difficulty || 'Easy').toLowerCase();
     }
 
+    function showWithdrawalModal() {
+        showModal('Withdrawal Request', 'Contact admin to process your withdrawal. Min amount: KES 500', 'warning');
+    }
+
+
     // ============================================
-    // FILTERING & SEARCH LOGIC
+    // API HELPERS & DATA FETCHING
     // ============================================
     
-    function applyFilters() {
-        const categoryFilter = document.getElementById('category-filter')?.value || 'all';
-        const difficultyFilter = document.getElementById('difficulty-filter')?.value || 'all';
-        const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
-        
-        currentFilters = { category: categoryFilter, difficulty: difficultyFilter, search: searchTerm };
-        
-        const filteredTasks = cachedTasks.filter(task => {
-            const matchesCategory = categoryFilter === 'all' || task.category === categoryFilter;
-            const matchesDifficulty = difficultyFilter === 'all' || getTaskDifficulty(task) === difficultyFilter.toLowerCase();
-            const matchesSearch = searchTerm === '' || task.title.toLowerCase().includes(searchTerm) || task.description.toLowerCase().includes(searchTerm);
+    async function fetchData(endpoint, options = {}) {
+        if (!AUTH_TOKEN) throw new Error('Authentication token missing.');
+
+        const config = {
+            method: options.method || 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${AUTH_TOKEN}`,
+                ...options.headers
+            },
+            ...(options.body && { body: JSON.stringify(options.body) }),
+        };
+
+        try {
+            const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
+            const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
             
-            return matchesCategory && matchesDifficulty && matchesSearch;
-        });
-        
-        renderFilteredTasks(filteredTasks);
-    }
-
-    function renderFilteredTasks(tasks) {
-        const container = document.getElementById('tasks-grid');
-        if (!container) return;
-        
-        if (tasks.length === 0) {
-            container.innerHTML = `
-                <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
-                    <i data-lucide="search-x" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
-                    <h3 class="text-xl font-black text-gray-800">No Tasks Found</h3>
-                    <p class="text-gray-600 text-sm mt-2">Try adjusting your filters or search terms.</p>
-                    <button onclick="resetFilters()" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
-                        Reset Filters
-                    </button>
-                </div>
-            `;
-            lucide.createIcons();
-            return;
+            if (!response.ok || !data.success) {
+                if (response.status === 401 || response.status === 403) {
+                    simulateLogout(true); 
+                }
+                throw new Error(data.error || `API Error: ${response.status}`);
+            }
+            return data;
+        } catch (error) {
+            console.error('API Error:', error.message);
+            throw error;
         }
-        
-        container.innerHTML = tasks.map((task, i) => renderTaskCard(task, i)).join('');
-        lucide.createIcons();
     }
 
-    function resetFilters() {
-        if (document.getElementById('category-filter')) document.getElementById('category-filter').value = 'all';
-        if (document.getElementById('difficulty-filter')) document.getElementById('difficulty-filter').value = 'all';
-        if (document.getElementById('search-input')) document.getElementById('search-input').value = '';
-        applyFilters();
+    async function fetchUserProfile() {
+        if (cache.profileLoaded) return;
+        try {
+            const result = await fetchData('/user/profile', { method: 'GET' });
+            if (result.success && result.user) {
+                userProfile = result.user;
+                cache.profileLoaded = true;
+            }
+        } catch (error) {
+            console.warn("Profile fetch failed:", error.message);
+        }
+    }
+    
+    async function fetchUserStats() {
+        if (cache.statsLoaded) return;
+        try {
+            const earningsData = await fetchData('/earnings/summary');
+            const myTasksData = await fetchData('/tasks/my-tasks');
+
+            userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
+            userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
+            userStats.pendingEarnings = parseFloat(earningsData.earnings.pendingEarnings || 0);
+            userStats.tasksCompleted = parseInt(earningsData.earnings.completedTasks || 0);
+            userStats.activeTasks = myTasksData.tasks.filter(t => 
+                t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION'
+            ).length;
+            
+            cache.statsLoaded = true;
+        } catch (e) {
+            console.warn("Stats fetch failed, using defaults:", e.message);
+            userStats = { totalEarned: 0, availableBalance: 0, pendingEarnings: 0, tasksCompleted: 0, activeTasks: 0 };
+        }
+    }
+
+    async function fetchDailyTask() {
+        try {
+            const data = await fetchData('/tasks/daily', { method: 'GET' });
+            return data.task;
+        } catch (error) {
+            console.warn("Daily task fetch failed, using mock:", error.message);
+            return MOCK_TASK_DEFINITIONS.find(t => t.id === 1) || null;
+        }
     }
 
     // ============================================
@@ -571,7 +575,7 @@
     function acceptAndNavigateToSurvey(taskId) {
         acceptTask(taskId);
     }
-
+    
     // Generic handler for TEXT, IMAGE_URL, and BOTH submissions
     async function submitGenericFileTask(taskId, type) {
         const textInput = document.getElementById(`submission-text-field-${taskId}`);
@@ -672,14 +676,12 @@
         try {
             showAlert('Submitting survey...', true);
             
-            // Log to Formspree (for admin logging/analytics)
             await fetch(FORMSPREE_SURVEY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(surveyData)
             });
             
-            // Submit to backend for balance update
             const response = await fetchData(`/tasks/submit-daily-task`, {
                 method: 'POST',
                 body: { taskId: taskId }
@@ -696,7 +698,6 @@
         }
     }
     
-    // --- File Select UI Update ---
     function handleFileSelectForGeneric(taskId) {
         const fileInput = document.getElementById(`submission-file-input-${taskId}`);
         const filePreview = document.getElementById(`file-preview-generic-${taskId}`);
@@ -712,10 +713,9 @@
     }
 
     // ============================================
-    // RENDERING FUNCTIONS (Modularized)
+    // RENDERING FUNCTIONS
     // ============================================
     
-    // Renders the main task card (from renderTasksList)
     function renderTaskCard(task, index) {
         const dailyTask = JSON.parse(localStorage.getItem('dailyTask') || 'null');
         if (dailyTask && task.id === dailyTask.id) return '';
@@ -767,7 +767,588 @@
         `;
     }
 
-    // Renders the task submission form dynamically
+    function renderTasksList(tasks, dailyTask) {
+        const appContainer = document.getElementById('app-container');
+        const availableTasks = tasks || MOCK_TASK_DEFINITIONS;
+        cachedTasks = availableTasks;
+        
+        const dailyTaskHtml = dailyTask ? `
+            <div class="ultra-card p-4 md:p-6 mb-6 border-2 border-indigo-400 bg-gradient-to-br from-indigo-50 to-purple-50">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg md:text-xl font-black text-indigo-700 flex items-center space-x-2">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                        <span>Daily Micro Task</span>
+                    </h3>
+                    <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full pulse">NEW</span>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">${dailyTask.title || 'N/A'}</h4>
+                <p class="text-sm text-gray-700 mb-3">
+                    <span class="font-semibold">Category:</span> ${dailyTask.category || 'N/A'} | 
+                    <span class="font-semibold">Payout:</span> KES ${getTaskPayout(dailyTask)}
+                </p>
+                
+                ${dailyTask.isCompleted ? `
+                    <button class="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 opacity-70" disabled>
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                        <span>COMPLETED TODAY</span>
+                    </button>
+                ` : `
+                    <button onclick="acceptAndNavigateToSurvey(${dailyTask.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        <span>Start Survey (${dailyTask.estimatedTime})</span>
+                    </button>
+                `}
+            </div>
+        ` : `
+            <div class="ultra-card p-4 md:p-6 mb-6 text-center text-gray-500">
+                <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
+                <p class="text-sm">No new microtasks available today. Check back tomorrow!</p>
+            </div>
+        `;
+
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
+                    <div class="ultra-card p-4 md:p-6 stats-card">
+                        <i data-lucide="dollar-sign" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Total Earned</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">KES ${userStats.totalEarned.toFixed(2)}</p>
+                    </div>
+                    <div class="ultra-card p-4 md:p-6 stats-card">
+                        <i data-lucide="wallet" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Available</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">KES ${userStats.availableBalance.toFixed(2)}</p>
+                    </div>
+                    <div class="ultra-card p-4 md:p-6 stats-card">
+                        <i data-lucide="check-circle-2" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Completed</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">${userStats.tasksCompleted}</p>
+                    </div>
+                    <div class="ultra-card p-4 md:p-6 stats-card">
+                        <i data-lucide="activity" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
+                        <p class="text-xs md:text-sm font-medium opacity-90">Active</p>
+                        <p class="text-xl md:text-3xl font-black mt-1">${userStats.activeTasks}</p>
+                    </div>
+                </div>
+
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-2 flex items-center">
+                    <i data-lucide="zap" class="w-8 h-8 mr-3"></i>
+                    Today's Quick Win
+                </h2>
+                <p class="text-gray-300 text-sm md:text-base mb-4">Complete daily tasks for instant rewards</p>
+                ${dailyTaskHtml}
+                
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-2 mt-8 flex items-center">
+                    <i data-lucide="briefcase" class="w-8 h-8 mr-3"></i>
+                    Available Tasks
+                </h2>
+                <p class="text-gray-300 text-sm md:text-base mb-6">High-value opportunities to maximize your earnings</p>
+
+                <div class="ultra-card p-4 md:p-6 mb-6">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="search-container flex-1">
+                            <div class="relative">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                                <input 
+                                    type="text" 
+                                    id="search-input" 
+                                    placeholder="Search tasks..." 
+                                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition"
+                                    oninput="applyFilters()"
+                                >
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <select id="category-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
+                                <option value="all">All Categories</option>
+                                <option value="Survey">Survey</option>
+                                <option value="Account Connection">Account Connection</option>
+                                <option value="Account Procurement">Account Procurement</option>
+                            </select>
+                            <select id="difficulty-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
+                                <option value="all">All Difficulties</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tasks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    ${availableTasks.map((task, i) => renderTaskCard(task, i)).join('')}
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
+    function renderMyTasks(tasks) {
+        const appContainer = document.getElementById('app-container');
+        const activeTasks = tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION');
+        const completedTasks = tasks.filter(t => t.status === 'COMPLETED');
+        
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
+                    <i data-lucide="list-checks" class="w-8 h-8 mr-3"></i>
+                    My Tasks
+                </h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-white mb-4">Active Tasks (${activeTasks.length})</h3>
+                    ${activeTasks.length > 0 ? `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                            ${activeTasks.map((task, i) => `
+                                <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="status-${task.status === 'IN_PROGRESS' ? 'progress' : 'pending'} text-white text-xs font-bold px-3 py-1 rounded-full">
+                                            ${task.status.replace('_', ' ')}
+                                        </span>
+                                        <span class="text-xs text-gray-500">${new Date(task.startedDate).toLocaleDateString()}</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
+                                    <p class="text-2xl font-black gradient-text mb-3">KES ${getTaskPayout(task)}</p>
+                                    <button onclick="setRoute('tasks/${task.taskId}')" class="btn-premium w-full text-white font-bold py-3 rounded-xl">
+                                        ${task.status === 'IN_PROGRESS' ? 'Continue Task' : 'View Status'}
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <div class="ultra-card p-8 text-center">
+                            <i data-lucide="inbox" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                            <p class="text-gray-600">No active tasks. Browse available tasks to get started!</p>
+                            <button onclick="setRoute('tasks')" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
+                                Browse Tasks
+                            </button>
+                        </div>
+                    `}
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Completed Tasks (${completedTasks.length})</h3>
+                    ${completedTasks.length > 0 ? `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                            ${completedTasks.map((task, i) => `
+                                <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="status-completed text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
+                                            <i data-lucide="check" class="w-3 h-3"></i>
+                                            <span>COMPLETED</span>
+                                        </span>
+                                        <span class="text-xs text-gray-500">${new Date(task.completedAt).toLocaleDateString()}</span>
+                                    </div>
+                                    <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
+                                    <p class="text-2xl font-black text-green-600 mb-3">+KES ${getTaskPayout(task)}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <div class="ultra-card p-8 text-center">
+                            <i data-lucide="clock" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                            <p class="text-gray-600">No completed tasks yet. Keep going!</p>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
+    function renderEarnings() {
+        const appContainer = document.getElementById('app-container');
+        
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
+                    <i data-lucide="wallet" class="w-8 h-8 mr-3"></i>
+                    Earnings Dashboard
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+                    <div class="ultra-card p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-green-50">
+                                <i data-lucide="trending-up" class="w-8 h-8 text-green-600"></i>
+                            </div>
+                            <span class="text-xs font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full">+12%</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Total Earned</p>
+                        <p class="text-3xl md:text-4xl font-black gradient-text">KES ${userStats.totalEarned.toFixed(2)}</p>
+                    </div>
+                    
+                    <div class="ultra-card p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-blue-50">
+                                <i data-lucide="wallet" class="w-8 h-8 text-blue-600"></i>
+                            </div>
+                            <button onclick="showWithdrawalModal()" class="text-xs font-bold text-blue-600 hover:text-blue-700">Withdraw</button>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Available Balance</p>
+                        <p class="text-3xl md:text-4xl font-black text-blue-600">KES ${userStats.availableBalance.toFixed(2)}</p>
+                    </div>
+                    
+                    <div class="ultra-card p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-yellow-50">
+                                <i data-lucide="clock" class="w-8 h-8 text-yellow-600"></i>
+                            </div>
+                            <span class="text-xs font-bold text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full pulse">Pending</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Pending Earnings</p>
+                        <p class="text-3xl md:text-4xl font-black text-yellow-600">KES ${userStats.pendingEarnings.toFixed(2)}</p>
+                    </div>
+                </div>
+                
+                <div class="ultra-card p-6 md:p-8 mb-6">
+                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        Earnings Overview (Last 7 Days)
+                    </h3>
+                    <canvas id="earningsChart" height="100"></canvas>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6">
+                    <div class="ultra-card p-4 text-center"><i data-lucide="check-circle-2" class="w-8 h-8 text-green-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${userStats.tasksCompleted}</p><p class="text-xs text-gray-600">Tasks Completed</p></div>
+                    <div class="ultra-card p-4 text-center"><i data-lucide="activity" class="w-8 h-8 text-blue-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${userStats.activeTasks}</p><p class="text-xs text-gray-600">Active</p></div>
+                    <div class="ultra-card p-4 text-center"><i data-lucide="target" class="w-8 h-8 text-purple-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${(userStats.tasksCompleted > 0 ? ((userStats.tasksCompleted / (userStats.tasksCompleted + userStats.activeTasks)) * 100) : 0).toFixed(0)}%</p><p class="text-xs text-gray-600">Success Rate</p></div>
+                    <div class="ultra-card p-4 text-center"><i data-lucide="zap" class="w-8 h-8 text-yellow-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${userStats.tasksCompleted > 0 ? Math.floor(userStats.totalEarned / userStats.tasksCompleted) : 0}</p><p class="text-xs text-gray-600">Avg Per Task</p></div>
+                </div>
+
+                <div class="ultra-card p-6 md:p-8">
+                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="receipt" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        Recent Transactions
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 rounded-lg bg-green-50">
+                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <div><p class="font-bold text-gray-800 text-sm">Task Completed: Daily Survey</p><p class="text-xs text-gray-500">2025-11-01</p></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-green-600">+KES 50.00</p>
+                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 rounded-lg bg-green-50">
+                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <div><p class="font-bold text-gray-800 text-sm">Task Completed: Data Entry</p><p class="text-xs text-gray-500">2025-10-31</p></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-green-600">+KES 300.00</p>
+                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
+                            </div>
+                        </div>
+                         <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 rounded-lg bg-red-50">
+                                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-red-600"></i>
+                                </div>
+                                <div><p class="font-bold text-gray-800 text-sm">Withdrawal to M-Pesa</p><p class="text-xs text-gray-500">2025-10-30</p></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-red-600">-KES 500.00</p>
+                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 rounded-lg bg-green-50">
+                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <div><p class="font-bold text-gray-800 text-sm">Referral Bonus</p><p class="text-xs text-gray-500">2025-10-29</p></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-green-600">+KES 200.00</p>
+                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 rounded-lg bg-green-50">
+                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <div><p class="font-bold text-gray-800 text-sm">Task Completed: Transcription</p><p class="text-xs text-gray-500">2025-10-28</p></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-green-600">+KES 450.00</p>
+                                <span class="text-xs text-yellow-600 font-semibold">PENDING</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        lucide.createIcons();
+        renderEarningsChart();
+    }
+
+    function renderAffiliateProfile() {
+        const appContainer = document.getElementById('app-container');
+        const referralCode = userProfile.referralCode || 'BTECH' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        const referralLink = `https://www.btechplus.com/download?ref=${referralCode}`; 
+        
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
+                    <i data-lucide="users" class="w-8 h-8 mr-3"></i>
+                    Affiliate Program
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+                    <div class="ultra-card p-6 md:p-8">
+                        <div class="p-3 rounded-xl bg-purple-50 w-fit mb-4">
+                            <i data-lucide="users" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Total Referrals</p>
+                        <p class="text-4xl font-black gradient-text">12</p>
+                    </div>
+                    
+                    <div class="ultra-card p-6 md:p-8">
+                        <div class="p-3 rounded-xl bg-green-50 w-fit mb-4">
+                            <i data-lucide="dollar-sign" class="w-8 h-8 text-green-600"></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Referral Earnings</p>
+                        <p class="text-4xl font-black text-green-600">KES 2,400</p>
+                    </div>
+                    
+                    <div class="ultra-card p-6 md:p-8">
+                        <div class="p-3 rounded-xl bg-blue-50 w-fit mb-4">
+                            <i data-lucide="percent" class="w-8 h-8 text-blue-600"></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Bonus per Referral</p>
+                        <p class="text-4xl font-black text-blue-600">KES ${REFERRAL_BONUS.toFixed(2)}</p>
+                    </div>
+                </div>
+                
+                <div class="ultra-card p-6 md:p-8 mb-6">
+                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="link" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        Your Referral Link
+                    </h3>
+                    <div class="bg-gray-50 p-4 rounded-xl mb-4">
+                        <p class="text-sm text-gray-800 font-mono break-all">${referralLink}</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="copyToClipboard('${referralLink}')" class="btn-premium text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
+                            <i data-lucide="copy" class="w-5 h-5"></i>
+                            <span>Copy Link</span>
+                        </button>
+                        <button onclick="shareReferral('${referralLink}')" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
+                            <i data-lucide="share-2" class="w-5 h-5"></i>
+                            <span>Share via WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="ultra-card p-6 md:p-8 mb-6">
+                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="lightbulb" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        How It Works
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <i data-lucide="send" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">1. Share Your Link</h4>
+                            <p class="text-sm text-gray-600">Send your unique referral link to friends and family</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <i data-lucide="user-plus" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">2. They Sign Up</h4>
+                            <p class="text-sm text-gray-600">Your referrals create an account and complete their first task</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <i data-lucide="gift" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">3. Earn Bonus</h4>
+                            <p class="text-sm text-gray-600">Get KES ${REFERRAL_BONUS.toFixed(2)} bonus instantly credited to your account</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ultra-card p-6 md:p-8">
+                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="users-2" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        Recent Referrals
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                    <span class="text-white font-bold text-sm">J</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 text-sm">John K.</p>
+                                    <p class="text-xs text-gray-500">john***@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-green-600">+KES 200.00</p>
+                                <span class="text-xs text-green-600 font-semibold">ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+    
+    function renderAchievements() {
+        const appContainer = document.getElementById('app-container');
+        const achievements = [
+            { id: 1, title: 'First Steps', desc: 'Complete your first task', icon: 'footprints', unlocked: true, xp: 50 },
+            { id: 2, title: 'Task Master', desc: 'Complete 10 tasks', icon: 'award', unlocked: true, xp: 100 },
+            { id: 3, title: 'Speed Demon', desc: 'Complete 5 tasks in one day', icon: 'zap', unlocked: false, xp: 150 },
+            { id: 4, title: 'Quality Pro', desc: '100% approval rate on 20 tasks', icon: 'star', unlocked: false, xp: 200 },
+        ];
+        
+        const totalXP = achievements.filter(a => a.unlocked).reduce((sum, a) => sum + a.xp, 0);
+        const unlockedCount = achievements.filter(a => a.unlocked).length;
+        
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
+                    <i data-lucide="trophy" class="w-8 h-8 mr-3"></i>
+                    Achievements
+                </h2>
+                
+                <div class="ultra-card p-6 md:p-8 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-sm text-gray-600">Achievement Progress</p>
+                            <p class="text-2xl font-black gradient-text">${unlockedCount} / ${achievements.length} Unlocked</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">Total XP</p>
+                            <p class="text-2xl font-black text-indigo-600">${totalXP} XP</p>
+                        </div>
+                    </div>
+                    <div class="progress-bar h-4">
+                        <div class="progress-fill" style="width: ${(unlockedCount / achievements.length) * 100}%"></div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    ${achievements.map((ach, i) => `
+                        <div class="ultra-card p-6 fade-in-up ${!ach.unlocked ? 'opacity-60' : ''}" style="animation-delay: ${i * 0.1}s">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="p-4 rounded-xl ${ach.unlocked ? 'bg-gradient-to-br from-indigo-500 to-purple-600' : 'bg-gray-200'}">
+                                    <i data-lucide="${ach.icon}" class="w-8 h-8 ${ach.unlocked ? 'text-white' : 'text-gray-400'}"></i>
+                                </div>
+                                ${ach.unlocked ? '<i data-lucide="check-circle" class="w-6 h-6 text-green-500"></i>' : '<i data-lucide="lock" class="w-6 h-6 text-gray-400"></i>'}
+                            </div>
+                            <h4 class="text-lg font-black text-gray-800 mb-2">${ach.title}</h4>
+                            <p class="text-sm text-gray-600 mb-3">${ach.desc}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold ${ach.unlocked ? 'text-indigo-600' : 'text-gray-400'}">+${ach.xp} XP</span>
+                                ${ach.unlocked ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">UNLOCKED</span>' : '<span class="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded">LOCKED</span>'}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+    
+    function renderTaskDetail(taskId) {
+        const task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
+        if (!task) { showAlert('Task not found', false); setRoute('tasks'); return; }
+        
+        const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
+        
+        const appContainer = document.getElementById('app-container');
+        appContainer.innerHTML = `
+            <div class="fade-in-up">
+                <button onclick="setRoute('tasks')" class="text-white hover:text-gray-300 font-semibold mb-6 flex items-center space-x-2">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span>Back to Tasks</span>
+                </button>
+                
+                <div class="ultra-card p-6 md:p-8 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="p-3 rounded-xl bg-indigo-50">
+                                    <i data-lucide="${getCategoryIcon(task.category)}" class="w-8 h-8 text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold text-gray-600">${task.category}</span>
+                                    <h1 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-left md:text-right">
+                            <p class="text-4xl md:text-5xl font-black gradient-text mb-2">${payoutText}</p>
+                            <span class="difficulty-${getTaskDifficulty(task)} text-white text-sm font-bold px-4 py-2 rounded-full inline-block">
+                                ${task.difficulty}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <i data-lucide="clock" class="w-6 h-6 text-gray-600 mb-2"></i>
+                            <p class="text-xs text-gray-600">Duration</p>
+                            <p class="font-bold text-gray-800">${task.estimatedTime}</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <i data-lucide="calendar" class="w-6 h-6 text-gray-600 mb-2"></i>
+                            <p class="text-xs text-gray-600">Deadline</p>
+                            <p class="font-bold text-gray-800">${task.deadline}</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <i data-lucide="users" class="w-6 h-6 text-gray-600 mb-2"></i>
+                            <p class="text-xs text-gray-600">Available</p>
+                            <p class="font-bold text-gray-800">${task.tasksAvailable} slots</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <i data-lucide="award" class="w-6 h-6 text-gray-600 mb-2"></i>
+                            <p class="text-xs text-gray-600">Success Rate</p>
+                            <p class="font-bold text-gray-800">${task.completionRate}%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-lg font-black text-gray-800 mb-3">Task Description</h3>
+                        <p class="text-gray-700 leading-relaxed">${task.description}</p>
+                    </div>
+                    
+                    ${task.requiresVerification ? `
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 mb-6">
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="shield-alert" class="w-6 h-6 text-yellow-600 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-bold text-yellow-800 mb-1">Verification Required</p>
+                                    <p class="text-sm text-yellow-700">This task requires manual review before payment is processed.</p>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="ultra-card p-6 md:p-8">
+                    ${renderSubmissionForm(task)}
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+
     function renderSubmissionForm(task) {
         const type = task.submission_type || 'NONE';
         const guide = task.submission_guide || 'Please follow the instructions in the task description.';
@@ -840,7 +1421,6 @@
         `;
     }
 
-    // Renders the daily survey form
     function renderDailySurveyForm(taskId) {
         return `
             <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
@@ -887,8 +1467,69 @@
         `;
     }
 
+    // ============================================
+    // FILTERING & SEARCH LOGIC
+    // ============================================
+    
+    function applyFilters() {
+        const categoryFilter = document.getElementById('category-filter')?.value || 'all';
+        const difficultyFilter = document.getElementById('difficulty-filter')?.value || 'all';
+        const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
+        
+        currentFilters = { category: categoryFilter, difficulty: difficultyFilter, search: searchTerm };
+        
+        const filteredTasks = cachedTasks.filter(task => {
+            const matchesCategory = categoryFilter === 'all' || task.category === categoryFilter;
+            const matchesDifficulty = difficultyFilter === 'all' || getTaskDifficulty(task) === difficultyFilter.toLowerCase();
+            const matchesSearch = searchTerm === '' || task.title.toLowerCase().includes(searchTerm) || task.description.toLowerCase().includes(searchTerm);
+            
+            return matchesCategory && matchesDifficulty && matchesSearch;
+        });
+        
+        renderFilteredTasks(filteredTasks);
+    }
 
-    // The main function to decide which content to display
+    function renderFilteredTasks(tasks) {
+        const container = document.getElementById('tasks-grid');
+        if (!container) return;
+        
+        if (tasks.length === 0) {
+            container.innerHTML = `
+                <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
+                    <i data-lucide="search-x" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
+                    <h3 class="text-xl font-black text-gray-800">No Tasks Found</h3>
+                    <p class="text-gray-600 text-sm mt-2">Try adjusting your filters or search terms.</p>
+                    <button onclick="resetFilters()" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
+                        Reset Filters
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+            return;
+        }
+        
+        container.innerHTML = tasks.map((task, i) => renderTaskCard(task, i)).join('');
+        lucide.createIcons();
+    }
+
+    function resetFilters() {
+        if (document.getElementById('category-filter')) document.getElementById('category-filter').value = 'all';
+        if (document.getElementById('difficulty-filter')) document.getElementById('difficulty-filter').value = 'all';
+        if (document.getElementById('search-input')) document.getElementById('search-input').value = '';
+        applyFilters();
+    }
+
+
+    // ============================================
+    // MAIN CONTENT LOADER & INITIALIZATION
+    // ============================================
+    
+    function setRoute(path) {
+        window.location.hash = `#${path}`;
+        updateMobileNav(path);
+        loadContent();
+    }
+    
     async function loadContent() {
         const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
@@ -902,24 +1543,32 @@
         lucide.createIcons();
 
         try {
+            // Fetch core data needed for all routes
             await Promise.all([fetchUserProfile(), fetchUserStats()]);
+            
+            // Fetch available tasks (can fail, using mock fallback)
             const [tasksData, dailyTaskData] = await Promise.all([
-                fetchData('/tasks/available').catch(e => ({ tasks: MOCK_TASK_DEFINITIONS, success: true })),
+                fetchData('/tasks/available').catch(e => {
+                    console.warn("Tasks fetch failed, using mock:", e.message);
+                    return { tasks: MOCK_TASK_DEFINITIONS, success: true };
+                }),
                 fetchDailyTask(),
             ]);
 
-            // Cache daily task data in local storage
+            // Cache tasks
+            cachedTasks = tasksData.tasks;
+
+            // Handle daily task data persistence
             if (dailyTaskData && dailyTaskData.id) {
                 localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
             } else {
                 localStorage.removeItem('dailyTask');
             }
             
-            cachedTasks = tasksData.tasks;
+            // Route Handling
             const hash = window.location.hash.slice(1);
             const route = hash || 'tasks';
             
-            // Route Handling
             if (route === 'tasks') {
                 renderTasksList(cachedTasks, dailyTaskData);
             } else if (route === 'my-tasks') {
@@ -935,18 +1584,19 @@
                 const taskId = route.split('/')[1];
                 renderTaskDetail(taskId);
             }
-
         } catch (error) {
             console.error("Critical Load Error:", error);
-            // Render error screen
             if (!AUTH_TOKEN) return;
+            
+            // Fallback error UI
             appContainer.innerHTML = `
-                <div class="ultra-card p-8 md:p-12 text-center mt-12 fade-in-up">
+                <div class="ultra-card p-8 md:p-12 text-center mt-12">
                     <i data-lucide="wifi-off" class="w-20 h-20 text-red-500 mx-auto mb-4"></i>
                     <h3 class="text-2xl font-black text-red-600 mb-3">Connection Error</h3>
                     <p class="text-gray-600 mb-6">Unable to load dashboard data. Please check your connection and try again.</p>
                     <button onclick="location.reload()" class="btn-premium text-white font-bold py-4 px-8 rounded-xl">
-                        <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>Retry
+                        <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>
+                        Retry
                     </button>
                 </div>
             `;
@@ -955,10 +1605,6 @@
     }
 
 
-    // ============================================
-    // INITIALIZATION & EVENT LISTENERS
-    // ============================================
-    
     async function initializeApp() {
         createStarField();
         
@@ -977,23 +1623,20 @@
             return;
         }
         
-        // Remove token from URL after successful capture
         if (window.location.search) {
             window.history.replaceState(null, null, window.location.pathname + window.location.hash);
         }
 
         const hash = window.location.hash.slice(1);
-        updateMobileNav(hash || 'tasks'); // Set initial nav state
+        updateMobileNav(hash || 'tasks');
         
-        // Load initial content
         await loadContent();
     }
-    
+
     function renderSignInScreen() {
-        // Implementation for sign-in screen (already well-defined in original code)
         const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
-             <div class="ultra-card p-8 md:p-12 text-center mt-12 fade-in-up">
+             <div class="ultra-card p-8 md:p-12 text-center mt-12">
                  <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                      <i data-lucide="shield-check" class="w-12 h-12 text-white"></i>
                  </div>
@@ -1070,7 +1713,7 @@
         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
     };
     window.showWithdrawalModal = showWithdrawalModal;
-    // Removed redundant submitGenericTextTask exposure
+
 </script>
 </body>
 </html>
