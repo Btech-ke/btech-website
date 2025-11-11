@@ -1046,7 +1046,7 @@
                                 <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
                             </div>
                         </div>
-                         <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
+                           <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
                             <div class="flex items-center space-x-3">
                                 <div class="p-2 rounded-lg bg-red-50">
                                     <i data-lucide="arrow-up-right" class="w-5 h-5 text-red-600"></i>
@@ -1265,9 +1265,69 @@
         lucide.createIcons();
     }
     
-    function renderTaskDetail(taskId) {
-        const task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
-        if (!task) { showAlert('Task not found', false); setRoute('tasks'); return; }
+    // START: REPLACED FUNCTION
+    async function renderTaskDetail(taskId) {
+        let task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
+
+        // --- NEW FALLBACK LOGIC ---
+        if (!task) {
+            // If not found in available tasks, try fetching from my-tasks
+            try {
+                showAlert('Fetching task details from active list...', true);
+                const myTasksData = await fetchData('/tasks/my-tasks');
+                
+                // Find the task in the user's active/completed list
+                const myTaskEntry = myTasksData.tasks.find(t => t.taskId == taskId);
+
+                if (myTaskEntry) {
+                    // Since myTaskEntry only has limited data (title, status, payment), 
+                    // we must merge it with its full definition from the MOCK list 
+                    // to ensure the submission form renders correctly.
+                    task = {
+                        ...MOCK_TASK_DEFINITIONS.find(t => t.id == taskId), // Get full template
+                        ...myTaskEntry // Overlay user-specific status data
+                    };
+
+                    // CRITICAL CHECK: If the task ID > 1502 (a real DB task)
+                    if (taskId > 1502) {
+                        // *** For real DB tasks (ID > 1502), you would ideally have a
+                        // *** dedicated backend endpoint: GET /api/tasks/detail/:id
+                        // *** Since that doesn't exist, we must rely on the data used 
+                        // *** to populate my-tasks, which thankfully works for now. 
+                        // *** This section relies on the full task details being available 
+                        // *** in the myTasks fetch, which is likely true for all *real* tasks.
+                        // *** RE-FETCHING ALL AVAILABLE TASKS FOR SAFETY
+                        
+                        // Attempt to fetch full task details again from the main tasks endpoint (inefficient but safe fallback)
+                        const allTasksData = await fetchData('/tasks/available');
+                        const fullTaskFromAvailable = allTasksData.tasks.find(t => t.id == taskId);
+
+                        if(fullTaskFromAvailable) {
+                            // Overlay user-specific status data on the full task details
+                            task = {
+                                ...fullTaskFromAvailable,
+                                ...myTaskEntry 
+                            };
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Task Detail Fallback Failed:", e);
+                // Clear the temporary alert
+                closeAlert();
+            }
+        }
+        // --- END NEW FALLBACK LOGIC ---
+
+
+        if (!task || !task.title) {
+            showAlert('Task details could not be found in cache or active list.', false);
+            setRoute('tasks');
+            return;
+        }
+        
+        // ... (rest of the renderTaskDetail function body remains the same,
+        //     using the now-populated 'task' object for rendering) ...
         
         const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
         
@@ -1301,26 +1361,10 @@
                     </div>
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="p-4 bg-gray-50 rounded-xl">
-                            <i data-lucide="clock" class="w-6 h-6 text-gray-600 mb-2"></i>
-                            <p class="text-xs text-gray-600">Duration</p>
-                            <p class="font-bold text-gray-800">${task.estimatedTime}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-xl">
-                            <i data-lucide="calendar" class="w-6 h-6 text-gray-600 mb-2"></i>
-                            <p class="text-xs text-gray-600">Deadline</p>
-                            <p class="font-bold text-gray-800">${task.deadline}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-xl">
-                            <i data-lucide="users" class="w-6 h-6 text-gray-600 mb-2"></i>
-                            <p class="text-xs text-gray-600">Available</p>
-                            <p class="font-bold text-gray-800">${task.tasksAvailable} slots</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-xl">
-                            <i data-lucide="award" class="w-6 h-6 text-gray-600 mb-2"></i>
-                            <p class="text-xs text-gray-600">Success Rate</p>
-                            <p class="font-bold text-gray-800">${task.completionRate}%</p>
-                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="clock" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Duration</p><p class="font-bold text-gray-800">${task.estimatedTime || 'N/A'}</p></div>
+                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="calendar" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Deadline</p><p class="font-bold text-gray-800">${task.deadline || 'N/A'}</p></div>
+                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="users" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Available</p><p class="font-bold text-gray-800">${task.tasksAvailable || 'N/A'} slots</p></div>
+                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="award" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Success Rate</p><p class="font-bold text-gray-800">${task.completionRate || 'N/A'}%</p></div>
                     </div>
                     
                     <div class="mb-6">
@@ -1348,6 +1392,7 @@
         `;
         lucide.createIcons();
     }
+    // END: REPLACED FUNCTION
 
     function renderSubmissionForm(task) {
         const type = task.submission_type || 'NONE';
@@ -1647,17 +1692,17 @@
                  
                  <div class="flex flex-col space-y-4 max-w-sm mx-auto">
                      <div id="g_id_onload"
-                         data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                         data-callback="handleCredentialResponse"
-                         data-auto_prompt="false">
+                          data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                          data-callback="handleCredentialResponse"
+                          data-auto_prompt="false">
                      </div>
                      <div class="g_id_signin"
-                         data-type="standard"
-                         data-size="large"
-                         data-theme="outline"
-                         data-text="signin_with"
-                         data-shape="rectangular"
-                         data-logo_alignment="left">
+                          data-type="standard"
+                          data-size="large"
+                          data-theme="outline"
+                          data-text="signin_with"
+                          data-shape="rectangular"
+                          data-logo_alignment="left">
                      </div>
                      <button onclick="location.reload()" class="btn-premium text-white font-bold py-4 px-8 rounded-xl">
                          <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>
@@ -1715,5 +1760,3 @@
     window.showWithdrawalModal = showWithdrawalModal;
 
 </script>
-</body>
-</html>
