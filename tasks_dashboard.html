@@ -28,7 +28,7 @@
         .animated-bg {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
             background: radial-gradient(ellipse at top, #1e3a8a 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom, #7c3aed 0%, transparent 50%);
+                         radial-gradient(ellipse at bottom, #7c3aed 0%, transparent 50%);
             opacity: 0.4;
         }
         
@@ -316,6 +316,7 @@
         { id: 1, title: 'Daily App Feedback Survey', description: 'Quick 2-minute feedback survey about your platform experience. Instant KES 50 reward.', category: 'Survey', payment: 50.00, estimatedTime: '2 minutes', difficulty: 'Easy', requiresVerification: false, deadline: '2025-11-30', tasksAvailable: 1, completionRate: 99, clientName: 'BTECH Internal', featured: true, submission_type: 'NONE', submission_guide: null },
         { id: 1501, title: 'LinkedIn Network Builder: Connect to Liam Lee', description: 'Connect your existing or new LinkedIn account to the specified target profile. Submission requires a screenshot of the sent request.', category: 'Account Connection', payment: 0.00, estimatedTime: '10 minutes', difficulty: 'Easy', requiresVerification: true, deadline: '2025-12-31', tasksAvailable: 50, completionRate: 90, clientName: 'BTECH HR', featured: true, submission_type: 'IMAGE_URL', submission_guide: 'Upload a screenshot of the sent connection request.' },
         { id: 1502, title: 'WeChat Account Acquisition: KES 1,000 Payout', description: 'Sell us a valid, existing, or new WeChat account. Instant KES 1,000 credited upon successful validation by the admin.', category: 'Account Procurement', payment: 1000.00, estimatedTime: '5 minutes', difficulty: 'Easy', requiresVerification: true, deadline: '2025-12-31', tasksAvailable: 20, completionRate: 80, clientName: 'BTECH Acquisitions', submission_type: 'TEXT', submission_guide: 'Submit the account phone number and password separated by a newline.' }
+        // NEW TASK 1503 WAS EXCLUDED AS REQUESTED
     ];
 
     // ============================================
@@ -1265,60 +1266,44 @@
         lucide.createIcons();
     }
     
-    // START: REPLACED FUNCTION
     async function renderTaskDetail(taskId) {
+        // 1. Try to find the task in the available cache first
         let task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
 
-        // --- NEW FALLBACK LOGIC ---
+        // 2. If the task is accepted (cache miss) or is a newly created task, fetch full details
         if (!task) {
-            // If not found in available tasks, try fetching from my-tasks
             try {
-                showAlert('Fetching task details from active list...', true);
-                const myTasksData = await fetchData('/tasks/my-tasks');
+                showAlert('Fetching task details from the server...', true);
                 
-                // Find the task in the user's active/completed list
-                const myTaskEntry = myTasksData.tasks.find(t => t.taskId == taskId);
+                // Re-fetch ALL available tasks (or implement a dedicated GET /tasks/:id endpoint on the server)
+                const allTasksData = await fetchData('/tasks/available');
+                const fetchedTask = allTasksData.tasks.find(t => t.id == taskId);
 
-                if (myTaskEntry) {
-                    // Since myTaskEntry only has limited data (title, status, payment), 
-                    // we must merge it with its full definition from the MOCK list 
-                    // to ensure the submission form renders correctly.
-                    task = {
-                        ...MOCK_TASK_DEFINITIONS.find(t => t.id == taskId), // Get full template
-                        ...myTaskEntry // Overlay user-specific status data
-                    };
+                if (fetchedTask) {
+                    task = fetchedTask;
+                } else {
+                    // If it's not available, it must be active/completed, so fetch the user's list
+                    const myTasksData = await fetchData('/tasks/my-tasks');
+                    const myTaskEntry = myTasksData.tasks.find(t => t.taskId == taskId);
 
-                    // CRITICAL CHECK: If the task ID > 1502 (a real DB task)
-                    if (taskId > 1502) {
-                        // *** For real DB tasks (ID > 1502), you would ideally have a
-                        // *** dedicated backend endpoint: GET /api/tasks/detail/:id
-                        // *** Since that doesn't exist, we must rely on the data used 
-                        // *** to populate my-tasks, which thankfully works for now. 
-                        // *** This section relies on the full task details being available 
-                        // *** in the myTasks fetch, which is likely true for all *real* tasks.
-                        // *** RE-FETCHING ALL AVAILABLE TASKS FOR SAFETY
+                    if (myTaskEntry) {
+                        // This creates a composite task object using the available fields from the my-tasks endpoint.
+                        // NOTE: This still assumes the task's full metadata (description, etc.) is in myTaskEntry 
+                        // or one of the mock definitions.
+                        task = {
+                            ...MOCK_TASK_DEFINITIONS.find(t => t.id == taskId) || {}, // Get mock template if applicable
+                            ...myTaskEntry // Overlay user-specific status data
+                        };
                         
-                        // Attempt to fetch full task details again from the main tasks endpoint (inefficient but safe fallback)
-                        const allTasksData = await fetchData('/tasks/available');
-                        const fullTaskFromAvailable = allTasksData.tasks.find(t => t.id == taskId);
-
-                        if(fullTaskFromAvailable) {
-                            // Overlay user-specific status data on the full task details
-                            task = {
-                                ...fullTaskFromAvailable,
-                                ...myTaskEntry 
-                            };
-                        }
+                        // If the task is a REAL task (ID > 1502), the fallback above is insufficient.
+                        // This is why a dedicated backend GET /tasks/:id is necessary for robustness.
+                        // But for IDs 1, 1501, 1502, this merging should work.
                     }
                 }
             } catch (e) {
                 console.error("Task Detail Fallback Failed:", e);
-                // Clear the temporary alert
-                closeAlert();
             }
         }
-        // --- END NEW FALLBACK LOGIC ---
-
 
         if (!task || !task.title) {
             showAlert('Task details could not be found in cache or active list.', false);
@@ -1326,9 +1311,7 @@
             return;
         }
         
-        // ... (rest of the renderTaskDetail function body remains the same,
-        //     using the now-populated 'task' object for rendering) ...
-        
+        // Ensure values are present, even if data fetch was incomplete
         const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
         
         const appContainer = document.getElementById('app-container');
@@ -1344,10 +1327,10 @@
                         <div class="flex-1">
                             <div class="flex items-center space-x-3 mb-4">
                                 <div class="p-3 rounded-xl bg-indigo-50">
-                                    <i data-lucide="${getCategoryIcon(task.category)}" class="w-8 h-8 text-indigo-600"></i>
+                                    <i data-lucide="${getCategoryIcon(task.category || 'briefcase')}" class="w-8 h-8 text-indigo-600"></i>
                                 </div>
                                 <div>
-                                    <span class="text-sm font-semibold text-gray-600">${task.category}</span>
+                                    <span class="text-sm font-semibold text-gray-600">${task.category || 'N/A'}</span>
                                     <h1 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h1>
                                 </div>
                             </div>
@@ -1355,7 +1338,7 @@
                         <div class="text-left md:text-right">
                             <p class="text-4xl md:text-5xl font-black gradient-text mb-2">${payoutText}</p>
                             <span class="difficulty-${getTaskDifficulty(task)} text-white text-sm font-bold px-4 py-2 rounded-full inline-block">
-                                ${task.difficulty}
+                                ${task.difficulty || 'N/A'}
                             </span>
                         </div>
                     </div>
@@ -1369,7 +1352,7 @@
                     
                     <div class="mb-6">
                         <h3 class="text-lg font-black text-gray-800 mb-3">Task Description</h3>
-                        <p class="text-gray-700 leading-relaxed">${task.description}</p>
+                        <p class="text-gray-700 leading-relaxed">${task.description || 'Description not provided.'}</p>
                     </div>
                     
                     ${task.requiresVerification ? `
@@ -1392,7 +1375,6 @@
         `;
         lucide.createIcons();
     }
-    // END: REPLACED FUNCTION
 
     function renderSubmissionForm(task) {
         const type = task.submission_type || 'NONE';
@@ -1760,3 +1742,5 @@
     window.showWithdrawalModal = showWithdrawalModal;
 
 </script>
+</body>
+</html>
