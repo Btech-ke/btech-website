@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your Firebase Admin Token (Dual Sign-In)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .success-box { 
+            background: #10b981; 
+            color: white; 
+            padding: 1rem; 
+            border-radius: 0.5rem;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .copy-btn {
+            transition: all 0.3s;
+        }
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+        .sign-in-box {
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+        .sign-in-box:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: #6366f1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <div class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-8">
+            <h1 class="text-4xl font-bold mb-2">🔑 Firebase Admin Token Generator</h1>
+            <p class="text-blue-100">Get your Firebase ID token in 3 easy steps (Dual Sign-In)</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-12 max-w-4xl">
+        
+        <div id="alertBox" class="hidden mb-6"></div>
+
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">1</div>
+                <h2 class="text-2xl font-bold text-gray-800">Enter Your Firebase Configuration</h2>
+            </div>
+            
+            <p class="text-gray-600 mb-6">
+                Get this from your Firebase Console → Project Settings → General → Your apps → Web app → SDK setup and configuration.
+            </p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">API Key *</label>
+                    <input type="text" id="apiKey" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Auth Domain *</label>
+                    <input type="text" id="authDomain" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="your-project.firebaseapp.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Project ID *</label>
+                    <input type="text" id="projectId" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="your-project-id">
+                </div>
+            </div>
+
+            <button onclick="initializeFirebase()" class="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg">
+                ✅ INITIALIZE FIREBASE
+            </button>
+        </div>
+
+        <div id="step2" class="bg-white rounded-xl shadow-lg p-8 mb-8 opacity-50 pointer-events-none">
+            <div class="flex items-center mb-6">
+                <div class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">2</div>
+                <h2 class="text-2xl font-bold text-gray-800">Sign In With Your Admin Account</h2>
+            </div>
+
+            <p class="text-gray-600 mb-6">
+                Select the method you use to log into your Firebase Console.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div id="emailPasswordBox" class="sign-in-box bg-gray-50 rounded-xl p-5">
+                    <h3 class="font-bold text-gray-800 mb-3">✉️ Email & Password</h3>
+                    <div class="space-y-4">
+                        <input type="email" id="adminEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Admin Email">
+                        <input type="password" id="adminPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Password">
+                    </div>
+                    <button onclick="signInAdminEmailPassword()" class="w-full mt-4 bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-all shadow-md">
+                        🔑 Sign In
+                    </button>
+                </div>
+
+                <div id="googleSignInBox" class="sign-in-box bg-gray-50 rounded-xl p-5">
+                    <h3 class="font-bold text-gray-800 mb-3">🌐 Google Sign-In</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        **If the popup closes instantly:** Go to **Firebase Auth** -> **Settings** -> **Authorized Domains** and add the domain you are using (e.g., `localhost`).
+                    </p>
+                    <button onclick="signInAdminWithGoogle()" class="w-full mt-4 bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition-all shadow-md">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12.24 10.23c-.15 0-.27 0-.4 0-.13 0-.25 0-.37 0-1.72 0-3.32-.6-4.63-1.87l-.54-.53v3.74c0 .4-.16.8-.45 1.1-.3.3-.67.45-1.1.45H3.57c-.4 0-.75-.15-1.05-.45-.3-.3-.45-.67-.45-1.1V6.93c0-.43.15-.8.45-1.1.3-.3.65-.45 1.05-.45h2.16c.43 0 .8.15 1.1.45.3.3.45.67.45 1.1v2.96c.72-1.35 1.83-2.45 3.16-3.15 1.33-.7 2.82-1.06 4.47-1.06 1.7 0 3.25.35 4.65 1.05 1.4.7 2.5 1.7 3.3 3.0.8 1.3.9 2.9.3 4.6-.6 1.7-1.7 3.0-3.3 4.0-1.6 1.0-3.5 1.4-5.6 1.4-1.9 0-3.7-.3-5.3-.9-1.6-.6-3.0-1.5-4.1-2.7-1.1-1.2-1.8-2.6-2.1-4.2h3.5c.3 1.2.9 2.2 1.9 2.9 1.0.7 2.1 1.0 3.5 1.0 1.3 0 2.5-.3 3.5-.9 1.0-.6 1.7-1.4 2.2-2.5.5-1.1.6-2.3.2-3.5-.4-1.2-1.1-2.2-2.1-2.9-1.0-.7-2.1-1.1-3.4-1.1z"/></svg>
+                        Sign In with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="step3" class="bg-white rounded-xl shadow-lg p-8 opacity-50 pointer-events-none">
+            <div class="flex items-center mb-6">
+                <div class="bg-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">3</div>
+                <h2 class="text-2xl font-bold text-gray-800">Your Admin ID Token</h2>
+            </div>
+
+            <div id="tokenDisplay" class="hidden">
+                <div class="success-box mb-6">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-semibold">Token Generated Successfully!</span>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 border-2 border-gray-300 rounded-lg p-4 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold text-gray-700">Your Firebase Admin UID:</span>
+                        <button onclick="copyUID()" class="text-blue-600 hover:text-blue-800 font-semibold text-sm copy-btn">📋 Copy</button>
+                    </div>
+                    <div id="uidDisplay" class="font-mono text-sm bg-white p-3 rounded border border-gray-200 overflow-x-auto"></div>
+                </div>
+
+                <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold text-gray-700">Your ID Token (Copy this!):</span>
+                        <button onclick="copyToken()" class="text-blue-600 hover:text-blue-800 font-semibold text-sm copy-btn">📋 Copy Token</button>
+                    </div>
+                    <div id="adminToken" class="font-mono text-xs bg-white p-3 rounded border border-yellow-200 overflow-x-auto max-h-40"></div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <p class="text-sm text-blue-800 font-semibold mb-2">⚠️ IMPORTANT SECURITY NOTES:</p>
+                    <ul class="text-sm text-blue-700 space-y-1 list-disc list-inside">
+                        <li>This token expires after **1 hour** - generate a new one if needed.</li>
+                        <li>**Never share this token publicly.**</li>
+                        <li>Use this token when the Admin Panel asks for the "Firebase Admin Token".</li>
+                        <li>Your Admin UID is: <code class="bg-white px-2 py-1 rounded" id="uidShort"></code></li>
+                    </ul>
+                </div>
+
+                <button onclick="openAdminPanel()" class="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">
+                    🚀 OPEN ADMIN PANEL WITH THIS TOKEN
+                </button>
+            </div>
+
+            <div id="tokenLoading" class="hidden text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
+                <p class="text-gray-600">Authenticating and generating your token...</p>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 mt-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">📚 Where to Find Your Firebase Config:</h3>
+            <ol class="space-y-3 text-gray-700">
+                <li class="flex">
+                    <span class="font-bold mr-2">1.</span>
+                    <span>Go to <a href="https://console.firebase.google.com" target="_blank" class="text-blue-600 underline">Firebase Console</a></span>
+                </li>
+                <li class="flex">
+                    <span class="font-bold mr-2">2.</span>
+                    <span>Select your project (BTECH)</span>
+                </li>
+                <li class="flex">
+                    <span class="font-bold mr-2">3.</span>
+                    <span>Click the gear icon ⚙️ → Project Settings</span>
+                </li>
+                <li class="flex">
+                    <span class="font-bold mr-2">4.</span>
+                    <span>Scroll down to "Your apps" → Select your Web app</span>
+                </li>
+                <li class="flex">
+                    <span class="font-bold mr-2">5.</span>
+                    <span>Copy the config values (apiKey, authDomain, projectId)</span>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        window.firebaseApp = null;
+        window.firebaseAuth = null;
+
+        // --- Helper Function to Display Token ---
+        function displayToken(user, token, uid) {
+            document.getElementById('adminToken').textContent = token;
+            document.getElementById('uidDisplay').textContent = uid;
+            document.getElementById('uidShort').textContent = uid;
+            
+            document.getElementById('tokenLoading').classList.add('hidden');
+            document.getElementById('tokenDisplay').classList.remove('hidden');
+            document.getElementById('step3').classList.remove('opacity-50', 'pointer-events-none');
+            
+            showAlert(`🎉 Token generated successfully for user: ${user.email || 'Admin User'}`, 'success');
+
+            window.generatedToken = token;
+            window.adminUID = uid;
+        }
+
+        // --- Step 1: Initialize Firebase ---
+        window.initializeFirebase = function() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const authDomain = document.getElementById('authDomain').value.trim();
+            const projectId = document.getElementById('projectId').value.trim();
+
+            if (!apiKey || !authDomain || !projectId) {
+                showAlert('Please fill in all Firebase configuration fields', 'error');
+                return;
+            }
+
+            try {
+                const firebaseConfig = {
+                    apiKey: apiKey,
+                    authDomain: authDomain,
+                    projectId: projectId
+                };
+
+                if (!window.firebaseApp) {
+                    window.firebaseApp = initializeApp(firebaseConfig);
+                    window.firebaseAuth = getAuth(window.firebaseApp);
+                }
+
+                showAlert('✅ Firebase initialized successfully!', 'success');
+                
+                // Enable step 2
+                document.getElementById('step2').classList.remove('opacity-50', 'pointer-events-none');
+                document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (error) {
+                showAlert('Failed to initialize Firebase: ' + error.message, 'error');
+            }
+        };
+
+        // --- Step 2, Option A: Email & Password Sign-In ---
+        window.signInAdminEmailPassword = async function() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            if (!email || !password) {
+                showAlert('Please enter both email and password for this option', 'error');
+                return;
+            }
+
+            if (!window.firebaseAuth) {
+                showAlert('Please initialize Firebase first (Step 1)', 'error');
+                return;
+            }
+
+            document.getElementById('tokenLoading').classList.remove('hidden');
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                const user = userCredential.user;
+                const token = await user.getIdToken();
+                const uid = user.uid;
+                
+                displayToken(user, token, uid);
+
+            } catch (error) {
+                document.getElementById('tokenLoading').classList.add('hidden');
+                let errorMessage = 'Authentication failed: ';
+                
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage += 'Invalid email or password.';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                showAlert(errorMessage, 'error');
+            }
+        };
+
+        // --- Step 2, Option B: Google Sign-In ---
+        window.signInAdminWithGoogle = async function() {
+            if (!window.firebaseAuth) {
+                showAlert('Please initialize Firebase first (Step 1)', 'error');
+                return;
+            }
+
+            document.getElementById('tokenLoading').classList.remove('hidden');
+
+            try {
+                const provider = new GoogleAuthProvider();
+                
+                // Sign in using the Google popup method
+                const result = await signInWithPopup(window.firebaseAuth, provider);
+                const user = result.user;
+
+                // Get the ID Token and UID
+                const token = await user.getIdToken();
+                const uid = user.uid;
+
+                displayToken(user, token, uid);
+
+            } catch (error) {
+                document.getElementById('tokenLoading').classList.add('hidden');
+                let errorMessage = 'Google Sign-In failed: ';
+                
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = 'Sign-In cancelled by user OR the domain is blocked. Check Firebase Auth -> Settings -> Authorized Domains.';
+                } else if (error.code === 'auth/cancelled-popup-request') {
+                    errorMessage = 'Sign-In cancelled because a previous popup was open.';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                showAlert(errorMessage, 'error');
+            }
+        };
+
+
+        // --- Utility Functions ---
+
+        window.copyToken = function() {
+            const token = document.getElementById('adminToken').textContent;
+            navigator.clipboard.writeText(token);
+            showAlert('✅ Token copied to clipboard!', 'success');
+        };
+
+        window.copyUID = function() {
+            const uid = document.getElementById('uidDisplay').textContent;
+            navigator.clipboard.writeText(uid);
+            showAlert('✅ UID copied to clipboard!', 'success');
+        };
+
+        window.openAdminPanel = function() {
+            if (!window.generatedToken) {
+                showAlert('No token generated yet', 'error');
+                return;
+            }
+            
+            // Note: Since the admin panel is on a different domain (onrender.com), 
+            // the token MUST be copied manually and pasted into the prompt.
+            showAlert("Please copy the token above manually, then click OK and paste it into the prompt in the admin panel.", 'warning');
+            
+            // Open admin panel after the warning
+            window.open('https://btech-earning-api.onrender.com/admin.html', '_blank');
+        };
+
+        window.showAlert = function(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            const bgColor = type === 'success' ? 'bg-green-100 border-green-500 text-green-800' : 
+                            type === 'warning' ? 'bg-yellow-100 border-yellow-500 text-yellow-800' :
+                            'bg-red-100 border-red-500 text-red-800';
+            
+            alertBox.className = `${bgColor} border-l-4 p-4 rounded-lg shadow-md`;
+            alertBox.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <p class="font-semibold">${message}</p>
+                    <button onclick="this.parentElement.parentElement.classList.add('hidden')" class="text-xl font-bold">×</button>
+                </div>
+            `;
+            alertBox.classList.remove('hidden');
+            
+            setTimeout(() => alertBox.classList.add('hidden'), 5000);
+        };
+    </script>
+</body>
+</html>
