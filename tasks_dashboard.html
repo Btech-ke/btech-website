@@ -1416,11 +1416,11 @@
         lucide.createIcons();
     }
 
-    // Located in DASHBOARD.HTML
+ // Located in DASHBOARD.HTML
 function renderSubmissionForm(task) {
     // 1. CHECK IF TASK HAS BEEN ACCEPTED BY THE USER
+    // If status is NOT IN_PROGRESS or REJECTED, the user hasn't started yet.
     if (task.status !== 'IN_PROGRESS' && task.status !== 'REJECTED') {
-        // This is correct: If the user hasn't accepted it, prompt them to start.
         return `
             <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                 <i data-lucide="play-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
@@ -1435,35 +1435,40 @@ function renderSubmissionForm(task) {
         `;
     }
 
-    // 2. SAFETY CHECK: DETERMINE SUBMISSION TYPE
-    // If your backend fix worked, this should be 'TEXT', 'IMAGE_URL', or 'BOTH'.
+    // 2. DEFINE CORE PARAMETERS (Assuming IN_PROGRESS or REJECTED)
+    // The safest type is the one returned from the backend (which we fixed to default to 'TEXT').
     const type = (task.submission_type && task.submission_type !== 'NONE') ? task.submission_type : 'NONE';
     const guide = task.submission_guide || 'Please follow the instructions in the task description.';
     const taskId = task.id;
     
-    // 3. HANDLE AUTO-COMPLETE (Daily/Survey Tasks) OR EXPLICIT NONE
-    if (taskId == 1 || task.category === 'Survey' || type === 'NONE') {
-         return `
+    // 3. HANDLE SPECIAL CASE: SURVEYS/DAILY TASKS
+    // Surveys use a separate handler (renderDailySurveyForm), regardless of submission_type value.
+    if (taskId == 1 || task.category === 'Survey') {
+        return renderDailySurveyForm(taskId);
+    }
+    
+    // 4. HANDLE EXPLICIT NON-SUBMISSION TASKS (type === 'NONE')
+    if (type === 'NONE') {
+        return `
             <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                 <i data-lucide="check-circle" class="w-6 h-6 mr-3 text-green-600"></i>
                 Task Completion Status
             </h3>
             <div class="text-center py-8 text-gray-600">
                 <p class="font-bold text-gray-800">No Submission Required</p>
-                <p>This task is completed by tracking in the background or requires an internal form. Your status will update soon.</p>
+                <p>This task is completed by tracking in the background. Your status will update soon.</p>
                 <button onclick="setRoute('my-tasks')" class="btn-premium text-white font-bold py-3 px-6 rounded-xl mt-4">
                     View My Tasks Status
                 </button>
             </div>
-         `;
+        `;
     }
-    
-    // 4. RENDER GENERIC SUBMISSION FORM (for TEXT, IMAGE_URL, BOTH)
+
+    // 5. RENDER GENERIC SUBMISSION FORM (TEXT, IMAGE_URL, or BOTH)
     let submissionHtml = '';
     let formAction = `submitGenericFileTask(${taskId}, '${type}')`;
-
-    // ... (The rest of your existing logic for rendering TEXT/IMAGE/BOTH inputs goes here) ...
     
+    // --- Render Text/Link Field ---
     if (type === 'TEXT' || type === 'BOTH') {
         const textLabel = (type === 'TEXT') ? '1.' : 'A.';
         submissionHtml += `
@@ -1474,6 +1479,7 @@ function renderSubmissionForm(task) {
         `;
     }
 
+    // --- Render File/Image Upload Field ---
     if (type === 'IMAGE_URL' || type === 'BOTH') {
         const fileLabel = (type === 'IMAGE_URL') ? '1.' : 'B.';
         const fileUploadBlock = `
@@ -1495,7 +1501,7 @@ function renderSubmissionForm(task) {
         submissionHtml += fileUploadBlock;
     }
 
-    // Return the form
+    // --- Final Form Wrapper ---
     return `
         <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
             <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
@@ -1511,78 +1517,6 @@ function renderSubmissionForm(task) {
         </form>
     `;
 }
-
-        // Use 'NONE' only if the property exists but is explicitly 'NONE', otherwise use the actual type.
-const type = (task.submission_type && task.submission_type !== 'NONE') ? task.submission_type : 'NONE';
-        const guide = task.submission_guide || 'Please follow the instructions in the task description.';
-        const taskId = task.id;
-        
-        if (taskId == 1 || task.category === 'Survey') {
-            return renderDailySurveyForm(taskId);
-        }
-        
-        let submissionHtml = '';
-        let formAction = `submitGenericFileTask(${taskId}, '${type}')`;
-
-        if (type === 'NONE') {
-            return `
-                <div class="text-center py-8 text-gray-600">
-                    <i data-lucide="check-circle" class="w-16 h-16 mx-auto mb-4 text-green-500"></i>
-                    <p class="font-bold text-gray-800">No Submission Required</p>
-                    <p>This task is completed by tracking in the background. Your status will update soon.</p>
-                    <button onclick="setRoute('my-tasks')" class="btn-premium text-white font-bold py-3 px-6 rounded-xl mt-4">
-                        View My Tasks Status
-                    </button>
-                </div>
-            `;
-        } 
-
-        if (type === 'TEXT' || type === 'BOTH') {
-            const textLabel = (type === 'TEXT') ? '1.' : 'A.';
-            submissionHtml += `
-                <div class="mb-5 md:mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">${textLabel} Text/Link/Credential Submission:</label>
-                    <textarea id="submission-text-field-${taskId}" rows="4" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Enter proof, links, or credentials here..." ${type === 'TEXT' ? 'required' : ''}></textarea>
-                </div>
-            `;
-        }
-
-        if (type === 'IMAGE_URL' || type === 'BOTH') {
-            const fileLabel = (type === 'IMAGE_URL') ? '1.' : 'B.';
-            const fileUploadBlock = `
-                <div class="mb-5 md:mb-6 ${type === 'BOTH' ? 'mt-6 border-t pt-4' : ''}">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">${fileLabel} Image/Screenshot Proof (Max 5MB, JPEG/PNG):</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-indigo-400 transition">
-                        <input type="file" id="submission-file-input-${taskId}" name="document" class="hidden" ${type === 'IMAGE_URL' ? 'required' : ''} accept="image/jpeg,image/png" onchange="handleFileSelectForGeneric(${taskId})">
-                        <label for="submission-file-input-${taskId}" class="cursor-pointer">
-                            <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-2"></i>
-                            <p class="text-sm text-gray-600">Click to upload your screenshot proof</p>
-                            <p class="text-xs text-gray-500 mt-1">JPEG, PNG only (max 5MB)</p>
-                        </label>
-                        <div id="file-preview-generic-${taskId}" class="mt-4 hidden">
-                            <p class="text-sm font-semibold text-gray-800" id="file-name-generic-${taskId}"></p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            submissionHtml += fileUploadBlock;
-        }
-        
-        return `
-            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                Task Submission Portal
-            </h3>
-            <p class="text-gray-600 text-sm mb-4 font-semibold">Submission Guide: ${guide}</p>
-            <form onsubmit="event.preventDefault(); ${formAction};">
-                ${submissionHtml}
-                <button type="submit" id="submit-btn-generic-${taskId}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
-                    <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>Submit Task for Review</span>
-                </button>
-            </form>
-        `;
-    }
 
     function renderDailySurveyForm(taskId) {
         return `
