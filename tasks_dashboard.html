@@ -1296,12 +1296,16 @@
     
     // Located in DASHBOARD.HTML
 async function renderTaskDetail(taskId) {
-    // 1. Fetch user's status first (determines if IN_PROGRESS, COMPLETED, etc.)
+    // CRITICAL: Ensure taskId is a number for reliable comparison against DB results
+    const numericTaskId = parseInt(taskId);
+
+    // 1. Fetch user's status first...
     let userTaskStatus = null;
     let myTaskEntry;
     try {
         const myTasksData = await fetchData('/tasks/my-tasks');
-        myTaskEntry = myTasksData.tasks.find(t => t.taskId == taskId);
+        // Use strict equality (===) with the numeric ID
+        myTaskEntry = myTasksData.tasks.find(t => t.taskId === numericTaskId); 
         if (myTaskEntry) {
             userTaskStatus = myTaskEntry.status;
         }
@@ -1310,7 +1314,11 @@ async function renderTaskDetail(taskId) {
     }
 
     // 2. Try to find the full task details in the cache or mocks.
-    let task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
+    // Use strict equality (===) with the numeric ID
+    let task = cachedTasks.find(t => t.id === numericTaskId) || MOCK_TASK_DEFINITIONS.find(t => t.id === numericTaskId);
+
+    // 3. CRITICAL FALLBACK: If the task isn't in cache, force fetch...
+    // ... (rest of the logic remains the same, ensuring 'numericTaskId' is used where appropriate)
 
     // 3. CRITICAL FALLBACK: If the task isn't in cache, force fetch the full list of available tasks.
     // This is the safety net for users landing directly on the detail page.
