@@ -478,16 +478,6 @@
     }
 
 
-    // Add this function to your existing <script> block in DASHBOARD.HTML
-function navigateToTaskDetail(taskId) {
-    // This function reliably transfers the task ID using a query parameter, 
-    // which the updated initializeApp() function then detects and processes.
-    window.location.hash = ''; 
-    window.location.search = `?taskid=${taskId}`;
-    window.location.reload(); 
-}
-
-
     // ============================================
     // API HELPERS & DATA FETCHING
     // ============================================
@@ -570,28 +560,40 @@ function navigateToTaskDetail(taskId) {
     // TASK ACTION HANDLERS
     // ============================================
 
-    async function acceptTask(taskId) {
-        try {
-            showAlert('Accepting task...', true);
-            const response = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
-            
-            if (response.message.includes('already in your active list')) {
-                 showModal('Task Already Active!', 'This task is already in your "My Tasks" list. Redirecting to continue.', 'warning');
-                 setTimeout(() => {
-                    closeModal();
-                    setRoute(`tasks/${taskId}`);
-                }, 2000);
-            } else {
-                showModal('Task Accepted!', 'You can now start working on this task.', 'success');
-                setTimeout(() => {
-                    closeModal();
-                    setRoute(`tasks/${taskId}`);
-                }, 2000);
-            }
-        } catch (error) {
-            showAlert(error.message, false);
+    // Located in DASHBOARD.HTML
+async function acceptTask(taskId) {
+    try {
+        showAlert('Accepting task...', true);
+        const response = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
+        
+        // --- CRITICAL REDIRECTION LOGIC START ---
+        
+        if (response.message.includes('already in your active list')) {
+            showModal('Task Already Active!', 'This task is already in your "My Tasks" list. We are refreshing to the detail screen.', 'warning');
+        } else {
+            showModal('Task Accepted!', 'You can now start working on this task. Loading details...', 'success');
         }
+        
+        // 1. Force the URL into the clean 'detail' state:
+        // Clear both search and hash, then set the query parameter for the detail page.
+        // This forces a complete re-initialization on reload.
+        window.location.search = `?taskid=${taskId}`;
+        window.location.hash = ''; 
+        
+        // 2. Schedule the reload after the modal closes.
+        setTimeout(() => {
+            closeModal();
+            // Reloads the page, which triggers initializeApp() and hits the ?taskid= logic.
+            window.location.reload(); 
+        }, 2000);
+        
+        // --- CRITICAL REDIRECTION LOGIC END ---
+
+    } catch (error) {
+        // If the server returns a 402/error (e.g., Registration Fee Required)
+        showAlert(error.message, false);
     }
+}
 
     function acceptAndNavigateToSurvey(taskId) {
         acceptTask(taskId);
