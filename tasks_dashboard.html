@@ -1294,127 +1294,148 @@
         lucide.createIcons();
     }
     
-    async function renderTaskDetail(taskId) {
-        // Find task from cache/mock for initial display
-        let task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
+    // Located in DASHBOARD.HTML
+async function renderTaskDetail(taskId) {
+    // 1. Fetch user's status first (determines if IN_PROGRESS, COMPLETED, etc.)
+    let userTaskStatus = null;
+    let myTaskEntry;
+    try {
+        const myTasksData = await fetchData('/tasks/my-tasks');
+        myTaskEntry = myTasksData.tasks.find(t => t.taskId == taskId);
+        if (myTaskEntry) {
+            userTaskStatus = myTaskEntry.status;
+        }
+    } catch (e) {
+        console.warn("Could not fetch user status for task:", taskId, e);
+    }
 
-        // Fetch user's status for this specific task
-        let userTaskStatus = null;
+    // 2. Try to find the full task details in the cache or mocks.
+    let task = cachedTasks.find(t => t.id == taskId) || MOCK_TASK_DEFINITIONS.find(t => t.id == taskId);
+
+    // 3. CRITICAL FALLBACK: If the task isn't in cache, force fetch the full list of available tasks.
+    // This is the safety net for users landing directly on the detail page.
+    if (!task) {
         try {
-            const myTasksData = await fetchData('/tasks/my-tasks');
-            const myTaskEntry = myTasksData.tasks.find(t => t.taskId == taskId);
-            if (myTaskEntry) {
-                 userTaskStatus = myTaskEntry.status;
-                 // Merge the user-specific data into the main task object
-                 task = { ...task, ...myTaskEntry };
-            }
+            const tasksData = await fetchData('/tasks/available');
+            cachedTasks = tasksData.tasks;
+            task = cachedTasks.find(t => t.id == taskId);
         } catch (e) {
-             console.warn("Could not fetch user status for task:", taskId, e);
+            console.error("Failed to fetch available tasks on detail load:", e);
         }
+    }
+    
+    // 4. Final check and redirect if task still not found
+    if (!task || !task.title) {
+        showAlert('Task details could not be found. Returning home.', false);
+        setRoute('tasks');
+        return;
+    }
+    
+    // 5. Merge user-specific status (from myTaskEntry) into the full task object
+    if (myTaskEntry) {
+        task = { ...task, ...myTaskEntry };
+    }
 
-        if (!task || !task.title) {
-            showAlert('Task details could not be found.', false);
-            setRoute('tasks');
-            return;
-        }
-        
-        const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
-        const statusClass = userTaskStatus ? `status-${userTaskStatus.toLowerCase()}` : 'bg-gray-400';
-        const statusText = userTaskStatus ? userTaskStatus.replace('_', ' ') : 'NOT ACCEPTED';
-        
-        // Define the Submission Form based on the current user status
-        let submissionSection;
-        if (userTaskStatus === 'COMPLETED') {
-            submissionSection = `
-                <div class="text-center py-8 text-gray-600 bg-green-50 rounded-xl border-2 border-green-200">
-                    <i data-lucide="check-circle" class="w-16 h-16 mx-auto mb-4 text-green-500"></i>
-                    <p class="font-bold text-green-800">Task Completed!</p>
-                    <p>You have successfully finished this task and been credited.</p>
-                </div>
-            `;
-        } else if (userTaskStatus === 'PENDING_VERIFICATION') {
-            submissionSection = `
-                <div class="text-center py-8 text-gray-600 bg-yellow-50 rounded-xl border-2 border-yellow-200">
-                    <i data-lucide="clock" class="w-16 h-16 mx-auto mb-4 text-yellow-500"></i>
-                    <p class="font-bold text-yellow-800">Awaiting Admin Review</p>
-                    <p>Your submission is being reviewed by the BTECH team. This typically takes 24-48 hours. Thank you for your patience!</p>
-                </div>
-            `;
-        } else if (userTaskStatus === 'REJECTED') {
-            submissionSection = `
-                <div class="text-center py-8 text-gray-600 bg-red-50 rounded-xl border-2 border-red-200">
-                    <i data-lucide="x-circle" class="w-16 h-16 mx-auto mb-4 text-red-500"></i>
-                    <p class="font-bold text-red-800">Submission Rejected</p>
-                    <p>Your previous submission was rejected. Please review the requirements carefully and resubmit using the form below.</p>
-                </div>
-                ${renderSubmissionForm(task)}
-            `;
-        } else {
-             // Status: IN_PROGRESS (User is currently working) or NOT ACCEPTED
-             submissionSection = renderSubmissionForm(task);
-        }
-
-        const appContainer = document.getElementById('app-container');
-        appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <button onclick="setRoute('tasks')" class="text-white hover:text-gray-300 font-semibold mb-6 flex items-center space-x-2">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                    <span>Back to Tasks</span>
-                </button>
-                
-                <div class="ultra-card p-6 md:p-8 mb-6">
-                    <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
-                        <div class="flex-1">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="p-3 rounded-xl bg-indigo-50">
-                                    <i data-lucide="${getCategoryIcon(task.category || 'briefcase')}" class="w-8 h-8 text-indigo-600"></i>
-                                </div>
-                                <div>
-                                    <span class="text-sm font-semibold text-gray-600">${task.category || 'N/A'}</span>
-                                    <h1 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-left md:text-right">
-                            <p class="text-4xl md:text-5xl font-black gradient-text mb-2">${payoutText}</p>
-                            <span class="${statusClass} text-white text-sm font-bold px-4 py-2 rounded-full inline-block">
-                                ${statusText}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="clock" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Duration</p><p class="font-bold text-gray-800">${task.estimatedTime || 'N/A'}</p></div>
-                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="calendar" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Deadline</p><p class="font-bold text-gray-800">${task.deadline || 'N/A'}</p></div>
-                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="users" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Available</p><p class="font-bold text-gray-800">${task.tasksAvailable || 'N/A'} slots</p></div>
-                        <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="award" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Success Rate</p><p class="font-bold text-gray-800">${task.completionRate || 'N/A'}%</p></div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <h3 class="text-lg font-black text-gray-800 mb-3">Task Description</h3>
-                        <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">${task.description || 'Description not provided.'}</p>
-                    </div>
-                    
-                    ${task.requiresVerification ? `
-                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 mb-6">
-                            <div class="flex items-start space-x-3">
-                                <i data-lucide="shield-alert" class="w-6 h-6 text-yellow-600 flex-shrink-0"></i>
-                                <div>
-                                    <p class="font-bold text-yellow-800 mb-1">Verification Required</p>
-                                    <p class="text-sm text-yellow-700">This task requires manual review by an administrator before payment is processed.</p>
-                                </div>
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-                
-                <div class="ultra-card p-6 md:p-8">
-                    ${submissionSection}
-                </div>
+    // 6. Define rendering variables
+    const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
+    const statusClass = userTaskStatus ? `status-${userTaskStatus.toLowerCase()}` : 'bg-gray-400';
+    const statusText = userTaskStatus ? userTaskStatus.replace('_', ' ') : 'NOT ACCEPTED';
+    
+    // 7. Determine submission section based on status
+    let submissionSection;
+    if (userTaskStatus === 'COMPLETED') {
+        submissionSection = `
+            <div class="text-center py-8 text-gray-600 bg-green-50 rounded-xl border-2 border-green-200">
+                <i data-lucide="check-circle" class="w-16 h-16 mx-auto mb-4 text-green-500"></i>
+                <p class="font-bold text-green-800">Task Completed!</p>
+                <p>You have successfully finished this task and been credited.</p>
             </div>
         `;
-        lucide.createIcons();
+    } else if (userTaskStatus === 'PENDING_VERIFICATION') {
+        submissionSection = `
+            <div class="text-center py-8 text-gray-600 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+                <i data-lucide="clock" class="w-16 h-16 mx-auto mb-4 text-yellow-500"></i>
+                <p class="font-bold text-yellow-800">Awaiting Admin Review</p>
+                <p>Your submission is being reviewed by the BTECH team. This typically takes 24-48 hours. Thank you for your patience!</p>
+            </div>
+        `;
+    } else if (userTaskStatus === 'REJECTED') {
+        submissionSection = `
+            <div class="text-center py-8 text-gray-600 bg-red-50 rounded-xl border-2 border-red-200">
+                <i data-lucide="x-circle" class="w-16 h-16 mx-auto mb-4 text-red-500"></i>
+                <p class="font-bold text-red-800">Submission Rejected</p>
+                <p>Your previous submission was rejected. Please review the requirements carefully and resubmit using the form below.</p>
+            </div>
+            ${renderSubmissionForm(task)}
+        `;
+    } else {
+        // Status: IN_PROGRESS (User is currently working) or NOT ACCEPTED
+        submissionSection = renderSubmissionForm(task);
     }
+
+    // 8. RENDER FINAL HTML
+    const appContainer = document.getElementById('app-container');
+    appContainer.innerHTML = `
+        <div class="fade-in-up">
+            <button onclick="setRoute('tasks')" class="text-white hover:text-gray-300 font-semibold mb-6 flex items-center space-x-2">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span>Back to Tasks</span>
+            </button>
+            
+            <div class="ultra-card p-6 md:p-8 mb-6">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="p-3 rounded-xl bg-indigo-50">
+                                <i data-lucide="${getCategoryIcon(task.category || 'briefcase')}" class="w-8 h-8 text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-600">${task.category || 'N/A'}</span>
+                                <h1 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <p class="text-4xl md:text-5xl font-black gradient-text mb-2">${payoutText}</p>
+                        <span class="${statusClass} text-white text-sm font-bold px-4 py-2 rounded-full inline-block">
+                            ${statusText}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="clock" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Duration</p><p class="font-bold text-gray-800">${task.estimatedTime || 'N/A'}</p></div>
+                    <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="calendar" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Deadline</p><p class="font-bold text-gray-800">${task.deadline || 'N/A'}</p></div>
+                    <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="users" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Available</p><p class="font-bold text-gray-800">${task.tasksAvailable || 'N/A'} slots</p></div>
+                    <div class="p-4 bg-gray-50 rounded-xl"><i data-lucide="award" class="w-6 h-6 text-gray-600 mb-2"></i><p class="text-xs text-gray-600">Success Rate</p><p class="font-bold text-gray-800">${task.completionRate || 'N/A'}%</p></div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-black text-gray-800 mb-3">Task Description</h3>
+                    <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">${task.description || 'Description not provided.'}</p>
+                </div>
+                
+                ${task.requiresVerification ? `
+                    <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 mb-6">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="shield-alert" class="w-6 h-6 text-yellow-600 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-bold text-yellow-800 mb-1">Verification Required</p>
+                                <p class="text-sm text-yellow-700">This task requires manual review by an administrator before payment is processed.</p>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div class="ultra-card p-6 md:p-8">
+                ${submissionSection}
+            </div>
+        </div>
+    `;
+
+    lucide.createIcons();
+}
 
  // Located in DASHBOARD.HTML
 function renderSubmissionForm(task) {
