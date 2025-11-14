@@ -1653,79 +1653,80 @@ function renderSubmissionForm(task) {
         loadContent();
     }
     
-    async function loadContent() {
-        const appContainer = document.getElementById('app-container');
+    // Located in DASHBOARD.HTML
+
+async function loadContent() {
+    const appContainer = document.getElementById('app-container');
+    appContainer.innerHTML = `
+        <div class="flex items-center justify-center py-20">
+            <div class="text-center">
+                <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
+                <p class="text-white font-bold text-sm md:text-base">Loading your dashboard...</p>
+            </div>
+        </div>
+    `;
+    lucide.createIcons();
+
+    try {
+        // A. ESSENTIAL PREREQUISITES: Fetch user profile, stats, and ALL available tasks first.
+        const [profileData, statsData, tasksData, dailyTaskData] = await Promise.all([
+            fetchUserProfile().catch(e => { console.warn("Profile load failed:", e); return null; }),
+            fetchUserStats().catch(e => { console.warn("Stats load failed:", e); return null; }),
+            fetchData('/tasks/available').catch(e => { // CRITICAL FETCH
+                console.warn("Tasks fetch failed, using mock:", e.message);
+                return { tasks: MOCK_TASK_DEFINITIONS, success: true };
+            }),
+            fetchDailyTask(),
+        ]);
+
+        // B. Populate Global Cache
+        cachedTasks = tasksData.tasks;
+        
+        if (dailyTaskData && dailyTaskData.id) {
+            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
+        } else {
+            localStorage.removeItem('dailyTask');
+        }
+
+        // C. ROUTE HANDLING: Now that cachedTasks is GUARANTEED to be populated, we route.
+        const hash = window.location.hash.slice(1);
+        const route = hash || 'tasks';
+
+        if (route === 'tasks') {
+            renderTasksList(cachedTasks, dailyTaskData);
+        } else if (route === 'my-tasks') {
+            const myTasksData = await fetchData('/tasks/my-tasks');
+            renderMyTasks(myTasksData.tasks);
+        } else if (route === 'earnings') {
+            renderEarnings();
+        } else if (route === 'affiliate') {
+            renderAffiliateProfile();
+        } else if (route === 'achievements') {
+            renderAchievements();
+        } else if (route.startsWith('tasks/')) {
+            const taskId = route.split('/')[1];
+            // Since cachedTasks is populated, this should successfully find the task details.
+            await renderTaskDetail(taskId); 
+        }
+    } catch (error) {
+        console.error("Critical Load Error:", error);
+        if (!AUTH_TOKEN) return;
+        
+        // Fallback error UI
         appContainer.innerHTML = `
-            <div class="flex items-center justify-center py-20">
-                <div class="text-center">
-                    <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
-                    <p class="text-white font-bold text-sm md:text-base">Loading your dashboard...</p>
-                </div>
+            <div class="ultra-card p-8 md:p-12 text-center mt-12">
+                <i data-lucide="wifi-off" class="w-20 h-20 text-red-500 mx-auto mb-4"></i>
+                <h3 class="text-2xl font-black text-red-600 mb-3">Connection Error</h3>
+                <p class="text-gray-600 mb-6">Unable to load dashboard data. Please check your connection and try again.</p>
+                <button onclick="location.reload()" class="btn-premium text-white font-bold py-4 px-8 rounded-xl">
+                    <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>
+                    Retry
+                </button>
             </div>
         `;
         lucide.createIcons();
-
-        try {
-            // Fetch core data needed for all routes
-            await Promise.all([fetchUserProfile(), fetchUserStats()]);
-            
-            // Fetch available tasks (can fail, using mock fallback)
-            const [tasksData, dailyTaskData] = await Promise.all([
-                fetchData('/tasks/available').catch(e => {
-                    console.warn("Tasks fetch failed, using mock:", e.message);
-                    return { tasks: MOCK_TASK_DEFINITIONS, success: true };
-                }),
-                fetchDailyTask(),
-            ]);
-
-            // Cache tasks
-            cachedTasks = tasksData.tasks;
-
-            // Handle daily task data persistence
-            if (dailyTaskData && dailyTaskData.id) {
-                localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
-            } else {
-                localStorage.removeItem('dailyTask');
-            }
-            
-            // Route Handling
-            const hash = window.location.hash.slice(1);
-            const route = hash || 'tasks';
-            
-            if (route === 'tasks') {
-                renderTasksList(cachedTasks, dailyTaskData);
-            } else if (route === 'my-tasks') {
-                const myTasksData = await fetchData('/tasks/my-tasks');
-                renderMyTasks(myTasksData.tasks);
-            } else if (route === 'earnings') {
-                renderEarnings();
-            } else if (route === 'affiliate') {
-                renderAffiliateProfile();
-            } else if (route === 'achievements') {
-                renderAchievements();
-            } else if (route.startsWith('tasks/')) {
-                const taskId = route.split('/')[1];
-                renderTaskDetail(taskId);
-            }
-        } catch (error) {
-            console.error("Critical Load Error:", error);
-            if (!AUTH_TOKEN) return;
-            
-            // Fallback error UI
-            appContainer.innerHTML = `
-                <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                    <i data-lucide="wifi-off" class="w-20 h-20 text-red-500 mx-auto mb-4"></i>
-                    <h3 class="text-2xl font-black text-red-600 mb-3">Connection Error</h3>
-                    <p class="text-gray-600 mb-6">Unable to load dashboard data. Please check your connection and try again.</p>
-                    <button onclick="location.reload()" class="btn-premium text-white font-bold py-4 px-8 rounded-xl">
-                        <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>
-                        Retry
-                    </button>
-                </div>
-            `;
-            lucide.createIcons();
-        }
     }
+}
 
 
     async function initializeApp() {
