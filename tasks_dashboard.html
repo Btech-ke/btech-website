@@ -1433,7 +1433,8 @@
              `;
         }
 
-        const type = task.submission_type || 'NONE';
+        // Use 'NONE' only if the property exists but is explicitly 'NONE', otherwise use the actual type.
+const type = (task.submission_type && task.submission_type !== 'NONE') ? task.submission_type : 'NONE';
         const guide = task.submission_guide || 'Please follow the instructions in the task description.';
         const taskId = task.id;
         
