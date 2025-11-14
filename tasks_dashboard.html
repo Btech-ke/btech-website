@@ -478,6 +478,16 @@
     }
 
 
+    // Add this function to your existing <script> block in DASHBOARD.HTML
+function navigateToTaskDetail(taskId) {
+    // This function reliably transfers the task ID using a query parameter, 
+    // which the updated initializeApp() function then detects and processes.
+    window.location.hash = ''; 
+    window.location.search = `?taskid=${taskId}`;
+    window.location.reload(); 
+}
+
+
     // ============================================
     // API HELPERS & DATA FETCHING
     // ============================================
@@ -898,91 +908,92 @@
     }
 
     function renderMyTasks(tasks) {
-        const appContainer = document.getElementById('app-container');
-        const activeTasks = tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION' || t.status === 'REJECTED');
-        const completedTasks = tasks.filter(t => t.status === 'COMPLETED');
-        
-        appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
-                    <i data-lucide="list-checks" class="w-8 h-8 mr-3"></i>
-                    My Tasks
-                </h2>
-                
-                <div class="mb-8">
-                    <h3 class="text-2xl font-bold text-white mb-4">Active & Pending Review (${activeTasks.length})</h3>
-                    ${activeTasks.length > 0 ? `
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                            ${activeTasks.map((task, i) => {
-                                let statusClass, statusText;
-                                if (task.status === 'PENDING_VERIFICATION') {
-                                    statusClass = 'status-pending_verification';
-                                    statusText = 'PENDING ADMIN REVIEW';
-                                } else if (task.status === 'REJECTED') {
-                                    statusClass = 'status-rejected';
-                                    statusText = 'REJECTED - RETRY';
-                                } else {
-                                    statusClass = 'status-in_progress';
-                                    statusText = 'IN PROGRESS';
-                                }
+    const appContainer = document.getElementById('app-container');
+    const activeTasks = tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION' || t.status === 'REJECTED');
+    const completedTasks = tasks.filter(t => t.status === 'COMPLETED');
+    
+    appContainer.innerHTML = `
+        <div class="fade-in-up">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
+                <i data-lucide="list-checks" class="w-8 h-8 mr-3"></i>
+                My Tasks
+            </h2>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-white mb-4">Active & Pending Review (${activeTasks.length})</h3>
+                ${activeTasks.length > 0 ? `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        ${activeTasks.map((task, i) => {
+                            let statusClass, statusText;
+                            if (task.status === 'PENDING_VERIFICATION') {
+                                statusClass = 'status-pending_verification';
+                                statusText = 'PENDING ADMIN REVIEW';
+                            } else if (task.status === 'REJECTED') {
+                                statusClass = 'status-rejected';
+                                statusText = 'REJECTED - RETRY';
+                            } else {
+                                statusClass = 'status-in_progress';
+                                statusText = 'IN PROGRESS';
+                            }
 
-                                return `
-                                    <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
-                                        <div class="flex justify-between items-start mb-4">
-                                            <span class="${statusClass} text-white text-xs font-bold px-3 py-1 rounded-full">
-                                                ${statusText}
-                                            </span>
-                                            <span class="text-xs text-gray-500">${new Date(task.startedDate).toLocaleDateString()}</span>
-                                        </div>
-                                        <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
-                                        <p class="text-2xl font-black gradient-text mb-3">KES ${getTaskPayout(task)}</p>
-                                        <button onclick="setRoute('tasks/${task.taskId}')" class="btn-premium w-full text-white font-bold py-3 rounded-xl">
-                                            ${task.status === 'IN_PROGRESS' || task.status === 'REJECTED' ? 'Continue/Re-Submit' : 'View Status'}
-                                        </button>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    ` : `
-                        <div class="ultra-card p-8 text-center">
-                            <i data-lucide="inbox" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                            <p class="text-gray-600">No active tasks. Browse available tasks to get started!</p>
-                            <button onclick="setRoute('tasks')" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
-                                Browse Tasks
-                            </button>
-                        </div>
-                    `}
-                </div>
-                
-                <div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Completed Tasks (${completedTasks.length})</h3>
-                    ${completedTasks.length > 0 ? `
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                            ${completedTasks.map((task, i) => `
+                            return `
                                 <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
                                     <div class="flex justify-between items-start mb-4">
-                                        <span class="status-completed text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
-                                            <i data-lucide="check" class="w-3 h-3"></i>
-                                            <span>COMPLETED</span>
+                                        <span class="${statusClass} text-white text-xs font-bold px-3 py-1 rounded-full">
+                                            ${statusText}
                                         </span>
-                                        <span class="text-xs text-gray-500">${new Date(task.completedAt).toLocaleDateString()}</span>
+                                        <span class="text-xs text-gray-500">${new Date(task.startedDate).toLocaleDateString()}</span>
                                     </div>
                                     <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
-                                    <p class="text-2xl font-black text-green-600 mb-3">+KES ${getTaskPayout(task)}</p>
+                                    <p class="text-2xl font-black gradient-text mb-3">KES ${getTaskPayout(task)}</p>
+                                    
+                                    <button onclick="navigateToTaskDetail(${task.taskId})" class="btn-premium w-full text-white font-bold py-3 rounded-xl">
+                                        ${task.status === 'IN_PROGRESS' || task.status === 'REJECTED' ? 'Continue/Re-Submit' : 'View Status'}
+                                    </button>
                                 </div>
-                            `).join('')}
-                        </div>
-                    ` : `
-                        <div class="ultra-card p-8 text-center">
-                            <i data-lucide="clock" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                            <p class="text-gray-600">No completed tasks yet. Keep going!</p>
-                        </div>
-                    `}
-                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                ` : `
+                    <div class="ultra-card p-8 text-center">
+                        <i data-lucide="inbox" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600">No active tasks. Browse available tasks to get started!</p>
+                        <button onclick="setRoute('tasks')" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
+                            Browse Tasks
+                        </button>
+                    </div>
+                `}
             </div>
-        `;
-        lucide.createIcons();
-    }
+            
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4">Completed Tasks (${completedTasks.length})</h3>
+                ${completedTasks.length > 0 ? `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        ${completedTasks.map((task, i) => `
+                            <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="status-completed text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
+                                        <i data-lucide="check" class="w-3 h-3"></i>
+                                        <span>COMPLETED</span>
+                                    </span>
+                                    <span class="text-xs text-gray-500">${new Date(task.completedAt).toLocaleDateString()}</span>
+                                </div>
+                                <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
+                                <p class="text-2xl font-black text-green-600 mb-3">+KES ${getTaskPayout(task)}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : `
+                    <div class="ultra-card p-8 text-center">
+                        <i data-lucide="clock" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600">No completed tasks yet. Keep going!</p>
+                    </div>
+                `}
+            </div>
+        </div>
+    `;
+    lucide.createIcons();
+}
 
     function renderEarnings() {
         const appContainer = document.getElementById('app-container');
@@ -1729,33 +1740,57 @@ async function loadContent() {
 }
 
 
-    async function initializeApp() {
-        createStarField();
-        
-        const params = new URLSearchParams(window.location.search);
-        const urlToken = params.get('token');
-        
-        if (urlToken) {
-            AUTH_TOKEN = urlToken;
-            localStorage.setItem('btech_auth_token', AUTH_TOKEN);
-        } else if (localStorage.getItem('btech_auth_token')) {
-            AUTH_TOKEN = localStorage.getItem('btech_auth_token');
-        }
-        
-        if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
-            renderSignInScreen();
-            return;
-        }
-        
-        if (window.location.search) {
-            window.history.replaceState(null, null, window.location.pathname + window.location.hash);
-        }
-
-        const hash = window.location.hash.slice(1);
-        updateMobileNav(hash || 'tasks');
-        
-        await loadContent();
+    // Located in DASHBOARD.HTML
+async function initializeApp() {
+    createStarField();
+    
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get('token');
+    
+    // --- Authentication Logic ---
+    if (urlToken) {
+        AUTH_TOKEN = urlToken;
+        localStorage.setItem('btech_auth_token', AUTH_TOKEN);
+    } else if (localStorage.getItem('btech_auth_token')) {
+        AUTH_TOKEN = localStorage.getItem('btech_auth_token');
     }
+    
+    if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
+        renderSignInScreen();
+        return;
+    }
+    
+    // --- Query Parameter Handling for Direct Task Detail ---
+    const taskIdFromUrl = params.get('taskid');
+
+    if (taskIdFromUrl) {
+        // 1. Force navigation state update (removes the ?taskid= part)
+        // We replace the state and ensure the page is clean before rendering.
+        window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+        
+        // 2. Set the navigation bar to 'tasks' for visual consistency
+        updateMobileNav('tasks'); 
+        
+        // 3. Immediately render the specific task detail using the ID
+        // The renderTaskDetail function is responsible for the necessary data fetches.
+        await renderTaskDetail(taskIdFromUrl); 
+        
+        return; // STOP execution of the rest of the router
+    }
+    
+    // --- Standard Hash Routing ---
+    
+    // Clean up old token parameters if present in search but no taskid was found
+    if (window.location.search) {
+        window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+    }
+
+    const hash = window.location.hash.slice(1);
+    updateMobileNav(hash || 'tasks');
+    
+    // Load content based on hash if no query parameter was present
+    await loadContent();
+}
 
     function renderSignInScreen() {
         const appContainer = document.getElementById('app-container');
