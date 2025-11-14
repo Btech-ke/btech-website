@@ -1294,17 +1294,17 @@
         lucide.createIcons();
     }
     
-    // Located in DASHBOARD.HTML
+// Located in DASHBOARD.HTML
 async function renderTaskDetail(taskId) {
     // CRITICAL: Ensure taskId is a number for reliable comparison against DB results
     const numericTaskId = parseInt(taskId);
 
-    // 1. Fetch user's status first...
+    // 1. Fetch user's current status for this task
     let userTaskStatus = null;
     let myTaskEntry;
     try {
         const myTasksData = await fetchData('/tasks/my-tasks');
-        // Use strict equality (===) with the numeric ID
+        // Use strict equality (===) for reliable matching
         myTaskEntry = myTasksData.tasks.find(t => t.taskId === numericTaskId); 
         if (myTaskEntry) {
             userTaskStatus = myTaskEntry.status;
@@ -1314,35 +1314,33 @@ async function renderTaskDetail(taskId) {
     }
 
     // 2. Try to find the full task details in the cache or mocks.
-    // Use strict equality (===) with the numeric ID
     let task = cachedTasks.find(t => t.id === numericTaskId) || MOCK_TASK_DEFINITIONS.find(t => t.id === numericTaskId);
 
-    // 3. CRITICAL FALLBACK: If the task isn't in cache, force fetch...
-    // ... (rest of the logic remains the same, ensuring 'numericTaskId' is used where appropriate)
-
     // 3. CRITICAL FALLBACK: If the task isn't in cache, force fetch the full list of available tasks.
-    // This is the safety net for users landing directly on the detail page.
     if (!task) {
         try {
             const tasksData = await fetchData('/tasks/available');
             cachedTasks = tasksData.tasks;
-            task = cachedTasks.find(t => t.id == taskId);
+            task = cachedTasks.find(t => t.id === numericTaskId);
         } catch (e) {
             console.error("Failed to fetch available tasks on detail load:", e);
         }
     }
     
-    // 4. Final check and redirect if task still not found
+    // 4. FINAL CHECK & ERROR HANDLING (THE FIX)
     if (!task || !task.title) {
+        // This means the task ID exists in the user's tasks but not in the available task list (it might be sold out or deleted).
+        // We MUST return an error state instead of falling back to rendering incomplete data.
         showAlert('Task details could not be found. Returning home.', false);
         setRoute('tasks');
         return;
     }
     
-    // 5. Merge user-specific status (from myTaskEntry) into the full task object
+    // 5. MERGE: Combine the static details (from 'task') with the user status (from 'myTaskEntry').
     if (myTaskEntry) {
         task = { ...task, ...myTaskEntry };
     }
+
 
     // 6. Define rendering variables
     const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
@@ -1377,7 +1375,7 @@ async function renderTaskDetail(taskId) {
             ${renderSubmissionForm(task)}
         `;
     } else {
-        // Status: IN_PROGRESS (User is currently working) or NOT ACCEPTED
+        // Status: IN_PROGRESS or NOT ACCEPTED
         submissionSection = renderSubmissionForm(task);
     }
 
@@ -1444,7 +1442,6 @@ async function renderTaskDetail(taskId) {
 
     lucide.createIcons();
 }
-
  // Located in DASHBOARD.HTML
 function renderSubmissionForm(task) {
     // 1. CHECK IF TASK HAS BEEN ACCEPTED BY THE USER
