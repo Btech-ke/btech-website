@@ -584,8 +584,17 @@
                 notification.remove();
             }, 3000);
 
-            // Add your actual download logic here
-            console.log('Downloading:', filename);
+            // Direct download from GitHub repository
+            const githubRepo = 'https://raw.githubusercontent.com/Btech-ke/btech-website/main/';
+            const downloadUrl = githubRepo + encodeURIComponent(filename);
+            
+            // Create temporary link and trigger download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
