@@ -315,7 +315,6 @@
 
     // Mock Task Definitions (Used as fallback/placeholders)
     const MOCK_TASK_DEFINITIONS = [
-        { id: 1, title: 'Daily App Feedback Survey', description: 'Quick 2-minute feedback survey about your platform experience. Instant KES 50 reward.', category: 'Survey', payment: 50.00, estimatedTime: '2 minutes', difficulty: 'Easy', requiresVerification: false, deadline: '2025-11-30', tasksAvailable: 1, completionRate: 99, clientName: 'BTECH Internal', featured: true, submission_type: 'NONE', submission_guide: null, requires_admin_action: false },
         { id: 1501, title: 'PRO Task: Executive Network Outreach (Liam Lee Profile)', description: 'Establish a professional connection with our Lead Strategist, Liam Lee, on LinkedIn to unlock future executive tasks. This requires genuine outreach and following specific profile guidelines.', category: 'Professional Networking & Outreach', payment: 250.00, estimatedTime: '10 minutes', difficulty: 'Easy', requiresVerification: true, deadline: '2025-12-31', tasksAvailable: 50, completionRate: 90, clientName: 'BTECH HR', featured: true, submission_type: 'IMAGE_URL', submission_guide: `1. Visit Liam Lee's LinkedIn: ${LINKEDIN_PROFILE_URL} | 2. Send Connection Request | 3. Upload screenshot of 'Request Pending' page.`, requires_admin_action: true },
         { id: 1502, title: 'WeChat Account Acquisition: KES 1,000 Payout', description: 'Sell us a valid, existing, or new WeChat account. Instant KES 1,000 credited upon successful validation by the admin.', category: 'Account Procurement', payment: 1000.00, estimatedTime: '5 minutes', difficulty: 'Easy', requiresVerification: true, deadline: '2025-12-31', tasksAvailable: 20, completionRate: 80, clientName: 'BTECH Acquisitions', submission_type: 'TEXT', submission_guide: 'Submit the account phone number and password separated by a newline.', requires_admin_action: true }
     ];
@@ -1455,11 +1454,12 @@ async function renderTaskDetail(taskId) {
 
     lucide.createIcons();
 }
- // Located in DASHBOARD.HTML
+// Located in DASHBOARD.HTML
+
 function renderSubmissionForm(task) {
     // 1. CHECK IF TASK HAS BEEN ACCEPTED BY THE USER
-    // If status is NOT IN_PROGRESS or REJECTED, the user hasn't started yet.
-    if (task.status !== 'IN_PROGRESS' && task.status !== 'REJECTED') {
+    // If status is NOT IN_PROGRESS or REJECTED or PENDING_VERIFICATION, the user hasn't started yet.
+    if (task.status !== 'IN_PROGRESS' && task.status !== 'REJECTED' && task.status !== 'PENDING_VERIFICATION') {
         return `
             <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
                 <i data-lucide="play-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
@@ -1474,14 +1474,15 @@ function renderSubmissionForm(task) {
         `;
     }
 
-    // 2. DEFINE CORE PARAMETERS (Assuming IN_PROGRESS or REJECTED)
-    // The safest type is the one returned from the backend (which we fixed to default to 'TEXT').
-    const type = (task.submission_type && task.submission_type !== 'NONE') ? task.submission_type : 'NONE';
-    const guide = task.submission_guide || 'Please follow the instructions in the task description.';
-    const taskId = task.id;
+    // 2. DEFINE CORE PARAMETERS (ROBUST CHECK)
+    // FIX: Check both snake_case (DB) and camelCase (API wrapper) to ensure we capture the type.
+    let rawType = task.submission_type || task.submissionType || 'NONE';
+    const type = (rawType !== 'NONE') ? rawType : 'NONE';
+    
+    const guide = task.submission_guide || task.submissionGuide || 'Please follow the instructions in the task description.';
+    const taskId = task.id || task.taskId; // Handle ID variations too
     
     // 3. HANDLE SPECIAL CASE: SURVEYS/DAILY TASKS
-    // Surveys use a separate handler (renderDailySurveyForm), regardless of submission_type value.
     if (taskId == 1 || task.category === 'Survey') {
         return renderDailySurveyForm(taskId);
     }
@@ -1505,6 +1506,7 @@ function renderSubmissionForm(task) {
 
     // 5. RENDER GENERIC SUBMISSION FORM (TEXT, IMAGE_URL, or BOTH)
     let submissionHtml = '';
+    // We pass the 'type' explicitly to the submit handler
     let formAction = `submitGenericFileTask(${taskId}, '${type}')`;
     
     // --- Render Text/Link Field ---
