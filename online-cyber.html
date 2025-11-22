@@ -1,1826 +1,716 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Online Cyber Services - BTECH</title>
-  <meta name="description" content="BTECH's premium online cyber services: KUCCPS, KRA, HELB applications and more. Fast, secure, and reliable government service access." />
-  <meta name="author" content="BTECH" />
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <style>
-    :root {
-      --primary-blue: #1e40af;
-      --primary-blue-dark: #1e3a8a;
-      --primary-blue-light: #3b82f6;
-      --accent-orange: #f59e0b;
-      --accent-orange-light: #fbbf24;
-      --success-green: #10b981;
-      --warning-yellow: #f59e0b;
-      --error-red: #ef4444;
-      --text-dark: #1f2937;
-      --text-light: #6b7280;
-      --background-light: #f8fafc;
-      --background-white: #ffffff;
-      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-      --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-      --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
-      color: var(--text-dark);
-      background: var(--background-light);
-      overflow-x: hidden;
-    }
-
-    /* Header */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      z-index: 1000;
-      transition: var(--transition);
-    }
-
-    .header.scrolled {
-      background: rgba(255, 255, 255, 0.98);
-      box-shadow: var(--shadow-medium);
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-weight: 800;
-      font-size: 1.5rem;
-      color: var(--primary-blue);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-
-    .logo i {
-      font-size: 1.75rem;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .nav-menu a {
-      text-decoration: none;
-      color: var(--text-dark);
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 0.5rem 0;
-      position: relative;
-      transition: var(--transition);
-    }
-
-    .nav-menu a:hover {
-      color: var(--primary-blue);
-    }
-
-    .nav-menu a::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--primary-blue);
-      border-radius: 1px;
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
-    }
-
-    .nav-menu a:hover::after {
-      transform: scaleX(1);
-    }
-
-    .book-btn {
-      background: var(--gradient-primary);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: var(--transition);
-      box-shadow: var(--shadow-soft);
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .book-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-large);
-    }
-
-    .book-btn i {
-      font-size: 1rem;
-    }
-
-    /* Mobile Menu */
-    .mobile-menu-btn {
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      z-index: 1002;
-    }
-
-    .mobile-menu-btn span {
-      width: 24px;
-      height: 2px;
-      background: var(--text-dark);
-      border-radius: 1px;
-      transition: var(--transition);
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .mobile-nav {
-      position: fixed;
-      top: 80px;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      padding: 2rem;
-      transform: translateY(-100%);
-      opacity: 0;
-      visibility: hidden;
-      transition: var(--transition);
-      z-index: 999;
-    }
-
-    .mobile-nav.active {
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-nav ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .mobile-nav a {
-      text-decoration: none;
-      color: var(--text-dark);
-      font-weight: 600;
-      font-size: 1.1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      transition: var(--transition);
-    }
-
-    .mobile-nav a:hover {
-      color: var(--primary-blue);
-      transform: translateX(10px);
-    }
-
-    /* Hero Section */
-    .hero {
-      background: var(--gradient-hero);
-      color: white;
-      padding: 8rem 2rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 100%;
-      background: url('https://images.unsplash.com/photo-1560472355-536de3962603?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-      opacity: 0.1;
-    }
-
-    .hero-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .typing-text {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.2rem;
-      color: var(--accent-orange-light);
-      margin-bottom: 1.5rem;
-      min-height: 1.5em;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      opacity: 0.9;
-      margin-bottom: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--primary-blue);
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: var(--transition);
-      box-shadow: var(--shadow-soft);
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-large);
-      background: white;
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: var(--transition);
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-    }
-
-    /* Services Section */
-    .services {
-      padding: 6rem 2rem;
-      background: var(--background-white);
-    }
-
-    .services-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .section-header h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: var(--text-dark);
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .section-header p {
-      font-size: 1.1rem;
-      color: var(--text-light);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .service-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: var(--shadow-soft);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--gradient-primary);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: var(--transition);
-    }
-
-    .service-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--shadow-large);
-    }
-
-    .service-icon {
-      width: 80px;
-      height: 80px;
-      background: var(--gradient-primary);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      font-size: 2rem;
-      color: white;
-    }
-
-    .service-card h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 1rem;
-    }
-
-    .service-card p {
-      color: var(--text-light);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    .service-features {
-      list-style: none;
-      margin-bottom: 2rem;
-    }
-
-    .service-features li {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-light);
-      font-size: 0.9rem;
-    }
-
-    .service-features i {
-      color: var(--success-green);
-      font-size: 0.8rem;
-    }
-
-    .service-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .service-link {
-      background: var(--primary-blue);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .service-link:hover {
-      background: var(--primary-blue-dark);
-      transform: translateY(-1px);
-    }
-
-    .service-link.secondary {
-      background: var(--accent-orange);
-    }
-
-    .service-link.secondary:hover {
-      background: var(--accent-orange-light);
-    }
-
-    .service-link.outline {
-      background: transparent;
-      color: var(--primary-blue);
-      border: 1px solid var(--primary-blue);
-    }
-
-    .service-link.outline:hover {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    /* Stats Section */
-    .stats-section {
-      background: var(--gradient-primary);
-      color: white;
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-
-    .stats-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-    }
-
-    .stat-item {
-      padding: 1rem;
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--accent-orange-light);
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      opacity: 0;
-      visibility: hidden;
-      transition: var(--transition);
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal {
-      background: white;
-      padding: 2rem;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 500px;
-      margin: 1rem;
-      box-shadow: var(--shadow-large);
-      transform: translateY(50px);
-      transition: var(--transition);
-    }
-
-    .modal-overlay.active .modal {
-      transform: translateY(0);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .modal-header h3 {
-      color: var(--text-dark);
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .close-modal {
-      background: none;
-      border: none;
-      color: var(--text-light);
-      cursor: pointer;
-      font-size: 1.5rem;
-      transition: var(--transition);
-      padding: 0.25rem;
-      border-radius: 50%;
-    }
-
-    .close-modal:hover {
-      color: var(--text-dark);
-      background: rgba(0, 0, 0, 0.05);
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: var(--text-dark);
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      font-size: 1rem;
-      transition: var(--transition);
-      background: var(--background-light);
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--primary-blue);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
-      background: white;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-
-    .modal-btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .modal-btn.primary {
-      background: var(--gradient-primary);
-      color: white;
-    }
-
-    .modal-btn.primary:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
-    }
-
-    .modal-btn.secondary {
-      background: #e5e7eb;
-      color: var(--text-dark);
-    }
-
-    .modal-btn.secondary:hover {
-      background: #d1d5db;
-    }
-
-    .modal-btn.paystack {
-      background: var(--gradient-accent);
-      color: var(--text-dark);
-    }
-
-    .modal-btn.paystack:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
-    }
-
-    .payment-info {
-      background: linear-gradient(135deg, #dbeafe, #e0f2fe);
-      border: 1px solid var(--primary-blue-light);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .payment-info h4 {
-      color: var(--primary-blue);
-      font-weight: 700;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .payment-details {
-      display: grid;
-      gap: 0.5rem;
-    }
-
-    .payment-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(30, 64, 175, 0.1);
-    }
-
-    .payment-row:last-child {
-      border-bottom: none;
-      font-weight: 700;
-      color: var(--primary-blue);
-    }
-
-    .payment-label {
-      color: var(--text-light);
-    }
-
-    .payment-value {
-      font-weight: 600;
-      color: var(--text-dark);
-    }
-
-    /* Alert Styles */
-    .alert {
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .alert.success {
-      background: #d1fae5;
-      color: #065f46;
-      border: 1px solid #a7f3d0;
-    }
-
-    .alert.error {
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-
-    .alert.info {
-      background: #dbeafe;
-      color: #1e40af;
-      border: 1px solid #93c5fd;
-    }
-
-    /* Loading Animation */
-    .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top: 2px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Footer */
-    footer {
-      background: var(--text-dark);
-      color: white;
-      padding: 3rem 2rem 2rem;
-      text-align: center;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-bottom: 2rem;
-      text-align: left;
-    }
-
-    .footer-section h4 {
-      color: white;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .footer-section p,
-    .footer-section a {
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      margin-bottom: 0.5rem;
-      display: block;
-      transition: var(--transition);
-    }
-
-    .footer-section a:hover {
-      color: var(--accent-orange);
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .social-links a {
-      width: 50px;
-      height: 50px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-decoration: none;
-      transition: var(--transition);
-      font-size: 1.2rem;
-    }
-
-    .social-links a:hover {
-      background: var(--primary-blue);
-      transform: translateY(-3px);
-    }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 2rem;
-      margin-top: 2rem;
-      text-align: center;
-    }
-
-    .footer-bottom p {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.9rem;
-    }
-
-    /* Scroll Animations */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .nav-menu {
-        display: none;
-      }
-
-      .mobile-menu-btn {
-        display: flex;
-      }
-
-      .header-container {
-        padding: 0 1rem;
-      }
-
-      .hero {
-        padding: 6rem 1rem 3rem;
-      }
-
-      .services {
-        padding: 4rem 1rem;
-      }
-
-      .stats-section {
-        padding: 3rem 1rem;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn-primary,
-      .btn-secondary {
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-      }
-
-      .service-actions {
-        justify-content: center;
-      }
-
-      .form-actions {
-        flex-direction: column;
-      }
-
-      .modal-btn {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .service-card {
-        padding: 1.5rem;
-      }
-
-      .modal {
-        margin: 0.5rem;
-        padding: 1.5rem;
-      }
-
-      header {
-        height: 70px;
-      }
-
-      .mobile-nav {
-        top: 70px;
-      }
-
-      .hero {
-        padding: 5rem 1rem 2rem;
-      }
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--background-light);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary-blue);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary-blue-dark);
-    }
-
-    /* Focus States for Accessibility */
-    *:focus {
-      outline: 2px solid var(--primary-blue);
-      outline-offset: 2px;
-    }
-
-    button:focus,
-    a:focus,
-    input:focus,
-    select:focus {
-      outline: 2px solid var(--primary-blue);
-      outline-offset: 2px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Cyber Services - BTECH</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* --- CORE FUTURISTIC THEME --- */
+        :root {
+            --neon-blue: #00F5FF;
+            --neon-green: #00FF88;
+            --neon-gold: #FFD700;
+            --neon-red: #FF0055;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* CANVAS BACKGROUND */
+        canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
+        }
+
+        .nav-menu { display: flex; gap: 30px; list-style: none; }
+        .nav-menu a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+
+        .book-btn {
+            background: var(--neon-blue); color: #000; border: none;
+            padding: 8px 20px; font-weight: 700; cursor: pointer;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .book-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-blue); }
+
+        /* --- HERO --- */
+        .hero { padding: 100px 20px 60px; text-align: center; position: relative; }
+        
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 5px 15px; border: 1px solid var(--neon-green); 
+            color: var(--neon-green); border-radius: 50px; font-size: 0.9rem;
+            background: rgba(0, 255, 136, 0.05); margin-bottom: 20px;
+        }
+
+        .typing-text {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
+            color: var(--neon-gold); min-height: 1.5em; margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800;
+            line-height: 1.1; margin-bottom: 20px; color: white;
+        }
+
+        .hero p {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px;
+        }
+
+        .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            color: #000; padding: 15px 35px; font-weight: 700; border: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); cursor: pointer;
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 245, 255, 0.4); }
+
+        .btn-secondary {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
+            padding: 15px 35px; font-weight: 700; text-decoration: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-secondary:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+        /* --- STATS --- */
+        .stats-section {
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.02);
+            padding: 50px 0; margin: 60px 0;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--neon-blue); display: block; }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- SERVICES --- */
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; color: white; }
+        
+        .services-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
+        }
+
+        .service-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 15px; padding: 30px; transition: 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .service-card:hover {
+            transform: translateY(-10px); border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.15);
+        }
+
+        .service-item {
+            width: 80px; height: 80px; background: white; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; padding: 10px;
+        }
+        .service-item img { width: 100%; height: 100%; object-fit: contain; }
+
+        .service-card h3 { font-size: 1.5rem; color: white; margin-bottom: 15px; }
+        .service-card p { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+
+        .service-features { list-style: none; margin-bottom: 25px; }
+        .service-features li {
+            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .service-features li i { color: var(--neon-green); }
+
+        .service-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        .service-link {
+            padding: 8px 15px; border-radius: 5px; text-decoration: none;
+            font-size: 0.85rem; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px;
+        }
+        .link-primary { background: var(--neon-blue); color: black; }
+        .link-primary:hover { background: #fff; }
+        
+        .link-secondary { background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold); }
+        .link-secondary:hover { background: var(--neon-gold); color: black; }
+        
+        .link-outline { border: 1px solid var(--text-muted); color: var(--text-muted); }
+        .link-outline:hover { border-color: white; color: white; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            padding: 60px 0 20px; margin-top: 80px;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+        .footer-section h4 { color: var(--neon-blue); margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-section p, .footer-section a { color: var(--text-muted); display: block; margin-bottom: 10px; text-decoration: none; transition: 0.3s; }
+        .footer-section a:hover { color: white; padding-left: 5px; }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a {
+            width: 40px; height: 40px; border: 1px solid var(--glass-border);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; transition: 0.3s;
+        }
+        .social-links a:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center; z-index: 2000;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: #050505; border: 1px solid var(--neon-blue);
+            border-radius: 20px; width: 95%; max-width: 500px; padding: 30px;
+            box-shadow: 0 0 60px rgba(0, 245, 255, 0.15);
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .modal-header h3 { color: white; font-size: 1.5rem; }
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .close-modal:hover { color: white; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; }
+        
+        .dark-input {
+            width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border); border-radius: 8px;
+            color: white; font-family: inherit; font-size: 1rem;
+        }
+        .dark-input:focus { outline: none; border-color: var(--neon-green); }
+        select.dark-input option { background: #000; color: white; }
+
+        .modal-btn {
+            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            font-weight: 700; cursor: pointer; margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-submit { background: var(--neon-blue); color: black; }
+        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+        
+        /* Payment Box */
+        .payment-info {
+            background: rgba(0, 255, 136, 0.05); border: 1px solid var(--neon-green);
+            border-radius: 10px; padding: 20px; margin-top: 20px; display: none;
+        }
+        .payment-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        
+        /* Alerts */
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
+        .alert-success { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
+        .alert-error { background: rgba(255, 0, 85, 0.1); border: 1px solid var(--neon-red); color: var(--neon-red); }
+        .alert-info { background: rgba(0, 245, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+
+        /* Mobile Menu */
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; }
+        .mobile-nav { position: fixed; top: 70px; left: 0; width: 100%; background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; }
+        .mobile-nav.active { display: flex; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .services-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3rem; }
+        }
+    </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="header-container">
-      <a href="../index.html" class="logo">
-        <i class="fas fa-shield-alt"></i>
-        <span>BTECH Cyber</span>
-      </a>
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="../index.html">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#help">Help</a></li>
-        </ul>
-      </nav>
-      <div style="display: flex; align-items: center; gap: 1rem;">
-        <button class="book-btn" id="openModal">
-          <i class="fas fa-calendar-plus"></i>
-          Book Application
-        </button>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-    <!-- Mobile Navigation -->
-    <nav class="mobile-nav" id="mobileNav">
-      <ul>
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#help">Help</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-container">
-      <div class="hero-badge">
-        <i class="fas fa-shield-check"></i>
-        Trusted Government Services Partner
-      </div>
-      <div class="typing-text" id="typingText"></div>
-      <h1>Your Gateway to Digital Government Services</h1>
-      <p>Fast, secure, and reliable access to KUCCPS, KRA, HELB, and other essential government services. Professional assistance guaranteed.</p>
-      <div class="hero-buttons">
-        <button class="btn-primary" id="heroBookBtn">
-          <i class="fas fa-rocket"></i>
-          Start Application
-        </button>
-        <a href="#services" class="btn-secondary">
-          <i class="fas fa-info-circle"></i>
-          View Services
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats Section -->
-  <section class="stats-section">
-    <div class="stats-container">
-      <div class="stats-grid">
-        <div class="stat-item fade-in">
-          <span class="stat-number">5000+</span>
-          <span class="stat-label">Applications Processed</span>
-        </div>
-        <div class="stat-item fade-in">
-          <span class="stat-number">24/7</span>
-          <span class="stat-label">Support Available</span>
-        </div>
-        <div class="stat-item fade-in">
-          <span class="stat-number">99.9%</span>
-          <span class="stat-label">Success Rate</span>
-        </div>
-        <div class="stat-item fade-in">
-          <span class="stat-number">Same Day</span>
-          <span class="stat-label">Processing</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services Section -->
-  <section id="services" class="services">
-    <div class="services-container">
-      <div class="section-header">
-        <h2 class="fade-in">Our Premium Cyber Services</h2>
-        <p class="fade-in">Professional assistance for all your government service needs with guaranteed results and expert support.</p>
-      </div>
-      
-      <div class="services-grid">
-        <!-- KUCCPS Service -->
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <img src="kuccps.png" alt="KUCCPS Applications" loading="lazy" />
-          </div>
-          <h3>KUCCPS Applications</h3>
-          <p>Complete university and college placement applications through KUCCPS with expert guidance and guaranteed submission.</p>
-          <ul class="service-features">
-            <li><i class="fas fa-check-circle"></i> Course selection guidance</li>
-            <li><i class="fas fa-check-circle"></i> Document verification</li>
-            <li><i class="fas fa-check-circle"></i> Application tracking</li>
-            <li><i class="fas fa-check-circle"></i> Result notifications</li>
-          </ul>
-          <div class="service-actions">
-            <a href="kuccps-details.html" class="service-link">
-              <i class="fas fa-info-circle"></i>
-              View Details
+    <header>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>BTECH CYBER</span>
             </a>
-            <a href="request-application-kuccps.html" class="service-link secondary">
-              <i class="fas fa-paper-plane"></i>
-              Request Now
-            </a>
-            <a href="#" class="service-link outline">
-              <i class="fas fa-download"></i>
-              Requirements
-            </a>
-          </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#help">Help</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="book-btn" id="openModal">
+                    <i class="fas fa-calendar-plus"></i> Book Application
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
-
-        <!-- HELB Service -->
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <img src="helb.png" alt="HELB Loan Application" loading="lazy" />
-          </div>
-          <h3>HELB Loan Applications</h3>
-          <p>Secure your education funding with professional HELB loan application assistance and follow-up services.</p>
-          <ul class="service-features">
-            <li><i class="fas fa-check-circle"></i> Loan calculation</li>
-            <li><i class="fas fa-check-circle"></i> Document preparation</li>
-            <li><i class="fas fa-check-circle"></i> Application submission</li>
-            <li><i class="fas fa-check-circle"></i> Status monitoring</li>
-          </ul>
-          <div class="service-actions">
-            <a href="helb-details.html" class="service-link">
-              <i class="fas fa-info-circle"></i>
-              View Details
-            </a>
-            <a href="request-application-helb.html" class="service-link secondary">
-              <i class="fas fa-paper-plane"></i>
-              Apply Now
-            </a>
-            <a href="HELB%20APPLICATION%20REQUIREMENTS%20(1).pdf" class="service-link outline">
-              <i class="fas fa-download"></i>
-              Requirements
-            </a>
-          </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="../index.html" style="color:white;">Home</a>
+            <a href="#services" style="color:white;">Services</a>
+            <a href="#contact" style="color:white;">Contact</a>
+            <a href="#help" style="color:white;">Help</a>
         </div>
+    </header>
 
-        <!-- KRA Service -->
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <img src="kra.png" alt="KRA Services" loading="lazy" />
-          </div>
-          <h3>KRA Tax Services</h3>
-          <p>Complete tax services including PIN registration, returns filing, and tax compliance assistance.</p>
-          <ul class="service-features">
-            <li><i class="fas fa-check-circle"></i> PIN registration</li>
-            <li><i class="fas fa-check-circle"></i> Tax returns filing</li>
-            <li><i class="fas fa-check-circle"></i> Compliance certificates</li>
-            <li><i class="fas fa-check-circle"></i> Tax consultancy</li>
-          </ul>
-          <div class="service-actions">
-            <a href="kra-details.html" class="service-link">
-              <i class="fas fa-info-circle"></i>
-              View Details
-            </a>
-            <a href="file-kra-returns.html" class="service-link secondary">
-              <i class="fas fa-calculator"></i>
-              File Returns
-            </a>
-            <a href="request-application-kra.html" class="service-link outline">
-              <i class="fas fa-id-card"></i>
-              Get PIN
-            </a>
-          </div>
+    <section class="hero">
+        <canvas id="canvas"></canvas>
+        <div class="container">
+            <div class="hero-badge">
+                <i class="fas fa-shield-check"></i> Trusted Government Services Partner
+            </div>
+            <div class="typing-text" id="typingText"></div>
+            <h1>Your Gateway to Digital Government Services</h1>
+            <p>Fast, secure, and reliable access to KUCCPS, KRA, HELB, and other essential government services. Professional assistance guaranteed.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" id="heroBookBtn">
+                    <i class="fas fa-rocket"></i> Start Application
+                </button>
+                <a href="#services" class="btn-secondary">
+                    <i class="fas fa-info-circle"></i> View Services
+                </a>
+            </div>
         </div>
+    </section>
 
-        <!-- Other Services -->
-        <div class="service-card fade-in">
-          <div class="service-item">
-            <img src="other-services.png" alt="Other Cyber Services" loading="lazy" />
-          </div>
-          <h3>Other Government Services</h3>
-          <p>Additional government services including NHIF, NSSF, passport applications, and more digital services.</p>
-          <ul class="service-features">
-            <li><i class="fas fa-check-circle"></i> NHIF registrations</li>
-            <li><i class="fas fa-check-circle"></i> NSSF applications</li>
-            <li><i class="fas fa-check-circle"></i> Passport services</li>
-            <li><i class="fas fa-check-circle"></i> Business permits</li>
-          </ul>
-          <div class="service-actions">
-            <a href="other-services-details.html" class="service-link">
-              <i class="fas fa-info-circle"></i>
-              View All
-            </a>
-            <a href="request-application-other-services.html" class="service-link secondary">
-              <i class="fas fa-paper-plane"></i>
-              Request Service
-            </a>
-            <a href="#contact" class="service-link outline">
-              <i class="fas fa-phone"></i>
-              Consult
-            </a>
-          </div>
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">5000+</span>
+                    <span class="stat-label">Applications Processed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support Available</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">Same Day</span>
+                    <span class="stat-label">Processing</span>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer id="contact">
-    <div class="footer-content">
-      <div class="footer-grid">
-        <div class="footer-section">
-          <h4>BTECH Cyber Services</h4>
-          <p>Your trusted partner for all government digital services. Professional, reliable, and secure assistance for all your online application needs.</p>
+    <section id="services" class="container" style="padding-bottom: 80px;">
+        <div class="section-header">
+            <h2>Our Premium Cyber Services</h2>
+            <p style="color: var(--text-muted);">Professional assistance for all your government service needs with guaranteed results and expert support.</p>
         </div>
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <a href="../index.html">Home</a>
-          <a href="#services">Services</a>
-          <a href="#help">Help Center</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <div class="footer-section">
-          <h4>Services</h4>
-          <a href="#">KUCCPS Applications</a>
-          <a href="#">HELB Loans</a>
-          <a href="#">KRA Services</a>
-          <a href="#">Other Services</a>
-        </div>
-        <div class="footer-section" id="help">
-          <h4>Contact Info</h4>
-          <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
-          <a href="tel:+254113996609">+254 113 996 609</a>
-          <a href="tel:+254734644917">+254 734 644 917</a>
-          <p>Available 24/7 for support</p>
-        </div>
-      </div>
-      <div class="social-links">
-        <a href="#" aria-label="Facebook">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#" aria-label="Twitter">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" aria-label="Instagram">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="#" aria-label="LinkedIn">
-          <i class="fab fa-linkedin-in"></i>
-        </a>
-        <a href="#" aria-label="WhatsApp">
-          <i class="fab fa-whatsapp"></i>
-        </a>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 BTECH Cyber Services. All rights reserved. Trusted government services partner.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Booking Modal -->
-  <div class="modal-overlay" id="bookingModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Book Your Application</h3>
-        <button class="close-modal" id="closeModal">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      
-      <div id="alertContainer"></div>
-
-      <form id="bookingForm">
-        <div class="form-group">
-          <label for="clientName">Full Name *</label>
-          <input type="text" id="clientName" name="clientName" placeholder="Enter your full name" required>
-        </div>
-
-        <div class="form-group">
-          <label for="clientPhone">Phone Number *</label>
-          <input type="tel" id="clientPhone" name="clientPhone" placeholder="+254 7XX XXX XXX" required>
-        </div>
-
-        <div class="form-group">
-          <label for="serviceType">Select Service *</label>
-          <select id="serviceType" name="serviceType" required>
-            <option value="">-- Choose a Service --</option>
-            <option value="KUCCPS">KUCCPS Application - KES 450</option>
-            <option value="HELB">HELB Loan Application - KES 500</option>
-            <option value="KRA_PIN">KRA PIN Registration - KES 200</option>
-            <option value="KRA_RETURNS">KRA Returns Filing - KES 200</option>
-            <option value="NHIF">NHIF Registration - KES 250</option>
-            <option value="NSSF">NSSF Application - KES 250</option>
-            <option value="OTHER">Other Service - KES 400</option>
-          </select>
-        </div>
-
-        <div class="form-group" id="otherServiceGroup" style="display: none;">
-          <label for="otherService">Specify Other Service *</label>
-          <input type="text" id="otherService" name="otherService" placeholder="Describe the service you need">
-        </div>
-
-        <div class="form-group">
-          <label for="urgency">Urgency Level</label>
-          <select id="urgency" name="urgency">
-            <option value="normal">Normal (1-2 days) - No extra charge</option>
-            <option value="urgent">Urgent (Same day) - +KES 50</option>
-            <option value="express">Express (Within 2 hours) - +KES 100</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="additionalNotes">Additional Notes</label>
-          <input type="text" id="additionalNotes" name="additionalNotes" placeholder="Any special requirements or notes">
-        </div>
-
-        <div class="form-actions">
-          <button type="button" class="modal-btn secondary" id="cancelBooking">
-            Cancel
-          </button>
-          <button type="submit" class="modal-btn primary" id="submitBooking">
-            <i class="fas fa-check"></i>
-            Confirm Booking
-          </button>
-        </div>
-      </form>
-
-      <!-- Payment Information (Hidden by default) -->
-      <div class="payment-info" id="paymentInfo" style="display: none;">
-        <h4><i class="fas fa-credit-card"></i> Payment Instructions</h4>
-        <div class="payment-details" id="paymentDetails">
-          <!-- Payment details will be populated here -->
-        </div>
-        <div class="form-actions" style="margin-top: 1rem;">
-          <button type="button" class="modal-btn paystack" id="paystackBtn">
-            <i class="fas fa-credit-card"></i>
-            Pay Online Now
-          </button>
-          <button type="button" class="modal-btn secondary" id="payLaterBtn">
-            <i class="fas fa-clock"></i>
-            Pay via M-Pesa
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Paystack Script -->
-  <script src="https://js.paystack.co/v1/inline.js"></script>
-
-  <script>
-    // Global variables
-    let currentBookingData = {};
-    let currentAmount = 0;
-
-    // Mobile Menu Functionality
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileNav = document.getElementById('mobileNav');
-    
-    if (mobileMenuBtn && mobileNav) {
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.toggle('active');
-        mobileNav.classList.toggle('active');
-        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-      });
-
-      // Close mobile menu when clicking on links
-      document.querySelectorAll('.mobile-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenuBtn.classList.remove('active');
-          mobileNav.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
-
-      // Close mobile menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-          mobileMenuBtn.classList.remove('active');
-          mobileNav.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-    }
-
-    // Typing effect
-    const typingElement = document.getElementById('typingText');
-    const phrases = [
-      "Government Services Made Easy",
-      "Professional Application Assistance",
-      "Secure & Reliable Processing", 
-      "24/7 Expert Support Available",
-      "Your Digital Gateway to Success"
-    ];
-    
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    
-    function typeEffect() {
-      const currentPhrase = phrases[phraseIndex];
-      
-      if (!isDeleting) {
-        typingElement.textContent = currentPhrase.slice(0, charIndex + 1);
-        charIndex++;
         
-        if (charIndex === currentPhrase.length) {
-          isDeleting = true;
-          setTimeout(typeEffect, 2000);
-          return;
-        }
-      } else {
-        typingElement.textContent = currentPhrase.slice(0, charIndex - 1);
-        charIndex--;
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-item">
+                    <img src="kuccps.png" alt="KUCCPS Applications" loading="lazy" />
+                </div>
+                <h3>KUCCPS Applications</h3>
+                <p>Complete university and college placement applications through KUCCPS with expert guidance and guaranteed submission.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> Course selection guidance</li>
+                    <li><i class="fas fa-check-circle"></i> Document verification</li>
+                    <li><i class="fas fa-check-circle"></i> Application tracking</li>
+                    <li><i class="fas fa-check-circle"></i> Result notifications</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <button onclick="prefillService('KUCCPS')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Now</button>
+                    <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-item">
+                    <img src="helb.png" alt="HELB Loan" loading="lazy" />
+                </div>
+                <h3>HELB Loan Applications</h3>
+                <p>Secure your education funding with professional HELB loan application assistance and follow-up services.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> Loan calculation</li>
+                    <li><i class="fas fa-check-circle"></i> Document preparation</li>
+                    <li><i class="fas fa-check-circle"></i> Application submission</li>
+                    <li><i class="fas fa-check-circle"></i> Status monitoring</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <button onclick="prefillService('HELB')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                    <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-item">
+                    <img src="kra.png" alt="KRA Services" loading="lazy" />
+                </div>
+                <h3>KRA Tax Services</h3>
+                <p>Complete tax services including PIN registration, returns filing, and tax compliance assistance.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> PIN registration</li>
+                    <li><i class="fas fa-check-circle"></i> Tax returns filing</li>
+                    <li><i class="fas fa-check-circle"></i> Compliance certificates</li>
+                    <li><i class="fas fa-check-circle"></i> Tax consultancy</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary"><i class="fas fa-calculator"></i> File Returns</button>
+                    <button onclick="prefillService('KRA_PIN')" class="service-link link-outline"><i class="fas fa-id-card"></i> Get PIN</button>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-item">
+                    <img src="other-services.png" alt="Other Services" loading="lazy" />
+                </div>
+                <h3>Other Government Services</h3>
+                <p>Additional government services including NHIF, NSSF, passport applications, and more digital services.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> NHIF registrations</li>
+                    <li><i class="fas fa-check-circle"></i> NSSF applications</li>
+                    <li><i class="fas fa-check-circle"></i> Passport services</li>
+                    <li><i class="fas fa-check-circle"></i> Business permits</li>
+                </ul>
+                <div class="service-actions">
+                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View All</a>
+                    <button onclick="prefillService('OTHER')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Service</button>
+                    <a href="#contact" class="service-link link-outline"><i class="fas fa-phone"></i> Consult</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>BTECH Cyber Services</h4>
+                    <p>Your trusted partner for all government digital services. Professional, reliable, and secure assistance for all your online application needs.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="../index.html">Home</a>
+                    <a href="#services">Services</a>
+                    <a href="#help">Help Center</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <a href="#">KUCCPS Applications</a>
+                    <a href="#">HELB Loans</a>
+                    <a href="#">KRA Services</a>
+                    <a href="#">Other Services</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
+                    <a href="tel:+254113996609">+254 113 996 609</a>
+                    <a href="tel:+254734644917">+254 734 644 917</a>
+                    <p style="color: var(--neon-green);">Available 24/7 for support</p>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div style="text-align: center; margin-top: 30px; color: var(--text-muted); font-size: 0.85rem;">
+                &copy; 2025 BTECH Cyber Services. All rights reserved. Trusted government services partner.
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Book Your Application</h3>
+                <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div id="alertContainer"></div>
+
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="clientName">Full Name *</label>
+                    <input type="text" id="clientName" name="clientName" class="dark-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="clientPhone">Phone Number *</label>
+                    <input type="tel" id="clientPhone" name="clientPhone" class="dark-input" placeholder="+254 7XX XXX XXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceType">Select Service *</label>
+                    <select id="serviceType" name="serviceType" class="dark-input" required>
+                        <option value="">-- Choose a Service --</option>
+                        <option value="KUCCPS">KUCCPS Application - KES 450</option>
+                        <option value="HELB">HELB Loan Application - KES 500</option>
+                        <option value="KRA_PIN">KRA PIN Registration - KES 200</option>
+                        <option value="KRA_RETURNS">KRA Returns Filing - KES 200</option>
+                        <option value="NHIF">NHIF Registration - KES 250</option>
+                        <option value="NSSF">NSSF Application - KES 250</option>
+                        <option value="OTHER">Other Service - KES 400</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="otherServiceGroup" style="display: none;">
+                    <label for="otherService">Specify Other Service *</label>
+                    <input type="text" id="otherService" name="otherService" class="dark-input" placeholder="Describe the service you need">
+                </div>
+
+                <div class="form-group">
+                    <label for="urgency">Urgency Level</label>
+                    <select id="urgency" name="urgency" class="dark-input">
+                        <option value="normal">Normal (1-2 days) - No extra charge</option>
+                        <option value="urgent">Urgent (Same day) - +KES 50</option>
+                        <option value="express">Express (Within 2 hours) - +KES 100</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalNotes">Additional Notes</label>
+                    <input type="text" id="additionalNotes" name="additionalNotes" class="dark-input" placeholder="Any special requirements">
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="modal-btn btn-cancel" id="cancelBooking">Cancel</button>
+                    <button type="submit" class="modal-btn btn-submit"><i class="fas fa-check"></i> Confirm Booking</button>
+                </div>
+            </form>
+
+            <div class="payment-info" id="paymentInfo">
+                <h4 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> Payment Instructions</h4>
+                <div id="paymentDetails"></div>
+                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                    <button type="button" class="modal-btn btn-submit" id="paystackBtn">
+                        <i class="fas fa-credit-card"></i> Pay Online Now
+                    </button>
+                    <button type="button" class="modal-btn btn-cancel" id="payLaterBtn" style="border: 1px solid white; color: white;">
+                        <i class="fas fa-clock"></i> Pay via M-Pesa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    <script>
+        // --- PARTICLE BACKGROUND ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
         
-        if (charIndex === 0) {
-          isDeleting = false;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-        }
-      }
-      
-      setTimeout(typeEffect, isDeleting ? 50 : 100);
-    }
-    
-    if (typingElement) {
-      typeEffect();
-    }
-
-    // Header scroll effect
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('.header');
-      if (window.scrollY > 100) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-
-    // Modal functionality
-    const modal = document.getElementById('bookingModal');
-    const openModalBtns = [
-      document.getElementById('openModal'),
-      document.getElementById('heroBookBtn')
-    ];
-    const closeModalBtn = document.getElementById('closeModal');
-    const cancelBookingBtn = document.getElementById('cancelBooking');
-    const alertContainer = document.getElementById('alertContainer');
-    const bookingForm = document.getElementById('bookingForm');
-    const serviceTypeSelect = document.getElementById('serviceType');
-    const otherServiceGroup = document.getElementById('otherServiceGroup');
-    const paymentInfo = document.getElementById('paymentInfo');
-
-    // Service pricing
-    const servicePricing = {
-      'KUCCPS': 450,
-      'HELB': 500,
-      'KRA_PIN': 200,
-      'KRA_RETURNS': 300,
-      'NHIF': 250,
-      'NSSF': 250,
-      'OTHER': 400
-    };
-
-    const urgencyPricing = {
-      'normal': 0,
-      'urgent': 50,
-      'express': 100
-    };
-
-    function showAlert(message, type = 'error') {
-      alertContainer.innerHTML = `
-        <div class="alert ${type}">
-          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-          ${message}
-        </div>
-      `;
-      setTimeout(() => {
-        alertContainer.innerHTML = '';
-      }, 5000);
-    }
-
-    function openModal() {
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => {
-        document.getElementById('clientName').focus();
-      }, 300);
-    }
-
-    function closeModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-      bookingForm.reset();
-      otherServiceGroup.style.display = 'none';
-      paymentInfo.style.display = 'none';
-      alertContainer.innerHTML = '';
-    }
-
-    // Event listeners for opening modal
-    openModalBtns.forEach(btn => {
-      if (btn) {
-        btn.addEventListener('click', openModal);
-      }
-    });
-
-    // Event listeners for closing modal
-    [closeModalBtn, cancelBookingBtn].forEach(btn => {
-      if (btn) {
-        btn.addEventListener('click', closeModal);
-      }
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeModal();
-      }
-    });
-
-    // Service type change handler
-    serviceTypeSelect.addEventListener('change', () => {
-      const selectedValue = serviceTypeSelect.value;
-      otherServiceGroup.style.display = selectedValue === 'OTHER' ? 'block' : 'none';
-      
-      if (selectedValue === 'OTHER') {
-        document.getElementById('otherService').required = true;
-      } else {
-        document.getElementById('otherService').required = false;
-      }
-    });
-
-    // Form submission
-    bookingForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const formData = new FormData(bookingForm);
-      const clientName = formData.get('clientName').trim();
-      const clientPhone = formData.get('clientPhone').trim();
-      const serviceType = formData.get('serviceType');
-      const otherService = formData.get('otherService').trim();
-      const urgency = formData.get('urgency');
-      const additionalNotes = formData.get('additionalNotes').trim();
-
-      // Validation
-      if (!clientName) {
-        showAlert('Please enter your full name');
-        document.getElementById('clientName').focus();
-        return;
-      }
-
-      if (!clientPhone) {
-        showAlert('Please enter your phone number');
-        document.getElementById('clientPhone').focus();
-        return;
-      }
-
-      if (!serviceType) {
-        showAlert('Please select a service');
-        document.getElementById('serviceType').focus();
-        return;
-      }
-
-      if (serviceType === 'OTHER' && !otherService) {
-        showAlert('Please specify the other service you need');
-        document.getElementById('otherService').focus();
-        return;
-      }
-
-      // Calculate total amount
-      const baseAmount = servicePricing[serviceType] || 400;
-      const urgencyAmount = urgencyPricing[urgency] || 0;
-      currentAmount = baseAmount + urgencyAmount;
-
-      // Prepare booking data
-      currentBookingData = {
-        clientName,
-        clientPhone,
-        serviceType,
-        otherService: serviceType === 'OTHER' ? otherService : '',
-        urgency,
-        additionalNotes,
-        baseAmount,
-        urgencyAmount,
-        totalAmount: currentAmount,
-        bookingId: 'BTECH-' + Date.now(),
-        timestamp: new Date().toISOString()
-      };
-
-      // Show payment information
-      displayPaymentInfo();
-      
-      showAlert('Booking confirmed! Please proceed with payment to complete your application.', 'success');
-    });
-
-    function displayPaymentInfo() {
-      const serviceName = currentBookingData.serviceType === 'OTHER' 
-        ? currentBookingData.otherService 
-        : document.querySelector(`#serviceType option[value="${currentBookingData.serviceType}"]`).textContent.split(' - ')[0];
-
-      const urgencyText = document.querySelector(`#urgency option[value="${currentBookingData.urgency}"]`).textContent;
-
-      const paymentDetails = document.getElementById('paymentDetails');
-      paymentDetails.innerHTML = `
-        <div class="payment-row">
-          <span class="payment-label">Client:</span>
-          <span class="payment-value">${currentBookingData.clientName}</span>
-        </div>
-        <div class="payment-row">
-          <span class="payment-label">Phone:</span>
-          <span class="payment-value">${currentBookingData.clientPhone}</span>
-        </div>
-        <div class="payment-row">
-          <span class="payment-label">Service:</span>
-          <span class="payment-value">${serviceName}</span>
-        </div>
-        <div class="payment-row">
-          <span class="payment-label">Processing:</span>
-          <span class="payment-value">${urgencyText}</span>
-        </div>
-        <div class="payment-row">
-          <span class="payment-label">Booking ID:</span>
-          <span class="payment-value">${currentBookingData.bookingId}</span>
-        </div>
-        <div class="payment-row">
-          <span class="payment-label">Total Amount:</span>
-          <span class="payment-value">KES ${currentAmount.toLocaleString()}</span>
-        </div>
-      `;
-
-      paymentInfo.style.display = 'block';
-      bookingForm.style.display = 'none';
-    }
-
-    // Paystack payment
-    document.getElementById('paystackBtn').addEventListener('click', () => {
-      if (!currentBookingData.clientName) {
-        showAlert('Please complete the booking form first');
-        return;
-      }
-
-      const handler = PaystackPop.setup({
-        key: 'pk_live_5f7aed7f532c2856d645a4be19928c741c3bde03',
-        email: currentBookingData.clientName.toLowerCase().replace(/\s+/g, '') + '@btechcyber.com',
-        amount: currentAmount * 100,
-        currency: 'KES',
-        ref: currentBookingData.bookingId,
-        metadata: {
-          custom_fields: [
-            {
-              display_name: "Client Name",
-              variable_name: "client_name",
-              value: currentBookingData.clientName
-            },
-            {
-              display_name: "Phone Number", 
-              variable_name: "phone_number",
-              value: currentBookingData.clientPhone
-            },
-            {
-              display_name: "Service Type",
-              variable_name: "service_type", 
-              value: currentBookingData.serviceType
-            },
-            {
-              display_name: "Urgency Level",
-              variable_name: "urgency_level",
-              value: currentBookingData.urgency
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
             }
-          ]
-        },
-        callback: function(response) {
-          showAlert(`Payment successful! Reference: ${response.reference}. You will be contacted within 2 hours to begin processing your application.`, 'success');
-          
-          // Send confirmation (in real app, this would go to a backend)
-          console.log('Payment successful:', response);
-          console.log('Booking data:', currentBookingData);
-          
-          setTimeout(() => {
-            closeModal();
-          }, 3000);
-        },
-        onClose: function() {
-          showAlert('Payment was cancelled. You can try again or contact us for assistance.', 'info');
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.3)'; ctx.fill(); }
         }
-      });
-
-      handler.openIframe();
-    });
-
-    // Pay later button
-    document.getElementById('payLaterBtn').addEventListener('click', () => {
-      const mpesaInstructions = `
-M-PESA Payment Instructions:
-
-1. Go to M-PESA on your phone
-2. Select "Lipa na M-PESA"
-3. Select "Buy Goods and Services"
-4. Enter Till Number: 4499436
-5. Enter Amount: ${currentAmount}
-6. Enter your PIN to complete
-
-Booking Reference: ${currentBookingData.bookingId}
-
-After payment, SMS or WhatsApp us the M-PESA confirmation code at +254 734 644 917
-
-We'll contact you within 30 minutes to confirm and begin processing your application.
-      `;
-
-      // Copy to clipboard
-      navigator.clipboard.writeText(mpesaInstructions).then(() => {
-        showAlert('Payment instructions copied to clipboard! You can also screenshot these details.', 'info');
-      }).catch(() => {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = mpesaInstructions;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showAlert('Payment instructions copied! You can also screenshot these details.', 'info');
-      });
-
-      // Show instructions in alert
-      setTimeout(() => {
-        alert(mpesaInstructions);
-      }, 1000);
-    });
-
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          const offsetTop = target.offsetTop - 80;
-          window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
-          });
+        function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach((a, i) => {
+                particles.slice(i+1).forEach(b => {
+                    let d = Math.hypot(a.x-b.x, a.y-b.y);
+                    if(d<150) {
+                        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+                        ctx.strokeStyle = `rgba(0, 245, 255, ${1 - d/150})`; ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animate);
         }
-      });
-    });
+        window.addEventListener('resize', () => { resize(); init(); });
+        resize(); init(); animate();
 
-    // Scroll animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+        // --- TYPING EFFECT ---
+        const typingElement = document.getElementById('typingText');
+        const phrases = [
+            "Government Services Made Easy",
+            "Professional Application Assistance",
+            "Secure & Reliable Processing", 
+            "24/7 Expert Support Available",
+            "Your Digital Gateway to Success"
+        ];
+        let phraseIndex = 0, charIndex = 0, isDeleting = false;
+        
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            if (!isDeleting) {
+                typingElement.textContent = currentPhrase.slice(0, charIndex + 1);
+                charIndex++;
+                if (charIndex === currentPhrase.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
+            } else {
+                typingElement.textContent = currentPhrase.slice(0, charIndex - 1);
+                charIndex--;
+                if (charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
+            }
+            setTimeout(typeEffect, isDeleting ? 50 : 100);
         }
-      });
-    }, observerOptions);
-    
-    // Observe elements for scroll animations
-    document.querySelectorAll('.fade-in').forEach(el => {
-      observer.observe(el);
-    });
+        typeEffect();
 
-    // Service card hover effects
-    document.querySelectorAll('.service-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-10px) scale(1.02)';
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0) scale(1)';
-      });
-    });
+        // --- APP LOGIC (Original Content) ---
+        let currentBookingData = {};
+        let currentAmount = 0;
 
-    // Keyboard navigation support
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (modal.classList.contains('active')) {
-          closeModal();
+        const modal = document.getElementById('bookingModal');
+        const alertContainer = document.getElementById('alertContainer');
+        const bookingForm = document.getElementById('bookingForm');
+        const serviceTypeSelect = document.getElementById('serviceType');
+        const otherServiceGroup = document.getElementById('otherServiceGroup');
+        const paymentInfo = document.getElementById('paymentInfo');
+
+        // Mobile Menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.toggle('active');
+        });
+
+        // Modal Control
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { 
+            modal.classList.remove('active'); 
+            bookingForm.style.display = 'block';
+            paymentInfo.style.display = 'none';
+            bookingForm.reset();
+            alertContainer.innerHTML = '';
         }
-        if (mobileNav && mobileNav.classList.contains('active')) {
-          mobileMenuBtn.classList.remove('active');
-          mobileNav.classList.remove('active');
-          document.body.style.overflow = '';
+
+        document.getElementById('openModal').addEventListener('click', openModal);
+        document.getElementById('heroBookBtn').addEventListener('click', openModal);
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('cancelBooking').addEventListener('click', closeModal);
+
+        // Prefill
+        function prefillService(svc) {
+            openModal();
+            serviceTypeSelect.value = svc;
         }
-      }
-    });
 
-    // Phone number formatting
-    document.getElementById('clientPhone').addEventListener('input', function(e) {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.startsWith('254')) {
-        value = '+' + value;
-      } else if (value.startsWith('0') && value.length === 10) {
-        value = '+254' + value.substring(1);
-      } else if (value.length === 9) {
-        value = '+254' + value;
-      }
-      e.target.value = value;
-    });
+        // Service Pricing Logic
+        const servicePricing = { 'KUCCPS': 450, 'HELB': 500, 'KRA_PIN': 200, 'KRA_RETURNS': 200, 'NHIF': 250, 'NSSF': 250, 'OTHER': 400 };
+        const urgencyPricing = { 'normal': 0, 'urgent': 50, 'express': 100 };
 
-    // Prevent form resubmission on page refresh
-    if (window.history.replaceState) {
-      window.history.replaceState(null, null, window.location.href);
-    }
-  </script>
+        serviceTypeSelect.addEventListener('change', () => {
+            otherServiceGroup.style.display = serviceTypeSelect.value === 'OTHER' ? 'block' : 'none';
+        });
+
+        function showAlert(message, type) {
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fd = new FormData(bookingForm);
+            const serviceType = fd.get('serviceType');
+            const urgency = fd.get('urgency');
+
+            if (!fd.get('clientName') || !fd.get('clientPhone') || !serviceType) {
+                showAlert('Please fill all required fields', 'error'); return;
+            }
+
+            const baseAmount = servicePricing[serviceType] || 400;
+            const urgencyAmount = urgencyPricing[urgency] || 0;
+            currentAmount = baseAmount + urgencyAmount;
+
+            currentBookingData = {
+                clientName: fd.get('clientName'),
+                clientPhone: fd.get('clientPhone'),
+                serviceType: serviceType,
+                otherService: fd.get('otherService'),
+                urgency: urgency,
+                bookingId: 'BTECH-' + Date.now()
+            };
+
+            // Show Payment Info
+            bookingForm.style.display = 'none';
+            paymentInfo.style.display = 'block';
+            
+            const svcName = serviceType === 'OTHER' ? fd.get('otherService') : serviceType;
+            document.getElementById('paymentDetails').innerHTML = `
+                <div class="payment-row"><span class="payment-label">Client:</span><span class="payment-value">${currentBookingData.clientName}</span></div>
+                <div class="payment-row"><span class="payment-label">Service:</span><span class="payment-value">${svcName}</span></div>
+                <div class="payment-row"><span class="payment-label">Booking ID:</span><span class="payment-value">${currentBookingData.bookingId}</span></div>
+                <div class="payment-row"><span class="payment-label">Total:</span><span class="payment-value" style="color:var(--neon-green); font-weight:bold">KES ${currentAmount}</span></div>
+            `;
+            showAlert('Booking confirmed! Proceed to payment.', 'success');
+        });
+
+        // Paystack
+        document.getElementById('paystackBtn').addEventListener('click', () => {
+            const handler = PaystackPop.setup({
+                key: 'pk_live_5f7aed7f532c2856d645a4be19928c741c3bde03',
+                email: currentBookingData.clientName.toLowerCase().replace(/\s+/g, '') + '@btechcyber.com',
+                amount: currentAmount * 100,
+                currency: 'KES',
+                ref: currentBookingData.bookingId,
+                callback: function(response) {
+                    alert(`Payment successful! Ref: ${response.reference}. We will contact you shortly.`);
+                    closeModal();
+                },
+                onClose: function() { showAlert('Payment cancelled.', 'info'); }
+            });
+            handler.openIframe();
+        });
+
+        // M-Pesa
+        document.getElementById('payLaterBtn').addEventListener('click', () => {
+            const instructions = `M-PESA Payment Instructions:\n\n1. Buy Goods: 4499436\n2. Amount: ${currentAmount}\n3. Send Ref to +254 734 644 917\n\nBooking Ref: ${currentBookingData.bookingId}`;
+            alert(instructions);
+        });
+    </script>
 </body>
 </html>
-

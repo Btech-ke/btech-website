@@ -1,909 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Enroll in BTECH's professional technology courses. Complete your registration to start your journey in tech education.">
-  <title>Enroll Now - BTECH</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #0062cc;
-      --primary-dark: #0051a8;
-      --primary-light: #e6f2ff;
-      --secondary: #6c757d;
-      --success: #28a745;
-      --info: #17a2b8;
-      --dark: #1c2331;
-      --light: #f8f9fa;
-      --white: #ffffff;
-      --shadow: 0 5px 15px rgba(0,0,0,0.08);
-      --transition: all 0.3s ease;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      color: var(--dark);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-
-    /* Header */
-    header {
-      background-color: var(--white);
-      padding: 15px 0;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-    }
-
-    header.scrolled {
-      padding: 10px 0;
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .logo-text {
-      font-family: 'Montserrat', sans-serif;
-      color: var(--primary);
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .logo-icon {
-      color: var(--primary);
-      font-size: 28px;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav-links a {
-      color: var(--dark);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 16px;
-      position: relative;
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: -4px;
-      left: 0;
-      background-color: var(--primary);
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .hamburger {
-      display: none;
-      cursor: pointer;
-      font-size: 24px;
-      color: var(--primary);
-    }
-
-    /* Page Content */
-    .page-container {
-      max-width: 1200px;
-      margin: 100px auto 60px;
-      padding: 0 20px;
-    }
-
-    .page-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .page-header h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 32px;
-      color: var(--dark);
-      margin-bottom: 15px;
-    }
-
-    .page-header p {
-      color: var(--secondary);
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    /* Enrollment Form */
-    .enrollment-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      background-color: var(--white);
-      border-radius: 10px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      margin-bottom: 40px;
-    }
-
-    .form-image {
-      background: linear-gradient(rgba(0, 74, 173, 0.8), rgba(0, 74, 173, 0.9)), url('/api/placeholder/600/800') center/cover no-repeat;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: var(--white);
-    }
-
-    .form-image h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    .form-image p {
-      margin-bottom: 20px;
-      font-size: 16px;
-      opacity: 0.9;
-    }
-
-    .key-features {
-      list-style: none;
-    }
-
-    .key-features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-      font-size: 15px;
-    }
-
-    .key-features li i {
-      color: var(--primary-light);
-    }
-
-    .testimonial-box {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: auto;
-    }
-
-    .testimonial-quote {
-      font-style: italic;
-      margin-bottom: 15px;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .testimonial-author {
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .testimonial-author img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .enrollment-form {
-      padding: 40px;
-    }
-
-    .enrollment-form h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 24px;
-      margin-bottom: 25px;
-      color: var(--dark);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      font-size: 15px;
-      color: var(--dark);
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      transition: var(--transition);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 98, 204, 0.1);
-    }
-
-    .form-select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 16px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .checkbox-input {
-      margin-top: 5px;
-    }
-
-    .checkbox-label {
-      font-size: 14px;
-      color: var(--secondary);
-    }
-
-    .checkbox-label a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .checkbox-label a:hover {
-      text-decoration: underline;
-    }
-
-    .submit-btn {
-      display: inline-block;
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 12px 30px;
-      border: 2px solid var(--primary);
-      border-radius: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      text-align: center;
-      width: 100%;
-    }
-
-    .submit-btn:hover {
-      background-color: var(--primary-dark);
-      border-color: var(--primary-dark);
-    }
-
-    .form-footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
-      color: var(--secondary);
-    }
-
-    .form-footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .form-footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* Success Modal */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-    }
-
-    .modal.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-content {
-      background-color: var(--white);
-      width: 90%;
-      max-width: 500px;
-      border-radius: 10px;
-      padding: 40px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      transform: translateY(-20px);
-      transition: transform 0.3s;
-    }
-
-    .modal.active .modal-content {
-      transform: translateY(0);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 24px;
-      color: var(--secondary);
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .modal-close:hover {
-      color: var(--dark);
-    }
-
-    .success-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 80px;
-      height: 80px;
-      background-color: #d4edda;
-      border-radius: 50%;
-      color: #28a745;
-      font-size: 40px;
-      margin: 0 auto 20px;
-    }
-
-    .modal-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 24px;
-      margin-bottom: 15px;
-      color: var(--dark);
-    }
-
-    .modal-text {
-      color: var(--secondary);
-      margin-bottom: 25px;
-    }
-
-    .modal-btn {
-      display: inline-block;
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 12px 30px;
-      border-radius: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      text-decoration: none;
-    }
-
-    .modal-btn:hover {
-      background-color: var(--primary-dark);
-    }
-
-    /* Footer */
-    footer {
-      background-color: var(--dark);
-      color: var(--light);
-      padding: 60px 0 0;
-      margin-top: auto;
-    }
-
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-    }
-
-    .footer-column h3 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      position: relative;
-      padding-bottom: 10px;
-    }
-
-    .footer-column h3::after {
-      content: '';
-      position: absolute;
-      width: 40px;
-      height: 2px;
-      background-color: var(--primary);
-      bottom: 0;
-      left: 0;
-    }
-
-    .footer-column p {
-      margin-bottom: 20px;
-      opacity: 0.8;
-      font-size: 14px;
-    }
-
-    .footer-links {
-      list-style: none;
-    }
-
-    .footer-links li {
-      margin-bottom: 10px;
-    }
-
-    .footer-links a {
-      color: var(--light);
-      text-decoration: none;
-      opacity: 0.8;
-      transition: var(--transition);
-      font-size: 14px;
-    }
-
-    .footer-links a:hover {
-      opacity: 1;
-      color: var(--primary-light);
-      padding-left: 5px;
-    }
-
-    .contact-info {
-      list-style: none;
-    }
-
-    .contact-info li {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      font-size: 14px;
-      opacity: 0.8;
-    }
-
-    .contact-info i {
-      color: var(--primary-light);
-    }
-
-    .social-links {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .social-links a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      background-color: rgba(255,255,255,0.1);
-      color: var(--white);
-      border-radius: 50%;
-      transition: var(--transition);
-    }
-
-    .social-links a:hover {
-      background-color: var(--primary);
-    }
-
-    .copyright {
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin-top: 40px;
-      font-size: 14px;
-      opacity: 0.8;
-    }
-
-    /* Responsive */
-    @media (max-width: 992px) {
-      .enrollment-container {
-        grid-template-columns: 1fr;
-      }
-      
-      .form-image {
-        padding: 30px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hamburger {
-        display: block;
-      }
-      
-      .nav-links {
-        position: fixed;
-        top: 70px;
-        left: -100%;
-        background-color: var(--white);
-        width: 100%;
-        height: calc(100vh - 70px);
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding-top: 40px;
-        transition: var(--transition);
-      }
-      
-      .nav-links.active {
-        left: 0;
-      }
-      
-      .enrollment-form {
-        padding: 30px;
-      }
-      
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .page-header h1 {
-        font-size: 28px;
-      }
-      
-      .form-image {
-        padding: 25px;
-      }
-      
-      .enrollment-form {
-        padding: 25px;
-      }
-      
-      .form-image h2 {
-        font-size: 24px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll Now - BTECH</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CORE THEME VARIABLES --- */
+        :root {
+            --neon-blue: #00F5FF;
+            --neon-green: #00FF88;
+            --neon-gold: #FFD700;
+            --neon-purple: #BC13FE;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* CANVAS BACKGROUND */
+        canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
+        }
+
+        .nav-menu { display: flex; gap: 30px; list-style: none; }
+        .nav-menu a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+
+        /* --- PAGE CONTENT --- */
+        .page-header { text-align: center; padding: 100px 20px 60px; }
+        .page-header h1 {
+            font-size: 3rem; margin-bottom: 15px; color: white;
+            text-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+        .page-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+        /* --- SPLIT LAYOUT --- */
+        .enrollment-grid {
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; margin-bottom: 80px;
+        }
+
+        /* Info Side */
+        .info-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 40px; position: relative; overflow: hidden;
+        }
+        .info-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+        }
+
+        .info-card h2 { font-size: 1.8rem; margin-bottom: 20px; color: white; }
+        
+        .feature-list { list-style: none; margin-bottom: 40px; }
+        .feature-list li {
+            margin-bottom: 15px; color: var(--text-muted); display: flex; align-items: center; gap: 10px;
+        }
+        .feature-list li i { color: var(--neon-green); }
+
+        .testimonial-box {
+            background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+        .testimonial-quote { font-style: italic; margin-bottom: 15px; color: #eee; font-size: 0.9rem; }
+        .author { display: flex; align-items: center; gap: 10px; }
+        .author img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--neon-purple); }
+        .author span { font-size: 0.8rem; font-weight: 700; color: var(--neon-purple); }
+
+        /* Form Side */
+        .form-card {
+            background: rgba(0,0,0,0.6); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 40px; backdrop-filter: blur(20px);
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        
+        .form-label {
+            display: block; margin-bottom: 8px; color: var(--neon-blue);
+            font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;
+        }
+
+        .dark-input, .dark-select, .dark-textarea {
+            width: 100%; padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white; font-family: 'Space Grotesk', sans-serif; font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .dark-input:focus, .dark-select:focus, .dark-textarea:focus {
+            outline: none; border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+            background: rgba(0, 245, 255, 0.05);
+        }
+
+        .dark-select option { background: #000; color: white; }
+
+        .checkbox-group { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-muted); }
+        .checkbox-group input { margin-top: 5px; accent-color: var(--neon-blue); }
+        .checkbox-group a { color: var(--neon-blue); text-decoration: none; }
+
+        .submit-btn {
+            width: 100%; padding: 15px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border: none; border-radius: 8px; color: white;
+            font-weight: 700; font-size: 1.1rem; cursor: pointer;
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px); box-shadow: 0 0 30px rgba(188, 19, 254, 0.4);
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        
+        .modal-box {
+            background: #000; border: 1px solid var(--neon-green);
+            padding: 40px; border-radius: 20px; text-align: center;
+            max-width: 400px; width: 90%; position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.2);
+        }
+        
+        .success-icon {
+            width: 80px; height: 80px; background: rgba(0, 255, 136, 0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; color: var(--neon-green); font-size: 2.5rem;
+            border: 2px solid var(--neon-green);
+        }
+
+        .close-modal {
+            position: absolute; top: 15px; right: 15px;
+            background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            padding: 60px 0 20px; margin-top: auto;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h4 { color: var(--neon-blue); margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-col a { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
+        .footer-col a:hover { color: white; padding-left: 5px; }
+
+        /* Mobile */
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; }
+        .mobile-nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; flex-direction: column; gap: 15px; }
+        .mobile-nav.active { display: flex; }
+
+        @media (max-width: 768px) {
+            .enrollment-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<header id="header">
-  <div class="nav-container">
-    <a href="index.html" class="logo">
-      <i class="fas fa-laptop-code logo-icon"></i>
-      <span class="logo-text">BTECH</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html#home">Home</a></li>
-      <li><a href="index.html#courses">Courses</a></li>
-      <li><a href="index.html#about">About Us</a></li>
-      <li><a href="index.html#testimonials">Testimonials</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
-    </ul>
-    <div class="hamburger" id="hamburger">
-      <i class="fas fa-bars"></i>
-    </div>
-  </div>
-</header>
-
-<div class="page-container">
-  <div class="page-header">
-    <h1>Begin Your Tech Journey Today</h1>
-    <p>Complete the enrollment form below to secure your spot in our professional technology courses. Our team will contact you within 24 hours to confirm your registration.</p>
-  </div>
-
-  <div class="enrollment-container">
-    <div class="form-image">
-      <div>
-        <h2>Why Choose BTECH?</h2>
-        <p>Join thousands of students who have transformed their careers with our industry-recognized technology training programs.</p>
-        
-        <ul class="key-features">
-          <li><i class="fas fa-check-circle"></i> Hands-on, project-based learning</li>
-          <li><i class="fas fa-check-circle"></i> Industry-experienced instructors</li>
-          <li><i class="fas fa-check-circle"></i> Flexible learning schedules</li>
-          <li><i class="fas fa-check-circle"></i> Career guidance and job placement support</li>
-          <li><i class="fas fa-check-circle"></i> State-of-the-art learning facilities</li>
-          <li><i class="fas fa-check-circle"></i> Industry-recognized certifications</li>
-        </ul>
-      </div>
-      
-      <div class="testimonial-box">
-        <p class="testimonial-quote">"Enrolling at BTECH was the best career decision I've made. The practical skills I gained helped me land my dream job in tech!"</p>
-        <div class="testimonial-author">
-          <img src="sarah.png" alt="Sarah Johnson">
-          <span>Sarah Johnson, Software Developer</span>
+    <header>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-laptop-code" style="color: var(--neon-green);"></i> BTECH ENROLL
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="computer-learning-hub.html">Courses</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
         </div>
-      </div>
-    </div>
-    <div class="enrollment-form">
-  <h2>Complete Your Enrollment</h2>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="../index.html" style="color:white;">Home</a>
+            <a href="computer-learning-hub.html" style="color:white;">Courses</a>
+            <a href="index.html#contact" style="color:white;">Contact</a>
+        </div>
+    </header>
 
-  <form action="https://formspree.io/f/mblolava" method="POST" id="enrollmentForm">
-    <div class="form-row">
-      <div class="form-group">
-        <label for="firstName" class="form-label">First Name*</label>
-        <input type="text" id="firstName" name="firstName" class="form-input" required>
-      </div>
-      <div class="form-group">
-        <label for="lastName" class="form-label">Last Name*</label>
-        <input type="text" id="lastName" name="lastName" class="form-input" required>
-      </div>
+    <canvas id="canvas"></canvas>
+
+    <div class="page-header">
+        <h1>BEGIN YOUR JOURNEY</h1>
+        <p>Complete the form below to secure your spot. Our team will contact you within 24 hours.</p>
     </div>
 
-    <div class="form-group">
-      <label for="email" class="form-label">Email Address*</label>
-      <input type="email" id="email" name="email" class="form-input" required>
+    <div class="container">
+        <div class="enrollment-grid">
+            
+            <div class="info-card">
+                <h2>Why Choose BTECH?</h2>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Hands-on, project-based learning</li>
+                    <li><i class="fas fa-check-circle"></i> Industry-experienced instructors</li>
+                    <li><i class="fas fa-check-circle"></i> Career guidance & support</li>
+                    <li><i class="fas fa-check-circle"></i> Modern learning facilities</li>
+                    <li><i class="fas fa-check-circle"></i> Recognized certifications</li>
+                </ul>
+
+                <div class="testimonial-box">
+                    <p class="testimonial-quote">"Enrolling at BTECH was the best career decision I've made. The skills I gained helped me land my dream job!"</p>
+                    <div class="author">
+                        <img src="sarah.png" alt="Sarah">
+                        <span>Sarah Johnson, Developer</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <form action="https://formspree.io/f/mblolava" method="POST" id="enrollmentForm">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" name="firstName" class="dark-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" name="lastName" class="dark-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" name="email" class="dark-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" name="phone" class="dark-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Select Course *</label>
+                        <select id="course" name="course" class="dark-select" required>
+                            <option value="" disabled selected>Choose your course</option>
+                            <option value="computer-packages">Computer Packages</option>
+                            <option value="business-applications">Business Applications</option>
+                            <option value="programming">Programming Fundamentals</option>
+                            <option value="web-development">Web Development</option>
+                            <option value="app-development">Mobile App Development</option>
+                            <option value="ethical-hacking">Ethical Hacking</option>
+                            <option value="graphic-design">Graphic Design</option>
+                            <option value="digital-marketing">Digital Marketing</option>
+                            <option value="cyber-security">Cyber Security</option>
+                            <option value="networking">Network Engineering</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" name="startDate" class="dark-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Schedule</label>
+                            <select name="schedule" class="dark-select">
+                                <option value="" disabled selected>Select schedule</option>
+                                <option value="weekday-morning">Weekday Mornings</option>
+                                <option value="weekday-evening">Weekday Evenings</option>
+                                <option value="weekend">Weekend Classes</option>
+                                <option value="flexible">Flexible/Online</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Info</label>
+                        <textarea name="message" class="dark-textarea" rows="3"></textarea>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms</a> & <a href="#">Privacy Policy</a></label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Application</button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label for="phone" class="form-label">Phone Number*</label>
-      <input type="tel" id="phone" name="phone" class="form-input" required>
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box">
+            <button class="close-modal" id="modalClose">×</button>
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h3 style="color: white; margin-bottom: 10px;">Application Sent!</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">We have received your enrollment request. An advisor will contact you shortly.</p>
+            <a href="../index.html" class="submit-btn" style="text-decoration: none; display: inline-block;">Return Home</a>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label for="course" class="form-label">Select Course*</label>
-      <select id="course" name="course" class="form-select" required>
-        <option value="" disabled selected>Choose your course</option>
-        <option value="computer-packages">Professional Computer Packages</option>
-        <option value="business-applications">Business Applications</option>
-        <option value="programming">Modern Programming Fundamentals</option>
-        <option value="web-development">Full-Stack Web Development</option>
-        <option value="app-development">Mobile App Development</option>
-        <option value="ethical-hacking">Ethical Hacking & Penetration Testing</option>
-        <option value="graphic-design">Professional Graphic Design</option>
-        <option value="digital-marketing">Digital Marketing Strategy</option>
-        <option value="cyber-security">Advanced Cyber Security</option>
-        <option value="networking">Network Engineering</option>
-      </select>
-    </div>
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>BTECH</h4>
+                    <p style="color: var(--text-muted);">Dedicated to providing industry-relevant education to build the digital workforce of tomorrow.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="../index.html">Home</a>
+                    <a href="computer-learning-hub.html">Courses</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
+                    <a href="tel:+254113996609">+254 113 996 609</a>
+                </div>
+            </div>
+            <div style="text-align: center; border-top: 1px solid var(--glass-border); padding-top: 20px; margin-top: 40px; color: var(--text-muted); font-size: 0.8rem;">
+                © 2025 BTECH Learning Center. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="startDate" class="form-label">Preferred Start Date</label>
-        <input type="date" id="startDate" name="startDate" class="form-input">
-      </div>
-      <div class="form-group">
-        <label for="schedule" class="form-label">Preferred Schedule</label>
-        <select id="schedule" name="schedule" class="form-select">
-          <option value="" disabled selected>Select schedule</option>
-          <option value="weekday-morning">Weekday Mornings</option>
-          <option value="weekday-evening">Weekday Evenings</option>
-          <option value="weekend">Weekend Classes</option>
-          <option value="flexible">Flexible/Online</option>
-        </select>
-      </div>
-    </div>
+    <script>
+        // --- PARTICLE BACKGROUND ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.3)'; ctx.fill(); }
+        }
+        function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach((a, i) => {
+                particles.slice(i+1).forEach(b => {
+                    let d = Math.hypot(a.x-b.x, a.y-b.y);
+                    if(d<150) {
+                        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+                        ctx.strokeStyle = `rgba(0,245,255,${1-d/150})`; ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => { resize(); init(); });
+        resize(); init(); animate();
 
-    <div class="form-group">
-      <label for="message" class="form-label">Additional Information</label>
-      <textarea id="message" name="message" class="form-input" rows="4" placeholder="Any questions or special requirements?"></textarea>
-    </div>
+        // --- MOBILE MENU ---
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.toggle('active');
+        });
 
-    <div class="checkbox-group">
-      <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
-      <label for="terms" class="checkbox-label">
-        I agree to the <a href="terms.html">Terms & Conditions</a> and <a href="privacy.html">Privacy Policy</a>*
-      </label>
-    </div>
+        // --- FORM LOGIC & MODAL ---
+        const form = document.getElementById('enrollmentForm');
+        const modal = document.getElementById('successModal');
+        const closeModal = document.getElementById('modalClose');
 
-    <div class="checkbox-group">
-      <input type="checkbox" id="marketing" name="marketing" class="checkbox-input">
-      <label for="marketing" class="checkbox-label">
-        I would like to receive updates about courses, promotions, and events
-      </label>
-    </div>
+        // Handle FormSpree Submission gracefully
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    form.reset();
+                    modal.classList.add('active');
+                } else {
+                    alert("Oops! There was a problem submitting your form");
+                }
+            } catch (error) {
+                alert("Oops! There was a problem submitting your form");
+            }
+        });
 
-    <button type="submit" class="submit-btn">Submit Application</button>
-  </form>
-</div>
-      
-        <p class="form-footer">Already enrolled? <a href="#">Check your application status</a></p>
-      </form>
-    </div>
-  </div>
-</div>
+        closeModal.addEventListener('click', () => modal.classList.remove('active'));
+        window.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
 
-<div class="modal" id="successModal">
-  <div class="modal-content">
-    <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
-    <div class="success-icon">
-      <i class="fas fa-check"></i>
-    </div>
-    <h3 class="modal-title">Application Submitted!</h3>
-    <p class="modal-text">Thank you for enrolling with BTECH. One of our education advisors will contact you within 24 hours to confirm your registration and provide next steps.</p>
-    <a href="index.html" class="modal-btn">Return to Homepage</a>
-  </div>
-</div>
-
-<footer id="contact">
-  <div class="footer-container">
-    <div class="footer-column">
-      <h3>About BTECH</h3>
-      <p>BTECH is a premier technology learning center dedicated to providing industry-relevant education and hands-on training to build the digital workforce of tomorrow.</p>
-      <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-    
-    <div class="footer-column">
-      <h3>Quick Links</h3>
-      <ul class="footer-links">
-        <li><a href="index.html#home">Home</a></li>
-        <li><a href="index.html#courses">Our Courses</a></li>
-        <li><a href="index.html#about">About Us</a></li>
-        <li><a href="index.html#testimonials">Testimonials</a></li>
-        <li><a href="index.html#contact">Contact Us</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="terms.html">Terms & Conditions</a></li>
-      </ul>
-    </div>
-    
-    <div class="footer-column">
-      <h3>Our Courses</h3>
-      <ul class="footer-links">
-        <li><a href="computer-learning-hub.html#courses">Computer Packages</a></li>
-        <li><a href="computer-learning-hub.html#courses">Web Development</a></li>
-        <li><a href="computer-learning-hub.html#courses">Programming</a></li>
-        <li><a href="computer-learning-hub.html#courses">Mobile App Development</a></li>
-        <li><a href="computer-learning-hub.html#courses#">Cyber Security</a></li>
-        <li><a href="computer-learning-hub.html#courses">Digital Marketing</a></li>
-      </ul>
-    </div>
-    
-    <div class="footer-column">
-      <h3>Contact Us</h3>
-      <ul class="contact-info">
-        <li><i class="fas fa-map-marker-alt"></i> 123 Tech Avenue, Innovation District</li>
-        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
-        <li><i class="fas fa-envelope"></i> info@btechlearning.com</li>
-        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
-      </ul>
-    </div>
-  </div>
-  
-  <div class="copyright">
-    <p>&copy; 2025 BTECH Learning Center. All rights reserved.</p>
-  </div>
-</footer>
-
-<script>
-  // Mobile menu toggle
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    hamburger.innerHTML = navLinks.classList.contains('active') 
-      ? '<i class="fas fa-times"></i>' 
-      : '<i class="fas fa-bars"></i>';
-  });
-  
-  // Close mobile menu when clicking a link
-  const navItems = document.querySelectorAll('.nav-links a');
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-    });
-  });
-  
-  // Header scroll effect
-  const header = document.getElementById('header');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-  
-  // Form validation and submission
-  const enrollmentForm = document.getElementById('enrollmentForm');
-  const successModal = document.getElementById('successModal');
-  const modalClose = document.getElementById('modalClose');
-  
-  enrollmentForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Simple form validation
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const course = document.getElementById('course').value;
-    const terms = document.getElementById('terms').checked;
-    
-    if (firstName && lastName && email && phone && course && terms) {
-      // In a real application, you would send this data to your server here
-      console.log('Form submitted successfully');
-      
-      // Display success modal
-      successModal.classList.add('active');
-      
-      // Reset form
-      enrollmentForm.reset();
-    }
-  });
-  
-  // Close modal
-  modalClose.addEventListener('click', () => {
-    successModal.classList.remove('active');
-  });
-  
-  // Close modal when clicking outside
-  window.addEventListener('click', (e) => {
-    if (e.target === successModal) {
-      successModal.classList.remove('active');
-    }
-  });
-  
-  // Pre-fill course selection if coming from a specific course page
-  window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const courseParam = urlParams.get('course');
-    
-    if (courseParam) {
-      const courseSelect = document.getElementById('course');
-      const courseOptions = Array.from(courseSelect.options);
-      
-      const matchingOption = course
+        // --- PRE-FILL COURSE FROM URL ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseParam = urlParams.get('course');
+            
+            if (courseParam) {
+                const courseSelect = document.getElementById('course');
+                // Simple mapping or direct match if values align
+                for(let i=0; i<courseSelect.options.length; i++) {
+                    if(courseSelect.options[i].value.includes(courseParam)) {
+                        courseSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

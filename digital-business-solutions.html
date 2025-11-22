@@ -1,823 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BTECH - Professional Digital Business Solutions for modern enterprises">
-  <title>BTECH - Digital Business Solutions</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-  <style>
-    /* Reset & Base Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BTECH - Professional Digital Business Solutions for modern enterprises">
+    <title>BTECH - Digital Business Solutions</title>
     
-    :root {
-      --primary: #0056b3;
-      --primary-light: #007BFF;
-      --primary-dark: #003b7a;
-      --secondary: #3a3a3a;
-      --accent: #ffb400;
-      --light: #f8f9fa;
-      --dark: #212529;
-      --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      --transition: all 0.3s ease;
-    }
-    
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f8f9fa;
-      color: var(--secondary);
-      line-height: 1.6;
-    }
-    
-    /* Container */
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    
-    /* Button Styles */
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      background-color: var(--primary-light);
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      transition: var(--transition);
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* Header / Navbar */
-    .header {
-      background-color: white;
-      box-shadow: var(--shadow);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 0;
-    }
-    
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 80px;
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-    
-    .logo-text {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 1px;
-    }
-    
-    .logo-text span {
-      color: var(--accent);
-    }
-    
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-    }
-    
-    .nav-links li a {
-      color: var(--secondary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: var(--transition);
-      position: relative;
-      padding: 5px 0;
-    }
-    
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      bottom: -3px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: var(--primary-light);
-      transition: var(--transition);
-    }
-    
-    .nav-links li a:hover {
-      color: var(--primary-light);
-    }
-    
-    .nav-links li a:hover::after {
-      width: 100%;
-    }
-    
-    .hamburger {
-      display: none;
-      cursor: pointer;
-      background: none;
-      border: none;
-      color: var(--secondary);
-      font-size: 24px;
-    }
-    
-    /* Hero Section */
-    .hero {
-      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
-      color: white;
-      padding: 160px 0 100px;
-      text-align: center;
-    }
-    
-    .hero h1 {
-      font-size: 44px;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-    
-    .hero p {
-      font-size: 18px;
-      max-width: 700px;
-      margin: 0 auto 40px;
-      opacity: 0.9;
-    }
-    
-    .hero-cta .btn {
-      background-color: var(--accent);
-      color: var(--dark);
-      margin: 0 10px;
-    }
-    
-    .hero-cta .btn:hover {
-      background-color: #e6a200;
-    }
-    
-    .btn-outline {
-      background-color: transparent;
-      border: 2px solid white;
-    }
-    
-    .btn-outline:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    /* Services Section */
-    .services {
-      padding: 100px 0;
-    }
-    
-    .section-title {
-      text-align: center;
-      position: relative;
-      margin-bottom: 60px;
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--secondary);
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 4px;
-      background-color: var(--primary-light);
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 2px;
-    }
-    
-    .section-subtitle {
-      text-align: center;
-      max-width: 700px;
-      margin: -30px auto 60px;
-      color: #666;
-      font-size: 17px;
-    }
-    
-    /* Cards */
-    .service-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    .card-image {
-      height: 200px;
-      overflow: hidden;
-    }
-    
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: var(--transition);
-    }
-    
-    .card:hover img {
-      transform: scale(1.05);
-    }
-    
-    .card-content {
-      padding: 25px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .card-tag {
-      display: inline-block;
-      background-color: rgba(0, 123, 255, 0.1);
-      color: var(--primary-light);
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .card h3 {
-      font-size: 22px;
-      margin-bottom: 15px;
-      color: var(--dark);
-      font-weight: 600;
-    }
-    
-    .card p {
-      font-size: 15px;
-      color: #666;
-      margin-bottom: 25px;
-      flex-grow: 1;
-    }
-    
-    .card-footer {
-      margin-top: auto;
-    }
-    
-    /* Why Choose Us Section */
-    .why-us {
-      background-color: #f0f7ff;
-      padding: 100px 0;
-    }
-    
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 40px;
-      margin-top: 50px;
-    }
-    
-    .feature-item {
-      text-align: center;
-      padding: 30px 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-    }
-    
-    .feature-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-    
-    .feature-icon {
-      background-color: rgba(0, 123, 255, 0.1);
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      color: var(--primary-light);
-      font-size: 30px;
-    }
-    
-    .feature-item h3 {
-      font-size: 20px;
-      margin-bottom: 15px;
-      color: var(--dark);
-    }
-    
-    .feature-item p {
-      color: #666;
-      font-size: 15px;
-    }
-    
-    /* CTA Section */
-    .cta-section {
-      background: linear-gradient(135deg, #003b7a 0%, #0056b3 100%);
-      color: white;
-      padding: 80px 0;
-      text-align: center;
-    }
-    
-    .cta-section h2 {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-    
-    .cta-section p {
-      font-size: 17px;
-      max-width: 700px;
-      margin: 0 auto 30px;
-      opacity: 0.9;
-    }
-    
-    /* Footer */
-    .footer {
-      background-color: var(--dark);
-      color: #b3b3b3;
-      padding: 80px 0 30px;
-    }
-    
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      margin-bottom: 50px;
-    }
-    
-    .footer-column h3 {
-      color: white;
-      font-size: 18px;
-      margin-bottom: 20px;
-      position: relative;
-      padding-bottom: 10px;
-    }
-    
-    .footer-column h3::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 30px;
-      height: 2px;
-      background-color: var(--primary-light);
-    }
-    
-    .footer-links {
-      list-style: none;
-    }
-    
-    .footer-links li {
-      margin-bottom: 10px;
-    }
-    
-    .footer-links li a {
-      color: #b3b3b3;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-    
-    .footer-links li a:hover {
-      color: white;
-      padding-left: 5px;
-    }
-    
-    .social-links {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-    }
-    
-    .social-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      color: white;
-      font-size: 18px;
-      transition: var(--transition);
-      text-decoration: none;
-    }
-    
-    .social-icon:hover {
-      background-color: var(--primary-light);
-      transform: translateY(-3px);
-    }
-    
-    .footer-bottom {
-      text-align: center;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 14px;
-    }
-    
-    /* Mobile */
-    @media (max-width: 1000px) {
-      .hamburger {
-        display: block;
-      }
-      
-      .nav-links {
-        position: absolute;
-        top: 80px;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        gap: 0;
-        height: 0;
-        overflow: hidden;
-        transition: height 0.3s ease;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-      }
-      
-      .nav-links.active {
-        height: 240px;
-      }
-      
-      .nav-links li {
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-      }
-      
-      .nav-links.active li {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      
-      .nav-links li a {
-        display: block;
-        padding: 15px 20px;
-        border-bottom: 1px solid #eee;
-      }
-      
-      .hero {
-        padding: 140px 0 80px;
-      }
-      
-      .hero h1 {
-        font-size: 36px;
-      }
-      
-      .hero-cta .btn {
-        display: block;
-        width: 80%;
-        margin: 10px auto;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-title {
-        font-size: 30px;
-      }
-      
-      .services {
-        padding: 70px 0;
-      }
-      
-      .why-us {
-        padding: 70px 0;
-      }
-      
-      .feature-item {
-        padding: 20px 15px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .hero h1 {
-        font-size: 30px;
-      }
-      
-      .logo-text {
-        font-size: 24px;
-      }
-    }
-  </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CORE THEME VARIABLES --- */
+        :root {
+            --neon-blue: #00F5FF;
+            --neon-green: #00FF88;
+            --neon-gold: #FFD700;
+            --neon-purple: #BC13FE;
+            --neon-red: #FF0055;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* CANVAS BACKGROUND */
+        canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .content { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
+        }
+
+        .nav-menu { display: flex; gap: 30px; list-style: none; }
+        .nav-menu a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+
+        .cta-btn {
+            background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold);
+            padding: 8px 25px; font-weight: 700; text-transform: uppercase; cursor: pointer;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: 0.3s; text-decoration: none; font-size: 0.85rem;
+        }
+        .cta-btn:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 20px var(--neon-gold); }
+
+        /* --- HERO --- */
+        .hero { padding: 120px 20px 80px; text-align: center; position: relative; }
+        
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 5px 15px; border: 1px solid var(--neon-blue); 
+            color: var(--neon-blue); border-radius: 50px; font-size: 0.8rem;
+            background: rgba(0, 245, 255, 0.05); margin-bottom: 20px;
+        }
+
+        .typing-text {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
+            color: var(--neon-purple); min-height: 1.5em; margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700;
+            line-height: 1.1; margin-bottom: 20px; color: white;
+            background: linear-gradient(90deg, #fff, var(--neon-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px;
+        }
+
+        .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-gold));
+            color: #000; padding: 15px 35px; font-weight: 700; border: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); cursor: pointer;
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 245, 255, 0.4); }
+
+        .btn-secondary {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
+            padding: 15px 35px; font-weight: 700; text-decoration: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-secondary:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+        /* --- SERVICES GRID --- */
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; color: white; }
+        
+        .services-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
+        }
+
+        .service-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; overflow: hidden; transition: 0.3s;
+            display: flex; flex-direction: column; position: relative;
+        }
+        .service-card:hover {
+            transform: translateY(-10px); border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.1);
+        }
+
+        .card-image { height: 200px; width: 100%; overflow: hidden; position: relative; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .service-card:hover .card-image img { transform: scale(1.1); }
+
+        .card-tag {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(0,0,0,0.8); color: white;
+            padding: 5px 15px; border-radius: 50px; font-size: 0.75rem;
+            border: 1px solid var(--neon-blue); text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .card-content { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+        .card-content h3 { font-size: 1.4rem; color: white; margin-bottom: 15px; }
+        .card-content p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+
+        .card-footer { margin-top: auto; }
+        .learn-btn {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border); color: white; text-align: center;
+            text-decoration: none; display: block; transition: 0.3s; font-weight: 600;
+        }
+        .learn-btn:hover { background: var(--neon-blue); color: black; }
+
+        /* --- WHY CHOOSE US --- */
+        .why-us { 
+            background: rgba(255,255,255,0.02); 
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 80px 0; margin: 80px 0;
+        }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        
+        .feature-item {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 30px; border-radius: 15px; text-align: center; transition: 0.3s;
+        }
+        .feature-item:hover { transform: translateY(-5px); border-color: var(--neon-gold); }
+        
+        .feature-icon {
+            width: 60px; height: 60px; background: rgba(255,215,0,0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; color: var(--neon-gold); font-size: 1.5rem; border: 1px solid var(--neon-gold);
+        }
+
+        /* --- CTA --- */
+        .cta-section {
+            text-align: center; padding: 80px 20px;
+            background: linear-gradient(180deg, transparent, rgba(0, 245, 255, 0.05));
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            padding: 60px 0 20px; margin-top: auto;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+        .footer-section h4 { color: var(--neon-blue); margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-section p, .footer-section a { color: var(--text-muted); display: block; margin-bottom: 10px; text-decoration: none; transition: 0.3s; }
+        .footer-section a:hover { color: white; padding-left: 5px; }
+        
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-icon {
+            width: 40px; height: 40px; border: 1px solid var(--glass-border);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; transition: 0.3s; text-decoration: none;
+        }
+        .social-icon:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); }
+
+        /* Mobile Menu */
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; }
+        .mobile-nav { position: fixed; top: 70px; left: 0; width: 100%; background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; }
+        .mobile-nav.active { display: flex; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero h1 { font-size: 3rem; }
+        }
+    </style>
 </head>
 
 <body>
+    <header>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                B<span style="color: var(--neon-blue);">TECH</span>&nbsp;<span style="color: var(--neon-gold);">SOLUTIONS</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#why-us">Why Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="#contact" class="cta-btn">Get In Touch</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+        
+        <div class="mobile-nav" id="mobileNav">
+            <a href="../index.html" style="color:white;">Home</a>
+            <a href="#services" style="color:white;">Services</a>
+            <a href="#why-us" style="color:white;">Why Us</a>
+            <a href="#contact" style="color:white;">Contact</a>
+        </div>
+    </header>
 
-<!-- Header -->
-<header class="header">
-  <div class="container">
-    <nav class="navbar">
-      <div class="logo">
-        <a href="#" class="logo-text">B<span>TECH</span></a>
-      </div>
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#why-us">Why Us</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button class="hamburger" id="hamburger">
-        <i class="fas fa-bars"></i>
-      </button>
-    </nav>
-  </div>
-</header>
+    <canvas id="canvas"></canvas>
 
-<!-- Hero Section -->
-<section id="home" class="hero">
-  <div class="container">
-    <h1>Transform Your Business with Digital Solutions</h1>
-    <p>We help businesses modernize, grow, and succeed in today's digital landscape with our comprehensive professional services.</p>
-    <div class="hero-cta">
-      <a href="#services" class="btn">Our Services</a>
-      <a href="#contact" class="btn btn-outline">Get In Touch</a>
-    </div>
-  </div>
-</section>
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-badge"><i class="fas fa-bolt"></i> POWERING MODERN ENTERPRISES</div>
+            <div class="typing-text" id="typingText"></div>
+            <h1>TRANSFORM YOUR BUSINESS</h1>
+            <p>We help businesses modernize, grow, and succeed in today's digital landscape with our comprehensive professional services.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary">Our Services</a>
+                <a href="#contact" class="btn-secondary">Start Project</a>
+            </div>
+        </div>
+    </section>
 
-<!-- Services Section -->
-<section id="services" class="services">
-  <div class="container">
-    <h2 class="section-title">Digital Business Solutions</h2>
-    <p class="section-subtitle">Comprehensive digital services tailored to meet the unique needs of your business and accelerate your growth.</p>
-    
-    <div class="service-cards">
-      <div class="card">
-        <div class="card-image">
-          <img src="consultation.png" alt="Business Consultation">
+    <section id="services" class="container" style="padding-bottom: 80px;">
+        <div class="section-header">
+            <h2>DIGITAL SOLUTIONS</h2>
+            <p style="color: var(--text-muted);">Comprehensive services tailored to accelerate your growth.</p>
         </div>
-        <div class="card-content">
-          <span class="card-tag">Strategic</span>
-          <h3>Business Consultation</h3>
-          <p>Expert guidance and strategic consulting services to optimize your business processes, overcome challenges, and achieve sustainable growth.</p>
-          <div class="card-footer">
-            <a href="business-consultation-details.html" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-image">
-          <img src="web-development.png" alt="Web Development">
-        </div>
-        <div class="card-content">
-          <span class="card-tag">Technology</span>
-          <h3>Web Development</h3>
-          <p>Custom-built, responsive websites and web applications designed to enhance your brand presence and deliver exceptional user experiences.</p>
-          <div class="card-footer">
-            <a href="web-development-details.html" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
+        <div class="services-grid">
+            
+            <div class="service-card">
+                <div class="card-image">
+                    <img src="consultation.png" alt="Business Consultation">
+                    <div class="card-tag" style="border-color: var(--neon-blue); color: var(--neon-blue);">Strategic</div>
+                </div>
+                <div class="card-content">
+                    <h3>Business Consultation</h3>
+                    <p>Expert guidance and strategic consulting services to optimize your business processes, overcome challenges, and achieve sustainable growth.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="business-consultation-details.html" class="learn-btn">Learn More</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-image">
-          <img src="ecommerce.png" alt="E-Commerce Solutions">
-        </div>
-        <div class="card-content">
-          <span class="card-tag">Sales</span>
-          <h3>E-Commerce Solutions</h3>
-          <p>End-to-end e-commerce platforms that enable you to manage inventory, process transactions, and scale your online business efficiently.</p>
-          <div class="card-footer">
-            <a href="ecommerce-details.html" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
+            <div class="service-card">
+                <div class="card-image">
+                    <img src="web-development.png" alt="Web Development">
+                    <div class="card-tag" style="border-color: var(--neon-purple); color: var(--neon-purple);">Technology</div>
+                </div>
+                <div class="card-content">
+                    <h3>Web Development</h3>
+                    <p>Custom-built, responsive websites and web applications designed to enhance your brand presence and deliver exceptional user experiences.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="web-development-details.html" class="learn-btn">Learn More</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-image">
-          <img src="marketing.png" alt="Digital Marketing">
-        </div>
-        <div class="card-content">
-          <span class="card-tag">Growth</span>
-          <h3>Digital Marketing</h3>
-          <p>Data-driven marketing strategies including SEO, social media, and PPC advertising to boost your visibility, engagement, and conversion rates.</p>
-          <div class="card-footer">
-            <a href="digital-marketing-details.html" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
+            <div class="service-card">
+                <div class="card-image">
+                    <img src="ecommerce.png" alt="E-Commerce">
+                    <div class="card-tag" style="border-color: var(--neon-green); color: var(--neon-green);">Sales</div>
+                </div>
+                <div class="card-content">
+                    <h3>E-Commerce Solutions</h3>
+                    <p>End-to-end e-commerce platforms that enable you to manage inventory, process transactions, and scale your online business efficiently.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="ecommerce-details.html" class="learn-btn">Learn More</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-image">
-          <img src="branding.png" alt="Branding Solutions">
-        </div>
-        <div class="card-content">
-          <span class="card-tag">Identity</span>
-          <h3>Branding Solutions</h3>
-          <p>Creative branding services that help define your unique identity, build customer trust, and establish a strong market position.</p>
-          <div class="card-footer">
-            <a href="branding-solutions-details.html" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
+            <div class="service-card">
+                <div class="card-image">
+                    <img src="marketing.png" alt="Digital Marketing">
+                    <div class="card-tag" style="border-color: var(--neon-gold); color: var(--neon-gold);">Growth</div>
+                </div>
+                <div class="card-content">
+                    <h3>Digital Marketing</h3>
+                    <p>Data-driven marketing strategies including SEO, social media, and PPC advertising to boost your visibility and conversion rates.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="digital-marketing-details.html" class="learn-btn">Learn More</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-image">
-          <img src="cloud.png" alt="Cloud Solutions">
-        </div>
-        <div class="card-content">
-          <span class="card-tag">Infrastructure</span>
-          <h3>Cloud Solutions</h3>
-          <p>Secure and scalable cloud infrastructure services to modernize your IT operations, improve collaboration, and enhance business agility.</p>
-          <div class="card-footer">
-            <a href="cloud-solutions-details.html" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="service-card">
+                <div class="card-image">
+                    <img src="branding.png" alt="Branding">
+                    <div class="card-tag" style="border-color: var(--neon-red); color: var(--neon-red);">Identity</div>
+                </div>
+                <div class="card-content">
+                    <h3>Branding Solutions</h3>
+                    <p>Creative branding services that help define your unique identity, build customer trust, and establish a strong market position.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="branding-solutions-details.html" class="learn-btn">Learn More</a>
+                </div>
+            </div>
 
-<!-- Why Choose Us -->
-<section id="why-us" class="why-us">
-  <div class="container">
-    <h2 class="section-title">Why Choose BTECH?</h2>
-    <p class="section-subtitle">We combine technical expertise with business acumen to deliver solutions that drive tangible results.</p>
-    
-    <div class="features-grid">
-      <div class="feature-item">
-        <div class="feature-icon">
-          <i class="fas fa-check-circle"></i>
-        </div>
-        <h3>Expert Team</h3>
-        <p>Our dedicated professionals bring years of industry experience and specialized knowledge to every project.</p>
-      </div>
-      
-      <div class="feature-item">
-        <div class="feature-icon">
-          <i class="fas fa-lightbulb"></i>
-        </div>
-        <h3>Innovative Approach</h3>
-        <p>We leverage the latest technologies and methodologies to develop forward-thinking solutions.</p>
-      </div>
-      
-      <div class="feature-item">
-        <div class="feature-icon">
-          <i class="fas fa-handshake"></i>
-        </div>
-        <h3>Client-Centric</h3>
-        <p>We prioritize your specific needs and goals, ensuring solutions that align perfectly with your vision.</p>
-      </div>
-      
-      <div class="feature-item">
-        <div class="feature-icon">
-          <i class="fas fa-chart-line"></i>
-        </div>
-        <h3>Results-Driven</h3>
-        <p>Our focus is on delivering measurable outcomes that contribute to your business growth and success.</p>
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="service-card">
+                <div class="card-image">
+                    <img src="cloud.png" alt="Cloud Solutions">
+                    <div class="card-tag" style="border-color: #00ccff; color: #00ccff;">Infrastructure</div>
+                </div>
+                <div class="card-content">
+                    <h3>Cloud Solutions</h3>
+                    <p>Secure and scalable cloud infrastructure services to modernize your IT operations, improve collaboration, and enhance business agility.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="cloud-solutions-details.html" class="learn-btn">Learn More</a>
+                </div>
+            </div>
 
-<!-- CTA Section -->
-<section class="cta-section">
-  <div class="container">
-    <h2>Ready to Transform Your Business?</h2>
-    <p>Contact us today to schedule a consultation and discover how our digital solutions can help you achieve your business goals.</p>
-    <a href="#contact" class="btn">Get Started</a>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-content">
-      <div class="footer-column">
-        <h3>About BTECH</h3>
-        <p>We provide comprehensive digital business solutions to help companies thrive in the digital age. Our expertise spans across multiple industries and technologies.</p>
-        <div class="social-links">
-          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
         </div>
-      </div>
-      
-      <div class="footer-column">
-        <h3>Our Services</h3>
-        <ul class="footer-links">
-          <li><a href="business-consultation-details.html">Business Consultation</a></li>
-          <li><a href="web-development-details.html">Web Development</a></li>
-          <li><a href="ecommerce-details.html">E-Commerce Solutions</a></li>
-          <li><a href="digital-marketing-details.html">Digital Marketing</a></li>
-          <li><a href="branding-solutions-details.html">Branding Solutions</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-column">
-        <h3>Quick Links</h3>
-        <ul class="footer-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#why-us">Why Choose Us</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-column">
-        <h3>Contact Us</h3>
-        <ul class="footer-links">
-          <li><i class="fas fa-map-marker-alt"></i> 392 BTECH Plaza, Thika</li>
-          <li><i class="fas fa-phone"></i> +254 113 996 609</li>
-          <li><i class="fas fa-envelope"></i> btechkenya@gmail.com</li>
-          <li><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 5:00 PM</li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="footer-bottom">
-      <p>&copy; 2025 BTECH Solutions. All rights reserved. | <a href="#" style="color: #b3b3b3;">Privacy Policy</a> | <a href="#" style="color: #b3b3b3;">Terms of Service</a></p>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<script>
-  // Mobile navigation toggle
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.querySelector('.nav-links');
-  
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    hamburger.innerHTML = navLinks.classList.contains('active') 
-      ? '<i class="fas fa-times"></i>' 
-      : '<i class="fas fa-bars"></i>';
-  });
-  
-  // Smooth scrolling for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Close mobile menu if open
-      if (navLinks.classList.contains('active')) {
-        navLinks.classList.remove('active');
-        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-      }
-      
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        window.scrollTo({
-          top: targetElement.offsetTop - 80,
-          behavior: 'smooth'
+    <section id="why-us" class="why-us">
+        <div class="container">
+            <div class="section-header">
+                <h2>WHY CHOOSE BTECH?</h2>
+                <p style="color: var(--text-muted);">Combining technical expertise with business acumen.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3 style="color:white; margin-bottom:10px;">Expert Team</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Dedicated professionals with years of specialized industry experience.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3 style="color:white; margin-bottom:10px;">Innovative Approach</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Leveraging the latest technologies to develop forward-thinking solutions.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                    <h3 style="color:white; margin-bottom:10px;">Client-Centric</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Prioritizing your specific needs to ensure solutions align with your vision.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 style="color:white; margin-bottom:10px;">Results-Driven</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Focusing on measurable outcomes that contribute to business growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 20px;">Ready to Transform Your Business?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Contact us today to schedule a consultation and discover how our digital solutions can help you achieve your business goals.
+            </p>
+            <a href="#contact" class="btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About BTECH</h4>
+                    <p style="color: var(--text-muted);">We provide comprehensive digital business solutions to help companies thrive in the digital age. Our expertise spans across multiple industries and technologies.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Our Services</h4>
+                    <a href="business-consultation-details.html">Business Consultation</a>
+                    <a href="web-development-details.html">Web Development</a>
+                    <a href="ecommerce-details.html">E-Commerce</a>
+                    <a href="digital-marketing-details.html">Digital Marketing</a>
+                    <a href="branding-solutions-details.html">Branding Solutions</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-map-marker-alt" style="color:var(--neon-blue)"></i> 392 BTECH Plaza, Thika</p>
+                    <a href="tel:+254113996609"><i class="fas fa-phone" style="color:var(--neon-blue)"></i> +254 113 996 609</a>
+                    <a href="mailto:btechkenya@gmail.com"><i class="fas fa-envelope" style="color:var(--neon-blue)"></i> btechkenya@gmail.com</a>
+                    <p><i class="fas fa-clock" style="color:var(--neon-blue)"></i> Mon-Fri: 9:00 AM - 5:00 PM</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted);">
+                © 2025 BTECH Solutions. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- PARTICLE ENGINE ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.3)'; ctx.fill(); }
+        }
+        function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach((a, i) => {
+                particles.slice(i+1).forEach(b => {
+                    let d = Math.hypot(a.x-b.x, a.y-b.y);
+                    if(d<150) {
+                        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+                        ctx.strokeStyle = `rgba(0, 245, 255, ${1 - d/150})`; ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => { resize(); init(); });
+        resize(); init(); animate();
+
+        // --- TYPING EFFECT ---
+        const phrases = ["Digital Growth.", "Business Innovation.", "Future-Ready Solutions."];
+        let pIdx = 0, cIdx = 0, isDel = false;
+        const typeEl = document.getElementById('typingText');
+        function type() {
+            let txt = phrases[pIdx];
+            typeEl.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++);
+            if(!isDel && cIdx === txt.length+1) { isDel = true; setTimeout(type, 2000); }
+            else if(isDel && cIdx === 0) { isDel = false; pIdx = (pIdx+1)%phrases.length; setTimeout(type, 500); }
+            else setTimeout(type, isDel ? 50 : 100);
+        }
+        type();
+
+        // --- MOBILE MENU ---
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.toggle('active');
         });
-      }
-    });
-  });
-  
-  // Header scroll effect
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('.header');
-    if (window.scrollY > 50) {
-      header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    } else {
-      header.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.05)';
-    }
-  });
-</script>
-
+    </script>
 </body>
 </html>

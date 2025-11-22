@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTECH Plus - Empowering Digital Futures</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* --- CORE THEME VARIABLES --- */
+        :root {
+            --neon-blue: #00F5FF;
+            --neon-green: #00FF88;
+            --neon-gold: #FFD700;
+            --neon-purple: #bc13fe;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CANVAS BACKGROUND */
+        canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .content { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- ETA BANNER --- */
+        .eta-banner {
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.2), rgba(0,0,0,0.8));
+            border-bottom: 1px solid var(--neon-green);
+            padding: 10px 20px;
+            display: flex; justify-content: center; align-items: center; gap: 20px;
+            font-size: 0.9rem; position: relative; z-index: 1001;
+        }
+        .eta-banner a { color: var(--neon-green); font-weight: 700; text-decoration: none; text-transform: uppercase; }
+        .close-banner { background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; margin-left: 20px; }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 1.8rem; font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-menu { display: flex; gap: 30px; list-style: none; }
+        .nav-menu a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+
+        .nav-cta {
+            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 8px 20px; text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        .nav-cta:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+
+        /* --- HERO --- */
+        .hero-section { padding: 100px 20px; text-align: center; }
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 700; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .typing-container {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.3rem;
+            color: var(--neon-green); min-height: 1.6em; margin-bottom: 40px;
+        }
+        .hero-btns { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            color: #000; padding: 15px 40px; font-weight: 700; text-transform: uppercase;
+            text-decoration: none; border: none; clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 245, 255, 0.4); }
+
+        .btn-secondary {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
+            padding: 15px 40px; font-weight: 700; text-transform: uppercase; text-decoration: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .btn-secondary:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+        /* --- FEATURED CARDS --- */
+        .featured-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); padding: 40px; border-radius: 20px;
+            margin: 40px 0; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .featured-card:hover { border-color: var(--neon-blue); box-shadow: 0 10px 50px rgba(0, 245, 255, 0.15); transform: translateY(-5px); }
+        .eta-highlight { border-color: var(--neon-green); background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), transparent); }
+
+        /* --- GRID & SERVICE CARDS --- */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; align-items: center; }
+
+        .glass-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 30px; transition: 0.3s; position: relative; overflow: hidden; border-radius: 15px;
+        }
+        .glass-card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0, 245, 255, 0.2); }
+
+        /* --- IMAGE CONTAINERS FOR SERVICES --- */
+        .card-img-container {
+            width: 80px; height: 80px; background: rgba(255,255,255,0.1);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; padding: 10px; border: 1px solid var(--glass-border);
+        }
+        .card-img-container img { width: 100%; height: 100%; object-fit: contain; }
+
+        .glass-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #fff; }
+        .glass-card p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.6; }
+
+        .card-link {
+            color: var(--neon-blue); text-decoration: none; font-weight: 600;
+            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+
+        /* --- ABOUT (CEO IMAGE) --- */
+        .ceo-wrapper { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+        .ceo-img {
+            width: 150px; height: 150px; border-radius: 50%;
+            border: 3px solid var(--neon-blue); object-fit: cover;
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.3);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            padding: 60px 0 20px; margin-top: auto;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h4 { color: var(--neon-blue); margin-bottom: 20px; }
+        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 10px; transition: 0.3s; }
+        .footer-col a:hover { color: white; padding-left: 5px; }
+
+        /* --- LOGIN MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .login-box {
+            background: #000; border: 1px solid var(--neon-blue); padding: 40px;
+            width: 90%; max-width: 400px; position: relative;
+            box-shadow: 0 0 50px rgba(0, 245, 255, 0.2);
+        }
+        .login-input {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            color: white; padding: 15px; margin-bottom: 20px; font-family: inherit;
+        }
+        .login-input:focus { outline: none; border-color: var(--neon-blue); }
+
+        /* --- MOBILE --- */
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .mobile-nav {
+            display: none; position: absolute; top: 100%; left: 0; width: 100%;
+            background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; flex-direction: column; gap: 15px;
+        }
+        .mobile-nav.active { display: flex; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero-title { font-size: 3rem; }
+            .ceo-wrapper { justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="content">
+        <div class="eta-banner" id="etaBanner">
+            <span>🇰🇪 Traveling to Kenya? Get your Electronic Travel Authorization (ETA) in 72hrs.</span>
+            <a href="pages/online-cyber.html#eta">Apply Now</a>
+            <button class="close-banner" onclick="document.getElementById('etaBanner').style.display='none'">×</button>
+        </div>
+
+        <header>
+            <div class="container nav-container">
+                <a href="#" class="logo">BTECH PLUS</a>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="pages/online-cyber.html" style="color: var(--neon-green);">Cyber Services</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <button class="nav-cta" onclick="openLogin()">Staff Portal</button>
+                    <button class="mobile-menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+            <div class="mobile-nav" id="mobileNav">
+                <a href="#home" style="color:white; text-decoration:none;">Home</a>
+                <a href="#about" style="color:white; text-decoration:none;">About</a>
+                <a href="#services" style="color:white; text-decoration:none;">Services</a>
+                <a href="pages/online-cyber.html" style="color:var(--neon-green); text-decoration:none;">Cyber Services</a>
+                <a href="#download" style="color:white; text-decoration:none;">Download</a>
+                <button class="nav-cta" onclick="openLogin()" style="width:100%">Staff Login</button>
+            </div>
+        </header>
+
+        <section id="home" class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">BTECH PLUS</h1>
+                <div class="typing-container" id="typingText"></div>
+                <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto 30px; font-size: 1.2rem;">
+                    Transform your future with cutting-edge technology courses, expert business solutions, and comprehensive digital services.
+                </p>
+                <div class="hero-btns">
+                    <a href="#services" class="btn-primary">
+                        <i class="fas fa-rocket"></i> Explore Services
+                    </a>
+                    <a href="#download" class="btn-secondary">
+                        <i class="fab fa-android"></i> Get App
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="container" style="padding: 80px 20px;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h2 style="font-size: 2.5rem; color: white;">OUR ECOSYSTEM</h2>
+                <p style="color: var(--text-muted);">Comprehensive digital solutions tailored for you.</p>
+            </div>
+            
+            <div class="grid-3">
+                <div class="glass-card">
+                    <div class="card-img-container">
+                        <img src="cyber.png" alt="Cyber Services">
+                    </div>
+                    <h3>Online Cyber Services</h3>
+                    <p>Secure access to KUCCPS, KRA, HELB and other essential government services with our trusted cyber platform.</p>
+                    <a href="pages/online-cyber.html" class="card-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-img-container">
+                        <img src="learning.png" alt="Learning Hub">
+                    </div>
+                    <h3 style="color: var(--neon-gold);">Learning Hub</h3>
+                    <p>Master industry-relevant skills with our comprehensive computer courses designed by experts.</p>
+                    <a href="computer-learning-hub.html" class="card-link" style="color: var(--neon-gold);">View Courses <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-img-container">
+                        <img src="business.png" alt="Business Solutions">
+                    </div>
+                    <h3 style="color: var(--neon-purple);">Business Solutions</h3>
+                    <p>Transform your business with modern tools, innovative designs, and strategic digital solutions.</p>
+                    <a href="digital-business-solutions.html" class="card-link" style="color: var(--neon-purple);">Discover <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-img-container">
+                        <img src="repair.png" alt="Tech Repair">
+                    </div>
+                    <h3 style="color: #ff4500;">Tech Repair</h3>
+                    <p>Professional repair and maintenance services for all your technology devices with guaranteed quality.</p>
+                    <a href="tech-repair.html" class="card-link" style="color: #ff4500;">Get Support <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="featured-card eta-highlight">
+                <div class="grid-2">
+                    <div>
+                        <div style="color: var(--neon-green); font-weight: 700; margin-bottom: 10px;">FEATURED SERVICE</div>
+                        <h2 style="font-size: 2.5rem; color: white; margin-bottom: 20px;">Kenya ETA Services</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 30px;">
+                            Official ETA processing for international travelers. Required for all visitors to Kenya since January 2024. Fast, secure, and reliable service.
+                        </p>
+                        <a href="pages/online-cyber.html#eta" class="btn-primary" style="background: var(--neon-green); color: black;">
+                            Apply For ETA - $90
+                        </a>
+                    </div>
+                    <div style="text-align: center;">
+                        <i class="fas fa-passport" style="font-size: 8rem; color: var(--neon-green); filter: drop-shadow(0 0 20px rgba(0,255,136,0.5));"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="container" style="padding: 60px 20px;">
+            <div class="featured-card">
+                <div class="ceo-wrapper">
+                    <img src="mypic.jpg" alt="Teddy CEO" class="ceo-img">
+                    <div style="flex: 1;">
+                        <div style="color: var(--neon-blue); letter-spacing: 2px; font-size: 0.9rem;">MEET THE FOUNDER</div>
+                        <h2 style="font-size: 2rem; margin: 10px 0; color: white;">Teddy</h2>
+                        <p style="color: var(--text-muted); line-height: 1.8;">
+                            "We don't just do tech - we empower futures through innovation. At BTECH, we combine years of industry experience with cutting-edge technology to deliver comprehensive digital solutions. From professional training programs to business transformation services, we're committed to empowering individuals."
+                        </p>
+                        <div style="margin-top: 20px; display: flex; gap: 30px;">
+                            <div>
+                                <h3 style="color: white; font-size: 1.5rem;">500+</h3>
+                                <span style="color: var(--text-muted); font-size: 0.8rem;">Students</span>
+                            </div>
+                            <div>
+                                <h3 style="color: white; font-size: 1.5rem;">100+</h3>
+                                <span style="color: var(--text-muted); font-size: 0.8rem;">Projects</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="container" style="text-align: center; padding: 80px 20px;">
+            <div style="background: linear-gradient(90deg, rgba(0,245,255,0.1), rgba(0,255,136,0.1)); padding: 60px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                <div style="color: var(--neon-blue); font-weight: 700; letter-spacing: 2px; margin-bottom: 20px;">⚡ LATEST RELEASE ⚡</div>
+                <h2 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; color: white;">BTECH Plus V1.1</h2>
+                <p style="color: var(--text-muted); margin-bottom: 40px; font-family: 'Courier New', monospace;">btechplus_v1.1.apk | 5MB | Android</p>
+                
+                <button class="btn-primary" onclick="downloadApp()">
+                    <span>Download APK</span>
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h4>BTECH PLUS</h4>
+                        <p style="color: var(--text-muted); line-height: 1.6;">
+                            Empowering digital futures through innovative technology solutions, professional training, and comprehensive business services.
+                        </p>
+                    </div>
+                    <div class="footer-col">
+                        <h4>QUICK LINKS</h4>
+                        <a href="#home">Home</a>
+                        <a href="#services">Services</a>
+                        <a href="pages/online-cyber.html">Cyber Services</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>CONTACT US</h4>
+                        <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
+                        <a href="tel:+254113996609">+254 113 996 609</a>
+                        <a href="tel:+254734644917">+254 734 644 917</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>FOLLOW US</h4>
+                        <div style="display: flex; gap: 15px;">
+                            <a href="#" style="font-size: 1.2rem; color: white;"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" style="font-size: 1.2rem; color: white;"><i class="fab fa-twitter"></i></a>
+                            <a href="#" style="font-size: 1.2rem; color: white;"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--glass-border); padding-top: 20px; margin-top: 40px;">
+                    © 2025 BTECH Plus. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="login-box">
+            <button style="position:absolute; top:15px; right:15px; background:none; border:none; color:white; cursor:pointer; font-size:1.5rem;" onclick="closeLogin()">×</button>
+            <h3 style="color: var(--neon-blue); margin-bottom: 20px; text-transform: uppercase;">Staff Access</h3>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <input type="text" class="login-input" placeholder="Staff ID (e.g. BTECH#1)" required>
+                <input type="password" class="login-input" placeholder="Password" required>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                    Login Portal
+                </button>
+            </form>
+            <div id="loginMsg" style="margin-top: 15px; font-size: 0.9rem; color: var(--neon-green);"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- PARTICLE BACKGROUND ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.4)'; ctx.fill(); }
+        }
+        function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach((a, i) => {
+                particles.slice(i+1).forEach(b => {
+                    let d = Math.hypot(a.x-b.x, a.y-b.y);
+                    if(d<150) {
+                        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+                        ctx.strokeStyle = `rgba(0, 245, 255, ${1 - d/150})`; ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => { resize(); init(); });
+        resize(); init(); animate();
+
+        // --- TYPING EFFECT ---
+        const phrases = ['Learn. Innovate. Transform.', 'Your Success, Our Mission', 'Empowering Digital Futures'];
+        let phraseIdx = 0, charIdx = 0, isDeleting = false;
+        const typeEl = document.getElementById('typingText');
+        
+        function type() {
+            let current = phrases[phraseIdx];
+            typeEl.textContent = current.substring(0, isDeleting ? charIdx-- : charIdx++);
+            
+            if(!isDeleting && charIdx === current.length + 1) { isDeleting = true; setTimeout(type, 2000); }
+            else if(isDeleting && charIdx === 0) { isDeleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; setTimeout(type, 500); }
+            else setTimeout(type, isDeleting ? 50 : 100);
+        }
+        type();
+
+        // --- INTERACTIVITY ---
+        function toggleMenu() { document.getElementById('mobileNav').classList.toggle('active'); }
+        function openLogin() { document.getElementById('loginModal').classList.add('active'); }
+        function closeLogin() { document.getElementById('loginModal').classList.remove('active'); }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const msg = document.getElementById('loginMsg');
+            msg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            setTimeout(() => {
+                msg.innerHTML = 'Login Successful! Redirecting...';
+                setTimeout(() => { window.location.href = 'https://btech-earning-api.onrender.com/admin.html'; }, 1000);
+            }, 1500);
+        }
+
+        function downloadApp() {
+            alert("Starting download for BTECH Plus V1.1.apk...");
+            const link = document.createElement('a');
+            link.href = 'https://raw.githubusercontent.com/Btech-ke/btech-website/main/BTECH%20Plus%20V1.1.apk';
+            link.download = 'BTECH Plus V1.1.apk';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
