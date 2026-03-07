@@ -1,0 +1,28 @@
+{
+  "name": "btech-plus-mpesa-backend",
+  "version": "1.0.0",
+  "description": "M-Pesa Daraja API integration for BTECH PLUS e-commerce",
+  "main": "mpesa-backend.js",
+  "scripts": {
+    "start": "node mpesa-backend.js",
+    "dev": "nodemon mpesa-backend.js"
+  },
+  "keywords": [
+    "mpesa",
+    "daraja",
+    "safaricom",
+    "payment",
+    "ecommerce"
+  ],
+  "author": "BTECH PLUS",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
