@@ -1721,19 +1721,32 @@
                 <div class="mpesa-info">
                     <div class="mpesa-logo">
                         <i class="fas fa-mobile-alt"></i>
-                        M-Pesa Payment
+                        M-PESA
                     </div>
-                    <p>Secure payment via M-Pesa sandbox. Enter your M-Pesa registered phone number to complete payment.</p>
+                    <p><strong>Secure Mobile Payment</strong></p>
+                    <p>Enter your M-Pesa registered phone number. You will receive a prompt on your phone to complete payment.</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">M-Pesa Phone Number</label>
-                    <input type="tel" class="form-input" id="mpesaNumber" placeholder="+254712345678" required>
+                    <input type="tel" class="form-input" id="mpesaNumber" placeholder="e.g., 0712345678 or 712345678 or +254712345678" required>
+                    <small style="color: var(--gray-500); margin-top: 0.5rem; display: block;">
+                        Format: 0712345678 (starts with 0), 712345678 (starts with 7), or +254712345678
+                    </small>
                 </div>
 
-                <button class="btn btn-mpesa" onclick="processMpesaPayment()" style="width: 100%; margin-top: 1rem;" id="paymentBtn">
-                    <i class="fas fa-lock"></i> Pay with M-Pesa
+                <button class="btn btn-mpesa" onclick="processMpesaPayment()" style="width: 100%; margin-top: 1.5rem;" id="paymentBtn">
+                    <i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa
                 </button>
+                
+                <div style="background: rgba(50, 181, 132, 0.1); border-left: 4px solid var(--mpesa-green); padding: 1rem; border-radius: var(--radius-md); margin-top: 1.5rem; font-size: 0.85rem; color: var(--gray-600);">
+                    <strong style="color: var(--mpesa-green);">✓ How it works:</strong><br>
+                    1. Enter your M-Pesa phone number<br>
+                    2. Click "Complete Payment"<br>
+                    3. You'll receive a prompt on your phone<br>
+                    4. Enter your M-Pesa PIN to confirm<br>
+                    5. Order complete! Check your email
+                </div>
             </div>
 
             <button class="btn btn-primary" onclick="proceedToCheckout()" style="width: 100%; margin: 1.5rem;" id="checkoutBtn">
@@ -1868,7 +1881,7 @@
                 color: "Black",
                 price: 1500,
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=600&fit=crop",
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect width='500' height='600' fill='%23222'/%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23888' text-anchor='middle' dy='.3em' font-family='Arial'%3EBLACK SHIRT%3C/text%3E%3C/svg%3E",
                 rating: 4.8,
                 reviews: 156,
                 description: "Premium black cotton shirt",
@@ -1881,7 +1894,7 @@
                 color: "White",
                 price: 1500,
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&h=600&fit=crop",
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect width='500' height='600' fill='%23f5f5f5'/%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23aaa' text-anchor='middle' dy='.3em' font-family='Arial'%3EWHITE SHIRT%3C/text%3E%3C/svg%3E",
                 rating: 4.9,
                 reviews: 203,
                 description: "Elegant white premium shirt",
@@ -1894,7 +1907,7 @@
                 color: "Black",
                 price: 1300,
                 sizes: ["S", "M", "L", "XL"],
-                image: "https://images.unsplash.com/photo-1595777712802-c0f72f29a730?w=500&h=600&fit=crop",
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect width='500' height='600' fill='%23111'/%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23666' text-anchor='middle' dy='.3em' font-family='Arial'%3EBLACK PREMIUM%3C/text%3E%3C/svg%3E",
                 rating: 4.7,
                 reviews: 89,
                 description: "Luxury black silk blend",
@@ -1907,7 +1920,7 @@
                 color: "White",
                 price: 1500,
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                image: "https://images.unsplash.com/photo-1597070694607-d2723aa32f00?w=500&h=600&fit=crop",
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect width='500' height='600' fill='%23fff'/%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23bbb' text-anchor='middle' dy='.3em' font-family='Arial'%3EWHITE CLASSIC%3C/text%3E%3C/svg%3E",
                 rating: 4.6,
                 reviews: 134,
                 description: "Comfortable unisex white",
@@ -1920,7 +1933,7 @@
                 color: "Black",
                 price: 1600,
                 sizes: ["M", "L", "XL", "XXL"],
-                image: "https://images.unsplash.com/photo-1542626891-2b94f3e3092d?w=500&h=600&fit=crop",
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect width='500' height='600' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23777' text-anchor='middle' dy='.3em' font-family='Arial'%3EBLACK DELUXE%3C/text%3E%3C/svg%3E",
                 rating: 4.9,
                 reviews: 67,
                 description: "Premium deluxe black",
@@ -1933,7 +1946,7 @@
                 color: "White",
                 price: 1700,
                 sizes: ["S", "M", "L", "XL"],
-                image: "https://images.unsplash.com/photo-1583846821694-a0874de7dee3?w=500&h=600&fit=crop",
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect width='500' height='600' fill='%23fafafa'/%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23ddd' text-anchor='middle' dy='.3em' font-family='Arial'%3EWHITE LUXE%3C/text%3E%3C/svg%3E",
                 rating: 5,
                 reviews: 45,
                 description: "Ultimate luxury white",
@@ -1988,7 +2001,7 @@
                 card.className = "product-card";
                 card.innerHTML = `
                     <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/500x600?text=${encodeURIComponent(product.name)}';">
+                        <img src="${product.image}" alt="${product.name}">
                         <div class="stock-badge ${stockClass}">${stockStatus}</div>
                         <button class="wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}" onclick="toggleWishlistItem(${product.id})">
                             <i class="fas fa-heart"></i>
@@ -2106,7 +2119,7 @@
                 cartItems.innerHTML += `
                     <div class="cart-item">
                         <div class="cart-item-image">
-                            <img src="${item.product.image}" alt="${item.product.name}" onerror="this.src='https://via.placeholder.com/100x120';">
+                            <img src="${item.product.image}" alt="${item.product.name}">
                         </div>
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.product.name}</div>
@@ -2142,7 +2155,7 @@
                 wishlistItems.innerHTML += `
                     <div class="cart-item">
                         <div class="cart-item-image">
-                            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/100x120';">
+                            <img src="${product.image}" alt="${product.name}">
                         </div>
                         <div class="cart-item-info">
                             <div class="cart-item-name">${product.name}</div>
@@ -2258,9 +2271,19 @@
         }
 
         function validatePhoneNumber(phone) {
-            // Validates Kenyan phone numbers
+            // Validates Kenyan phone numbers: +254XXXXXXXXX, 0XXXXXXXXX, or 7XXXXXXXXX
             const cleanPhone = phone.replace(/\D/g, '');
-            return cleanPhone.length === 12 && (cleanPhone.startsWith('254') || cleanPhone.startsWith('0'));
+            
+            // Accept formats:
+            // +254712345678 (12 digits starting with 254)
+            // 0712345678 (10 digits starting with 0)
+            // 712345678 (9 digits starting with 7)
+            
+            if (cleanPhone.length === 12 && cleanPhone.startsWith('254')) return true;
+            if (cleanPhone.length === 10 && cleanPhone.startsWith('0')) return true;
+            if (cleanPhone.length === 9 && cleanPhone.startsWith('7')) return true;
+            
+            return false;
         }
 
         function processMpesaPayment() {
