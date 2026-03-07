@@ -18,6 +18,7 @@
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
+            --mpesa-green: #32B584;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -296,7 +297,7 @@
             left: -5%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            background: radial-gradient(circle, rgba(50, 181, 132, 0.1), transparent);
             border-radius: 50%;
             animation: float 8s ease-in-out infinite reverse;
         }
@@ -315,14 +316,14 @@
 
         .hero-tag {
             display: inline-block;
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--accent-light);
+            background: rgba(50, 181, 132, 0.2);
+            color: #32B584;
             padding: 0.5rem 1.25rem;
             border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            border: 1px solid rgba(59, 130, 246, 0.5);
+            border: 1px solid rgba(50, 181, 132, 0.5);
         }
 
         .hero h1 {
@@ -433,15 +434,15 @@
             transform: translateY(-2px);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, var(--success-color), #059669);
+        .btn-mpesa {
+            background: linear-gradient(135deg, var(--mpesa-green), #229868);
             color: white;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 10px 25px rgba(50, 181, 132, 0.2);
         }
 
-        .btn-success:hover {
+        .btn-mpesa:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 15px 35px rgba(50, 181, 132, 0.3);
         }
 
         .btn-outline {
@@ -1030,40 +1031,31 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .payment-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 1rem;
+        .mpesa-info {
+            background: linear-gradient(135deg, rgba(50, 181, 132, 0.1), rgba(50, 181, 132, 0.05));
+            border-left: 4px solid var(--mpesa-green);
+            padding: 1rem;
+            border-radius: var(--radius-md);
             margin-bottom: 1.5rem;
         }
 
-        .payment-method {
-            padding: 1rem;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .payment-method:hover {
-            border-color: var(--accent-color);
-            background: var(--gray-50);
-        }
-
-        .payment-method.active {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .payment-method i {
-            display: block;
-            font-size: 1.5rem;
+        .mpesa-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--mpesa-green);
+        }
+
+        .mpesa-logo i {
+            font-size: 1.5rem;
+        }
+
+        .mpesa-info p {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin: 0;
         }
 
         /* ═════════════════════════════════════════════════════ NOTIFICATIONS ═════════════════════════════════════════════════════ */
@@ -1102,6 +1094,10 @@
 
         .notification.info {
             background: linear-gradient(135deg, var(--accent-color), var(--accent-dark));
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
         }
 
         /* ═════════════════════════════════════════════════════ ACCOUNT SECTION ═════════════════════════════════════════════════════ */
@@ -1182,12 +1178,12 @@
             color: #92400e;
         }
 
-        .order-status.shipped {
+        .order-status.processing {
             background: #bfdbfe;
             color: #1e3a8a;
         }
 
-        .order-status.delivered {
+        .order-status.completed {
             background: #d1fae5;
             color: #065f46;
         }
@@ -1238,6 +1234,26 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
+        }
+
+        /* ═════════════════════════════════════════════════════ LOADING STATE ═════════════════════════════════════════════════════ */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         /* ═════════════════════════════════════════════════════ RESPONSIVE DESIGN ═════════════════════════════════════════════════════ */
@@ -1577,7 +1593,7 @@
                     <button class="btn btn-primary" onclick="document.querySelector('.filters-section').scrollIntoView()">
                         <i class="fas fa-shopping-bag"></i> Shop Now
                     </button>
-                    <button class="btn btn-secondary" onclick="alert('Features coming soon!')">
+                    <button class="btn btn-secondary" onclick="alert('Premium apparel engineered in Nairobi, Kenya with international quality standards.')">
                         <i class="fas fa-info-circle"></i> Learn More
                     </button>
                 </div>
@@ -1661,7 +1677,7 @@
                 </div>
                 <div class="summary-row">
                     <span>Delivery:</span>
-                    <span id="delivery">KES 100</span>
+                    <span id="delivery">KES 200</span>
                 </div>
                 <div class="summary-row">
                     <span>Tax (16%):</span>
@@ -1680,12 +1696,12 @@
                     <input type="text" class="form-input" id="fullName" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Email</label>
+                    <label class="form-label">Email Address</label>
                     <input type="email" class="form-input" id="email" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Phone Number</label>
-                    <input type="tel" class="form-input" id="phone" placeholder="+254*********" required>
+                    <input type="tel" class="form-input" id="phone" placeholder="+254712345678" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Delivery Address</label>
@@ -1701,30 +1717,22 @@
                 </div>
 
                 <h3 style="margin: 1.75rem 0 1rem; font-weight: 800;">Payment Method</h3>
-                <div class="payment-methods">
-                    <div class="payment-method active" data-method="mpesa" onclick="selectPayment('mpesa')">
+                
+                <div class="mpesa-info">
+                    <div class="mpesa-logo">
                         <i class="fas fa-mobile-alt"></i>
-                        M-Pesa
+                        M-Pesa Payment
                     </div>
-                    <div class="payment-method" data-method="card" onclick="selectPayment('card')">
-                        <i class="fas fa-credit-card"></i>
-                        Card
-                    </div>
-                    <div class="payment-method" data-method="bank" onclick="selectPayment('bank')">
-                        <i class="fas fa-university"></i>
-                        Bank
-                    </div>
+                    <p>Secure payment via M-Pesa sandbox. Enter your M-Pesa registered phone number to complete payment.</p>
                 </div>
 
-                <div id="mpesaPayment">
-                    <div class="form-group">
-                        <label class="form-label">M-Pesa Phone Number</label>
-                        <input type="tel" class="form-input" id="mpesaNumber" placeholder="+254712345678" required>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">M-Pesa Phone Number</label>
+                    <input type="tel" class="form-input" id="mpesaNumber" placeholder="+254712345678" required>
                 </div>
 
-                <button class="btn btn-success" onclick="processPayment()" style="width: 100%; margin-top: 1rem;">
-                    <i class="fas fa-lock"></i> Complete Purchase
+                <button class="btn btn-mpesa" onclick="processMpesaPayment()" style="width: 100%; margin-top: 1rem;" id="paymentBtn">
+                    <i class="fas fa-lock"></i> Pay with M-Pesa
                 </button>
             </div>
 
@@ -1795,7 +1803,7 @@
                     <input type="checkbox" id="newsletter" style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
                     <label for="newsletter" style="cursor: pointer; margin: 0; font-weight: 500;">Subscribe to Newsletter</label>
                 </div>
-                <button class="btn btn-success" style="width: 100%; margin-bottom: 0.75rem;">Save Settings</button>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.75rem;">Save Settings</button>
                 <button class="btn" style="width: 100%; background: var(--danger-color); color: white; border: none;">Logout</button>
             </div>
         </div>
@@ -1849,7 +1857,9 @@
     </footer>
 
     <script>
-        // Products Database - CORRECTED IMAGE PATHS FOR GITHUB
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // PRODUCTS DATABASE
+        // ═══════════════════════════════════════════════════════════════════════════════════
         const products = [
             {
                 id: 1,
@@ -1858,7 +1868,7 @@
                 color: "Black",
                 price: 1500,
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                image: "https://raw.githubusercontent.com/Btech-ke/btech-website/main/images/black-shirt.jpg",
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=600&fit=crop",
                 rating: 4.8,
                 reviews: 156,
                 description: "Premium black cotton shirt",
@@ -1871,7 +1881,7 @@
                 color: "White",
                 price: 1500,
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                image: "https://raw.githubusercontent.com/Btech-ke/btech-website/main/images/white-shirt.jpg",
+                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&h=600&fit=crop",
                 rating: 4.9,
                 reviews: 203,
                 description: "Elegant white premium shirt",
@@ -1884,7 +1894,7 @@
                 color: "Black",
                 price: 1300,
                 sizes: ["S", "M", "L", "XL"],
-                image: "https://raw.githubusercontent.com/Btech-ke/btech-website/main/images/black-premium.jpg",
+                image: "https://images.unsplash.com/photo-1595777712802-c0f72f29a730?w=500&h=600&fit=crop",
                 rating: 4.7,
                 reviews: 89,
                 description: "Luxury black silk blend",
@@ -1897,7 +1907,7 @@
                 color: "White",
                 price: 1500,
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                image: "https://raw.githubusercontent.com/Btech-ke/btech-website/main/images/white-classic.jpg",
+                image: "https://images.unsplash.com/photo-1597070694607-d2723aa32f00?w=500&h=600&fit=crop",
                 rating: 4.6,
                 reviews: 134,
                 description: "Comfortable unisex white",
@@ -1910,7 +1920,7 @@
                 color: "Black",
                 price: 1600,
                 sizes: ["M", "L", "XL", "XXL"],
-                image: "https://raw.githubusercontent.com/Btech-ke/btech-website/main/images/black-deluxe.jpg",
+                image: "https://images.unsplash.com/photo-1542626891-2b94f3e3092d?w=500&h=600&fit=crop",
                 rating: 4.9,
                 reviews: 67,
                 description: "Premium deluxe black",
@@ -1923,7 +1933,7 @@
                 color: "White",
                 price: 1700,
                 sizes: ["S", "M", "L", "XL"],
-                image: "https://raw.githubusercontent.com/Btech-ke/btech-website/main/images/white-deluxe.jpg",
+                image: "https://images.unsplash.com/photo-1583846821694-a0874de7dee3?w=500&h=600&fit=crop",
                 rating: 5,
                 reviews: 45,
                 description: "Ultimate luxury white",
@@ -1935,12 +1945,14 @@
         let wishlist = [];
         let selectedSizes = {};
 
-        // Update Price Display
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // INITIALIZATION & EVENT LISTENERS
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         document.getElementById('priceRange').addEventListener('input', function() {
             document.getElementById('priceValue').textContent = this.value;
         });
 
-        // Header Scroll Effect
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');
             if (window.scrollY > 100) {
@@ -1950,7 +1962,20 @@
             }
         });
 
-        // Render Products
+        window.addEventListener('click', function(e) {
+            const cartModal = document.getElementById('cartModal');
+            const wishlistModal = document.getElementById('wishlistModal');
+            const accountModal = document.getElementById('accountModal');
+            
+            if (e.target === cartModal) toggleCart();
+            if (e.target === wishlistModal) toggleWishlist();
+            if (e.target === accountModal) toggleAccount();
+        });
+
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // PRODUCT RENDERING & MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         function renderProducts(productsToRender = products) {
             const grid = document.getElementById("productsGrid");
             grid.innerHTML = "";
@@ -1963,7 +1988,7 @@
                 card.className = "product-card";
                 card.innerHTML = `
                     <div class="product-image">
-                        <img src="${product.image}" onerror="this.style.background='linear-gradient(135deg, var(--gray-100), var(--gray-200))'; this.style.display='none';" alt="${product.name}">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/500x600?text=${encodeURIComponent(product.name)}';">
                         <div class="stock-badge ${stockClass}">${stockStatus}</div>
                         <button class="wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}" onclick="toggleWishlistItem(${product.id})">
                             <i class="fas fa-heart"></i>
@@ -1998,7 +2023,6 @@
             });
         }
 
-        // Product Interactions
         function selectSize(productId, size) {
             selectedSizes[productId] = size;
             renderProducts(getCurrentFilteredProducts());
@@ -2018,6 +2042,11 @@
             const product = products.find(p => p.id === productId);
             const quantity = parseInt(document.getElementById(`qty-${productId}`).value);
             const size = selectedSizes[productId] || product.sizes[0];
+
+            if (product.stock <= 0) {
+                showNotification("Sorry, this product is out of stock", "error");
+                return;
+            }
 
             cart.push({
                 id: Date.now(),
@@ -2051,7 +2080,10 @@
             renderWishlist();
         }
 
-        // Cart Management
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // CART MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         function updateCartBadge() {
             const badge = document.getElementById("cartBadge");
             const count = cart.length;
@@ -2074,7 +2106,7 @@
                 cartItems.innerHTML += `
                     <div class="cart-item">
                         <div class="cart-item-image">
-                            <img src="${item.product.image}" onerror="this.style.background='linear-gradient(135deg, var(--gray-100), var(--gray-200))'; this.style.display='none';" alt="${item.product.name}">
+                            <img src="${item.product.image}" alt="${item.product.name}" onerror="this.src='https://via.placeholder.com/100x120';">
                         </div>
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.product.name}</div>
@@ -2087,7 +2119,7 @@
             });
 
             const delivery = 200;
-            const tax = Math.round(subtotal * 0.00);
+            const tax = Math.round(subtotal * 0.16);
             const total = subtotal + delivery + tax;
 
             document.getElementById("subtotal").innerText = `KES ${subtotal.toLocaleString()}`;
@@ -2110,7 +2142,7 @@
                 wishlistItems.innerHTML += `
                     <div class="cart-item">
                         <div class="cart-item-image">
-                            <img src="${product.image}" onerror="this.style.background='linear-gradient(135deg, var(--gray-100), var(--gray-200))'; this.style.display='none';" alt="${product.name}">
+                            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/100x120';">
                         </div>
                         <div class="cart-item-info">
                             <div class="cart-item-name">${product.name}</div>
@@ -2126,7 +2158,10 @@
             document.getElementById("wishlistBadge").style.display = "flex";
         }
 
-        // Filtering & Sorting
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // FILTERING & SEARCHING
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         function getCurrentFilteredProducts() {
             let filtered = [...products];
 
@@ -2174,7 +2209,10 @@
             renderProducts(filtered);
         }
 
-        // Modal Management
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // MODAL MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         function toggleCart() {
             const modal = document.getElementById("cartModal");
             modal.classList.toggle("active");
@@ -2206,7 +2244,10 @@
             document.getElementById(tab).classList.add("active");
         }
 
-        // Checkout
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // CHECKOUT & PAYMENT PROCESSING
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         function proceedToCheckout() {
             if (cart.length === 0) {
                 showNotification("Add items to cart first!", "error");
@@ -2216,53 +2257,147 @@
             document.getElementById("checkoutBtn").style.display = "none";
         }
 
-        function selectPayment(method) {
-            document.querySelectorAll(".payment-method").forEach(m => m.classList.remove("active"));
-            document.querySelector(`[data-method="${method}"]`).classList.add("active");
-
-            const mpesaSection = document.getElementById("mpesaPayment");
-            mpesaSection.style.display = method === "mpesa" ? "block" : "none";
+        function validatePhoneNumber(phone) {
+            // Validates Kenyan phone numbers
+            const cleanPhone = phone.replace(/\D/g, '');
+            return cleanPhone.length === 12 && (cleanPhone.startsWith('254') || cleanPhone.startsWith('0'));
         }
 
-        function processPayment() {
-            const fullName = document.getElementById("fullName").value;
-            const email = document.getElementById("email").value;
-            const phone = document.getElementById("phone").value;
-            const address = document.getElementById("address").value;
-            const city = document.getElementById("city").value;
+        function processMpesaPayment() {
+            const fullName = document.getElementById("fullName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const mpesaNumber = document.getElementById("mpesaNumber").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const city = document.getElementById("city").value.trim();
 
             if (!fullName || !email || !phone || !address || !city) {
                 showNotification("Please fill in all required fields", "error");
                 return;
             }
 
-            const total = document.getElementById("total").innerText;
-            showNotification(`Order placed successfully! Confirmation sent to ${email}`, "success");
+            if (!validatePhoneNumber(phone)) {
+                showNotification("Please enter a valid Kenyan phone number", "error");
+                return;
+            }
 
+            if (!validatePhoneNumber(mpesaNumber)) {
+                showNotification("Please enter a valid M-Pesa registered phone number", "error");
+                return;
+            }
+
+            const paymentBtn = document.getElementById("paymentBtn");
+            paymentBtn.disabled = true;
+            paymentBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+
+            // Simulate M-Pesa payment processing
+            setTimeout(() => {
+                completePurchase(fullName, email, phone, address, city, mpesaNumber);
+                paymentBtn.disabled = false;
+                paymentBtn.innerHTML = '<i class="fas fa-lock"></i> Pay with M-Pesa';
+            }, 2000);
+        }
+
+        function completePurchase(fullName, email, phone, address, city, mpesaNumber) {
+            const total = document.getElementById("total").innerText;
+            const subtotal = document.getElementById("subtotal").innerText;
+            
+            // Create order
             const orderId = "ORD-" + Date.now();
             const order = {
                 id: orderId,
                 date: new Date().toLocaleDateString(),
                 items: cart.length,
                 total: total,
-                status: "pending"
+                status: "processing",
+                customerName: fullName,
+                customerEmail: email,
+                customerPhone: phone,
+                mpesaPhone: mpesaNumber,
+                address: address,
+                city: city,
+                products: cart.map(item => ({
+                    name: item.product.name,
+                    size: item.size,
+                    quantity: item.quantity,
+                    price: item.product.price
+                }))
             };
 
+            // Save to localStorage
             const orders = JSON.parse(localStorage.getItem("orders") || "[]");
             orders.push(order);
             localStorage.setItem("orders", JSON.stringify(orders));
 
+            // Send email via Formspree
+            sendOrderEmail(order);
+
+            // Show success notification
+            showNotification(`Order ${orderId} placed successfully! Check your email for confirmation.`, "success");
+
+            // Reset form and cart
             cart = [];
             updateCartBadge();
-            toggleCart();
-
+            
             document.getElementById("fullName").value = "";
             document.getElementById("email").value = "";
             document.getElementById("phone").value = "";
             document.getElementById("address").value = "";
             document.getElementById("city").value = "";
+            document.getElementById("postalCode").value = "";
+            document.getElementById("mpesaNumber").value = "";
+            
             document.getElementById("checkoutSection").classList.remove("active");
             document.getElementById("checkoutBtn").style.display = "block";
+            
+            toggleCart();
+        }
+
+        function sendOrderEmail(order) {
+            const formData = new FormData();
+            formData.append('email', order.customerEmail);
+            formData.append('name', order.customerName);
+            
+            const emailContent = `
+ORDER CONFIRMATION - BTECH PLUS
+
+Order ID: ${order.id}
+Date: ${order.date}
+Customer: ${order.customerName}
+Phone: ${order.customerPhone}
+Delivery Address: ${order.address}, ${order.city}
+
+ITEMS:
+${order.products.map(p => `- ${p.name} (Size: ${p.size}) x${p.quantity} - KES ${(p.price * p.quantity).toLocaleString()}`).join('\n')}
+
+Total: ${order.total}
+Status: ${order.status.toUpperCase()}
+
+Thank you for your purchase! Your order will be processed and delivered soon.
+
+M-Pesa Payment: Sent to ${order.mpesaPhone}
+
+Best regards,
+BTECH PLUS Team
+Nairobi, Kenya
+            `;
+            
+            formData.append('message', emailContent);
+
+            // Send to Formspree
+            fetch("https://formspree.io/f/mjgavnar", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Email sent successfully');
+                }
+            })
+            .catch(error => console.log('Email service note:', error));
         }
 
         function loadOrders() {
@@ -2276,12 +2411,7 @@
             }
 
             orders.reverse().forEach(order => {
-                const statusClass = {
-                    "pending": "pending",
-                    "shipped": "shipped",
-                    "delivered": "delivered"
-                }[order.status] || "pending";
-
+                const statusClass = order.status || "pending";
                 ordersList.innerHTML += `
                     <div class="order-card">
                         <div class="order-header">
@@ -2302,7 +2432,7 @@
                                 <div style="font-weight: 700; color: var(--accent-color); margin-top: 0.25rem;">${order.total}</div>
                             </div>
                             <div style="text-align: right;">
-                                <button class="btn btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">Track Order</button>
+                                <button class="btn btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">View Details</button>
                             </div>
                         </div>
                     </div>
@@ -2310,11 +2440,20 @@
             });
         }
 
-        // Notifications
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // NOTIFICATIONS
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         function showNotification(message, type = "info") {
             const notification = document.createElement("div");
             notification.className = `notification ${type}`;
-            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i> ${message}`;
+            const icons = {
+                success: 'check-circle',
+                error: 'times-circle',
+                info: 'info-circle',
+                warning: 'exclamation-circle'
+            };
+            notification.innerHTML = `<i class="fas fa-${icons[type]}"></i> ${message}`;
             document.body.appendChild(notification);
 
             setTimeout(() => {
@@ -2322,7 +2461,10 @@
             }, 3500);
         }
 
-        // Initialize
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
         renderProducts();
     </script>
 </body>
