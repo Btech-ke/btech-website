@@ -988,6 +988,8 @@
         .checkout-section {
             padding: 1.5rem;
             display: none;
+            max-height: calc(85vh - 250px);
+            overflow-y: auto;
         }
 
         .checkout-section.active {
@@ -1871,6 +1873,11 @@
 
     <script>
         // ═══════════════════════════════════════════════════════════════════════════════════
+        // CONFIGURATION
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        const BACKEND_URL = 'http://localhost:3000'; // Change this when deploying
+
+        // ═══════════════════════════════════════════════════════════════════════════════════
         // PRODUCTS DATABASE
         // ═══════════════════════════════════════════════════════════════════════════════════
         const products = [
@@ -2258,7 +2265,7 @@
         }
 
         // ═══════════════════════════════════════════════════════════════════════════════════
-        // CHECKOUT & PAYMENT PROCESSING
+        // M-PESA PAYMENT INTEGRATION
         // ═══════════════════════════════════════════════════════════════════════════════════
 
         function proceedToCheckout() {
@@ -2271,22 +2278,14 @@
         }
 
         function validatePhoneNumber(phone) {
-            // Validates Kenyan phone numbers: +254XXXXXXXXX, 0XXXXXXXXX, or 7XXXXXXXXX
             const cleanPhone = phone.replace(/\D/g, '');
-            
-            // Accept formats:
-            // +254712345678 (12 digits starting with 254)
-            // 0712345678 (10 digits starting with 0)
-            // 712345678 (9 digits starting with 7)
-            
             if (cleanPhone.length === 12 && cleanPhone.startsWith('254')) return true;
             if (cleanPhone.length === 10 && cleanPhone.startsWith('0')) return true;
             if (cleanPhone.length === 9 && cleanPhone.startsWith('7')) return true;
-            
             return false;
         }
 
-        function processMpesaPayment() {
+        async function processMpesaPayment() {
             const fullName = document.getElementById("fullName").value.trim();
             const email = document.getElementById("email").value.trim();
             const phone = document.getElementById("phone").value.trim();
@@ -2294,6 +2293,7 @@
             const address = document.getElementById("address").value.trim();
             const city = document.getElementById("city").value.trim();
 
+            // Validation
             if (!fullName || !email || !phone || !address || !city) {
                 showNotification("Please fill in all required fields", "error");
                 return;
@@ -2305,34 +2305,71 @@
             }
 
             if (!validatePhoneNumber(mpesaNumber)) {
-                showNotification("Please enter a valid M-Pesa registered phone number", "error");
+                showNotification("Please enter a valid M-Pesa phone number", "error");
                 return;
             }
 
+            // Disable button and show loading
             const paymentBtn = document.getElementById("paymentBtn");
             paymentBtn.disabled = true;
-            paymentBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+            paymentBtn.innerHTML = '<span class="loading-spinner"></span> Processing M-Pesa...';
 
-            // Simulate M-Pesa payment processing
-            setTimeout(() => {
-                completePurchase(fullName, email, phone, address, city, mpesaNumber);
+            try {
+                // Get cart total
+                const totalText = document.getElementById("total").innerText;
+                const total = parseInt(totalText.replace(/\D/g, ''));
+                const orderId = "ORD-" + Date.now();
+
+                // Call backend to initiate STK push
+                const response = await fetch(`${BACKEND_URL}/api/initiate-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: mpesaNumber,
+                        amount: total,
+                        orderId: orderId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification("✓ M-Pesa prompt sent! Check your phone", "success");
+                    
+                    // Save order details
+                    saveOrderDetails(fullName, email, phone, address, city, mpesaNumber, orderId, total);
+                    
+                    // Start polling for payment status
+                    pollPaymentStatus(data.checkoutRequestID, orderId);
+                    
+                    // Reset form after 3 seconds
+                    setTimeout(() => {
+                        resetCheckoutForm();
+                        paymentBtn.disabled = false;
+                        paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
+                    }, 3000);
+                } else {
+                    showNotification("Failed: " + (data.message || "Unknown error"), "error");
+                    paymentBtn.disabled = false;
+                    paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                showNotification("Error: Make sure backend server is running on " + BACKEND_URL, "error");
                 paymentBtn.disabled = false;
-                paymentBtn.innerHTML = '<i class="fas fa-lock"></i> Pay with M-Pesa';
-            }, 2000);
+                paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
+            }
         }
 
-        function completePurchase(fullName, email, phone, address, city, mpesaNumber) {
-            const total = document.getElementById("total").innerText;
-            const subtotal = document.getElementById("subtotal").innerText;
-            
-            // Create order
-            const orderId = "ORD-" + Date.now();
+        function saveOrderDetails(fullName, email, phone, address, city, mpesaNumber, orderId, total) {
             const order = {
                 id: orderId,
                 date: new Date().toLocaleDateString(),
                 items: cart.length,
-                total: total,
-                status: "processing",
+                total: `KES ${total.toLocaleString()}`,
+                status: "pending",
                 customerName: fullName,
                 customerEmail: email,
                 customerPhone: phone,
@@ -2347,21 +2384,50 @@
                 }))
             };
 
-            // Save to localStorage
             const orders = JSON.parse(localStorage.getItem("orders") || "[]");
             orders.push(order);
             localStorage.setItem("orders", JSON.stringify(orders));
 
-            // Send email via Formspree
-            sendOrderEmail(order);
-
-            // Show success notification
-            showNotification(`Order ${orderId} placed successfully! Check your email for confirmation.`, "success");
-
-            // Reset form and cart
+            // Clear cart
             cart = [];
             updateCartBadge();
-            
+        }
+
+        function pollPaymentStatus(checkoutRequestID, orderId) {
+            let attempts = 0;
+            const maxAttempts = 30; // Poll for 5 minutes (10 seconds * 30)
+
+            const pollInterval = setInterval(async () => {
+                attempts++;
+
+                try {
+                    const response = await fetch(`${BACKEND_URL}/api/query-payment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            checkoutRequestID: checkoutRequestID
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        clearInterval(pollInterval);
+                        showNotification(`✓ Payment successful! Order ${orderId} confirmed`, "success");
+                    }
+                } catch (error) {
+                    console.log('Status check:', error.message);
+                }
+
+                if (attempts >= maxAttempts) {
+                    clearInterval(pollInterval);
+                }
+            }, 10000); // Poll every 10 seconds
+        }
+
+        function resetCheckoutForm() {
             document.getElementById("fullName").value = "";
             document.getElementById("email").value = "";
             document.getElementById("phone").value = "";
@@ -2369,58 +2435,9 @@
             document.getElementById("city").value = "";
             document.getElementById("postalCode").value = "";
             document.getElementById("mpesaNumber").value = "";
-            
             document.getElementById("checkoutSection").classList.remove("active");
             document.getElementById("checkoutBtn").style.display = "block";
-            
             toggleCart();
-        }
-
-        function sendOrderEmail(order) {
-            const formData = new FormData();
-            formData.append('email', order.customerEmail);
-            formData.append('name', order.customerName);
-            
-            const emailContent = `
-ORDER CONFIRMATION - BTECH PLUS
-
-Order ID: ${order.id}
-Date: ${order.date}
-Customer: ${order.customerName}
-Phone: ${order.customerPhone}
-Delivery Address: ${order.address}, ${order.city}
-
-ITEMS:
-${order.products.map(p => `- ${p.name} (Size: ${p.size}) x${p.quantity} - KES ${(p.price * p.quantity).toLocaleString()}`).join('\n')}
-
-Total: ${order.total}
-Status: ${order.status.toUpperCase()}
-
-Thank you for your purchase! Your order will be processed and delivered soon.
-
-M-Pesa Payment: Sent to ${order.mpesaPhone}
-
-Best regards,
-BTECH PLUS Team
-Nairobi, Kenya
-            `;
-            
-            formData.append('message', emailContent);
-
-            // Send to Formspree
-            fetch("https://formspree.io/f/mjgavnar", {
-                method: "POST",
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Email sent successfully');
-                }
-            })
-            .catch(error => console.log('Email service note:', error));
         }
 
         function loadOrders() {
@@ -2492,5 +2509,3 @@ Nairobi, Kenya
     </script>
 </body>
 </html>
-
-
