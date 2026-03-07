@@ -1677,7 +1677,7 @@
                 </div>
                 <div class="summary-row">
                     <span>Delivery:</span>
-                    <span id="delivery">KES 200</span>
+                    <span id="delivery">KES 100</span>
                 </div>
                 <div class="summary-row">
                     <span>Tax (16%):</span>
@@ -2131,8 +2131,8 @@
                 `;
             });
 
-            const delivery = 200;
-            const tax = Math.round(subtotal * 0.16);
+            const delivery = 100;
+            const tax = Math.round(subtotal * 0.00);
             const total = subtotal + delivery + tax;
 
             document.getElementById("subtotal").innerText = `KES ${subtotal.toLocaleString()}`;
@@ -2492,4 +2492,5 @@ Nairobi, Kenya
     </script>
 </body>
 </html>
+
 
