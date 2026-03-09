@@ -439,8 +439,8 @@
         <div class="cart-items" id="cartItems"></div>
         <div class="cart-summary" id="cartSummary">
             <div class="summary-row"><span>Subtotal:</span><span id="subtotal">KES 0</span></div>
-            <div class="summary-row"><span>Delivery:</span><span id="delivery">KES 100</span></div>
-            <div class="summary-row"><span>Tax (16% VAT):</span><span id="tax">KES 0</span></div>
+            <div class="summary-row"><span>Delivery:</span><span id="delivery">KES 0</span></div>
+            <div class="summary-row"><span>Tax :</span><span id="tax">KES 0</span></div>
             <div class="summary-row summary-total"><span>Total:</span><span id="total">KES 0</span></div>
         </div>
 
@@ -573,7 +573,7 @@ const BACKEND_URL = 'https://btechplus-backend-mpesa.onrender.com';
 // PRODUCTS DATABASE
 // ═══════════════════════════════════════════════════
 const products = [
-    { id: 1, name: "Black Edition Classic",  category: "men",    color: "Black", price: 1200, sizes: ["S","M","L","XL","XXL"], image: "images/black-shirt.jpg",   rating: 4.8, reviews: 156, description: "Premium black cotton shirt",      stock: 25 },
+    { id: 1, name: "Black Edition Classic",  category: "men",    color: "Black", price: 10, sizes: ["S","M","L","XL","XXL"], image: "images/black-shirt.jpg",   rating: 4.8, reviews: 156, description: "Premium black cotton shirt",      stock: 25 },
     { id: 2, name: "White Edition Premium",  category: "women",  color: "White", price: 1500, sizes: ["S","M","L","XL","XXL"], image: "images/white-shirt.jpg",   rating: 4.9, reviews: 203, description: "Elegant white premium shirt",    stock: 18 },
     { id: 3, name: "Black Edition Premium",  category: "women",  color: "Black", price: 1300, sizes: ["S","M","L","XL"],       image: "images/black-premium.jpg", rating: 4.7, reviews: 89,  description: "Luxury black silk blend",        stock: 12 },
     { id: 4, name: "White Edition Classic",  category: "unisex", color: "White", price: 1500, sizes: ["S","M","L","XL","XXL"], image: "images/white-classic.jpg", rating: 4.6, reviews: 134, description: "Comfortable unisex white",       stock: 30 },
@@ -1135,3 +1135,4 @@ renderProducts();
 </script>
 </body>
 </html>
+
