@@ -2265,229 +2265,254 @@
         }
 
         
-
-        // ═══════════════════════════════════════════════════════════════════════════════════
-// UPGRADED M-PESA PAYMENT INTEGRATION (COMPLETE & PROFESSIONAL)
 // ═══════════════════════════════════════════════════════════════════════════════════
+        // M-PESA PAYMENT INTEGRATION
+        // ═══════════════════════════════════════════════════════════════════════════════════
 
-/**
- * Generates a Professional Order ID like BtechplusA13
- */
-function generateBtechOrderID() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
-    const randomNum = Math.floor(10 + Math.random() * 90);
-    return `Btechplus${randomChar}${randomNum}`;
-}
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                showNotification("Add items to cart first!", "error");
+                return;
+            }
+            document.getElementById("checkoutSection").classList.add("active");
+            document.getElementById("checkoutBtn").style.display = "none";
+        }
 
-/**
- * Validates Kenyan Phone Numbers
- */
-function validatePhoneNumber(phone) {
-    const cleanPhone = phone.replace(/\D/g, '');
-    return (
-        (cleanPhone.length === 12 && cleanPhone.startsWith('254')) ||
-        (cleanPhone.length === 10 && cleanPhone.startsWith('0')) ||
-        (cleanPhone.length === 9 && cleanPhone.startsWith('7'))
-    );
-}
+        function validatePhoneNumber(phone) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            if (cleanPhone.length === 12 && cleanPhone.startsWith('254')) return true;
+            if (cleanPhone.length === 10 && cleanPhone.startsWith('0')) return true;
+            if (cleanPhone.length === 9 && cleanPhone.startsWith('7')) return true;
+            return false;
+        }
 
-/**
- * Handles the Entire Payment Process
- */
-async function processMpesaPayment() {
-    // 1. Capture All Form Data
-    const fullName = document.getElementById("fullName").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const mpesaNumber = document.getElementById("mpesaNumber").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const city = document.getElementById("city").value.trim();
-    
-    // 2. Capture Cart Data
-    const totalText = document.getElementById("total").innerText;
-    const total = parseInt(totalText.replace(/\D/g, ''));
-    const shirtType = cart.length > 0 ? cart[0].product.name : "BTECH Branded Shirt";
-    
-    // 3. Generate Professional Order ID
-    const customOrderID = generateBtechOrderID();
+        async function processMpesaPayment() {
+            const fullName = document.getElementById("fullName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const mpesaNumber = document.getElementById("mpesaNumber").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const city = document.getElementById("city").value.trim();
 
-    // 4. Detailed Validation
-    if (!fullName || !email || !phone || !address || !city || !mpesaNumber) {
-        showNotification("All delivery and payment fields are required!", "error");
-        return;
-    }
+            // Validation
+            if (!fullName || !email || !phone || !address || !city) {
+                showNotification("Please fill in all required fields", "error");
+                return;
+            }
 
-    if (!validatePhoneNumber(mpesaNumber)) {
-        showNotification("Please enter a valid M-Pesa number (07... or 254...)", "error");
-        return;
-    }
+            if (!validatePhoneNumber(phone)) {
+                showNotification("Please enter a valid Kenyan phone number", "error");
+                return;
+            }
 
-    // 5. UI Loading State
-    const paymentBtn = document.getElementById("paymentBtn");
-    paymentBtn.disabled = true;
-    paymentBtn.innerHTML = '<span class="loading-spinner"></span> ENCRYPTING TRANSACTION...';
+            if (!validatePhoneNumber(mpesaNumber)) {
+                showNotification("Please enter a valid M-Pesa phone number", "error");
+                return;
+            }
 
-    try {
-        // 6. Call Backend on Render
-        const response = await fetch(`${BACKEND_URL}/api/initiate-payment`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                phone: mpesaNumber,
-                amount: total,
-                orderId: customOrderID,
-                fullName: fullName,
-                shirtType: shirtType,
-                deliveryAddress: `${address}, ${city}`
-            })
-        });
+            // Disable button and show loading
+            const paymentBtn = document.getElementById("paymentBtn");
+            paymentBtn.disabled = true;
+            paymentBtn.innerHTML = '<span class="loading-spinner"></span> Processing M-Pesa...';
 
-        const data = await response.json();
+            try {
+                // Get cart total
+                const totalText = document.getElementById("total").innerText;
+                const total = parseInt(totalText.replace(/\D/g, ''));
+                const orderId = "ORD-" + Date.now();
 
-        if (data.success) {
-            showNotification("Prompt Sent! Check your phone to enter M-Pesa PIN", "success");
-            paymentBtn.innerHTML = '<span class="loading-spinner"></span> WAITING FOR PIN...';
-            
-            // 7. Save Order Locally for the User
-            saveOrderDetails(fullName, email, phone, address, city, mpesaNumber, customOrderID, total);
-            
-            // 8. Start Polling the Database for the PAID status
-            pollPaymentStatus(customOrderID);
-        } else {
-            throw new Error(data.message || "Gateway rejection");
-        }
-    } catch (error) {
-        console.error('Payment error:', error);
-        showNotification("M-Pesa Gateway Error. Please try again.", "error");
-        paymentBtn.disabled = false;
-        paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
-    }
-}
+                // Call backend to initiate STK push
+                const response = await fetch(`${BACKEND_URL}/api/initiate-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: mpesaNumber,
+                        amount: total,
+                        orderId: orderId
+                    })
+                });
 
-/**
- * Polls the Admin Route to detect when status changes to 'PAID'
- */
-function pollPaymentStatus(orderId) {
-    let attempts = 0;
-    const maxAttempts = 25; // Check for ~4 minutes
-    const adminPass = sessionStorage.getItem('admin_pass') || 'BtechAdmin2026!'; // Use your set pass
+                const data = await response.json();
 
-    const pollInterval = setInterval(async () => {
-        attempts++;
-        try {
-            const response = await fetch(`${BACKEND_URL}/api/admin/orders`, {
-                headers: { 'x-admin-password': adminPass }
-            });
-            const orders = await response.json();
-            const myOrder = orders.find(o => o.order_id === orderId);
+                if (data.success) {
+                    showNotification("✓ M-Pesa prompt sent! Check your phone", "success");
+                    
+                    // Save order details
+                    saveOrderDetails(fullName, email, phone, address, city, mpesaNumber, orderId, total);
+                    
+                    // Start polling for payment status
+                    pollPaymentStatus(data.checkoutRequestID, orderId);
+                    
+                    // Reset form after 3 seconds
+                    setTimeout(() => {
+                        resetCheckoutForm();
+                        paymentBtn.disabled = false;
+                        paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
+                    }, 3000);
+                } else {
+                    showNotification("Failed: " + (data.message || "Unknown error"), "error");
+                    paymentBtn.disabled = false;
+                    paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                showNotification("Error: Make sure backend server is running on " + BACKEND_URL, "error");
+                paymentBtn.disabled = false;
+                paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Complete Payment with M-Pesa';
+            }
+        }
 
-            if (myOrder && myOrder.payment_status === 'PAID') {
-                clearInterval(pollInterval);
-                showSuccessOverlay(orderId, myOrder.mpesa_receipt);
-            }
-        } catch (error) {
-            console.log("Detecting payment...");
-        }
+        function saveOrderDetails(fullName, email, phone, address, city, mpesaNumber, orderId, total) {
+            const order = {
+                id: orderId,
+                date: new Date().toLocaleDateString(),
+                items: cart.length,
+                total: `KES ${total.toLocaleString()}`,
+                status: "pending",
+                customerName: fullName,
+                customerEmail: email,
+                customerPhone: phone,
+                mpesaPhone: mpesaNumber,
+                address: address,
+                city: city,
+                products: cart.map(item => ({
+                    name: item.product.name,
+                    size: item.size,
+                    quantity: item.quantity,
+                    price: item.product.price
+                }))
+            };
 
-        if (attempts >= maxAttempts) {
-            clearInterval(pollInterval);
-            const paymentBtn = document.getElementById("paymentBtn");
-            paymentBtn.disabled = false;
-            paymentBtn.innerHTML = 'Verify Payment Manually';
-        }
-    }, 10000); // Check every 10 seconds
-}
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            orders.push(order);
+            localStorage.setItem("orders", JSON.stringify(orders));
 
-/**
- * Displays a Stunning Professional Receipt Overlay
- */
-function showSuccessOverlay(orderId, receipt) {
-    const modalContent = document.querySelector("#cartModal .modal-content");
-    
-    // Smooth transition to Success Screen
-    modalContent.innerHTML = `
-        <div style="padding: 3rem; text-align: center; animation: slideUp 0.5s ease-out;">
-            <div style="width: 80px; height: 80px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);">
-                <i class="fas fa-check text-white" style="font-size: 2rem;"></i>
-            </div>
-            <h2 style="font-size: 2rem; font-weight: 900; color: #0f172a; margin-bottom: 0.5rem;">ORDER CONFIRMED</h2>
-            <p style="color: #64748b; margin-bottom: 2rem;">Your BTECH PLUS premium apparel is being prepared.</p>
-            
-            <div style="background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 1.5rem; padding: 1.5rem; text-align: left; margin-bottom: 2rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 700; uppercase tracking-widest;">Order ID</span>
-                    <span style="color: #3b82f6; font-family: 'IBM Plex Mono', monospace; font-weight: 700;">${orderId}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 700; uppercase tracking-widest;">M-Pesa Receipt</span>
-                    <span style="color: #0f172a; font-family: 'IBM Plex Mono', monospace; font-weight: 700;">${receipt}</span>
-                </div>
-            </div>
+            // Clear cart
+            cart = [];
+            updateCartBadge();
+        }
 
-            <button onclick="location.reload()" class="btn btn-primary" style="width: 100%; padding: 1.25rem;">
-                Return to Home
-            </button>
-            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #94a3b8;">A confirmation email has been sent to your inbox.</p>
-        </div>
-    `;
-}
+        function pollPaymentStatus(checkoutRequestID, orderId) {
+            let attempts = 0;
+            const maxAttempts = 30; // Poll for 5 minutes (10 seconds * 30)
 
-function saveOrderDetails(fullName, email, phone, address, city, mpesaNumber, orderId, total) {
-    const order = {
-        id: orderId,
-        date: new Date().toLocaleDateString(),
-        items: cart.length,
-        total: `KES ${total.toLocaleString()}`,
-        status: "pending",
-        customerName: fullName,
-        customerEmail: email,
-        customerPhone: phone,
-        mpesaPhone: mpesaNumber,
-        address: address,
-        city: city,
-        products: cart.map(item => ({
-            name: item.product.name,
-            size: item.size,
-            quantity: item.quantity,
-            price: item.product.price
-        }))
-    };
+            const pollInterval = setInterval(async () => {
+                attempts++;
 
-    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-    orders.push(order);
-    localStorage.setItem("orders", JSON.stringify(orders));
+                try {
+                    const response = await fetch(`${BACKEND_URL}/api/query-payment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            checkoutRequestID: checkoutRequestID
+                        })
+                    });
 
-    // Clear cart
-    cart = [];
-    updateCartBadge();
-}
+                    const data = await response.json();
 
-function resetCheckoutForm() {
-    document.getElementById("fullName").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("phone").value = "";
-    document.getElementById("address").value = "";
-    document.getElementById("city").value = "";
-    document.getElementById("postalCode").value = "";
-    document.getElementById("mpesaNumber").value = "";
-    document.getElementById("checkoutSection").classList.remove("active");
-    document.getElementById("checkoutBtn").style.display = "block";
-    toggleCart();
-}
+                    if (data.success) {
+                        clearInterval(pollInterval);
+                        showNotification(`✓ Payment successful! Order ${orderId} confirmed`, "success");
+                    }
+                } catch (error) {
+                    console.log('Status check:', error.message);
+                }
 
-function renderProducts() {
-    // Calling existing product renderer
-}
+                if (attempts >= maxAttempts) {
+                    clearInterval(pollInterval);
+                }
+            }, 10000); // Poll every 10 seconds
+        }
 
-// FINAL INITIALIZATION
-renderProducts();
+        function resetCheckoutForm() {
+            document.getElementById("fullName").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("address").value = "";
+            document.getElementById("city").value = "";
+            document.getElementById("postalCode").value = "";
+            document.getElementById("mpesaNumber").value = "";
+            document.getElementById("checkoutSection").classList.remove("active");
+            document.getElementById("checkoutBtn").style.display = "block";
+            toggleCart();
+        }
 
-  </script>
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            const ordersList = document.getElementById("ordersList");
+            ordersList.innerHTML = "";
 
+            if (orders.length === 0) {
+                ordersList.innerHTML = "<p style='color: var(--gray-500);'>No orders yet</p>";
+                return;
+            }
+
+            orders.reverse().forEach(order => {
+                const statusClass = order.status || "pending";
+                ordersList.innerHTML += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-id">${order.id}</span>
+                            <span class="order-status ${statusClass}">${order.status.toUpperCase()}</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <small style="color: var(--gray-500); font-weight: 600;">Order Date</small>
+                                <div style="font-weight: 700; margin-top: 0.25rem;">${order.date}</div>
+                            </div>
+                            <div>
+                                <small style="color: var(--gray-500); font-weight: 600;">Items</small>
+                                <div style="font-weight: 700; margin-top: 0.25rem;">${order.items} item(s)</div>
+                            </div>
+                            <div>
+                                <small style="color: var(--gray-500); font-weight: 600;">Total</small>
+                                <div style="font-weight: 700; color: var(--accent-color); margin-top: 0.25rem;">${order.total}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <button class="btn btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // NOTIFICATIONS
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
+        function showNotification(message, type = "info") {
+            const notification = document.createElement("div");
+            notification.className = `notification ${type}`;
+            const icons = {
+                success: 'check-circle',
+                error: 'times-circle',
+                info: 'info-circle',
+                warning: 'exclamation-circle'
+            };
+            notification.innerHTML = `<i class="fas fa-${icons[type]}"></i> ${message}`;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3500);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════════════════════════
+
+        renderProducts();
+    </script>
 </body>
-
 </html>
+
+
+
 
 
 
