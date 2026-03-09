@@ -221,7 +221,7 @@
         }
         @keyframes phonePulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } }
         .countdown-bar { height: 6px; background: var(--gray-200); border-radius: 3px; margin: 1.5rem 0; overflow: hidden; }
-        .countdown-fill { height: 100%; background: linear-gradient(90deg, var(--mpesa-green), var(--accent-color)); border-radius: 3px; animation: countdownAnim 90s linear forwards; }
+        .countdown-fill { height: 100%; background: linear-gradient(90deg, var(--mpesa-green), var(--accent-color)); border-radius: 3px; animation: countdownAnim 120s linear forwards; }
         @keyframes countdownAnim { from { width: 100%; } to { width: 0%; } }
 
         /* ── SUCCESS OVERLAY ── */
@@ -439,8 +439,8 @@
         <div class="cart-items" id="cartItems"></div>
         <div class="cart-summary" id="cartSummary">
             <div class="summary-row"><span>Subtotal:</span><span id="subtotal">KES 0</span></div>
-            <div class="summary-row"><span>Delivery:</span><span id="delivery">KES 0</span></div>
-            <div class="summary-row"><span>Tax :</span><span id="tax">KES 0</span></div>
+            <div class="summary-row"><span>Delivery (TBD):</span><span id="delivery">KES 0</span></div>
+            <div class="summary-row"><span>Tax (TBD):</span><span id="tax">KES 0</span></div>
             <div class="summary-row summary-total"><span>Total:</span><span id="total">KES 0</span></div>
         </div>
 
@@ -569,11 +569,19 @@
 // ═══════════════════════════════════════════════════
 const BACKEND_URL = 'https://btechplus-backend-mpesa.onrender.com';
 
+// ── Wake up Render server on page load (free tier sleeps after inactivity) ──
+// This runs silently in background so the server is warm when user clicks Pay
+(function pingServer() {
+    fetch(`${BACKEND_URL}/health`, { method: 'GET' })
+        .then(() => console.log('[BTECH] Server is warm ✅'))
+        .catch(() => console.log('[BTECH] Server warming up... first payment may take ~15s'));
+})();
+
 // ═══════════════════════════════════════════════════
 // PRODUCTS DATABASE
 // ═══════════════════════════════════════════════════
 const products = [
-    { id: 1, name: "Black Edition Classic",  category: "men",    color: "Black", price: 10, sizes: ["S","M","L","XL","XXL"], image: "images/black-shirt.jpg",   rating: 4.8, reviews: 156, description: "Premium black cotton shirt",      stock: 25 },
+    { id: 1, name: "Black Edition Classic",  category: "men",    color: "Black", price: 1200, sizes: ["S","M","L","XL","XXL"], image: "images/black-shirt.jpg",   rating: 4.8, reviews: 156, description: "Premium black cotton shirt",      stock: 25 },
     { id: 2, name: "White Edition Premium",  category: "women",  color: "White", price: 1500, sizes: ["S","M","L","XL","XXL"], image: "images/white-shirt.jpg",   rating: 4.9, reviews: 203, description: "Elegant white premium shirt",    stock: 18 },
     { id: 3, name: "Black Edition Premium",  category: "women",  color: "Black", price: 1300, sizes: ["S","M","L","XL"],       image: "images/black-premium.jpg", rating: 4.7, reviews: 89,  description: "Luxury black silk blend",        stock: 12 },
     { id: 4, name: "White Edition Classic",  category: "unisex", color: "White", price: 1500, sizes: ["S","M","L","XL","XXL"], image: "images/white-classic.jpg", rating: 4.6, reviews: 134, description: "Comfortable unisex white",       stock: 30 },
@@ -876,12 +884,18 @@ async function processMpesaPayment() {
     const orderId   = "BTECH-" + Date.now();
     const shirtType = cart.map(i => `${i.product.name} (${i.size}) ×${i.quantity}`).join(" | ");
 
+    // Use AbortController for 40s timeout — Render free tier can take 15-30s to wake up
+    const controller = new AbortController();
+    const fetchTimeout = setTimeout(() => controller.abort(), 40000);
+
     try {
         const response = await fetch(`${BACKEND_URL}/api/initiate-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: mpesaNumber, amount: total, orderId, fullName, shirtType })
+            body: JSON.stringify({ phone: mpesaNumber, amount: total, orderId, fullName, shirtType }),
+            signal: controller.signal
         });
+        clearTimeout(fetchTimeout);
 
         const data = await response.json();
 
@@ -895,10 +909,44 @@ async function processMpesaPayment() {
             showNotification("Error: " + (data.message || "Could not initiate payment"), "error");
         }
     } catch (error) {
-        console.error(error);
-        paymentBtn.disabled = false;
-        paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Pay Now with M-Pesa';
-        showNotification("Network error. Make sure the server is running.", "error");
+        clearTimeout(fetchTimeout);
+        console.error('[BTECH] Payment fetch error:', error);
+
+        // If it was an AbortError (timeout) — the server may have received the request
+        // and already sent the M-Pesa prompt. Switch to waiting screen instead of erroring.
+        if (error.name === 'AbortError') {
+            showNotification("⏳ Server is starting up... checking if prompt was sent.", "info");
+            saveOrderLocally(fullName, email, phone, address, city, mpesaNumber, orderId, total);
+            // Generate a temporary checkoutRequestID — polling will find the real one from DB
+            // by querying with orderId. Show waiting screen so user doesn't retry.
+            showWaitingScreen('PENDING-' + orderId, orderId, fullName, mpesaNumber, total);
+            return;
+        }
+
+        // For genuine network errors, try once more after 5s before giving up
+        paymentBtn.innerHTML = '<span class="loading-spinner"></span> Retrying…';
+        await new Promise(r => setTimeout(r, 5000));
+        try {
+            const retry = await fetch(`${BACKEND_URL}/api/initiate-payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: mpesaNumber, amount: total, orderId, fullName, shirtType })
+            });
+            const retryData = await retry.json();
+            if (retryData.success) {
+                showNotification("✅ M-Pesa prompt sent! Check your phone now.", "success");
+                saveOrderLocally(fullName, email, phone, address, city, mpesaNumber, orderId, total);
+                showWaitingScreen(retryData.checkoutRequestID, orderId, fullName, mpesaNumber, total);
+            } else {
+                paymentBtn.disabled = false;
+                paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Pay Now with M-Pesa';
+                showNotification("Error: " + (retryData.message || "Could not initiate payment"), "error");
+            }
+        } catch (retryErr) {
+            paymentBtn.disabled = false;
+            paymentBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Pay Now with M-Pesa';
+            showNotification("Connection failed. Check your internet and try again.", "error");
+        }
     }
 }
 
@@ -923,7 +971,7 @@ function showWaitingScreen(checkoutRequestID, orderId, fullName, mpesaNumber, to
                 <div style="font-size:1.5rem; font-weight:900; color:var(--accent-color); font-family:'IBM Plex Mono',monospace;">KES ${total.toLocaleString()}</div>
             </div>
             <div class="countdown-bar"><div class="countdown-fill"></div></div>
-            <p style="font-size:0.83rem; color:var(--gray-400);">Waiting for confirmation… (up to 90 seconds)</p>
+            <p style="font-size:0.83rem; color:var(--gray-400);">Waiting for confirmation… (up to 2 minutes)</p>
             <button onclick="cancelPaymentWait()" style="margin-top:1.5rem; background:none; border:1px solid var(--gray-300); padding:0.6rem 1.5rem; border-radius:var(--radius-lg); cursor:pointer; color:var(--gray-600); font-family:'Poppins',sans-serif; font-size:0.9rem;">
                 Cancel
             </button>
@@ -939,29 +987,94 @@ function showWaitingScreen(checkoutRequestID, orderId, fullName, mpesaNumber, to
 let pollTimer = null;
 function pollPaymentStatus(checkoutRequestID, orderId, fullName, mpesaNumber, total) {
     let attempts = 0;
-    const max = 18; // 18 × 5s = 90s
+    const max = 36; // 36 × 5s = 180s (3 minutes)
+    let realCheckoutID = checkoutRequestID; // may be 'PENDING-xxx' if initial fetch timed out
+
     pollTimer = setInterval(async () => {
         attempts++;
         try {
+            // If fetch timed out, we have no checkoutRequestID — look up order by orderId first
+            if (realCheckoutID.startsWith('PENDING-')) {
+                const lookup = await fetch(`${BACKEND_URL}/api/order-by-id`, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ orderId })
+                });
+                const ld = await lookup.json();
+                if (ld.success) {
+                    clearInterval(pollTimer);
+                    showSuccessOverlay(orderId, ld.receipt || 'N/A', fullName, total);
+                    return;
+                }
+                if (ld.checkoutRequestID) {
+                    realCheckoutID = ld.checkoutRequestID;
+                    console.log('[POLL] Recovered checkoutRequestID:', realCheckoutID);
+                } else {
+                    console.log('[POLL] Order not in DB yet, retrying... attempt', attempts);
+                    return; // keep waiting
+                }
+            }
+
             const res  = await fetch(`${BACKEND_URL}/api/query-payment`, {
-                method: 'POST',
+                method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ checkoutRequestID })
+                body:    JSON.stringify({ checkoutRequestID: realCheckoutID })
             });
             const data = await res.json();
+
             if (data.success) {
                 clearInterval(pollTimer);
-                showSuccessOverlay(orderId, data.receipt || "N/A", fullName, total);
-            } else if (data.failed) {
-                clearInterval(pollTimer);
-                showFailedOverlay(orderId, data.message || "Transaction was cancelled or failed.");
+                showSuccessOverlay(orderId, data.receipt || 'N/A', fullName, total);
+                return;
             }
-        } catch (e) { /* continue polling */ }
+            // Keep polling for everything else — don't stop on failed/pending
+            // The callback is the only source of truth
+
+        } catch (e) { /* network hiccup — keep polling */ }
+
         if (attempts >= max) {
             clearInterval(pollTimer);
-            showFailedOverlay(orderId, "Payment confirmation timed out. If charged, contact support.");
+            finalConfirmationCheck(realCheckoutID, orderId, fullName, total,
+                'Payment confirmation timed out. If you were charged, contact support with your Order ID.', 0);
         }
-    }, 5000); // Poll every 5 seconds (faster than before)
+    }, 5000);
+}
+
+// ── Final safety net ─────────────────────────────────────
+// Called when main polling timer expires.
+// Safaricom callbacks can arrive up to 60s after the prompt.
+// We keep checking the DB every 5s for up to 75s before giving up.
+// ONLY success (PAID) will break the loop — we ignore FAILED status
+// because a late success callback can still arrive after a failed one.
+async function finalConfirmationCheck(checkoutRequestID, orderId, fullName, total, failMessage, attempt) {
+    const maxFinalAttempts = 15;  // 15 × 5s = 75 extra seconds
+    const delayMs = 5000;
+
+    try {
+        const res  = await fetch(`${BACKEND_URL}/api/query-payment`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ checkoutRequestID })
+        });
+        const data = await res.json();
+
+        if (data.success || data.receipt) {
+            // Callback arrived — payment confirmed PAID
+            showSuccessOverlay(orderId, data.receipt || 'N/A', fullName, total);
+            return;
+        }
+        // Ignore data.failed — keep retrying. A success callback may still arrive.
+        // Only give up after maxFinalAttempts.
+    } catch (e) { /* network hiccup — keep trying */ }
+
+    if (attempt < maxFinalAttempts) {
+        setTimeout(() => {
+            finalConfirmationCheck(checkoutRequestID, orderId, fullName, total, failMessage, attempt + 1);
+        }, delayMs);
+    } else {
+        // Truly gave up after 75 extra seconds — show failure
+        showFailedOverlay(orderId, failMessage || "Payment could not be confirmed. If you were charged, contact support with your Order ID.");
+    }
 }
 
 function cancelPaymentWait() {
@@ -1135,5 +1248,3 @@ renderProducts();
 </script>
 </body>
 </html>
-
-
