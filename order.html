@@ -488,8 +488,8 @@
             </div>
             <div class="form-group">
                 <label class="form-label">M-Pesa Phone Number *</label>
-                <input type="tel" class="form-input" id="mpesaNumber" placeholder="0712345678">
-                <small style="color:var(--gray-500); margin-top:0.5rem; display:block;">Format: 0712345678 or +254712345678</small>
+                <input type="tel" class="form-input" id="mpesaNumber" placeholder="e.g. 0712345678 (Safaricom only)">
+                <small style="color:var(--gray-500); margin-top:0.5rem; display:block;">⚠️ Must be a <strong>Safaricom</strong> number. Airtel/Telkom cannot receive M-Pesa prompts.</small>
             </div>
 
             <button class="btn btn-mpesa" onclick="processMpesaPayment()" style="width: 100%; margin-top: 1.5rem; font-size: 1rem; padding: 1rem;" id="paymentBtn">
@@ -535,8 +535,8 @@
         </div>
         <div id="orders" class="account-content active"><div id="ordersList"></div></div>
         <div id="profile" class="account-content">
-            <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" value="Teddy Brian"></div>
-            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="teddy@gmail.com"></div>
+            <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" value="John Doe"></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="john@example.com"></div>
             <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" value="+254712345678"></div>
             <button class="btn btn-primary" style="width:100%;">Update Profile</button>
         </div>
@@ -822,6 +822,24 @@ function validatePhoneNumber(phone) {
            (clean.length === 9  && (clean.startsWith('7') || clean.startsWith('1')));
 }
 
+// Returns true only for Safaricom numbers (M-Pesa eligible)
+function isSafaricomNumber(phone) {
+    let clean = phone.replace(/\D/g, '');
+    if (clean.startsWith('254')) clean = clean.slice(3);
+    if (clean.startsWith('0'))   clean = clean.slice(1);
+    // Must be 9 digits now, starting with Safaricom prefix
+    const safPrefixes = [
+        '700','701','702','703','704','705','706','707','708','709',
+        '710','711','712','713','714','715','716','717','718','719',
+        '720','721','722','723','724','725','726','727','728','729',
+        '740','741','742','743','745','748',
+        '757','758','759','768','769',
+        '790','791','792','793','794','795','796','797','798','799',
+        '110','111','112','113','114','115','116','117','118','119'
+    ];
+    return safPrefixes.some(p => clean.startsWith(p));
+}
+
 // ═══════════════════════════════════════════════════
 // M-PESA PAYMENT — with STK pre-check via /api/check-balance
 // ═══════════════════════════════════════════════════
@@ -844,6 +862,9 @@ async function processMpesaPayment() {
     }
     if (!validatePhoneNumber(mpesaNumber)) {
         showNotification("Please enter a valid M-Pesa phone number", "error"); return;
+    }
+    if (!isSafaricomNumber(mpesaNumber)) {
+        showNotification("⚠️ M-Pesa only works on Safaricom numbers (07xx / 011x). Airtel & Telkom are not supported.", "error"); return;
     }
 
     const paymentBtn = document.getElementById("paymentBtn");
@@ -1114,4 +1135,3 @@ renderProducts();
 </script>
 </body>
 </html>
-
