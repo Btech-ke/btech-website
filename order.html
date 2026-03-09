@@ -721,8 +721,8 @@ function renderCart() {
                 </div>
             </div>`;
     });
-    const delivery = 100;
-    const tax   = Math.round(subtotal * 0.16);
+    const delivery = 0;
+    const tax   = Math.round(subtotal * 0.00);
     const total = subtotal + delivery + tax;
     document.getElementById("subtotal").innerText = `KES ${subtotal.toLocaleString()}`;
     document.getElementById("tax").innerText      = `KES ${tax.toLocaleString()}`;
@@ -1135,4 +1135,5 @@ renderProducts();
 </script>
 </body>
 </html>
+
 
