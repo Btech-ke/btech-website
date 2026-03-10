@@ -872,6 +872,36 @@ footer {
 .amt-btn.active { background:rgba(0,166,81,0.15); border-color:#00a651; color:#00a651; }
 </style>
 
+
+/* ── Admin Panel Styles ───────────────────────────────── */
+.admin-tab { padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#999;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:inherit; }
+.admin-tab:hover { background:rgba(200,241,53,0.1);border-color:rgba(200,241,53,0.3);color:#c8f135; }
+.admin-tab.active { background:rgba(200,241,53,0.15);border-color:#c8f135;color:#c8f135; }
+.adm-card { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;text-align:center; }
+.adm-num { font-size:28px;font-weight:800;color:#c8f135;font-family:'Fraunces',serif; }
+.adm-lbl { font-size:11px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:4px; }
+.adm-section { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px; }
+.adm-table-wrap { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden; }
+.adm-table { width:100%;border-collapse:collapse;font-size:13px; }
+.adm-table thead tr { background:rgba(255,255,255,0.03); }
+.adm-table th { padding:12px 16px;text-align:left;color:#666;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:1px; }
+.adm-table td { padding:12px 16px;color:#ccc;border-top:1px solid rgba(255,255,255,0.04); }
+.adm-empty { padding:32px;text-align:center;color:#555; }
+.adm-btn-secondary { padding:8px 16px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.25);color:#c8f135;border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600; }
+.adm-input { width:100%;padding:9px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;box-sizing:border-box;margin-top:4px; }
+.adm-input:focus { outline:none;border-color:#c8f135; }
+.adm-label { font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;font-weight:700; }
+.adm-tab-content { animation:fadeUp 0.2s ease; }
+.forum-item { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px; }
+.chat-session-btn { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;cursor:pointer;text-align:left;width:100%;transition:border-color 0.15s; }
+.chat-session-btn:hover { border-color:rgba(200,241,53,0.3); }
+.chat-session-btn.escalated { border-color:rgba(255,107,82,0.4); }
+.chat-msg-admin { background:rgba(200,241,53,0.1);border-left:3px solid #c8f135;padding:10px 14px;border-radius:8px;font-size:13px;color:#c8f135; }
+.chat-msg-user { background:rgba(255,255,255,0.04);padding:10px 14px;border-radius:8px;font-size:13px;color:#ccc; }
+.chat-msg-ai { background:rgba(0,229,204,0.06);padding:10px 14px;border-radius:8px;font-size:13px;color:#aaa; }
+.deadline-item { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px; }
+.booking-item { background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px; }
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-orb hero-orb-1"></div>
@@ -1013,9 +1043,49 @@ footer {
         <button class="grade-pill" onclick="pickGrade(this,'D-')">Grade D− <small>TVET</small></button>
       </div>
     </div>
+    <!-- Minimum subject requirements button -->
+    <div style="margin-top:20px;text-align:center;">
+      <button onclick="openSubjectReqOverlay()" style="padding:12px 24px;background:rgba(200,241,53,0.08);border:1.5px solid rgba(200,241,53,0.3);color:var(--lime);border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;">
+        📋 View Minimum Subject Requirements
+      </button>
+    </div>
     <div class="courses-out reveal" id="courseOut"></div>
   </div>
 </section>
+
+<!-- MINIMUM SUBJECT REQUIREMENTS OVERLAY -->
+<div id="subjectReqOverlay" onclick="if(event.target===this)closeSubjectReqOverlay()" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);overflow-y:auto;padding:24px 16px;">
+  <div style="max-width:900px;margin:0 auto;background:#111118;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:32px;position:relative;animation:fadeUp 0.3s ease;">
+    <button onclick="closeSubjectReqOverlay()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.07);border:none;color:var(--white3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    <div style="margin-bottom:24px;">
+      <div style="font-size:11px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:6px;">Subject Requirements</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:26px;color:var(--white);margin:0 0 8px;">Minimum KCSE Subject<br><em>Requirements 2025</em></h2>
+      <p style="color:var(--white3);font-size:13px;margin:0;">Subject grades and cluster requirements for all major career pathways in Kenya.</p>
+    </div>
+    <!-- Category tabs -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+      <button class="sreq-tab active" onclick="showSReqTab('medicine')">🏥 Health</button>
+      <button class="sreq-tab" onclick="showSReqTab('engineering')">⚙️ Engineering</button>
+      <button class="sreq-tab" onclick="showSReqTab('law')">⚖️ Law & Business</button>
+      <button class="sreq-tab" onclick="showSReqTab('education')">📚 Education (TTC)</button>
+      <button class="sreq-tab" onclick="showSReqTab('kmtc')">🏥 KMTC Programs</button>
+      <button class="sreq-tab" onclick="showSReqTab('tvet')">🔧 TVET / Certificate</button>
+    </div>
+    <div id="sreqContent"></div>
+    <!-- Online cyber CTA -->
+    <div style="margin-top:24px;background:rgba(200,241,53,0.06);border:1.5px dashed rgba(200,241,53,0.25);border-radius:16px;padding:20px;text-align:center;">
+      <div style="font-size:18px;margin-bottom:8px;">🖥</div>
+      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">Need help with your application?</div>
+      <div style="font-size:13px;color:var(--white3);margin-bottom:14px;">We handle KUCCPS, KMTC, HELB & TVET applications at our Online Cyber. 100% success guaranteed.</div>
+      <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:inline-block;padding:11px 28px;background:var(--lime);color:var(--ink);border-radius:10px;font-weight:700;text-decoration:none;font-size:13px;">Book Application Help →</a>
+    </div>
+  </div>
+</div>
+<style>
+.sreq-tab { padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--white3);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s; }
+.sreq-tab:hover { border-color:var(--lime);color:var(--lime); }
+.sreq-tab.active { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime); }
+</style>
 
 <div class="hr"></div>
 
@@ -1100,10 +1170,38 @@ footer {
       </div>
       <div class="sidebar-card reveal">
         <h4>📞 Key Contacts</h4>
-        <div class="contact-row"><div class="contact-badge">K</div>KUCCPS: 0800 724 444 (Toll Free)</div>
-        <div class="contact-row"><div class="contact-badge">M</div>KMTC: 020 272 6440</div>
-        <div class="contact-row"><div class="contact-badge">H</div>HELB: 0711 052 000</div>
-        <div class="contact-row"><div class="contact-badge">E</div>KNEC: 020 313 349</div>
+        <div class="contact-row"><div class="contact-badge" style="background:var(--lime);color:var(--ink);">B</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">BTECHPLUS Support</div><a href="tel:+254113996609" style="color:var(--lime);font-size:12px;text-decoration:none;">0113 996 609</a> · <a href="mailto:btechkenya@gmail.com" style="color:var(--lime);font-size:12px;text-decoration:none;">btechkenya@gmail.com</a></div></div>
+        <div class="contact-row"><div class="contact-badge">K</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS</div><span style="font-size:12px;color:var(--white3);">0800 724 444 (Toll Free)</span></div></div>
+        <div class="contact-row"><div class="contact-badge">M</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KMTC</div><span style="font-size:12px;color:var(--white3);">020 272 6440</span></div></div>
+        <div class="contact-row"><div class="contact-badge">H</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">HELB</div><span style="font-size:12px;color:var(--white3);">0711 052 000</span></div></div>
+        <div class="contact-row"><div class="contact-badge">N</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KNEC</div><span style="font-size:12px;color:var(--white3);">020 313 349</span></div></div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+          <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:block;width:100%;padding:10px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:13px;text-align:center;text-decoration:none;box-sizing:border-box;">🖥 Book Application Help →</a>
+        </div>
+      </div>
+      <!-- Subject Requirements Card -->
+      <div class="sidebar-card reveal">
+        <h4>📐 Subject Requirements</h4>
+        <p style="font-size:12px;color:var(--white3);margin-bottom:12px;">Key cluster subjects per course category:</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div onclick="openSubjectOverlay('medicine')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:12px;font-weight:600;color:var(--white);">🏥 Health Sciences</div>
+            <div style="font-size:11px;color:var(--white3);">BIO, CHE, PHY/MAT, ENG</div>
+          </div>
+          <div onclick="openSubjectOverlay('engineering')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:12px;font-weight:600;color:var(--white);">⚙️ Engineering & Tech</div>
+            <div style="font-size:11px;color:var(--white3);">MAT A, PHY, CHE, ENG</div>
+          </div>
+          <div onclick="openSubjectOverlay('business')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:12px;font-weight:600;color:var(--white);">💼 Business & Law</div>
+            <div style="font-size:11px;color:var(--white3);">MAT B, ENG, KIS, BST</div>
+          </div>
+          <div onclick="openSubjectOverlay('arts')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:12px;font-weight:600;color:var(--white);">🎨 Arts & Education</div>
+            <div style="font-size:11px;color:var(--white3);">ENG/KIS, HIS/GEO, LIT</div>
+          </div>
+          <button onclick="openSubjectOverlay('all')" style="width:100%;padding:8px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--white3);font-size:12px;cursor:pointer;font-family:inherit;margin-top:4px;">View All Requirements →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1233,57 +1331,263 @@ footer {
   </div>
 </section>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel" style="display:none;">
-<section class="section-full" style="background:var(--ink);">
-  <div class="section-full-inner">
-    <div class="eyebrow">Admin</div>
-    <h2 class="heading">Admin<br><em>Dashboard</em></h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px;" id="adminStats">
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
-        <div style="font-size:32px;font-weight:800;color:var(--lime);" id="aStat1">—</div>
-        <div style="font-size:12px;color:var(--white3);margin-top:4px;">Total Donations</div>
+<!-- ADMIN PANEL TRIGGER (shown after login if admin) -->
+<div id="adminPanel" style="display:none;text-align:center;padding:24px 0 0;">
+  <button onclick="openAdminPanel()" style="padding:14px 32px;background:linear-gradient(135deg,#c8f135,#a0cc00);color:#0a0a0f;border:none;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;letter-spacing:0.5px;">
+    ⚙ Open Admin Panel
+  </button>
+</div>
+
+<!-- FULL ADMIN OVERLAY — full screen, tabbed -->
+<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0a0a0f;overflow-y:auto;">
+  <!-- Admin top bar -->
+  <div style="background:#111118;border-bottom:1px solid rgba(255,255,255,0.07);padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:10;">
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--lime);padding:16px 0;margin-right:24px;">⚙ BTECHPLUS Admin</div>
+    <!-- Tab buttons -->
+    <div style="display:flex;gap:0;overflow-x:auto;flex:1;">
+      <button id="atab-dashboard" class="admin-tab active" onclick="showAdminTab('dashboard')">📊 Dashboard</button>
+      <button id="atab-donations" class="admin-tab" onclick="showAdminTab('donations')">💳 Donations</button>
+      <button id="atab-forum"     class="admin-tab" onclick="showAdminTab('forum')">💬 Forum</button>
+      <button id="atab-chat"      class="admin-tab" onclick="showAdminTab('chat')">🤖 AI Chat</button>
+      <button id="atab-deadlines" class="admin-tab" onclick="showAdminTab('deadlines')">📅 Deadlines</button>
+      <button id="atab-users"     class="admin-tab" onclick="showAdminTab('users')">👥 Users</button>
+    </div>
+    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:8px 16px;background:rgba(255,107,82,0.15);border:1px solid rgba(255,107,82,0.3);color:var(--coral);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;margin-left:12px;">✕ Close</button>
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:32px 24px;">
+
+    <!-- ── TAB: DASHBOARD ── -->
+    <div id="adminTab-dashboard" class="admin-tab-content">
+      <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0 0 24px;">Overview</h2>
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;">
+        <div class="adm-stat-card" style="border-color:rgba(200,241,53,0.2);">
+          <div style="font-size:36px;font-weight:800;color:var(--lime);" id="adm-donations">—</div>
+          <div style="font-size:12px;color:var(--white3);">Total Donations</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(0,229,204,0.2);">
+          <div style="font-size:28px;font-weight:800;color:var(--teal);" id="adm-revenue">—</div>
+          <div style="font-size:12px;color:var(--white3);">KES Raised</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(167,139,250,0.2);">
+          <div style="font-size:36px;font-weight:800;color:var(--violet);" id="adm-posts">—</div>
+          <div style="font-size:12px;color:var(--white3);">Forum Posts</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(0,166,81,0.2);">
+          <div style="font-size:36px;font-weight:800;color:#00a651;" id="adm-users">—</div>
+          <div style="font-size:12px;color:var(--white3);">Registered Users</div>
+        </div>
       </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
-        <div style="font-size:32px;font-weight:800;color:var(--teal);" id="aStat2">—</div>
-        <div style="font-size:12px;color:var(--white3);margin-top:4px;">Total KES Raised</div>
+      <!-- Escalation queue -->
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h4 style="margin:0;font-size:15px;color:var(--white);">❓ Unanswered Questions (Need Reply)</h4>
+          <button onclick="loadAdminDashboard()" style="padding:6px 14px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;">↻ Refresh</button>
+        </div>
+        <div id="escalationList" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="color:var(--white3);font-size:13px;">Loading...</div>
+        </div>
       </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
-        <div style="font-size:32px;font-weight:800;color:var(--coral);" id="aStat3">—</div>
-        <div style="font-size:12px;color:var(--white3);margin-top:4px;">Forum Posts</div>
-      </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
-        <div style="font-size:32px;font-weight:800;color:var(--violet);" id="aStat4">—</div>
-        <div style="font-size:12px;color:var(--white3);margin-top:4px;">AI Conversations</div>
+      <!-- Deadline quick add -->
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
+        <h4 style="margin:0 0 16px;font-size:15px;color:var(--white);">📅 Quick Add Deadline to Ticker</h4>
+        <div style="display:grid;grid-template-columns:1fr 160px 140px auto;gap:10px;align-items:end;">
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Application / Event Name</label>
+            <input id="dlName2" type="text" placeholder="e.g. KUCCPS 2026 Opens" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Deadline Date</label>
+            <input id="dlDate2" type="date" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Portal URL</label>
+            <input id="dlUrl2" type="url" placeholder="https://..." style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
+          <button onclick="addDeadline2()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">+ Add</button>
+        </div>
+        <div id="adminDeadlineList" style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"></div>
       </div>
     </div>
-    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
-      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-        <h4 style="margin:0;font-size:15px;">Recent Donations</h4>
-        <button onclick="loadAdminData()" style="padding:6px 14px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;">↻ Refresh</button>
+
+    <!-- ── TAB: DONATIONS ── -->
+    <div id="adminTab-donations" class="admin-tab-content" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0;">💳 Donations</h2>
+        <button onclick="loadAdminDonations()" style="padding:8px 18px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">↻ Refresh</button>
       </div>
-      <div id="donationsTable" style="overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
-          <thead><tr style="background:rgba(255,255,255,0.03);">
-            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Phone</th>
-            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Amount</th>
-            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Receipt</th>
-            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Status</th>
-            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Date</th>
-          </tr></thead>
-          <tbody id="donationsBody"><tr><td colspan="5" style="padding:24px;text-align:center;color:var(--white3);">Loading...</td></tr></tbody>
-        </table>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead><tr style="background:rgba(255,255,255,0.03);">
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Phone</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Amount</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Receipt</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Status</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Date</th>
+            </tr></thead>
+            <tbody id="adminDonBody"><tr><td colspan="5" style="padding:32px;text-align:center;color:var(--white3);">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: FORUM ── -->
+    <div id="adminTab-forum" class="admin-tab-content" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0;">💬 Forum Posts</h2>
+        <button onclick="loadAdminForum()" style="padding:8px 18px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">↻ Refresh</button>
+      </div>
+      <div id="adminForumList" style="display:flex;flex-direction:column;gap:12px;">
+        <div style="color:var(--white3);">Loading...</div>
+      </div>
+    </div>
+
+    <!-- ── TAB: AI CHAT ── -->
+    <div id="adminTab-chat" class="admin-tab-content" style="display:none;">
+      <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0 0 8px;">🤖 AI Conversations</h2>
+      <p style="color:var(--white3);font-size:13px;margin:0 0 24px;">Enter a student session ID to view their conversation and inject an admin reply.</p>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;">
+        <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Session ID</label>
+        <div style="display:flex;gap:10px;">
+          <input id="adminSessionId" type="text" placeholder="bp_abc123..." style="flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+          <button onclick="loadAdminChat()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">Load Chat</button>
+        </div>
+      </div>
+      <div id="adminChatLog" style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;min-height:200px;max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:16px;">
+        <div style="color:var(--white3);font-size:13px;">Enter session ID above to load chat</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
+        <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Admin Reply (injected into student chat)</label>
+        <div style="display:flex;gap:10px;">
+          <textarea id="adminReplyText" placeholder="Type your reply to the student..." rows="3" style="flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;resize:none;"></textarea>
+          <button onclick="sendAdminReply()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;align-self:flex-end;">Send Reply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: DEADLINES ── -->
+    <div id="adminTab-deadlines" class="admin-tab-content" style="display:none;">
+      <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0 0 24px;">📅 Application Deadlines</h2>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px;">
+        <h4 style="margin:0 0 16px;font-size:14px;color:var(--white);">Add New Deadline</h4>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end;">
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Event Name</label>
+            <input id="dlName3" type="text" placeholder="e.g. KUCCPS Application 2026" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Category</label>
+            <select id="dlCat3" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <option>KUCCPS</option><option>KMTC</option><option>HELB</option><option>TVET</option><option>Bursary</option><option>General</option>
+            </select></div>
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Deadline Date</label>
+            <input id="dlDate3" type="date" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
+          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Status</label>
+            <select id="dlStat3" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <option value="OPEN">🟢 Open</option><option value="CLOSING_SOON">🟡 Closing Soon</option><option value="CLOSED">🔴 Closed</option>
+            </select></div>
+          <button onclick="addDeadline3()" style="padding:9px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">+ Add</button>
+        </div>
+      </div>
+      <div id="adminDeadlinesFull" style="display:flex;flex-direction:column;gap:10px;">
+        <div style="color:var(--white3);font-size:13px;">Loading deadlines...</div>
+      </div>
+    </div>
+
+    <!-- ── TAB: USERS ── -->
+    <div id="adminTab-users" class="admin-tab-content" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0;">👥 Registered Users</h2>
+        <button onclick="loadAdminUsers()" style="padding:8px 18px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">↻ Refresh</button>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead><tr style="background:rgba(255,255,255,0.03);">
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Username</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Email</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Joined</th>
+            </tr></thead>
+            <tbody id="adminUsersBody"><tr><td colspan="3" style="padding:32px;text-align:center;color:var(--white3);">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end inner -->
+</div><!-- end adminOverlay -->
+
+<style>
+.admin-tab {
+  padding:14px 18px;background:transparent;border:none;border-bottom:2px solid transparent;
+  color:var(--white3);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;
+  white-space:nowrap;transition:all 0.15s;
+}
+.admin-tab:hover { color:var(--white2); }
+.admin-tab.active { color:var(--lime);border-bottom-color:var(--lime); }
+.adm-stat-card {
+  background:var(--ink2);border:1px solid var(--border);border-radius:16px;
+  padding:24px 20px;text-align:center;
+}
+</style>
+
+<!-- FOOTER -->
+<footer style="background:var(--ink2);border-top:1px solid var(--border);padding:48px 48px 32px;margin-top:0;">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;">
+      <!-- Brand -->
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:10px;">BTECHPLUS</div>
+        <p style="font-size:13px;color:var(--white3);line-height:1.7;margin-bottom:16px;">Kenya's #1 campus pathway platform helping KCSE students find their best course, college and career path. 100% free.</p>
+        <div style="display:flex;gap:10px;">
+          <a href="mailto:btechkenya@gmail.com" style="background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">✉ Email Us</a>
+          <a href="https://wa.me/254113996609" target="_blank" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">💬 WhatsApp</a>
+        </div>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:14px;">Quick Links</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="#courses" style="color:var(--white2);text-decoration:none;font-size:13px;">📚 Courses</a>
+          <a href="#calculator" style="color:var(--white2);text-decoration:none;font-size:13px;">🧮 Cluster Calculator</a>
+          <a href="#applications" style="color:var(--white2);text-decoration:none;font-size:13px;">📋 Applications</a>
+          <a href="#forum" style="color:var(--white2);text-decoration:none;font-size:13px;">💬 Student Forum</a>
+          <a href="#ai" style="color:var(--white2);text-decoration:none;font-size:13px;">🤖 AI Assistant</a>
+          <a href="https://btechplus.com/online-cyber.html" target="_blank" style="color:var(--lime);text-decoration:none;font-size:13px;font-weight:600;">🖥 Online Cyber →</a>
+        </div>
+      </div>
+      <!-- Contacts -->
+      <div>
+        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:14px;">Contact Us</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Email</div>
+            <a href="mailto:btechkenya@gmail.com" style="color:var(--white2);text-decoration:none;font-size:13px;">btechkenya@gmail.com</a>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Phone / WhatsApp</div>
+            <a href="tel:+254113996609" style="color:var(--white2);text-decoration:none;font-size:13px;">0113 996 609</a>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Book Application Help</div>
+            <a href="https://btechplus.com/online-cyber.html" target="_blank" style="color:var(--lime);text-decoration:none;font-size:13px;font-weight:600;">Online Cyber →</a>
+          </div>
+        </div>
+      </div>
+      <!-- Official Portals -->
+      <div>
+        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:14px;">Official Portals</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="https://students.kuccps.net" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">🎓 KUCCPS Portal</a>
+          <a href="https://admissions.kmtc.ac.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">🏥 KMTC Admissions</a>
+          <a href="https://helb.co.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">💰 HELB Loans</a>
+          <a href="https://knec.ac.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">📜 KNEC</a>
+          <a href="https://tvetcdacc.go.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">🔧 TVET CDACC</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div style="font-size:12px;color:var(--white3);">© 2026 BTECHPLUS Campus Pathway · Made with 💚 for Kenyan Students</div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span style="font-size:12px;color:var(--white3);">📞 0113 996 609</span>
+        <span style="font-size:12px;color:var(--white3);">✉ btechkenya@gmail.com</span>
+        <span style="font-size:20px;">🇰🇪</span>
       </div>
     </div>
   </div>
-</section>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">BTECHPLUS</div>
-  <div class="footer-copy">© 2026 BTECHPLUS Campus Pathway — Helping Students Find Their Future</div>
-  <div class="footer-flag">🇰🇪</div>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -2358,7 +2662,8 @@ async function submitDonation() {
 function donateNow() { openMpesaModal(); }
 
 /* ─ AUTH ─────────────────────────────────────────────────────── */
-const ADMIN_EMAIL = 'admin@btechplus.com'; // change to your email
+const ADMIN_EMAIL    = 'btechkenya@gmail.com';
+const ADMIN_USERNAME = 'btechplus_admin'; // set this as your username when registering
 
 function checkAuthState() {
   const user = JSON.parse(localStorage.getItem('bpUser') || 'null');
@@ -2397,7 +2702,7 @@ function checkAuthState() {
     }
 
     // Show admin panel if admin
-    if (user.email === ADMIN_EMAIL) {
+    if (user.email === ADMIN_EMAIL || user.username === ADMIN_USERNAME || user.email === 'admin@btechplus.com') {
       if (adminPanel) { adminPanel.style.display = 'block'; loadAdminData(); }
       // Add admin nav link
       const navLinks = document.querySelector('.nav-links');
@@ -2417,125 +2722,1080 @@ function checkAuthState() {
   }
 }
 
-function loginUser() {
-  const email = (document.getElementById('liEmail').value || '').trim();
-  const pw    = (document.getElementById('liPw').value || '').trim();
-  const msg   = document.getElementById('liMsg');
+/* ════════════════════════════════════════════════════════════
+   REAL AUTH — backend-powered login/register/logout
+════════════════════════════════════════════════════════════ */
+async function loginUser() {
+  var email = (document.getElementById('liEmail').value || '').trim();
+  var pw    = (document.getElementById('liPw').value    || '').trim();
+  var msg   = document.getElementById('liMsg');
   if (!email || !pw) { msg.innerHTML = '<span style="color:var(--coral);">Please fill in both fields.</span>'; return; }
-
-  const btn = document.getElementById('loginBtn');
+  var btn = document.getElementById('loginBtn');
   btn.disabled = true; btn.textContent = 'Signing in...';
-
-  // localStorage-based auth (upgrade to real backend when ready)
-  const stored = JSON.parse(localStorage.getItem('bpAccounts') || '{}');
-  if (stored[email] && stored[email].pw === btoa(pw)) {
-    const user = { email, name: stored[email].name };
-    localStorage.setItem('bpUser', JSON.stringify(user));
-    msg.innerHTML = '<span style="color:var(--lime);">✅ Welcome back!</span>';
-    setTimeout(() => { checkAuthState(); toast('👋 Welcome back, ' + (user.name || 'Student') + '!'); }, 500);
-  } else {
-    msg.innerHTML = '<span style="color:var(--coral);">❌ Invalid email or password.</span>';
-    btn.disabled = false; btn.textContent = 'Login to Account';
+  try {
+    var r = await fetch(API_BASE + '/auth/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ login: email, password: pw })
+    });
+    var d = await r.json();
+    if (d.success) {
+      localStorage.setItem('bpUser', JSON.stringify(d.user));
+      localStorage.setItem('bpToken', d.token);
+      msg.innerHTML = '<span style="color:var(--lime);">✅ Welcome back!</span>';
+      setTimeout(function(){ checkAuthState(); toast('👋 Welcome back, ' + (d.user.username||'Student') + '!'); }, 400);
+    } else {
+      msg.innerHTML = '<span style="color:var(--coral);">❌ ' + (d.error||'Invalid credentials') + '</span>';
+      btn.disabled = false; btn.textContent = 'Login to Account';
+    }
+  } catch(e) {
+    // Fallback to localStorage if backend not reachable
+    var stored = JSON.parse(localStorage.getItem('bpAccounts') || '{}');
+    if (stored[email] && stored[email].pw === btoa(pw)) {
+      var user = { email, name: stored[email].name };
+      localStorage.setItem('bpUser', JSON.stringify(user));
+      msg.innerHTML = '<span style="color:var(--lime);">✅ Welcome back!</span>';
+      setTimeout(function(){ checkAuthState(); toast('👋 Welcome back, '+(user.name||'Student')+'!'); }, 400);
+    } else {
+      msg.innerHTML = '<span style="color:var(--coral);">❌ Invalid email or password.</span>';
+      btn.disabled = false; btn.textContent = 'Login to Account';
+    }
   }
 }
 
-function registerUser() {
-  const name  = (document.getElementById('regName').value || '').trim();
-  const email = (document.getElementById('regEmail').value || '').trim();
-  const pw    = (document.getElementById('regPw').value || '').trim();
-  const msg   = document.getElementById('regMsg');
-
-  if (!name || !email || !pw) { msg.innerHTML = '<span style="color:var(--coral);">Please fill in all fields.</span>'; return; }
-  if (pw.length < 6) { msg.innerHTML = '<span style="color:var(--coral);">Password must be at least 6 characters.</span>'; return; }
-  if (!/\S+@\S+\.\S+/.test(email)) { msg.innerHTML = '<span style="color:var(--coral);">Enter a valid email address.</span>'; return; }
-
-  const btn = document.getElementById('registerBtn');
+async function registerUser() {
+  var name  = (document.getElementById('regName').value  || '').trim();
+  var email = (document.getElementById('regEmail').value || '').trim();
+  var pw    = (document.getElementById('regPw').value    || '').trim();
+  var msg   = document.getElementById('regMsg');
+  if (!name || !email || !pw) { msg.innerHTML = '<span style="color:var(--coral);">Fill in all fields.</span>'; return; }
+  if (pw.length < 6) { msg.innerHTML = '<span style="color:var(--coral);">Password must be 6+ characters.</span>'; return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { msg.innerHTML = '<span style="color:var(--coral);">Invalid email address.</span>'; return; }
+  var btn = document.getElementById('registerBtn');
   btn.disabled = true; btn.textContent = 'Creating account...';
-
-  const stored = JSON.parse(localStorage.getItem('bpAccounts') || '{}');
-  if (stored[email]) {
-    msg.innerHTML = '<span style="color:var(--coral);">An account with this email already exists.</span>';
-    btn.disabled = false; btn.textContent = 'Create Account';
-    return;
+  try {
+    var r = await fetch(API_BASE + '/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username: name, email, password: pw })
+    });
+    var d = await r.json();
+    if (d.success) {
+      localStorage.setItem('bpUser', JSON.stringify(d.user));
+      localStorage.setItem('bpToken', d.token);
+      msg.innerHTML = '<span style="color:var(--lime);">✅ Account created!</span>';
+      setTimeout(function(){ checkAuthState(); toast('🎉 Welcome to BTECHPLUS, '+name+'!'); }, 400);
+    } else {
+      msg.innerHTML = '<span style="color:var(--coral);">❌ ' + (d.error||'Registration failed') + '</span>';
+      btn.disabled = false; btn.textContent = 'Create Account';
+    }
+  } catch(e) {
+    // Fallback localStorage
+    var stored = JSON.parse(localStorage.getItem('bpAccounts') || '{}');
+    if (stored[email]) { msg.innerHTML = '<span style="color:var(--coral);">Account already exists.</span>'; btn.disabled=false; btn.textContent='Create Account'; return; }
+    stored[email] = { name, pw: btoa(pw), created: new Date().toISOString() };
+    localStorage.setItem('bpAccounts', JSON.stringify(stored));
+    var user = { email, name };
+    localStorage.setItem('bpUser', JSON.stringify(user));
+    msg.innerHTML = '<span style="color:var(--lime);">✅ Account created!</span>';
+    setTimeout(function(){ checkAuthState(); toast('🎉 Welcome, '+name+'!'); }, 400);
   }
-  stored[email] = { name, pw: btoa(pw), created: new Date().toISOString() };
-  localStorage.setItem('bpAccounts', JSON.stringify(stored));
-  const user = { email, name };
-  localStorage.setItem('bpUser', JSON.stringify(user));
-  msg.innerHTML = '<span style="color:var(--lime);">✅ Account created!</span>';
-  setTimeout(() => { checkAuthState(); toast('🎉 Account created! Welcome, ' + name + '!'); }, 500);
 }
 
 function logoutUser() {
   localStorage.removeItem('bpUser');
+  localStorage.removeItem('bpToken');
   checkAuthState();
   toast('👋 Signed out. See you soon!');
   go('#account');
 }
 
-/* ─ ADMIN DATA ────────────────────────────────────────────────── */
-async function loadAdminData() {
-  try {
-    const res = await fetch(API_BASE + '/mpesa/donations');
-    const rows = await res.json();
-    const total = rows.length;
-    const raised = rows.filter(r=>r.status==='SUCCESS').reduce((s,r)=>s+parseFloat(r.amount||0),0);
-    const el1 = document.getElementById('aStat1'); if(el1) el1.textContent = total;
-    const el2 = document.getElementById('aStat2'); if(el2) el2.textContent = 'KES ' + raised.toLocaleString();
+/* ════════════════════════════════════════════════════════════
+   FULL ADMIN PANEL
+════════════════════════════════════════════════════════════ */
+function openAdminPanel() {
+  var el = document.getElementById('adminOverlay');
+  if (!el) return;
+  el.style.display = 'block';
+  showAdminTab('dashboard');
+  loadAdminDashboard();
+}
 
-    const tbody = document.getElementById('donationsBody');
-    if (!tbody) return;
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--white3);">No donations yet</td></tr>';
-      return;
+function showAdminTab(tab) {
+  document.querySelectorAll('.admin-tab-content').forEach(function(el){ el.style.display='none'; });
+  document.querySelectorAll('.admin-tab').forEach(function(el){ el.classList.remove('active'); });
+  var c = document.getElementById('adminTab-'+tab);
+  var t = document.getElementById('atab-'+tab);
+  if (c) c.style.display = 'block';
+  if (t) t.classList.add('active');
+  if (tab==='donations') loadAdminDonations();
+  if (tab==='forum') loadAdminForum();
+  if (tab==='users') loadAdminUsers();
+  if (tab==='deadlines') renderAdminDeadlines();
+}
+
+async function loadAdminDashboard() {
+  try {
+    var r  = await fetch(API_BASE + '/mpesa/donations');
+    var rows = await r.json();
+    var total  = rows.length;
+    var raised = rows.filter(function(x){return x.status==='SUCCESS';}).reduce(function(s,x){return s+parseFloat(x.amount||0);},0);
+    var el1 = document.getElementById('adm-donations'); if(el1) el1.textContent = total;
+    var el2 = document.getElementById('adm-revenue');   if(el2) el2.textContent = 'KES '+raised.toLocaleString();
+  } catch(e) {}
+  try {
+    var r2 = await fetch(API_BASE + '/forum/posts');
+    var posts = await r2.json();
+    var el3 = document.getElementById('adm-posts'); if(el3) el3.textContent = Array.isArray(posts)?posts.length:'—';
+    renderEscalationQueue(posts);
+  } catch(e) {}
+  try {
+    var r3 = await fetch(API_BASE + '/auth/users');
+    var users3 = await r3.json();
+    var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users3)?users3.length:'—';
+  } catch(e) {}
+  renderAdminDeadlines();
+}
+
+async function loadAdminDonations() {
+  var tbody = document.getElementById('adminDonBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--white3);">Loading...</td></tr>';
+  try {
+    var r = await fetch(API_BASE + '/mpesa/donations');
+    var rows = await r.json();
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="padding:32px;text-align:center;color:var(--white3);">No donations yet</td></tr>'; return; }
+    tbody.innerHTML = rows.map(function(r) {
+      var sc = r.status==='SUCCESS'?'#00a651':r.status==='FAILED'?'var(--coral)':'var(--white3)';
+      var dt = new Date(r.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return '<tr style="border-top:1px solid rgba(255,255,255,0.04);">'+
+        '<td style="padding:12px 16px;color:var(--white2);">'+r.phone+'</td>'+
+        '<td style="padding:12px 16px;color:#00a651;font-weight:700;">KES '+parseFloat(r.amount||0).toLocaleString()+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white3);font-size:12px;letter-spacing:1px;">'+(r.mpesa_receipt||'—')+'</td>'+
+        '<td style="padding:12px 16px;"><span style="color:'+sc+';font-size:12px;font-weight:700;">'+r.status+'</span></td>'+
+        '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+dt+'</td>'+
+      '</tr>';
+    }).join('');
+  } catch(e) { tbody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--coral);">Failed to load</td></tr>'; }
+}
+
+async function loadAdminForum() {
+  var list = document.getElementById('adminForumList');
+  if (!list) return;
+  list.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE + '/forum/posts');
+    var posts = await r.json();
+    if (!posts.length) { list.innerHTML = '<div style="color:var(--white3);padding:16px;">No posts yet</div>'; return; }
+    list.innerHTML = posts.map(function(p) {
+      var dt = new Date(p.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var replied = p.admin_reply ? '<div style="background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px;font-size:13px;color:var(--white2);"><strong style="color:var(--lime);">Admin Reply:</strong> '+p.admin_reply+'</div>' : '';
+      return '<div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;" data-id="'+p.id+'">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">'+
+          '<div style="display:flex;align-items:center;gap:10px;">'+
+            '<div style="width:32px;height:32px;background:var(--lime-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--lime);">'+(p.username||'S')[0].toUpperCase()+'</div>'+
+            '<div><div style="font-size:13px;font-weight:700;color:var(--white);">'+(p.username||'Student')+'</div><div style="font-size:11px;color:var(--white3);">'+dt+'</div></div>'+
+          '</div>'+
+          '<button onclick="deleteForumPost('+p.id+',this)" style="padding:5px 12px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.3);color:var(--coral);border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;">🗑 Delete</button>'+
+        '</div>'+
+        '<div style="font-size:14px;color:var(--white2);line-height:1.6;margin-bottom:10px;">'+(p.message||'')+'</div>'+
+        replied+
+        '<div style="margin-top:10px;display:flex;gap:8px;">'+
+          '<input type="text" placeholder="Type admin reply..." style="flex:1;padding:8px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;" id="reply-'+p.id+'">'+
+          '<button onclick="submitAdminReply('+p.id+')" style="padding:8px 14px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit;">Reply</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  } catch(e) { list.innerHTML = '<div style="color:var(--coral);padding:16px;">Failed: '+e.message+'</div>'; }
+}
+
+async function deleteForumPost(id, btn) {
+  if (!confirm('Delete this post?')) return;
+  btn.textContent = '...';
+  try {
+    await fetch(API_BASE + '/forum/posts/' + id, { method:'DELETE' });
+    btn.closest('[data-id]').remove();
+    toast('🗑 Post deleted');
+    // Refresh public feed
+    var r2 = await fetch(API_BASE + '/forum/posts');
+    renderQ(await r2.json());
+  } catch(e) { toast('❌ Delete failed'); btn.textContent = '🗑 Delete'; }
+}
+
+async function submitAdminReply(postId) {
+  var inp = document.getElementById('reply-'+postId);
+  var reply = inp ? inp.value.trim() : '';
+  if (!reply) return;
+  try {
+    var r = await fetch(API_BASE + '/forum/posts/' + postId + '/reply', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ reply })
+    });
+    var d = await r.json();
+    if (d.success) {
+      toast('✅ Reply posted!');
+      inp.value = '';
+      loadAdminForum();
+      // Refresh public forum feed
+      var r2 = await fetch(API_BASE + '/forum/posts');
+      renderQ(await r2.json());
     }
-    tbody.innerHTML = rows.map(r => {
-      const statusColor = r.status==='SUCCESS'?'var(--lime)':r.status==='FAILED'?'var(--coral)':'var(--white3)';
-      const date = new Date(r.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      return `<tr style="border-top:1px solid rgba(255,255,255,0.04);">
-        <td style="padding:12px 16px;color:var(--white2);">${r.phone}</td>
-        <td style="padding:12px 16px;color:var(--lime);font-weight:600;">KES ${parseFloat(r.amount).toLocaleString()}</td>
-        <td style="padding:12px 16px;color:var(--white3);font-size:12px;">${r.mpesa_receipt || '—'}</td>
-        <td style="padding:12px 16px;"><span style="color:${statusColor};font-size:12px;font-weight:600;">${r.status}</span></td>
-        <td style="padding:12px 16px;color:var(--white3);font-size:12px;">${date}</td>
-      </tr>`;
+  } catch(e) { toast('❌ Reply failed'); }
+}
+
+async function loadAdminChat() {
+  var sid = (document.getElementById('adminSessionId').value||'').trim();
+  if (!sid) { toast('Enter a session ID first'); return; }
+  var log = document.getElementById('adminChatLog');
+  if (log) log.innerHTML = '<div style="color:var(--white3);">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE + '/ai/history/' + sid);
+    var msgs = await r.json();
+    if (!log) return;
+    if (!msgs.length) { log.innerHTML = '<div style="color:var(--white3);">No messages found</div>'; return; }
+    log.innerHTML = msgs.map(function(m) {
+      var isAI = m.role==='assistant';
+      return '<div style="display:flex;gap:10px;align-items:flex-start;justify-content:'+(isAI?'flex-start':'flex-end')+';">'+
+        (isAI?'<div style="width:28px;height:28px;background:var(--lime-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🤖</div>':'') +
+        '<div style="max-width:75%;padding:10px 14px;background:'+(isAI?'var(--ink3)':'var(--lime-dim)')+';border-radius:12px;font-size:13px;color:'+(isAI?'var(--white2)':'var(--white)')+';line-height:1.6;">'+m.content+'</div>'+
+        (!isAI?'<div style="width:28px;height:28px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">👤</div>':'') +
+      '</div>';
+    }).join('');
+  } catch(e) { if(log) log.innerHTML = '<div style="color:var(--coral);">Failed: '+e.message+'</div>'; }
+}
+
+async function sendAdminReply() {
+  var sid   = (document.getElementById('adminSessionId').value||'').trim();
+  var reply = (document.getElementById('adminReplyText').value||'').trim();
+  if (!sid || !reply) { toast('Need session ID and reply text'); return; }
+  try {
+    await fetch(API_BASE + '/ai/admin-reply', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sessionId: sid, reply })
+    });
+    document.getElementById('adminReplyText').value = '';
+    toast('✅ Reply injected into student session');
+    loadAdminChat();
+  } catch(e) { toast('❌ Failed to send reply'); }
+}
+
+async function loadAdminUsers() {
+  var tbody = document.getElementById('adminUsersBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="3" style="padding:32px;text-align:center;color:var(--white3);">Loading...</td></tr>';
+  try {
+    var r = await fetch(API_BASE + '/auth/users');
+    var users = await r.json();
+    // Also update dashboard user count
+    var uc = document.getElementById('adm-users');
+    if (uc) uc.textContent = users.length || 0;
+    if (!users.length) { tbody.innerHTML = '<tr><td colspan="3" style="padding:32px;text-align:center;color:var(--white3);">No registered users yet</td></tr>'; return; }
+    tbody.innerHTML = users.map(function(u) {
+      var dt = new Date(u.created_at).toLocaleDateString('en-KE',{year:'numeric',month:'short',day:'numeric'});
+      return '<tr style="border-top:1px solid rgba(255,255,255,0.04);">'+
+        '<td style="padding:12px 16px;color:var(--white);font-weight:600;">'+(u.username||'—')+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white3);">'+(u.email||'—')+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+dt+'</td>'+
+      '</tr>';
     }).join('');
   } catch(e) {
-    console.error('Admin load failed:', e);
+    tbody.innerHTML = '<tr><td colspan="3" style="padding:24px;text-align:center;color:var(--coral);">Failed to load: '+e.message+'</td></tr>';
   }
 }
 
-/* ─ FORUM — post question ─────────────────────────────────────── */
-/* postQBusy defined at top */
-async function postQ() {
-  if (postQBusy) return;  // prevent double submit
-  var txtEl = document.getElementById('qText');
+function renderEscalationQueue(posts) {
+  var el = document.getElementById('escalationList');
+  if (!el) return;
+  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && p.message && p.message.length > 60; }).slice(0,5);
+  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:8px;">No pending escalations 🎉</div>'; return; }
+  el.innerHTML = flagged.map(function(p) {
+    return '<div style="background:rgba(255,107,82,0.06);border:1px solid rgba(255,107,82,0.15);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start;">'+
+      '<span style="font-size:20px;">❓</span>'+
+      '<div style="flex:1;">'+
+        '<div style="font-size:13px;color:var(--white2);margin-bottom:8px;">'+(p.message||'').slice(0,120)+'...</div>'+
+        '<div style="display:flex;gap:8px;">'+
+          '<input type="text" placeholder="Quick reply..." style="flex:1;padding:7px 10px;background:var(--ink3);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:inherit;font-size:12px;" id="esc-'+p.id+'">'+
+          '<button onclick="submitAdminReply('+p.id+')" style="padding:7px 12px;background:var(--lime);color:var(--ink);border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;font-family:inherit;">Reply</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════════════════
+   DEADLINE TICKER
+════════════════════════════════════════════════════════════ */
+var deadlines = JSON.parse(localStorage.getItem('bpDeadlines') || '[]');
+// Defaults if empty
+if (!deadlines.length) {
+  deadlines = [
+    { name:'KUCCPS 2026 Application', date:'2026-06-30', status:'Open', url:'https://students.kuccps.net' },
+    { name:'KMTC September Intake', date:'2026-05-15', status:'Open', url:'https://admissions.kmtc.ac.ke' },
+    { name:'HELB Loan Application', date:'2026-07-31', status:'Open', url:'https://helb.co.ke' },
+    { name:'TVET Admissions 2026', date:'2026-04-30', status:'Closing Soon', url:'https://tvetcdacc.go.ke' },
+  ];
+  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
+}
+
+function initDeadlineTicker() {
+  if (typeof deadlines !== 'undefined') renderDeadlineTicker();
+}
+
+function daysUntil(dateStr) {
+  var diff = new Date(dateStr) - new Date();
+  return Math.ceil(diff / (1000*60*60*24));
+}
+
+function renderDeadlineTicker() {
+  var ticker = document.getElementById('deadlineTicker');
+  var inner  = document.getElementById('tickerInner');
+  if (!ticker || !inner) return;
+  if (!deadlines || !Array.isArray(deadlines)) return;
+  var open = deadlines.filter(function(d){ return d.status !== 'Closed'; });
+  if (!open.length) return;
+  ticker.style.display = 'block';
+  var items = open.concat(open); // duplicate for seamless loop
+  inner.innerHTML = items.map(function(d) {
+    var days = daysUntil(d.date);
+    var urgency = days <= 7 ? 'var(--coral)' : days <= 30 ? '#f59e0b' : 'var(--lime)';
+    var badge = days > 0 ? days + ' days left' : 'Closing today!';
+    var statusDot = d.status === 'Closing Soon' ? '🔴' : d.status === 'Open' ? '🟢' : '⚫';
+    return '<a href="'+(d.url||'#')+'" target="_blank" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;padding:0 20px;">'+
+      '<span style="font-size:13px;">'+statusDot+' <strong style="color:'+urgency+';">'+d.name+'</strong></span>'+
+      '<span style="font-size:11px;background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:10px;color:'+urgency+';">'+badge+'</span>'+
+      '<span style="color:rgba(255,255,255,0.2);">│</span>'+
+    '</a>';
+  }).join('');
+}
+
+function addDeadline() {
+  var n = (document.getElementById('dlName').value||'').trim();
+  var d = document.getElementById('dlDate').value;
+  var s = document.getElementById('dlStatus').value;
+  if (!n || !d) { toast('Enter name and date'); return; }
+  deadlines.unshift({ name:n, date:d, status:s, url:'' });
+  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
+  renderDeadlineTicker();
+  renderAdminDeadlines();
+  document.getElementById('dlName').value = '';
+  toast('✅ Deadline added to ticker!');
+}
+
+function addDeadline2() {
+  var n = (document.getElementById('dlName2').value||'').trim();
+  var d = document.getElementById('dlDate2').value;
+  var u = (document.getElementById('dlUrl2').value||'').trim();
+  if (!n || !d) { toast('Enter name and date'); return; }
+  deadlines.unshift({ name:n, date:d, status:'Open', url:u });
+  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
+  renderDeadlineTicker();
+  renderAdminDeadlines();
+  document.getElementById('dlName2').value = '';
+  document.getElementById('dlDate2').value = '';
+  document.getElementById('dlUrl2').value = '';
+  toast('✅ Deadline added!');
+}
+
+function renderAdminDeadlines() {
+  var el = document.getElementById('adminDeadlineList');
+  var el2 = document.getElementById('adminDeadlinesFull');
+  var html = deadlines.map(function(d, i) {
+    var days = daysUntil(d.date);
+    var urgency = days <= 7 ? 'var(--coral)' : days <= 30 ? '#f59e0b' : 'var(--lime)';
+    return '<div style="background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">'+
+      '<div style="flex:1;">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--white);">'+d.name+'</div>'+
+        '<div style="font-size:11px;color:var(--white3);margin-top:2px;">'+d.date+' · '+d.status+'</div>'+
+      '</div>'+
+      '<div style="font-size:12px;font-weight:700;color:'+urgency+';white-space:nowrap;">'+(days>0?days+'d left':'Closed')+'</div>'+
+      '<button onclick="removeDeadline('+i+')" style="padding:4px 10px;background:rgba(255,107,82,0.1);border:1px solid rgba(255,107,82,0.2);color:var(--coral);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">✕</button>'+
+    '</div>';
+  }).join('') || '<div style="color:var(--white3);font-size:13px;padding:8px;">No deadlines added yet</div>';
+  if (el)  el.innerHTML  = html;
+  if (el2) el2.innerHTML = html;
+}
+
+function removeDeadline(i) {
+  deadlines.splice(i, 1);
+  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
+  renderDeadlineTicker();
+  renderAdminDeadlines();
+  toast('Deadline removed');
+}
+
+function addDeadline3() {
+  var n = (document.getElementById('dlName3').value||'').trim();
+  var d = document.getElementById('dlDate3').value;
+  var c = document.getElementById('dlCat3').value;
+  var s = document.getElementById('dlStat3').value;
+  if (!n || !d) { toast('Enter name and date'); return; }
+  var statusMap = { OPEN:'Open', CLOSING_SOON:'Closing Soon', CLOSED:'Closed' };
+  deadlines.unshift({ name:n, date:d, status:statusMap[s]||'Open', cat:c, url:'' });
+  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
+  renderDeadlineTicker();
+  renderAdminDeadlines();
+  document.getElementById('dlName3').value = '';
+  document.getElementById('dlDate3').value = '';
+  toast('✅ Deadline added to ticker!');
+}
+
+/* ════════════════════════════════════════════════════════════
+   SUBJECT REQUIREMENTS OVERLAY — openable from courses section
+════════════════════════════════════════════════════════════ */
+function openSubjectReqOverlay() {
+  var el = document.getElementById('subjectReqOverlay');
+  if (el) { el.style.display = 'block'; if(document.body) document.body.style.overflow='hidden'; }
+  showSReqTab('medicine');
+}
+function closeSubjectReqOverlay() {
+  var el = document.getElementById('subjectReqOverlay');
+  if (el) el.style.display = 'none';
+  if(document.body) document.body.style.overflow = '';
+}
+function showSReqTab(tab) {
+  document.querySelectorAll('.sreq-tab').forEach(function(b){ b.classList.remove('active'); });
+  var activeBtn = document.querySelector('.sreq-tab[onclick*="' + tab + '"]');
+  if (activeBtn) activeBtn.classList.add('active');
+  var d = subjectData[tab];
+  var el = document.getElementById('sreqContent');
+  if (!d || !el) return;
+  el.innerHTML = '<h3 style="font-size:18px;color:var(--white);margin:0 0 16px;">'+d.title+'</h3>'+
+    '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">'+
+    '<thead><tr style="background:rgba(255,255,255,0.04);">'+
+      '<th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;min-width:200px;">Course / Program</th>'+
+      '<th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;min-width:280px;">Subject Requirements</th>'+
+      '<th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Min Grade</th>'+
+      '<th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Cluster</th>'+
+    '</tr></thead>'+
+    '<tbody>'+d.groups.map(function(g,i){
+      var bg = i%2===0?'':'background:rgba(255,255,255,0.015);';
+      return '<tr style="border-top:1px solid rgba(255,255,255,0.05);'+bg+'">'+
+        '<td style="padding:12px 16px;color:var(--white);font-weight:600;">'+g.course+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white2);line-height:1.5;">'+g.req+'</td>'+
+        '<td style="padding:12px 16px;"><span style="background:rgba(200,241,53,0.1);color:var(--lime);padding:3px 10px;border-radius:6px;font-weight:700;font-size:12px;">'+g.min+'</span></td>'+
+        '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+g.cluster+'</td>'+
+      '</tr>';
+    }).join('')+
+    '</tbody></table></div>';
+}
+
+var subjectData = {
+  medicine: {
+    title: '🏥 Health Sciences', color: '#ef4444',
+    groups: [
+      { course:'Medicine (MBChB)',    req:'BIO B, CHE B, PHY or MAT B, ENG B', min:'A−', cluster:'Cluster 13A' },
+      { course:'Nursing (BScN)',      req:'BIO C+, CHE C, PHY or MAT C, ENG C', min:'B−', cluster:'Cluster 13B' },
+      { course:'Pharmacy (BPharm)',   req:'CHE B, BIO B, PHY or MAT B, ENG C+', min:'A−', cluster:'Cluster 13A' },
+      { course:'Medical Lab Science', req:'BIO C+, CHE C+, PHY or MAT C, ENG C', min:'B−', cluster:'Cluster 13C' },
+      { course:'Physiotherapy',       req:'BIO C, PHY C, CHE or MAT C, ENG C', min:'C+', cluster:'Cluster 13B' },
+      { course:'KMTC Clinical Med',   req:'BIO C, ENG/KIS C, CHE/PSC C−, PHY/MAT C−', min:'C', cluster:'No cluster needed' },
+      { course:'KMTC Nursing Dip',    req:'BIO C, ENG/KIS C, PHY/PSC/CHE/MAT C−', min:'C', cluster:'No cluster needed' },
+      { course:'KMTC Community Health',req:'BIO D, ENG/KIS D+, MAT/CHE/PHY D', min:'C−', cluster:'No cluster needed' },
+    ]
+  },
+  engineering: {
+    title: '⚙️ Engineering & Technology', color: '#f59e0b',
+    groups: [
+      { course:'BSc Civil Engineering',      req:'MAT A B, PHY B, CHE or GEO B, ENG C+', min:'B+', cluster:'Cluster 5A' },
+      { course:'BSc Electrical Engineering', req:'MAT A B, PHY B, CHE B, ENG C+', min:'B+', cluster:'Cluster 5A' },
+      { course:'BSc Mechanical Engineering', req:'MAT A B, PHY B, CHE B, ENG C+', min:'B+', cluster:'Cluster 5A' },
+      { course:'BSc Computer Science',       req:'MAT A C+, PHY C+, ENG C', min:'B−', cluster:'Cluster 7A' },
+      { course:'BSc Information Tech',       req:'MAT A C, ENG C', min:'C+', cluster:'Cluster 7C' },
+      { course:'TVET Engineering Dip',       req:'No specific subject requirements', min:'C−', cluster:'No cluster needed' },
+    ]
+  },
+  law: {
+    title: '⚖️ Law, Business & Social Sciences', color: '#a78bfa',
+    groups: [
+      { course:'Bachelor of Laws (LLB)',      req:'ENG B, any 2 humanities/social science C+', min:'B+', cluster:'Cluster 1' },
+      { course:'Bachelor of Commerce',        req:'MAT B C, ENG C, BUS/ACCT C', min:'C+', cluster:'Cluster 2' },
+      { course:'BSc Actuarial Science',       req:'MAT A A−, ENG C+', min:'A−', cluster:'Cluster 2A' },
+      { course:'Bachelor of Economics',       req:'MAT B/ECON C+, ENG C', min:'C+', cluster:'Cluster 2' },
+      { course:'BBA / Business Admin',        req:'ENG C, MAT B C, any business subject C', min:'C+', cluster:'Cluster 2' },
+      { course:'BSc Finance',                 req:'MAT B B, ENG C, ACCT/BUS C', min:'B', cluster:'Cluster 2A' },
+      { course:'Diploma in Business',         req:'ENG/KIS C, MAT B/BUS C−', min:'C−', cluster:'No cluster needed' },
+    ]
+  },
+  education: {
+    title: '📚 Education & Teacher Training (TTC/PTTC)', color: '#00e5cc',
+    groups: [
+      { course:'Diploma in Education (Science)',  req:'Two science subjects C+ each, ENG/KIS C', min:'C+', cluster:'Cluster 12B' },
+      { course:'Diploma in Education (Arts)',     req:'Two arts/humanities C+, ENG/KIS C', min:'C+', cluster:'Cluster 12A' },
+      { course:'TTC Primary Education',           req:'ENG C, MAT C, one other subject C−', min:'C', cluster:'No cluster needed' },
+      { course:'PTTC (Primary Teacher)',          req:'KCSE C (plain) minimum, no specific subjects', min:'C', cluster:'No cluster needed' },
+      { course:'BSc Education (Secondary)',       req:'Two teaching subjects B each, ENG C+', min:'B', cluster:'Cluster 12A/B' },
+      { course:'Diploma Early Childhood (ECD)',   req:'ENG/KIS C−, any two subjects C−', min:'C−', cluster:'No cluster needed' },
+    ]
+  },
+  kmtc: {
+    title: '🏥 KMTC Programs (All campuses)', color: '#00a651',
+    groups: [
+      { course:'KMTC Clinical Medicine',      req:'BIO C, ENG/KIS C, CHE or PHY/PSC C−', min:'C', cluster:'No cluster' },
+      { course:'KMTC Nursing',                req:'BIO C, ENG/KIS C, PHY/PSC or CHE C−', min:'C', cluster:'No cluster' },
+      { course:'KMTC Pharmacy',               req:'CHE C, BIO C, ENG/KIS C', min:'C', cluster:'No cluster' },
+      { course:'KMTC Medical Lab',            req:'BIO C, CHE C, PHY/MAT C−', min:'C', cluster:'No cluster' },
+      { course:'KMTC Physiotherapy',          req:'BIO C, PHY C, CHE/MAT C−', min:'C', cluster:'No cluster' },
+      { course:'KMTC Community Health',       req:'BIO D+, ENG/KIS D+, MAT/CHE D', min:'C−', cluster:'No cluster' },
+      { course:'KMTC Dental Technology',      req:'BIO C, CHE C−, ENG/KIS C', min:'C', cluster:'No cluster' },
+      { course:'KMTC Occupational Therapy',   req:'BIO C, PHY C, ENG/KIS C', min:'C', cluster:'No cluster' },
+      { course:'KMTC Health Records',         req:'MAT D+, ENG/KIS C−, any 3 C−', min:'C−', cluster:'No cluster' },
+      { course:'KMTC Medical Engineering',    req:'PHY C, MAT C, CHE C−, ENG C−', min:'C', cluster:'No cluster' },
+    ]
+  },
+  tvet: {
+    title: '🔧 TVET & Certificate Programs', color: '#f59e0b',
+    groups: [
+      { course:'TVET Artisan Certificate',    req:'KCSE attempted, no minimum grade', min:'D−', cluster:'No cluster' },
+      { course:'TVET Craft Certificate',      req:'D plain mean grade', min:'D', cluster:'No cluster' },
+      { course:'TVET Diploma',                req:'C− mean grade, relevant subjects C−', min:'C−', cluster:'No cluster' },
+      { course:'TVET Electrical',             req:'PHY D+, MAT D+, ENG/KIS D', min:'D+', cluster:'No cluster' },
+      { course:'TVET Building & Construction',req:'PHY/GEO D+, MAT D+', min:'D+', cluster:'No cluster' },
+      { course:'TVET ICT / Computer Studies', req:'MAT D, ENG/KIS D', min:'D', cluster:'No cluster' },
+      { course:'TVET Agriculture',            req:'AGRI/BIO D+, ENG/KIS D', min:'D', cluster:'No cluster' },
+      { course:'TVET Automotive Engineering', req:'PHY D+, MAT D+', min:'D+', cluster:'No cluster' },
+      { course:'TVET Fashion & Design',       req:'No specific requirements', min:'D', cluster:'No cluster' },
+      { course:'TVET Catering & Hospitality', req:'No specific requirements', min:'D', cluster:'No cluster' },
+    ]
+  },
+  business: {
+    title: '💼 Business, Law & Social Sciences', color: '#8b5cf6',
+    groups: [
+      { course:'BCom / BBA',      req:'MAT B C, ENG C, KIS C, BST/ECO C', min:'C+', cluster:'Cluster 2A / 4A' },
+      { course:'LLB Law',         req:'ENG or KIS B, any two humanities B', min:'A−', cluster:'Cluster 1' },
+      { course:'BA Economics',    req:'MAT A C+, ENG C, ECO or BST C', min:'C+', cluster:'Cluster 3A' },
+      { course:'BA Communication',req:'ENG C+, KIS C, LIT or HIS C', min:'C+', cluster:'Cluster 1 / 3B' },
+      { course:'BSc Education (Arts)', req:'ENG or KIS C, two teaching subjects C', min:'C+', cluster:'Cluster 6A' },
+      { course:'Diploma Business (TVET)', req:'No specific subject requirements', min:'C−', cluster:'No cluster needed' },
+    ]
+  },
+  arts: {
+    title: '🎨 Arts, Education & Humanities', color: '#10b981',
+    groups: [
+      { course:'B.Ed Arts / Science',       req:'ENG/KIS C, subject specific C+', min:'C+', cluster:'Cluster 6A/B' },
+      { course:'BA Fine Arts / Design',     req:'ENG C, any arts subjects C', min:'C+', cluster:'Cluster 1' },
+      { course:'P1 Certificate (TTC)',      req:'ENG or KIS C, no cluster subjects', min:'C', cluster:'No cluster' },
+      { course:'Diploma Education (TVET)',  req:'ENG C+, any 2 teaching subjects C', min:'C+', cluster:'No cluster' },
+      { course:'Certificate Early Childhood',req:'ENG/KIS D+', min:'D+', cluster:'No cluster' },
+    ]
+  },
+  all: {
+    title: '📚 All Subject Clusters', color: 'var(--lime)',
+    groups: [
+      { course:'Cluster 1 — Arts & Law',         req:'ENG/KIS + best 3 humanities', min:'Varies', cluster:'LLB, BA, B.Ed Arts' },
+      { course:'Cluster 2 — Business',           req:'MAT B/C + ENG/KIS + BST/ECO + Social', min:'C+', cluster:'BCom, BBA, Finance' },
+      { course:'Cluster 3 — Social Sciences',    req:'ENG/KIS + Social + Sci/Math', min:'C+', cluster:'BA Sociology, Psychology' },
+      { course:'Cluster 4 — Physical Sciences',  req:'MAT A + PHY + CHE + BIO/ENG', min:'B+', cluster:'BSc Chemistry, Physics' },
+      { course:'Cluster 5 — Engineering',        req:'MAT A + PHY + CHE + ENG', min:'B+', cluster:'All engineering degrees' },
+      { course:'Cluster 6 — Education',          req:'ENG/KIS + 3 teaching subjects', min:'C+', cluster:'B.Ed degrees' },
+      { course:'Cluster 7 — Computing',          req:'MAT A + PHY/ENG + ENG', min:'C+', cluster:'CS, IT, Software Eng' },
+      { course:'Cluster 13 — Health Sciences',   req:'BIO + CHE + PHY/MAT + ENG/KIS', min:'C to A−', cluster:'Medicine, Nursing, Pharmacy' },
+    ]
+  }
+};
+
+function closeSubjectOverlay() {
+  var el = document.getElementById('subjectOverlay');
+  if (el) el.style.display = 'none';
+  go('#calculator');
+}
+function openSubjectOverlay(cat) {
+  var el = document.getElementById('subjectOverlay');
+  var content = document.getElementById('subjectContent');
+  if (!el || !content) return;
+  var d = subjectData[cat] || subjectData.all;
+  content.innerHTML = '<div style="margin-bottom:16px;padding:12px 16px;background:rgba(255,255,255,0.04);border-radius:10px;"><span style="font-size:18px;font-weight:700;color:'+d.color+';">'+d.title+'</span></div>'+
+    '<div style="display:grid;gap:10px;">'+
+    d.groups.map(function(g) {
+      return '<div style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">'+
+        '<div><div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px;">'+g.course+'</div>'+
+        '<div style="font-size:12px;color:var(--white3);">Subjects: '+g.req+'</div></div>'+
+        '<div style="text-align:right;flex-shrink:0;">'+
+          '<div style="font-size:11px;font-weight:700;color:'+d.color+';">Min: '+g.min+'</div>'+
+          '<div style="font-size:10px;color:var(--white3);">'+g.cluster+'</div>'+
+        '</div></div>';
+    }).join('')+
+  '</div>'+
+  '<div style="margin-top:20px;padding:14px;background:rgba(200,241,53,0.05);border:1px solid var(--lime);border-radius:12px;font-size:12px;color:var(--white3);line-height:1.7;">'+
+    '💡 <strong style="color:var(--lime);">Tip:</strong> Cluster points are calculated from 4 subjects. Use the Cluster Calculator on this page to check your exact score. '+
+    '<a href="#" onclick="closeSubjectOverlay()" style="color:var(--lime);">Open Calculator →</a>'+
+  '</div>';
+  el.style.display = 'flex';
+}
+
+/* ════════════════════════════════════════════════════════════
+   TTC OVERLAY — 21 PTTCs
+════════════════════════════════════════════════════════════ */
+function initTTCOverlay() {
+  var ttcList = [
+    {name:'Highridge TTC',city:'Nairobi',region:'Nairobi'},
+    {name:'Kagumo TTC',city:'Nyeri',region:'Central'},
+    {name:'Kamwenja TTC',city:'Nyeri',region:'Central'},
+    {name:'Thogoto TTC',city:'Kiambu',region:'Central'},
+    {name:'Gituru TTC',city:'Nyeri',region:'Central'},
+    {name:'Kilimambogo TTC',city:'Thika',region:'Central'},
+    {name:'Kiriari TTC',city:'Embu',region:'Eastern'},
+    {name:'Kathwana TTC',city:'Tharaka-Nithi',region:'Eastern'},
+    {name:'Machakos TTC',city:'Machakos',region:'Eastern'},
+    {name:'Tambach TTC',city:'Elgeyo Marakwet',region:'Rift Valley'},
+    {name:'Mosoriot TTC',city:'Nandi',region:'Rift Valley'},
+    {name:'Baringo TTC',city:'Baringo',region:'Rift Valley'},
+    {name:'Laikipia TTC',city:'Laikipia',region:'Rift Valley'},
+    {name:'Kericho TTC',city:'Kericho',region:'Rift Valley'},
+    {name:'Eregi TTC',city:'Kakamega',region:'Western'},
+    {name:'Butere TTC',city:'Kakamega',region:'Western'},
+    {name:'Kibabii TTC',city:'Bungoma',region:'Western'},
+    {name:'Asumbi TTC',city:'Homa Bay',region:'Nyanza'},
+    {name:'Shanzu TTC',city:'Mombasa',region:'Coast'},
+    {name:'Garissa TTC',city:'Garissa',region:'North Eastern'},
+    {name:'Marsabit TTC',city:'Marsabit',region:'North Eastern'},
+  ];
+  var content = document.getElementById('ttcCardsContainer');
+  if (!content) return;
+  content.innerHTML = ttcList.map(function(t) {
+    return '<div style="background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">'+
+      '<div style="font-size:13px;font-weight:700;color:var(--white);">'+t.name+'</div>'+
+      '<div style="font-size:11px;color:var(--white3);margin-top:2px;">'+t.city+' · '+t.region+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function openTTCOverlay() {
+  var el = document.getElementById('ttcOverlay');
+  if (el) el.style.display = 'flex';
+}
+
+function openCyberOverlay() {
+  var el = document.getElementById('cyberOverlay');
+  if (el) el.style.display = 'flex';
+}
+
+/* ════════════════════════════════════════════════════════════
+   UPDATED checkAuthState — wire admin button
+════════════════════════════════════════════════════════════ */
+function checkAuthState() {
+  var user       = JSON.parse(localStorage.getItem('bpUser') || 'null');
+  var authForms  = document.getElementById('authForms');
+  var dashPanel  = document.getElementById('dashPanel');
+  var navLogin   = document.getElementById('navLoginBtn');
+  var navLogout  = document.getElementById('navLogoutBtn');
+  var adminPanel = document.getElementById('adminPanel'); // old inline panel if exists
+
+  if (user && user.email) {
+    if (authForms)  authForms.style.display  = 'none';
+    if (dashPanel)  dashPanel.style.display  = 'block';
+    if (navLogin)   navLogin.style.display   = 'none';
+    if (navLogout)  navLogout.style.display  = 'block';
+    if (adminPanel) adminPanel.style.display = 'none';
+
+    var initials = (user.name || user.email).split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+    var av = document.getElementById('avatarCircle'); if(av) av.textContent = initials;
+    var dn = document.getElementById('dashName');     if(dn) dn.textContent = user.name || 'Student';
+    var de = document.getElementById('dashEmail');    if(de) de.textContent = user.email;
+    var saved = localStorage.getItem('bpCluster');
+    if (saved) { var dc=document.getElementById('dashCluster'); if(dc) dc.textContent=saved; }
+    var savedG = localStorage.getItem('bpGrade');
+    if (savedG) { var dg=document.getElementById('dashGrade'); if(dg) dg.textContent=savedG; }
+
+    // Admin button in nav
+    var navLinks = document.querySelector('.nav-links');
+    var existingAdminLink = document.getElementById('adminNavLink');
+    if (user.email === ADMIN_EMAIL) {
+      if (navLinks && !existingAdminLink) {
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#" id="adminNavLink" onclick="openAdminPanel();return false;" style="color:var(--lime);font-weight:700;">⚙ Admin</a>';
+        if (navLinks.lastElementChild) navLinks.insertBefore(li, navLinks.lastElementChild);
+        else navLinks.appendChild(li);
+      }
+    } else {
+      if (existingAdminLink) existingAdminLink.closest('li').remove();
+    }
+  } else {
+    if (authForms)  authForms.style.display  = 'grid';
+    if (dashPanel)  dashPanel.style.display  = 'none';
+    if (navLogin)   navLogin.style.display   = 'block';
+    if (navLogout)  navLogout.style.display  = 'none';
+    if (adminPanel) adminPanel.style.display = 'none';
+    var adminLink = document.getElementById('adminNavLink');
+    if (adminLink && adminLink.parentElement) adminLink.parentElement.remove();
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   UPDATED renderQ — show admin replies in forum
+════════════════════════════════════════════════════════════ */
+function renderQ(posts) {
+  var data = posts || questions;
+  var feed = document.getElementById('qFeed');
+  if (!feed) return;
+  feed.innerHTML = data.map(function(q) {
+    var initial = (q.name || q.username || 'S')[0].toUpperCase();
+    var text    = q.text || q.message || '';
+    var when    = q.time || (q.created_at ? new Date(q.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : 'Just now');
+    var name    = q.name || q.username || 'Student';
+    var reply   = q.admin_reply ? '<div style="margin-top:8px;padding:10px 14px;background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);border-radius:0 8px 8px 0;font-size:12px;color:var(--white2);"><span style="font-size:11px;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:0.5px;">✅ BTECHPLUS Reply</span><br>'+q.admin_reply+'</div>' : '';
+    return '<div class="q-item"><div class="q-header"><div class="q-av">'+initial+'</div><span class="q-name">'+name+'</span><span class="q-when">'+when+'</span></div><div class="q-body">'+text+'</div>'+reply+'</div>';
+  }).join('');
+}
+
+async function addDeadlineAdmin() {
+  var title  = (document.getElementById('dlTitle').value||'').trim();
+  var date   = document.getElementById('dlDate').value;
+  var type   = document.getElementById('dlType').value;
+  var status = document.getElementById('dlStatus').value;
+  var link   = (document.getElementById('dlLink').value||'').trim();
+  if (!title || !date) { toast('⚠️ Title and date are required'); return; }
+  try {
+    var r = await fetch(API_BASE+'/admin/deadlines', {
+      method:'POST', headers: adminHeader(),
+      body: JSON.stringify({ title, deadline: date, type, status, link: link||null })
+    });
+    var d = await r.json();
+    if (d.id) {
+      toast('✅ Deadline added!');
+      document.getElementById('dlTitle').value = '';
+      document.getElementById('dlDate').value  = '';
+      document.getElementById('dlLink').value  = '';
+      loadAdminDeadlines();
+    } else toast('❌ '+(d.error||'Failed'));
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function deleteDeadlineAdmin(id) {
+  if (!confirm('Delete this deadline?')) return;
+  try {
+    await fetch(API_BASE+'/admin/deadlines/'+id, { method:'DELETE', headers: adminHeader() });
+    toast('🗑 Deleted'); loadAdminDeadlines();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function loadAdminBookings() {
+  var el = document.getElementById('adminBookingsList');
+  if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE+'/admin/bookings', { headers: adminHeader() });
+    var items = await r.json();
+    if (!el) return;
+    if (!items.length) { el.innerHTML = '<div class="adm-empty">No bookings yet</div>'; return; }
+    el.innerHTML = items.map(function(b){
+      var dt = new Date(b.created_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var sc = b.status==='DONE'?'#c8f135':b.status==='IN PROGRESS'?'#00e5cc':'#f59e0b';
+      return '<div class="booking-item">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;">'
+        +'<div>'
+        +'<div style="font-weight:700;color:#fff;font-size:14px;">'+b.name+' <span style="font-size:11px;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;color:#888;margin-left:6px;">'+b.service+'</span></div>'
+        +'<div style="font-size:12px;color:#888;margin-top:2px;">📱 '+b.phone+(b.email?' · 📧 '+b.email:'')+'</div>'
+        +(b.message?'<div style="font-size:13px;color:#ccc;margin-top:6px;">'+b.message+'</div>':'')
+        +'</div>'
+        +'<div style="text-align:right;flex-shrink:0;">'
+        +'<div style="font-size:11px;color:'+sc+';font-weight:700;margin-bottom:6px;">'+b.status+'</div>'
+        +'<div style="font-size:11px;color:#555;">'+dt+'</div>'
+        +'</div></div>'
+        +'<div style="display:flex;gap:6px;">'
+        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'IN PROGRESS\')" style="padding:5px 10px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);color:#00e5cc;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">In Progress</button>'
+        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'DONE\')" style="padding:5px 10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);color:#c8f135;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">Mark Done</button>'
+        +'</div></div>';
+    }).join('');
+  } catch(e){ if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
+}
+
+async function updateBookingStatus(id, status) {
+  try {
+    await fetch(API_BASE+'/admin/bookings/'+id+'/status', {
+      method:'PATCH', headers: adminHeader(),
+      body: JSON.stringify({ status })
+    });
+    toast('✅ Updated to: '+status);
+    loadAdminBookings();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+// Override openAdminPanel to use new dashboard loader
+function openAdminPanel() {
+  var el = document.getElementById('adminOverlay');
+  if (!el) return;
+  el.style.display = 'block';
+  showAdminTab('dashboard');
+  loadAdminDashboard();
+}
+
+/* ── CONTACT / KEY CONTACTS ────────────────────────────── */
+var BTECHPLUS_CONTACTS = {
+  email:    'btechkenya@gmail.com',
+  phone:    '0113996609',
+  whatsapp: 'https://wa.me/254113996609',
+  cyber:    'https://btechplus.com/online-cyber.html',
+};
+
+/* ── BOOKING FORM (public) ─────────────────────────────── */
+async function submitBooking() {
+  var name    = (document.getElementById('bkName')   ? document.getElementById('bkName').value.trim()    : '');
+  var phone   = (document.getElementById('bkPhone')  ? document.getElementById('bkPhone').value.trim()   : '');
+  var email   = (document.getElementById('bkEmail')  ? document.getElementById('bkEmail').value.trim()   : '');
+  var service = (document.getElementById('bkService')? document.getElementById('bkService').value         : '');
+  var message = (document.getElementById('bkMessage')? document.getElementById('bkMessage').value.trim() : '');
+  if (!name || !phone || !service) { toast('⚠️ Fill in name, phone and service'); return; }
+  var btn = document.getElementById('bkSubmitBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+  try {
+    var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+    var r = await fetch(API_BASE+'/bookings', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, phone, email, service, message, user_id: user ? user.id : null })
+    });
+    var d = await r.json();
+    if (d.success) {
+      toast('✅ Booking #'+d.booking_id+' submitted! We will contact you soon.');
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+      ['bkName','bkPhone','bkEmail','bkMessage'].forEach(function(id){
+        var el = document.getElementById(id); if(el) el.value='';
+      });
+    } else {
+      toast('❌ '+(d.error||'Failed'));
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+    }
+  } catch(e){
+    toast('❌ Network error');
+    if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+  }
+}
+
+/* ── POSTQ updated with user info ─────────────────────── */
+async function postQWithUser() {
+  if (postQBusy) return;
+  var txtEl  = document.getElementById('qText');
   var nameEl = document.getElementById('qName');
-  var t = txtEl ? txtEl.value.trim() : '';
+  var t = txtEl  ? txtEl.value.trim()  : '';
   var n = nameEl ? nameEl.value.trim() : '';
-  if (!n) n = 'Student';
+  var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+  if (!n) n = user ? user.username : 'Student';
   if (!t) { toast('⚠️ Please type your question first.'); return; }
   postQBusy = true;
-  // Show immediately locally
   questions.unshift({ name:n, text:t, time:'Just now' });
   renderQ();
   if (txtEl) txtEl.value = '';
-  if (nameEl) nameEl.value = '';
   toast('✅ Question posted!');
-  // Save to backend (fire and forget)
   try {
     await fetch(API_BASE + '/forum/posts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: n, message: t })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username: n, message: t, user_id: user ? user.id : null })
     });
-  } catch(e) { /* already shown locally, ignore */ }
+  } catch(e) { /* local render already done */ }
   setTimeout(function(){ postQBusy = false; }, 2000);
 }
 
-// Init on load
-checkAuthState();
 
 </script>
+
+<!-- ══════════════════════════════════════════════════════════
+     SUBJECT REQUIREMENTS OVERLAY
+══════════════════════════════════════════════════════════ -->
+<div id="subjectOverlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:var(--ink2);border:1px solid var(--border);border-radius:20px;max-width:780px;width:100%;padding:32px;margin:20px auto;position:relative;">
+    <button onclick="document.getElementById('subjectOverlay').style.display='none'" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.07);border:none;color:var(--white3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    <div class="eyebrow">Cluster Subjects</div>
+    <h2 style="font-family:'Fraunces',serif;font-size:28px;margin:0 0 24px;">Subject <em style="color:var(--lime);">Requirements</em></h2>
+    <div id="subjectContent"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TTC DETAILS OVERLAY
+══════════════════════════════════════════════════════════ -->
+<div id="ttcOverlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:var(--ink2);border:1px solid var(--border);border-radius:20px;max-width:820px;width:100%;padding:32px;margin:20px auto;position:relative;">
+    <button onclick="document.getElementById('ttcOverlay').style.display='none'" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.07);border:none;color:var(--white3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    <div class="eyebrow">Teacher Training</div>
+    <h2 style="font-family:'Fraunces',serif;font-size:28px;margin:0 0 8px;">Primary Teacher Training <em style="color:var(--lime);">Colleges</em></h2>
+    <p style="color:var(--white3);font-size:14px;margin-bottom:24px;">21 public PTTCs offering the P1 Certificate (2 years). Minimum mean grade: <strong style="color:var(--lime);">C plain</strong>. Apply via KUCCPS.</p>
+    <div id="ttcCardsContainer" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px;"></div>
+    <div style="background:var(--ink3);border-radius:14px;padding:20px;">
+      <h4 style="margin:0 0 12px;color:var(--white);font-size:15px;">📋 How to Apply for TTC</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="font-size:13px;color:var(--white2);line-height:1.7;"><strong style="color:var(--lime);">Requirements:</strong><br>• Mean grade C plain<br>• English/Kiswahili C<br>• No specific cluster subjects<br>• KCSE certificate</div>
+        <div style="font-size:13px;color:var(--white2);line-height:1.7;"><strong style="color:var(--lime);">Process:</strong><br>• Apply via KUCCPS portal<br>• Opens May–June yearly<br>• Select TTC programmes<br>• 2-year residential programme</div>
+      </div>
+      <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:inline-block;margin-top:14px;padding:10px 24px;background:var(--lime);color:var(--ink);border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;">🖥 Need Help Applying? Book Online →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CYBER / BOOKING OVERLAY
+══════════════════════════════════════════════════════════ -->
+<div id="cyberOverlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--ink2);border:1px solid var(--border);border-radius:20px;max-width:560px;width:100%;padding:32px;position:relative;animation:fadeUp 0.3s ease;">
+    <button onclick="document.getElementById('cyberOverlay').style.display='none'" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.07);border:none;color:var(--white3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:48px;margin-bottom:8px;">🖥️</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:26px;margin:0 0 8px;color:var(--white);">BTECHPLUS <em style="color:var(--lime);">Online Cyber</em></h2>
+      <p style="color:var(--white3);font-size:14px;line-height:1.7;">We handle your KUCCPS, KMTC, HELB and all applications for you. Guaranteed successful submission.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+      <div style="background:var(--ink3);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:22px;margin-bottom:4px;">🎓</div><div style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS Application</div><div style="font-size:11px;color:var(--white3);">University placement</div></div>
+      <div style="background:var(--ink3);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:22px;margin-bottom:4px;">🏥</div><div style="font-size:12px;font-weight:700;color:var(--white);">KMTC Application</div><div style="font-size:11px;color:var(--white3);">Medical training</div></div>
+      <div style="background:var(--ink3);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:22px;margin-bottom:4px;">💰</div><div style="font-size:12px;font-weight:700;color:var(--white);">HELB Loan</div><div style="font-size:11px;color:var(--white3);">Student funding</div></div>
+      <div style="background:var(--ink3);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:22px;margin-bottom:4px;">📜</div><div style="font-size:12px;font-weight:700;color:var(--white);">TVET / TTC / Private</div><div style="font-size:11px;color:var(--white3);">All institutions</div></div>
+    </div>
+    <div style="background:var(--lime-dim);border:1px solid var(--lime);border-radius:12px;padding:14px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">📞</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--lime);">Call / WhatsApp to Book</div>
+        <div style="font-size:15px;font-weight:700;color:var(--white);">0113 996 609</div>
+        <div style="font-size:11px;color:var(--white3);">btechkenya@gmail.com</div>
+      </div>
+    </div>
+    <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:block;width:100%;padding:14px;background:var(--lime);color:var(--ink);border-radius:12px;font-weight:700;font-size:15px;text-align:center;text-decoration:none;box-sizing:border-box;">Visit Online Cyber →</a>
+    <a href="https://wa.me/254113996609?text=Hi BTECHPLUS, I need help with my application" target="_blank" style="display:block;width:100%;padding:12px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;border-radius:12px;font-weight:700;font-size:14px;text-align:center;text-decoration:none;box-sizing:border-box;margin-top:8px;">💬 WhatsApp Us Now</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN PANEL OVERLAY (full screen)
+══════════════════════════════════════════════════════════ -->
+<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:#0a0a0f;overflow-y:auto;">
+  <!-- Admin Nav -->
+  <div style="background:#111118;border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div style="font-family:'Fraunces',serif;font-weight:700;font-size:17px;color:#c8f135;">⚙ BTECHPLUS Admin</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+        <button onclick="showAdminTab('dashboard')" class="admin-tab active" id="atab-dashboard">📊 Dashboard</button>
+        <button onclick="showAdminTab('donations');loadAdminDonations()" class="admin-tab" id="atab-donations">💰 Donations</button>
+        <button onclick="showAdminTab('forum');loadAdminForum()" class="admin-tab" id="atab-forum">💬 Forum</button>
+        <button onclick="showAdminTab('chats');loadAdminChats()" class="admin-tab" id="atab-chats">🤖 AI Chats</button>
+        <button onclick="showAdminTab('users');loadAdminUsers()" class="admin-tab" id="atab-users">👥 Users</button>
+        <button onclick="showAdminTab('deadlines');loadAdminDeadlines()" class="admin-tab" id="atab-deadlines">📅 Deadlines</button>
+        <button onclick="showAdminTab('bookings');loadAdminBookings()" class="admin-tab" id="atab-bookings">📋 Bookings</button>
+      </div>
+    </div>
+    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:8px 16px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.3);color:#ff6b52;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">✕ Close</button>
+  </div>
+
+  <div style="max-width:1300px;margin:0 auto;padding:28px;">
+
+  <!-- ── DASHBOARD ─────────────────────────────────────────────────────── -->
+  <div id="adminTab-dashboard" class="admin-tab-content">
+    <!-- Stat Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px;">
+      <div class="adm-card"><div class="adm-num" id="adm-donations">—</div><div class="adm-lbl">💰 Donations</div></div>
+      <div class="adm-card"><div class="adm-num" style="color:#00e5cc;" id="adm-revenue">—</div><div class="adm-lbl">KES Raised</div></div>
+      <div class="adm-card"><div class="adm-num" style="color:#ff6b52;" id="adm-posts">—</div><div class="adm-lbl">💬 Forum Posts</div></div>
+      <div class="adm-card"><div class="adm-num" style="color:#a78bfa;" id="adm-chats">—</div><div class="adm-lbl">🤖 AI Sessions</div></div>
+      <div class="adm-card"><div class="adm-num" style="color:#c8f135;" id="adm-users">—</div><div class="adm-lbl">👥 Users</div></div>
+      <div class="adm-card"><div class="adm-num" style="color:#f59e0b;" id="adm-bookings">—</div><div class="adm-lbl">📋 Pending Bookings</div></div>
+    </div>
+    <!-- Escalation queue -->
+    <div class="adm-section">
+      <h3 style="margin:0 0 6px;font-size:15px;color:#fff;">🚨 AI Escalation Queue</h3>
+      <p style="font-size:12px;color:#666;margin:0 0 14px;">Sessions where AI couldn't answer — click to reply directly.</p>
+      <div id="escalationList" style="display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;"></div>
+    </div>
+  </div>
+
+  <!-- ── DONATIONS ──────────────────────────────────────────────────────── -->
+  <div id="adminTab-donations" class="admin-tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#fff;">💰 All Donations</h3>
+      <button onclick="loadAdminDonations()" class="adm-btn-secondary">↻ Refresh</button>
+    </div>
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead><tr><th>Phone</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="adminDonBody"><tr><td colspan="5" class="adm-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── FORUM ──────────────────────────────────────────────────────────── -->
+  <div id="adminTab-forum" class="admin-tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#fff;">💬 Forum Posts</h3>
+      <button onclick="loadAdminForum()" class="adm-btn-secondary">↻ Refresh</button>
+    </div>
+    <div id="adminForumList" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+
+  <!-- ── AI CHATS ───────────────────────────────────────────────────────── -->
+  <div id="adminTab-chats" class="admin-tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#fff;">🤖 AI Chat Sessions</h3>
+      <button onclick="loadAdminChats()" class="adm-btn-secondary">↻ Refresh</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div>
+        <p style="font-size:12px;color:#666;margin:0 0 10px;">Click a session to view + reply</p>
+        <div id="adminChatList" style="display:flex;flex-direction:column;gap:8px;max-height:600px;overflow-y:auto;"></div>
+      </div>
+      <div id="adminChatDetail" style="background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+        <div style="color:#555;font-size:13px;text-align:center;margin:auto;">Select a session to view messages</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USERS ──────────────────────────────────────────────────────────── -->
+  <div id="adminTab-users" class="admin-tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#fff;">👥 Registered Users</h3>
+      <button onclick="loadAdminUsers()" class="adm-btn-secondary">↻ Refresh</button>
+    </div>
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Grade</th><th>County</th><th>Admin</th><th>Joined</th></tr></thead>
+        <tbody id="adminUsersBody"><tr><td colspan="6" class="adm-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── DEADLINES ─────────────────────────────────────────────────────── -->
+  <div id="adminTab-deadlines" class="admin-tab-content" style="display:none;">
+    <h3 style="margin:0 0 16px;color:#fff;">📅 Application Deadlines</h3>
+    <!-- Add form -->
+    <div class="adm-section" style="margin-bottom:20px;">
+      <h4 style="margin:0 0 12px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;">Add New Deadline</h4>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end;">
+        <div><label class="adm-label">Title</label><input id="dlTitle" placeholder="e.g. KUCCPS 2026 Applications" class="adm-input"></div>
+        <div><label class="adm-label">Deadline Date</label><input id="dlDate" type="datetime-local" class="adm-input"></div>
+        <div><label class="adm-label">Type</label>
+          <select id="dlType" class="adm-input">
+            <option>KUCCPS</option><option>KMTC</option><option>HELB</option><option>TVET</option><option>County Bursary</option><option>Other</option>
+          </select>
+        </div>
+        <div><label class="adm-label">Status</label>
+          <select id="dlStatus" class="adm-input">
+            <option>OPEN</option><option>CLOSING SOON</option><option>CLOSED</option>
+          </select>
+        </div>
+        <button onclick="addDeadlineAdmin()" style="padding:10px 16px;background:#c8f135;color:#0a0a0f;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;white-space:nowrap;">+ Add</button>
+      </div>
+      <div style="margin-top:10px;"><label class="adm-label">Link (optional)</label><input id="dlLink" placeholder="https://students.kuccps.net" class="adm-input" style="max-width:400px;"></div>
+    </div>
+    <div id="adminDeadlineList" style="display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+
+  <!-- ── BOOKINGS ───────────────────────────────────────────────────────── -->
+  <div id="adminTab-bookings" class="admin-tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#fff;">📋 Service Bookings</h3>
+      <button onclick="loadAdminBookings()" class="adm-btn-secondary">↻ Refresh</button>
+    </div>
+    <div id="adminBookingsList" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+
+  </div><!-- end inner -->
+</div>
+
+<!-- FLOATING DEADLINE TICKER (shows when admin adds deadlines) -->
+<div id="deadlineTicker" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:7000;background:linear-gradient(90deg,var(--ink2),var(--ink3));border-top:1px solid var(--border);padding:8px 0;overflow:hidden;">
+  <div id="tickerInner" style="display:flex;gap:40px;animation:tickerScroll 30s linear infinite;white-space:nowrap;padding-left:100%;"></div>
+</div>
+<style>
+@keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.admin-tab { padding:7px 14px;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--white3);font-family:inherit;font-size:12px;cursor:pointer;transition:0.2s; }
+.admin-tab.active,.admin-tab:hover { background:var(--lime-dim);border-color:var(--lime);color:var(--lime); }
+.admin-tab-content { display:none; }
+.admin-tab-content.active { display:block; }
+.admin-stat-card { background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center; }
+.admin-stat-num { font-size:32px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif; }
+.admin-stat-label { font-size:12px;color:var(--white3);margin-top:4px; }
+@media(max-width:768px){ footer > div > div:first-child { grid-template-columns:1fr !important; } }
+</style>
+
 </body>
 </html>
