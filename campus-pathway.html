@@ -1229,6 +1229,19 @@ footer {
 <div class="toast" id="toast"></div>
 
 <script>
+/* ═══ GLOBALS — declared first to avoid Temporal Dead Zone crashes ══════════ */
+var searchTriggerCount   = 0;
+var mpesaShownThisSession = false;
+var selectedAmt          = 100;
+var currentCheckoutId    = null;
+var postQBusy            = false;
+var API_BASE             = 'https://donate-erxu.onrender.com/api';
+var SESSION_ID           = localStorage.getItem('btechplus_session') || (function(){
+  var id = 'bp_' + Math.random().toString(36).slice(2);
+  localStorage.setItem('btechplus_session', id);
+  return id;
+})();
+/* ═══════════════════════════════════════════════════════════════════════════ */
 /* ─ UTILS ─ */
 function go(sel) { document.querySelector(sel).scrollIntoView({ behavior:'smooth' }); }
 function toast(msg) {
@@ -1275,14 +1288,9 @@ function saveCluster() {
 
 /* ─ COMPREHENSIVE COURSE DATABASE 2025 (KUCCPS/KMTC/TVET) ─ */
 // ── BACKEND CONFIG ──────────────────────────────────────────────────────────
-const API_BASE = 'https://donate-erxu.onrender.com/api';
+/* API_BASE defined at top */
 // Session ID for AI conversation memory (persists across page refresh)
-const SESSION_ID = localStorage.getItem('btechplus_session') || (() => {
-  const id = 'sess_' + Math.random().toString(36).slice(2) + Date.now();
-  localStorage.setItem('btechplus_session', id);
-  return id;
-})();
-
+/* SESSION_ID defined at top */
 const courseDB = {
   "A": [
     { cat:"Degree — Medicine & Surgery", badge:"badge-lime", lbl:"DEGREE", reqs:"BIO B, CHE B, PHY/MAT B, ENG B (Cluster 13A)", items:[
@@ -2163,12 +2171,8 @@ async function pollDonationStatus(checkoutId, attempts) {
   }
 }
 // Trigger modal after 3 course grade switches
-let searchTriggerCount = 0;
 
 /* ─ MPESA MODAL FULL FLOW ──────────────────────────────────── */
-let selectedAmt = 100;
-let mpesaShownThisSession = false;
-let currentCheckoutId = null;
 
 function openMpesaModal() {
   showMpStep(1);
@@ -2408,7 +2412,7 @@ async function loadAdminData() {
 }
 
 /* ─ FORUM — post question ─────────────────────────────────────── */
-var postQBusy = false;
+/* postQBusy defined at top */
 async function postQ() {
   if (postQBusy) return;  // prevent double submit
   var txtEl = document.getElementById('qText');
