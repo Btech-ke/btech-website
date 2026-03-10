@@ -715,8 +715,9 @@ footer {
     <li><a href="#courses">Courses</a></li>
     <li><a href="#forum">Forum</a></li>
     <li><a href="#ai">AI</a></li>
-    <li><a href="#account" class="nav-cta">My Account</a></li>
-    <li><a href="#donate" class="nav-donate" onclick="scrollToDonate()">Support Us 💚</a></li>
+    <li><a href="#account" class="nav-cta" id="navLoginBtn">My Account</a></li>
+    <li><a href="#" class="nav-cta" id="navLogoutBtn" onclick="logoutUser();return false;" style="display:none;background:rgba(255,107,82,0.2);color:var(--coral);border:1px solid rgba(255,107,82,0.3);">Sign Out</a></li>
+    <li><a href="#donate" class="nav-donate" onclick="openMpesaModal();return false;">Support Us 💚</a></li>
   </ul>
   <div class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
 </nav>
@@ -732,56 +733,88 @@ footer {
 </div>
 
 <!-- M-PESA DONATION MODAL -->
-<div id="mpesaModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
-  <div style="background:var(--ink2);border:1px solid rgba(200,241,53,0.3);border-radius:20px;max-width:420px;width:100%;padding:36px;position:relative;box-shadow:0 0 60px rgba(200,241,53,0.1);">
-    <button onclick="closeMpesaModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.07);border:none;color:var(--white2);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;line-height:32px;">✕</button>
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-size:40px;margin-bottom:8px;">💚</div>
-      <h3 style="font-family:'Fraunces',serif;font-size:22px;color:var(--white);margin:0 0 8px;">Keep BTECHPLUS Free</h3>
-      <p style="font-size:13px;color:var(--white3);line-height:1.6;margin:0;">You just found your future pathway. This tool is free for every Kenyan student — a small contribution keeps it running.</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;" id="amountGrid">
-      <button onclick="setAmount(50)" class="amt-btn" data-amt="50">KES 50</button>
-      <button onclick="setAmount(100)" class="amt-btn active" data-amt="100">KES 100</button>
-      <button onclick="setAmount(200)" class="amt-btn" data-amt="200">KES 200</button>
-      <button onclick="setAmount(500)" class="amt-btn" data-amt="500">KES 500</button>
-      <button onclick="setAmount(1000)" class="amt-btn" data-amt="1000">KES 1K</button>
-      <button onclick="setAmount(0)" class="amt-btn" data-amt="0" style="font-size:11px;">Custom</button>
-    </div>
-    <div id="customAmtWrap" style="display:none;margin-bottom:14px;">
-      <input id="customAmt" type="number" min="10" placeholder="Enter amount (KES)" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:var(--white);font-size:14px;outline:none;font-family:inherit;box-sizing:border-box;">
-    </div>
-    <div style="background:rgba(200,241,53,0.07);border:1px solid rgba(200,241,53,0.2);border-radius:14px;padding:18px;margin-bottom:18px;">
-      <p style="font-size:11px;color:var(--lime);font-weight:700;margin:0 0 12px;letter-spacing:1px;">LIPA NA M-PESA STEPS</p>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--white2);">
-          <span style="background:var(--lime);color:var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;">1</span>
-          Open M-Pesa → <strong style="color:var(--white);">Lipa na M-Pesa</strong> → Paybill
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--white2);">
-          <span style="background:var(--lime);color:var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;">2</span>
-          Business No: <strong style="color:var(--white);font-size:15px;letter-spacing:1px;">XXXXXXX</strong>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--white2);">
-          <span style="background:var(--lime);color:var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;">3</span>
-          Account: <strong style="color:var(--white);">BTECHPLUS</strong>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--white2);">
-          <span style="background:var(--lime);color:var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;">4</span>
-          Amount: <strong style="color:var(--lime);" id="modalAmtDisplay">KES 100</strong> → Enter PIN & Send
-        </div>
+<div id="mpesaModal" onclick="if(event.target===this)closeMpesaModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--ink2);border:1px solid rgba(200,241,53,0.25);border-radius:22px;max-width:400px;width:100%;padding:32px;position:relative;box-shadow:0 0 80px rgba(200,241,53,0.08);animation:fadeUp 0.3s ease;">
+    <button onclick="closeMpesaModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.07);border:none;color:var(--white3);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+
+    <!-- Step 1: Choose amount -->
+    <div id="mpStep1">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:36px;margin-bottom:6px;">💚</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:20px;color:var(--white);margin:0 0 6px;">Keep BTECHPLUS Free</h3>
+        <p style="font-size:12px;color:var(--white3);margin:0;line-height:1.6;">This platform is free for every Kenyan student.<br>Your support keeps it alive.</p>
       </div>
+      <p style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:600;">Choose Amount (KES)</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+        <button onclick="setAmount(50)"  class="amt-btn" data-amt="50">50</button>
+        <button onclick="setAmount(100)" class="amt-btn active" data-amt="100">100</button>
+        <button onclick="setAmount(200)" class="amt-btn" data-amt="200">200</button>
+        <button onclick="setAmount(500)" class="amt-btn" data-amt="500">500</button>
+        <button onclick="setAmount(1000)" class="amt-btn" data-amt="1000">1,000</button>
+        <button onclick="setAmount('custom')" class="amt-btn" data-amt="custom">Custom</button>
+      </div>
+      <div id="customAmtWrap" style="display:none;margin-bottom:12px;">
+        <input id="customAmt" type="number" min="10" placeholder="Enter amount (KES)" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:var(--white);font-size:14px;outline:none;font-family:inherit;box-sizing:border-box;">
+      </div>
+      <button onclick="goToStep2()" style="width:100%;padding:13px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;margin-top:4px;">Continue →</button>
+      <button onclick="closeMpesaModal()" style="width:100%;padding:8px;background:transparent;color:var(--white3);border:none;cursor:pointer;font-size:12px;margin-top:6px;font-family:inherit;">Maybe later</button>
     </div>
-    <button onclick="confirmDonation()" style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:0.2s;">💚 I've Sent My Donation</button>
-    <button onclick="closeMpesaModal()" style="width:100%;padding:10px;background:transparent;color:var(--white3);border:none;cursor:pointer;font-size:12px;margin-top:8px;font-family:inherit;">Maybe later</button>
+
+    <!-- Step 2: Enter phone -->
+    <div id="mpStep2" style="display:none;">
+      <button onclick="document.getElementById('mpStep2').style.display='none';document.getElementById('mpStep1').style.display='block';" style="background:none;border:none;color:var(--white3);cursor:pointer;font-size:12px;margin-bottom:16px;padding:0;font-family:inherit;">← Back</button>
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:32px;margin-bottom:6px;">📱</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;color:var(--white);margin:0 0 4px;">Enter Your M-Pesa Number</h3>
+        <p style="font-size:12px;color:var(--white3);margin:0;">You'll get a push notification to enter your PIN</p>
+      </div>
+      <div style="background:rgba(200,241,53,0.08);border-radius:12px;padding:14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:var(--white3);font-size:13px;">Amount</span>
+        <span style="color:var(--lime);font-weight:700;font-size:18px;" id="step2AmtDisplay">KES 100</span>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">M-Pesa Phone Number</label>
+        <input id="mpesaPhone" type="tel" placeholder="07XX XXX XXX" maxlength="13"
+          style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;color:var(--white);font-size:16px;outline:none;font-family:inherit;box-sizing:border-box;letter-spacing:1px;"
+          oninput="formatPhone(this)" onkeydown="if(event.key==='Enter')submitDonation()">
+      </div>
+      <button id="stkBtn" onclick="submitDonation()" style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:0.2s;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <span id="stkBtnText">💚 Send M-Pesa Prompt</span>
+      </button>
+      <p style="font-size:11px;color:var(--white3);text-align:center;margin-top:10px;line-height:1.5;">Secure payment via Safaricom Daraja API.<br>Your PIN never leaves your phone.</p>
+    </div>
+
+    <!-- Step 3: Waiting for PIN -->
+    <div id="mpStep3" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:48px;margin-bottom:16px;animation:spin 2s linear infinite;display:inline-block;">⏳</div>
+      <h3 style="font-family:'Fraunces',serif;font-size:18px;color:var(--white);margin:0 0 8px;">Check Your Phone!</h3>
+      <p style="font-size:13px;color:var(--white2);line-height:1.6;margin:0 0 16px;">An M-Pesa prompt has been sent to<br><strong id="phoneSent" style="color:var(--lime);"></strong></p>
+      <p style="font-size:12px;color:var(--white3);">Enter your M-Pesa PIN to complete the donation.<br>This page will update automatically.</p>
+      <div style="margin-top:20px;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;">
+        <div id="progressBar" style="height:100%;background:var(--lime);width:0%;transition:width 40s linear;border-radius:2px;"></div>
+      </div>
+      <button onclick="closeMpesaModal()" style="margin-top:16px;background:transparent;border:none;color:var(--white3);font-size:12px;cursor:pointer;font-family:inherit;">Close (payment continues in background)</button>
+    </div>
+
+    <!-- Step 4: Success -->
+    <div id="mpStep4" style="display:none;text-align:center;padding:16px 0;">
+      <div style="font-size:56px;margin-bottom:12px;">🎉</div>
+      <h3 style="font-family:'Fraunces',serif;font-size:22px;color:var(--lime);margin:0 0 8px;">Asante Sana!</h3>
+      <p style="font-size:14px;color:var(--white2);line-height:1.6;margin:0 0 12px;">Your donation was received successfully.<br>Thank you for keeping BTECHPLUS free!</p>
+      <div id="receiptBox" style="background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);border-radius:12px;padding:14px;margin-bottom:20px;">
+        <p style="font-size:11px;color:var(--white3);margin:0 0 4px;text-transform:uppercase;letter-spacing:1px;">M-Pesa Receipt</p>
+        <p id="receiptNum" style="font-size:18px;font-weight:700;color:var(--lime);margin:0;letter-spacing:2px;"></p>
+      </div>
+      <button onclick="closeMpesaModal()" style="padding:12px 32px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;">Continue Learning 🎓</button>
+    </div>
   </div>
 </div>
-
 <style>
-.amt-btn { padding:10px 8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;font-family:inherit; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.amt-btn { padding:10px 6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;font-family:inherit; }
 .amt-btn:hover,.amt-btn.active { background:rgba(200,241,53,0.15);border-color:var(--lime);color:var(--lime); }
 </style>
-
 <!-- HERO -->
 <section class="hero">
   <div class="hero-orb hero-orb-1"></div>
@@ -1068,22 +1101,53 @@ footer {
 <section id="account" class="section">
   <div class="eyebrow">Student Account</div>
   <h2 class="heading">Save Your<br><em>Progress</em></h2>
-  <p class="subheading" style="margin-bottom:0;">Free account to save cluster results, bookmark courses and track all applications.</p>
-  <div class="auth-grid">
+  <p class="subheading" style="margin-bottom:0;">Free account to save cluster results, bookmark courses and track applications.</p>
+
+  <!-- AUTH FORMS (shown when logged out) -->
+  <div id="authForms" class="auth-grid">
     <div class="auth-card reveal">
       <h3>Sign In</h3>
       <div class="fld"><label>Email Address</label><input type="email" id="liEmail" placeholder="you@email.com"></div>
-      <div class="fld"><label>Password</label><input type="password" id="liPw" placeholder="••••••••"></div>
-      <button class="btn-primary" onclick="loginUser()">Login to Account</button>
-      <div id="liMsg"></div>
+      <div class="fld"><label>Password</label><input type="password" id="liPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginUser()"></div>
+      <button class="btn-primary" onclick="loginUser()" id="loginBtn">Login to Account</button>
+      <div id="liMsg" style="margin-top:10px;font-size:13px;"></div>
     </div>
     <div class="auth-card reveal">
-      <h3>Create Account</h3>
+      <h3>Create Free Account</h3>
       <div class="fld"><label>Full Name</label><input type="text" id="regName" placeholder="Your full name"></div>
       <div class="fld"><label>Email Address</label><input type="email" id="regEmail" placeholder="you@email.com"></div>
-      <div class="fld"><label>Password</label><input type="password" id="regPw" placeholder="Create a password (min. 6 chars)"></div>
-      <button class="btn-primary" onclick="registerUser()">Create Free Account</button>
-      <div id="regMsg"></div>
+      <div class="fld"><label>Password</label><input type="password" id="regPw" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')registerUser()"></div>
+      <button class="btn-primary" onclick="registerUser()" id="registerBtn">Create Account</button>
+      <div id="regMsg" style="margin-top:10px;font-size:13px;"></div>
+    </div>
+  </div>
+
+  <!-- LOGGED IN DASHBOARD (shown when logged in) -->
+  <div id="dashPanel" style="display:none;max-width:700px;margin:0 auto;">
+    <div class="auth-card reveal" style="text-align:center;padding:40px;">
+      <div id="avatarCircle" style="width:72px;height:72px;background:var(--lime);color:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin:0 auto 16px;font-family:'Fraunces',serif;"></div>
+      <h3 id="dashName" style="font-size:22px;margin:0 0 4px;"></h3>
+      <p id="dashEmail" style="font-size:13px;color:var(--white3);margin:0 0 24px;"></p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+        <div style="background:var(--ink3);border-radius:12px;padding:16px;">
+          <div style="font-size:22px;font-weight:700;color:var(--lime);" id="dashCluster">—</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:4px;">Cluster Points</div>
+        </div>
+        <div style="background:var(--ink3);border-radius:12px;padding:16px;">
+          <div style="font-size:22px;font-weight:700;color:var(--teal);" id="dashGrade">—</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:4px;">Mean Grade</div>
+        </div>
+        <div style="background:var(--ink3);border-radius:12px;padding:16px;">
+          <div style="font-size:22px;font-weight:700;color:var(--coral);">Free</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:4px;">Account Type</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="go('#calculator')" style="padding:10px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--white2);cursor:pointer;font-family:inherit;font-size:13px;">🧮 Calculator</button>
+        <button onclick="go('#courses')" style="padding:10px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--white2);cursor:pointer;font-family:inherit;font-size:13px;">📚 Courses</button>
+        <button onclick="go('#ai')" style="padding:10px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--white2);cursor:pointer;font-family:inherit;font-size:13px;">🤖 Ask AI</button>
+        <button onclick="logoutUser()" style="padding:10px 20px;background:rgba(255,107,82,0.15);border:1px solid rgba(255,107,82,0.3);border-radius:10px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:13px;">Sign Out</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1108,6 +1172,52 @@ footer {
     </div>
   </div>
 </section>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
+<section class="section-full" style="background:var(--ink);">
+  <div class="section-full-inner">
+    <div class="eyebrow">Admin</div>
+    <h2 class="heading">Admin<br><em>Dashboard</em></h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px;" id="adminStats">
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:32px;font-weight:800;color:var(--lime);" id="aStat1">—</div>
+        <div style="font-size:12px;color:var(--white3);margin-top:4px;">Total Donations</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:32px;font-weight:800;color:var(--teal);" id="aStat2">—</div>
+        <div style="font-size:12px;color:var(--white3);margin-top:4px;">Total KES Raised</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:32px;font-weight:800;color:var(--coral);" id="aStat3">—</div>
+        <div style="font-size:12px;color:var(--white3);margin-top:4px;">Forum Posts</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:32px;font-weight:800;color:var(--violet);" id="aStat4">—</div>
+        <div style="font-size:12px;color:var(--white3);margin-top:4px;">AI Conversations</div>
+      </div>
+    </div>
+    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h4 style="margin:0;font-size:15px;">Recent Donations</h4>
+        <button onclick="loadAdminData()" style="padding:6px 14px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;">↻ Refresh</button>
+      </div>
+      <div id="donationsTable" style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead><tr style="background:rgba(255,255,255,0.03);">
+            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Phone</th>
+            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Amount</th>
+            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Receipt</th>
+            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Status</th>
+            <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:500;">Date</th>
+          </tr></thead>
+          <tbody id="donationsBody"><tr><td colspan="5" style="padding:24px;text-align:center;color:var(--white3);">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1157,13 +1267,15 @@ function calcCluster() {
   toast('✅ Cluster points calculated!');
 }
 function saveCluster() {
-  if (!localStorage.getItem('bpEmail')) { toast('⚠️ Please login first to save results.'); return; }
+  if (!localStorage.getItem('bpUser')) { toast('⚠️ Please login first to save results.'); return; }
+  const clusterVal = document.getElementById('clusterScore')?.textContent || '';
+  localStorage.setItem('bpCluster', clusterVal);
   toast('💾 Results saved to your account!');
 }
 
 /* ─ COMPREHENSIVE COURSE DATABASE 2025 (KUCCPS/KMTC/TVET) ─ */
 // ── BACKEND CONFIG ──────────────────────────────────────────────────────────
-const API_BASE = 'https://btechplus-backend-mpesa.onrender.com/api';
+const API_BASE = 'https://donate-erxu.onrender.com/api';
 // Session ID for AI conversation memory (persists across page refresh)
 const SESSION_ID = localStorage.getItem('btechplus_session') || (() => {
   const id = 'sess_' + Math.random().toString(36).slice(2) + Date.now();
@@ -2018,42 +2130,298 @@ async function sendAI() {
     if (el) el.querySelector('.msg-bub').textContent = local || 'Service temporarily unavailable. Please try again shortly.';
   }
 }
-async function pollDonationStatus(checkoutId, attempts=0) {
-  if (attempts > 10) return;
-  await new Promise(r => setTimeout(r, 4000));
+async function pollDonationStatus(checkoutId, attempts) {
+  attempts = attempts || 0;
+  if (attempts > 12) {
+    toast('Payment not confirmed yet. Check your M-Pesa messages.');
+    return;
+  }
+  await new Promise(function(r){ setTimeout(r, 5000); });
   try {
-    const res  = await fetch(`${API_BASE}/mpesa/status/${checkoutId}`);
+    const res  = await fetch(API_BASE + '/mpesa/status/' + checkoutId);
     const data = await res.json();
     if (data.status === 'SUCCESS') {
-      toast('✅ Donation confirmed! Receipt: ' + (data.mpesa_receipt || '') + ' — Asante sana! 💚');
+      // Show step 4 success screen
+      const rn = document.getElementById('receiptNum');
+      if (rn) rn.textContent = data.mpesa_receipt || 'CONFIRMED';
+      showMpStep(4);
+      toast('🎉 Donation received! Asante sana! 💚');
     } else if (data.status === 'FAILED') {
-      toast('❌ Payment cancelled or failed. You can try again anytime.');
+      showMpStep(1);
+      toast('❌ Payment was cancelled. You can try again anytime.');
     } else {
       pollDonationStatus(checkoutId, attempts + 1);
     }
-  } catch(e) { /* silent */ }
+  } catch(e) {
+    pollDonationStatus(checkoutId, attempts + 1);
+  }
 }
-// Trigger modal after 3 course searches
+// Trigger modal after 3 course grade switches
 let searchTriggerCount = 0;
-// Close modal on backdrop click
-document.getElementById('mpesaModal').addEventListener('click', function(e) {
-  if (e.target === this) closeMpesaModal();
-});
 
-function donateNow() {
-  const a = document.getElementById('donAmt').value;
-  if (!a || a <= 0) { toast('⚠️ Enter a valid amount.'); return; }
-  document.getElementById('donMsg').innerHTML = `
-    <div class="mpesa-guide">
-      <p style="font-weight:700; font-size:14px; margin-bottom:14px; color:var(--teal);">✅ Complete your KES ${a} donation via M-Pesa:</p>
-      <div class="mpesa-step"><div class="step-badge">1</div> Open M-Pesa on your phone</div>
-      <div class="mpesa-step"><div class="step-badge">2</div> Select <strong>Lipa na M-Pesa → Paybill</strong></div>
-      <div class="mpesa-step"><div class="step-badge">3</div> Business No: <strong>XXXXXXX</strong></div>
-      <div class="mpesa-step"><div class="step-badge">4</div> Account: <strong>BTECHPLUS</strong></div>
-      <div class="mpesa-step"><div class="step-badge">5</div> Amount: <strong>KES ${a}</strong> · Enter PIN & Confirm</div>
-    </div>
-  `;
+/* ─ MPESA MODAL FULL FLOW ──────────────────────────────────── */
+let selectedAmt = 100;
+let mpesaShownThisSession = false;
+let currentCheckoutId = null;
+
+function openMpesaModal() {
+  showMpStep(1);
+  document.getElementById('mpesaModal').style.display = 'flex';
 }
+function closeMpesaModal() {
+  document.getElementById('mpesaModal').style.display = 'none';
+}
+function showMpStep(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('mpStep'+i);
+    if (el) el.style.display = (i===n) ? 'block' : 'none';
+  });
+}
+function setAmount(a) {
+  document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('[data-amt="'+a+'"]');
+  if (btn) btn.classList.add('active');
+  if (a === 'custom') {
+    document.getElementById('customAmtWrap').style.display = 'block';
+    selectedAmt = 0;
+  } else {
+    document.getElementById('customAmtWrap').style.display = 'none';
+    selectedAmt = Number(a);
+  }
+}
+function goToStep2() {
+  const custom = parseInt(document.getElementById('customAmt').value) || 0;
+  const finalAmt = selectedAmt === 0 ? custom : selectedAmt;
+  if (!finalAmt || finalAmt < 10) { toast('⚠️ Please choose or enter a valid amount (min KES 10)'); return; }
+  selectedAmt = finalAmt;
+  document.getElementById('step2AmtDisplay').textContent = 'KES ' + finalAmt;
+  showMpStep(2);
+  setTimeout(() => { const p = document.getElementById('mpesaPhone'); if(p) p.focus(); }, 150);
+}
+function formatPhone(inp) {
+  let v = inp.value.replace(/[^0-9]/g, '');
+  if (v.startsWith('254')) v = '0' + v.slice(3);
+  if (v.length > 10) v = v.slice(0, 10);
+  inp.value = v;
+}
+async function submitDonation() {
+  const phone = (document.getElementById('mpesaPhone').value || '').replace(/\s/g,'');
+  if (!/^(07|01)\d{8}$/.test(phone)) {
+    toast('⚠️ Enter a valid Safaricom number e.g. 0712345678');
+    return;
+  }
+  const btn = document.getElementById('stkBtn');
+  const btnTxt = document.getElementById('stkBtnText');
+  btn.disabled = true;
+  btnTxt.textContent = '⏳ Sending M-Pesa prompt...';
+  try {
+    const res = await fetch(API_BASE + '/mpesa/stk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: phone, amount: selectedAmt })
+    });
+    const data = await res.json();
+    if (data.success) {
+      currentCheckoutId = data.checkoutRequestId;
+      document.getElementById('phoneSent').textContent = phone;
+      showMpStep(3);
+      setTimeout(() => {
+        const pb = document.getElementById('progressBar');
+        if (pb) { pb.style.transition = 'width 40s linear'; pb.style.width = '100%'; }
+      }, 200);
+      pollDonationStatus(data.checkoutRequestId, 0);
+    } else {
+      toast('❌ ' + (data.error || 'M-Pesa request failed. Try again.'));
+      btn.disabled = false;
+      btnTxt.textContent = '💚 Send M-Pesa Prompt';
+    }
+  } catch(err) {
+    toast('❌ Network error. Check your connection.');
+    btn.disabled = false;
+    btnTxt.textContent = '💚 Send M-Pesa Prompt';
+  }
+}
+function donateNow() { openMpesaModal(); }
+
+/* ─ AUTH ─────────────────────────────────────────────────────── */
+const ADMIN_EMAIL = 'admin@btechplus.com'; // change to your email
+
+function checkAuthState() {
+  const user = JSON.parse(localStorage.getItem('bpUser') || 'null');
+  const authForms = document.getElementById('authForms');
+  const dashPanel = document.getElementById('dashPanel');
+  const navLogin  = document.getElementById('navLoginBtn');
+  const navLogout = document.getElementById('navLogoutBtn');
+  const adminPanel = document.getElementById('adminPanel');
+
+  if (user && user.email) {
+    // Logged in
+    if (authForms) authForms.style.display = 'none';
+    if (dashPanel) dashPanel.style.display = 'block';
+    if (navLogin)  navLogin.style.display  = 'none';
+    if (navLogout) navLogout.style.display = 'block';
+
+    // Populate dashboard
+    const initials = (user.name || user.email).split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const av = document.getElementById('avatarCircle');
+    if (av) av.textContent = initials;
+    const dn = document.getElementById('dashName');
+    if (dn) dn.textContent = user.name || 'Student';
+    const de = document.getElementById('dashEmail');
+    if (de) de.textContent = user.email;
+
+    // Load saved cluster
+    const saved = localStorage.getItem('bpCluster');
+    if (saved) {
+      const dc = document.getElementById('dashCluster');
+      if (dc) dc.textContent = saved;
+    }
+    const savedGrade = localStorage.getItem('bpGrade');
+    if (savedGrade) {
+      const dg = document.getElementById('dashGrade');
+      if (dg) dg.textContent = savedGrade;
+    }
+
+    // Show admin panel if admin
+    if (user.email === ADMIN_EMAIL) {
+      if (adminPanel) { adminPanel.style.display = 'block'; loadAdminData(); }
+      // Add admin nav link
+      const navLinks = document.querySelector('.nav-links');
+      if (navLinks && !document.getElementById('adminNavLink')) {
+        const li = document.createElement('li');
+        li.innerHTML = '<a href="#adminPanel" id="adminNavLink" style="color:var(--lime);">⚙ Admin</a>';
+        navLinks.insertBefore(li, navLinks.lastElementChild);
+      }
+    }
+  } else {
+    // Logged out
+    if (authForms) authForms.style.display = 'grid';
+    if (dashPanel) dashPanel.style.display = 'none';
+    if (navLogin)  navLogin.style.display  = 'block';
+    if (navLogout) navLogout.style.display = 'none';
+    if (adminPanel) adminPanel.style.display = 'none';
+  }
+}
+
+function loginUser() {
+  const email = (document.getElementById('liEmail').value || '').trim();
+  const pw    = (document.getElementById('liPw').value || '').trim();
+  const msg   = document.getElementById('liMsg');
+  if (!email || !pw) { msg.innerHTML = '<span style="color:var(--coral);">Please fill in both fields.</span>'; return; }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+
+  // localStorage-based auth (upgrade to real backend when ready)
+  const stored = JSON.parse(localStorage.getItem('bpAccounts') || '{}');
+  if (stored[email] && stored[email].pw === btoa(pw)) {
+    const user = { email, name: stored[email].name };
+    localStorage.setItem('bpUser', JSON.stringify(user));
+    msg.innerHTML = '<span style="color:var(--lime);">✅ Welcome back!</span>';
+    setTimeout(() => { checkAuthState(); toast('👋 Welcome back, ' + (user.name || 'Student') + '!'); }, 500);
+  } else {
+    msg.innerHTML = '<span style="color:var(--coral);">❌ Invalid email or password.</span>';
+    btn.disabled = false; btn.textContent = 'Login to Account';
+  }
+}
+
+function registerUser() {
+  const name  = (document.getElementById('regName').value || '').trim();
+  const email = (document.getElementById('regEmail').value || '').trim();
+  const pw    = (document.getElementById('regPw').value || '').trim();
+  const msg   = document.getElementById('regMsg');
+
+  if (!name || !email || !pw) { msg.innerHTML = '<span style="color:var(--coral);">Please fill in all fields.</span>'; return; }
+  if (pw.length < 6) { msg.innerHTML = '<span style="color:var(--coral);">Password must be at least 6 characters.</span>'; return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { msg.innerHTML = '<span style="color:var(--coral);">Enter a valid email address.</span>'; return; }
+
+  const btn = document.getElementById('registerBtn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+
+  const stored = JSON.parse(localStorage.getItem('bpAccounts') || '{}');
+  if (stored[email]) {
+    msg.innerHTML = '<span style="color:var(--coral);">An account with this email already exists.</span>';
+    btn.disabled = false; btn.textContent = 'Create Account';
+    return;
+  }
+  stored[email] = { name, pw: btoa(pw), created: new Date().toISOString() };
+  localStorage.setItem('bpAccounts', JSON.stringify(stored));
+  const user = { email, name };
+  localStorage.setItem('bpUser', JSON.stringify(user));
+  msg.innerHTML = '<span style="color:var(--lime);">✅ Account created!</span>';
+  setTimeout(() => { checkAuthState(); toast('🎉 Account created! Welcome, ' + name + '!'); }, 500);
+}
+
+function logoutUser() {
+  localStorage.removeItem('bpUser');
+  checkAuthState();
+  toast('👋 Signed out. See you soon!');
+  go('#account');
+}
+
+/* ─ ADMIN DATA ────────────────────────────────────────────────── */
+async function loadAdminData() {
+  try {
+    const res = await fetch(API_BASE + '/mpesa/donations');
+    const rows = await res.json();
+    const total = rows.length;
+    const raised = rows.filter(r=>r.status==='SUCCESS').reduce((s,r)=>s+parseFloat(r.amount||0),0);
+    const el1 = document.getElementById('aStat1'); if(el1) el1.textContent = total;
+    const el2 = document.getElementById('aStat2'); if(el2) el2.textContent = 'KES ' + raised.toLocaleString();
+
+    const tbody = document.getElementById('donationsBody');
+    if (!tbody) return;
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--white3);">No donations yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(r => {
+      const statusColor = r.status==='SUCCESS'?'var(--lime)':r.status==='FAILED'?'var(--coral)':'var(--white3)';
+      const date = new Date(r.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return `<tr style="border-top:1px solid rgba(255,255,255,0.04);">
+        <td style="padding:12px 16px;color:var(--white2);">${r.phone}</td>
+        <td style="padding:12px 16px;color:var(--lime);font-weight:600;">KES ${parseFloat(r.amount).toLocaleString()}</td>
+        <td style="padding:12px 16px;color:var(--white3);font-size:12px;">${r.mpesa_receipt || '—'}</td>
+        <td style="padding:12px 16px;"><span style="color:${statusColor};font-size:12px;font-weight:600;">${r.status}</span></td>
+        <td style="padding:12px 16px;color:var(--white3);font-size:12px;">${date}</td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    console.error('Admin load failed:', e);
+  }
+}
+
+/* ─ FORUM — wire to backend ───────────────────────────────────── */
+async function postQ() {
+  const t = (document.getElementById('qText').value || '').trim();
+  const n = (document.getElementById('qName').value || '').trim() || 'Student';
+  if (!t) { toast('⚠️ Please type your question first.'); return; }
+  try {
+    const res = await fetch(API_BASE + '/forum/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: n, message: t })
+    });
+    if (res.ok) {
+      document.getElementById('qText').value = '';
+      document.getElementById('qName').value = '';
+      toast('✅ Question posted! Loading...');
+      setTimeout(loadForumPosts, 800);
+    } else {
+      toast('❌ Could not post. Try again.');
+    }
+  } catch(e) {
+    // fallback local
+    questions.unshift({ name:n, text:t, time:'Just now' });
+    renderQ();
+    document.getElementById('qText').value = '';
+    toast('✅ Question posted!');
+  }
+}
+
+// Init on load
+checkAuthState();
+
 </script>
 </body>
 </html>
