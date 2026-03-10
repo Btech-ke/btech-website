@@ -1999,19 +1999,12 @@ pickGrade(document.querySelector('.grade-pill'), 'A');
 // Load forum posts from backend
 async function loadForumPosts() {
   try {
-    const res  = await fetch(`${API_BASE}/forum/posts`);
-    const posts = await res.json();
-    const el   = document.getElementById('forumPosts');
-    if (!el || !Array.isArray(posts)) return;
-    if (posts.length === 0) return;
-    el.innerHTML = posts.map(p => `
-      <div class="post-card">
-        <div class="post-meta"><span class="post-author">${p.username}</span>
-        <span class="post-time">${new Date(p.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'})}</span></div>
-        <div class="post-text">${p.message}</div>
-        <button class="post-like" onclick="likePost(${p.id}, this)">❤️ ${p.likes || 0}</button>
-      </div>`).join('');
-  } catch(e) { /* silent fallback to local posts */ }
+    var res = await fetch(API_BASE + '/forum/posts');
+    var posts = await res.json();
+    if (Array.isArray(posts) && posts.length > 0) {
+      renderQ(posts);
+    }
+  } catch(e) { /* silent — already has local posts */ }
 }
 
 async function likePost(id, btn) {
@@ -2045,29 +2038,19 @@ let questions = [
   { name:'Kevin O.', text:'When does KUCCPS portal open for 2026 admissions?', time:'1 day ago' },
   { name:'Amina H.', text:'What are the best private universities in Kenya for Education?', time:'2 days ago' },
 ];
-function renderQ() {
-  document.getElementById('qFeed').innerHTML = questions.map(q => `
-    <div class="q-item">
-      <div class="q-header">
-        <div class="q-av">${q.name[0]}</div>
-        <span class="q-name">${q.name}</span>
-        <span class="q-when">${q.time}</span>
-      </div>
-      <div class="q-body">${q.text}</div>
-    </div>
-  `).join('');
+function renderQ(posts) {
+  var data = posts || questions;
+  var feed = document.getElementById('qFeed');
+  if (!feed) return;
+  feed.innerHTML = data.map(function(q) {
+    var initial = (q.name || q.username || 'S')[0].toUpperCase();
+    var text = q.text || q.message || '';
+    var when = q.time || (q.created_at ? new Date(q.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : 'Just now');
+    var name = q.name || q.username || 'Student';
+    return '<div class="q-item"><div class="q-header"><div class="q-av">'+initial+'</div><span class="q-name">'+name+'</span><span class="q-when">'+when+'</span></div><div class="q-body">'+text+'</div></div>';
+  }).join('');
 }
 renderQ();
-function postQ() {
-  const t = document.getElementById('qText').value.trim();
-  const n = document.getElementById('qName').value.trim() || 'Student';
-  if (!t) { toast('⚠️ Please type your question first.'); return; }
-  questions.unshift({ name:n, text:t, time:'Just now' });
-  renderQ();
-  document.getElementById('qText').value = '';
-  document.getElementById('qName').value = '';
-  toast('✅ Question posted!');
-}
 
 /* ─ AI ─ */
 const aiKB = [
@@ -2103,31 +2086,50 @@ const aiKB = [
   { keys:['support','donate','mpesa','paybill','contribution'], ans:'BTECHPLUS is free for all Kenyan students. If this tool helped you, you can support us via M-Pesa Paybill: XXXXXXX, Account: BTECHPLUS. Even KES 50 goes a long way. Click the Support Us 💚 button at the top of the page.' },
 ];
 
+/* ─ AI CHAT ────────────────────────────────────────────────── */
+function addMsg(role, text, id) {
+  var box = document.getElementById('chatMsgs');
+  if (!box) return;
+  var div = document.createElement('div');
+  div.className = 'msg ' + role;
+  if (id) div.id = id;
+  if (role === 'ai') {
+    div.innerHTML = '<div class="msg-av">🤖</div><div class="msg-bub">' + text + '</div>';
+  } else {
+    div.innerHTML = '<div class="msg-bub">' + text + '</div>';
+  }
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
 async function sendAI() {
-  const inp = document.getElementById('aiQ');
-  const q   = inp.value.trim();
+  var inp = document.getElementById('aiQ');
+  var q = inp.value.trim();
   if (!q) return;
   addMsg('user', q);
   inp.value = '';
-  const tid = 'typing_' + Date.now();
-  addMsg('ai', '●●●', tid);
+  var tid = 'typing_' + Date.now();
+  addMsg('ai', '⏳ Thinking...', tid);
 
   try {
-    const res  = await fetch(`${API_BASE}/ai/chat`, {
+    var res  = await fetch(API_BASE + '/ai/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: q, sessionId: SESSION_ID }),
+      body: JSON.stringify({ message: q, sessionId: SESSION_ID })
     });
-    const data = await res.json();
-    const reply = data.reply || 'Samahani, I could not get a response. Try again!';
-    const el = document.getElementById(tid);
+    var data = await res.json();
+    var reply = data.reply || 'Samahani, I could not get a response. Try again!';
+    var el = document.getElementById(tid);
     if (el) el.querySelector('.msg-bub').textContent = reply;
   } catch(err) {
-    const qlo = q.toLowerCase();
-    let local = null;
-    for (const e of aiKB) { if (e.keys && e.keys.some(k => qlo.includes(k))) { local = e.ans; break; } }
-    const el = document.getElementById(tid);
-    if (el) el.querySelector('.msg-bub').textContent = local || 'Service temporarily unavailable. Please try again shortly.';
+    var qlo = q.toLowerCase();
+    var local = null;
+    for (var i = 0; i < aiKB.length; i++) {
+      var e = aiKB[i];
+      if (e.keys && e.keys.some(function(k){ return qlo.indexOf(k) >= 0; })) { local = e.ans; break; }
+    }
+    var el2 = document.getElementById(tid);
+    if (el2) el2.querySelector('.msg-bub').textContent = local || 'Could not connect to AI. Please try again.';
   }
 }
 async function pollDonationStatus(checkoutId, attempts) {
@@ -2391,32 +2393,25 @@ async function loadAdminData() {
   }
 }
 
-/* ─ FORUM — wire to backend ───────────────────────────────────── */
+/* ─ FORUM — post question ─────────────────────────────────────── */
 async function postQ() {
-  const t = (document.getElementById('qText').value || '').trim();
-  const n = (document.getElementById('qName').value || '').trim() || 'Student';
+  var t = (document.getElementById('qText') ? document.getElementById('qText').value : '').trim();
+  var n = (document.getElementById('qName') ? document.getElementById('qName').value : '').trim() || 'Student';
   if (!t) { toast('⚠️ Please type your question first.'); return; }
+  // Optimistic local render immediately
+  questions.unshift({ name:n, text:t, time:'Just now' });
+  renderQ();
+  document.getElementById('qText').value = '';
+  if (document.getElementById('qName')) document.getElementById('qName').value = '';
+  toast('✅ Question posted!');
+  // Also save to backend
   try {
-    const res = await fetch(API_BASE + '/forum/posts', {
+    await fetch(API_BASE + '/forum/posts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: n, message: t })
     });
-    if (res.ok) {
-      document.getElementById('qText').value = '';
-      document.getElementById('qName').value = '';
-      toast('✅ Question posted! Loading...');
-      setTimeout(loadForumPosts, 800);
-    } else {
-      toast('❌ Could not post. Try again.');
-    }
-  } catch(e) {
-    // fallback local
-    questions.unshift({ name:n, text:t, time:'Just now' });
-    renderQ();
-    document.getElementById('qText').value = '';
-    toast('✅ Question posted!');
-  }
+  } catch(e) { /* already shown locally */ }
 }
 
 // Init on load
