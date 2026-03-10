@@ -1156,7 +1156,7 @@ footer {
         <textarea id="qText" placeholder="e.g. What cluster points do I need for Nursing at KU?"></textarea>
         <div class="post-row">
           <input type="text" id="qName" placeholder="Your name (optional)">
-          <button onclick="postQ()">Post Question</button>
+          <button class="post-btn" onclick="postQWithUser()">Post Question</button>
         </div>
       </div>
       <div class="q-feed" id="qFeed"></div>
@@ -2455,9 +2455,9 @@ const aiKB = [
   { keys:['d plain','d grade','failed kcse','low grade'], ans:'With D plain: TVET Certificate programmes in Business, Computing, Tourism, Agriculture, Clothing & Textile are available. No subject requirements. These are 2-year programmes. With D−: Artisan certificates (1 year) are available in trade areas like electrical, plumbing, carpentry, motor vehicle.' },
   { keys:['c minus','c-','certificate'], ans:'With C−: You qualify for KMTC Certificate programmes (Community Health Assistant, Health Records, Enrolled Nursing, Ortho Trauma, Public Health, Medical Engineering), TVET Diploma programmes in Business, Engineering, Computing, Tourism etc., and some degree programmes at private universities.' },
   { keys:['ttc','teacher training','p1','primary teacher'], ans:'Primary Teacher Training requires mean grade C plain. Kenya has 21 Public Primary Teacher Training Colleges (PTTCs) including Highridge, Kagumo, Kamwenja, Thogoto, Mosoriot, Tambach, Kiriari, Kilimambogo and more. The P1 Certificate is a 2-year programme. Apply via KUCCPS. B.Ed (Secondary) requires B− or above.' },
-  { keys:['bursary','scholarship','county fund','cdf','helb'], ans:'Bursary options: 1) HELB loan (helb.co.ke) for admitted students. 2) NG-CDF bursaries — visit your local MP constituency office or ngcdf.go.ke. 3) County bursaries — apply at your county offices, usually January–March. 4) Equity Wings to Fly, KCB Foundation, and Mastercard Foundation also offer scholarships. Apply early!' },
+  { keys:['bursary','scholarship','county fund','cdf','helb'], ans:'Bursary options: 1) HELB loan (portal.hef.co.ke) for admitted students. 2) NG-CDF bursaries — visit your local MP constituency office or ngcdf.go.ke. 3) County bursaries — apply at your county offices, usually January–March. 4) Equity Wings to Fly, KCB Foundation, and Mastercard Foundation also offer scholarships. Apply early!' },
   { keys:['cut off','cutoff','minimum points','cluster required'], ans:'2024 cut-off points (cluster/48): Medicine UoN 42.8, Law UoN 43.6, Engineering UoN 39.2, Computer Science UoN 36.4, Nursing UoN 34.2, Pharmacy UoN 38.4, Economics UoN 36.2. Points vary yearly. Use the Cluster Calculator on this page to check your own score.' },
-  { keys:['support','donate','mpesa','paybill','contribution'], ans:'BTECHPLUS is free for all Kenyan students. If this tool helped you, you can support us via M-Pesa Paybill: XXXXXXX, Account: BTECHPLUS. Even KES 50 goes a long way. Click the Support Us 💚 button at the top of the page.' },
+  { keys:['support','donate','mpesa','paybill','contribution'], ans:'BTECHPLUS is free for all Kenyan students. If this tool helped you, you can support us via M-Pesa Till: 4499436, Account Name; Faith. Even KES 50 goes a long way. Click the Support Us 💚 button at the top of the page.' },
 ];
 
 /* ─ AI CHAT ────────────────────────────────────────────────── */
@@ -3801,4 +3801,5 @@ async function postQWithUser() {
 
 </body>
 </html>
+
 
