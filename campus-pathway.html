@@ -2118,6 +2118,10 @@ async function sendAI() {
       body: JSON.stringify({ message: q, sessionId: SESSION_ID })
     });
     var data = await res.json();
+    if (!res.ok || data.error) {
+      // Backend error — fall through to local KB
+      throw new Error(data.error || 'Backend error');
+    }
     var reply = data.reply || 'Samahani, I could not get a response. Try again!';
     var el = document.getElementById(tid);
     if (el) el.querySelector('.msg-bub').textContent = reply;
@@ -2129,7 +2133,7 @@ async function sendAI() {
       if (e.keys && e.keys.some(function(k){ return qlo.indexOf(k) >= 0; })) { local = e.ans; break; }
     }
     var el2 = document.getElementById(tid);
-    if (el2) el2.querySelector('.msg-bub').textContent = local || 'Could not connect to AI. Please try again.';
+    if (el2) el2.querySelector('.msg-bub').textContent = local || 'Samahani! The AI service is currently unavailable. Please try again in a few minutes, or browse the Courses section for instant answers.';
   }
 }
 async function pollDonationStatus(checkoutId, attempts) {
@@ -2180,25 +2184,35 @@ function showMpStep(n) {
   });
 }
 function setAmount(a) {
-  document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector('[data-amt="'+a+'"]');
+  document.querySelectorAll('.amt-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.querySelector('[data-amt="'+a+'"]');
   if (btn) btn.classList.add('active');
+  var wrap = document.getElementById('customAmtWrap');
   if (a === 'custom') {
-    document.getElementById('customAmtWrap').style.display = 'block';
+    if (wrap) wrap.style.display = 'block';
     selectedAmt = 0;
   } else {
-    document.getElementById('customAmtWrap').style.display = 'none';
+    if (wrap) wrap.style.display = 'none';
     selectedAmt = Number(a);
+    // Update display in step 1 label
+    var d = document.getElementById('modalAmtDisplay');
+    if (d) d.textContent = 'KES ' + a;
   }
 }
 function goToStep2() {
-  const custom = parseInt(document.getElementById('customAmt').value) || 0;
-  const finalAmt = selectedAmt === 0 ? custom : selectedAmt;
-  if (!finalAmt || finalAmt < 10) { toast('⚠️ Please choose or enter a valid amount (min KES 10)'); return; }
+  var customEl = document.getElementById('customAmt');
+  var custom = customEl ? (parseInt(customEl.value) || 0) : 0;
+  var finalAmt = (selectedAmt === 0 || selectedAmt === '0' || selectedAmt === 'custom') ? custom : Number(selectedAmt);
+  console.log('goToStep2: selectedAmt='+selectedAmt+' custom='+custom+' final='+finalAmt);
+  if (!finalAmt || finalAmt < 10) {
+    toast('⚠️ Please choose or enter a valid amount (min KES 10)');
+    return;
+  }
   selectedAmt = finalAmt;
-  document.getElementById('step2AmtDisplay').textContent = 'KES ' + finalAmt;
+  var disp = document.getElementById('step2AmtDisplay');
+  if (disp) disp.textContent = 'KES ' + finalAmt;
   showMpStep(2);
-  setTimeout(() => { const p = document.getElementById('mpesaPhone'); if(p) p.focus(); }, 150);
+  setTimeout(function(){ var p = document.getElementById('mpesaPhone'); if(p) p.focus(); }, 150);
 }
 function formatPhone(inp) {
   let v = inp.value.replace(/[^0-9]/g, '');
@@ -2394,24 +2408,31 @@ async function loadAdminData() {
 }
 
 /* ─ FORUM — post question ─────────────────────────────────────── */
+var postQBusy = false;
 async function postQ() {
-  var t = (document.getElementById('qText') ? document.getElementById('qText').value : '').trim();
-  var n = (document.getElementById('qName') ? document.getElementById('qName').value : '').trim() || 'Student';
+  if (postQBusy) return;  // prevent double submit
+  var txtEl = document.getElementById('qText');
+  var nameEl = document.getElementById('qName');
+  var t = txtEl ? txtEl.value.trim() : '';
+  var n = nameEl ? nameEl.value.trim() : '';
+  if (!n) n = 'Student';
   if (!t) { toast('⚠️ Please type your question first.'); return; }
-  // Optimistic local render immediately
+  postQBusy = true;
+  // Show immediately locally
   questions.unshift({ name:n, text:t, time:'Just now' });
   renderQ();
-  document.getElementById('qText').value = '';
-  if (document.getElementById('qName')) document.getElementById('qName').value = '';
+  if (txtEl) txtEl.value = '';
+  if (nameEl) nameEl.value = '';
   toast('✅ Question posted!');
-  // Also save to backend
+  // Save to backend (fire and forget)
   try {
     await fetch(API_BASE + '/forum/posts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: n, message: t })
     });
-  } catch(e) { /* already shown locally */ }
+  } catch(e) { /* already shown locally, ignore */ }
+  setTimeout(function(){ postQBusy = false; }, 2000);
 }
 
 // Init on load
