@@ -2811,7 +2811,7 @@ function logoutUser() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   FULL ADMIN PANEL
+   ADMIN PANEL
 ════════════════════════════════════════════════════════════ */
 function openAdminPanel() {
   var el = document.getElementById('adminOverlay');
@@ -2831,17 +2831,20 @@ function showAdminTab(tab) {
   if (tab==='donations') loadAdminDonations();
   if (tab==='forum') loadAdminForum();
   if (tab==='users') loadAdminUsers();
-  if (tab==='deadlines') renderAdminDeadlines();
+  if (tab==='chats') loadAdminChats();
+  if (tab==='deadlines') loadAdminDeadlines();
+  if (tab==='bookings') loadAdminBookings();
 }
+
+function loadAdminData() {}
 
 async function loadAdminDashboard() {
   try {
-    var r  = await fetch(API_BASE + '/mpesa/donations');
+    var r = await fetch(API_BASE + '/mpesa/donations');
     var rows = await r.json();
-    var total  = rows.length;
+    var el1 = document.getElementById('adm-donations'); if(el1) el1.textContent = rows.length;
     var raised = rows.filter(function(x){return x.status==='SUCCESS';}).reduce(function(s,x){return s+parseFloat(x.amount||0);},0);
-    var el1 = document.getElementById('adm-donations'); if(el1) el1.textContent = total;
-    var el2 = document.getElementById('adm-revenue');   if(el2) el2.textContent = 'KES '+raised.toLocaleString();
+    var el2 = document.getElementById('adm-revenue'); if(el2) el2.textContent = 'KES '+raised.toLocaleString();
   } catch(e) {}
   try {
     var r2 = await fetch(API_BASE + '/forum/posts');
@@ -2851,58 +2854,62 @@ async function loadAdminDashboard() {
   } catch(e) {}
   try {
     var r3 = await fetch(API_BASE + '/auth/users');
-    var users3 = await r3.json();
-    var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users3)?users3.length:'—';
+    var users = await r3.json();
+    var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users)?users.length:'—';
   } catch(e) {}
-  renderAdminDeadlines();
+  try {
+    var r4 = await fetch(API_BASE + '/ai/sessions');
+    var sess = await r4.json();
+    var el5 = document.getElementById('adm-chats'); if(el5) el5.textContent = Array.isArray(sess)?sess.length:'—';
+  } catch(e) {}
 }
 
 async function loadAdminDonations() {
   var tbody = document.getElementById('adminDonBody');
   if (!tbody) return;
-  tbody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--white3);">Loading...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" class="adm-empty">Loading...</td></tr>';
   try {
     var r = await fetch(API_BASE + '/mpesa/donations');
     var rows = await r.json();
-    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="padding:32px;text-align:center;color:var(--white3);">No donations yet</td></tr>'; return; }
-    tbody.innerHTML = rows.map(function(r) {
-      var sc = r.status==='SUCCESS'?'#00a651':r.status==='FAILED'?'var(--coral)':'var(--white3)';
-      var dt = new Date(r.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" class="adm-empty">No donations yet</td></tr>'; return; }
+    tbody.innerHTML = rows.map(function(row) {
+      var sc = row.status==='SUCCESS'?'#00a651':row.status==='FAILED'?'var(--coral)':'var(--white3)';
+      var dt = new Date(row.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
       return '<tr style="border-top:1px solid rgba(255,255,255,0.04);">'+
-        '<td style="padding:12px 16px;color:var(--white2);">'+r.phone+'</td>'+
-        '<td style="padding:12px 16px;color:#00a651;font-weight:700;">KES '+parseFloat(r.amount||0).toLocaleString()+'</td>'+
-        '<td style="padding:12px 16px;color:var(--white3);font-size:12px;letter-spacing:1px;">'+(r.mpesa_receipt||'—')+'</td>'+
-        '<td style="padding:12px 16px;"><span style="color:'+sc+';font-size:12px;font-weight:700;">'+r.status+'</span></td>'+
+        '<td style="padding:12px 16px;color:var(--white2);">'+row.phone+'</td>'+
+        '<td style="padding:12px 16px;color:#00a651;font-weight:700;">KES '+parseFloat(row.amount||0).toLocaleString()+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+(row.mpesa_receipt||'—')+'</td>'+
+        '<td style="padding:12px 16px;"><span style="color:'+sc+';font-size:12px;font-weight:700;">'+row.status+'</span></td>'+
         '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+dt+'</td>'+
       '</tr>';
     }).join('');
-  } catch(e) { tbody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--coral);">Failed to load</td></tr>'; }
+  } catch(e) { tbody.innerHTML = '<tr><td colspan="5" class="adm-empty" style="color:#ff6b52;">Failed to load</td></tr>'; }
 }
 
 async function loadAdminForum() {
   var list = document.getElementById('adminForumList');
   if (!list) return;
-  list.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Loading...</div>';
+  list.innerHTML = '<div style="color:var(--white3);padding:16px;">Loading...</div>';
   try {
     var r = await fetch(API_BASE + '/forum/posts');
     var posts = await r.json();
     if (!posts.length) { list.innerHTML = '<div style="color:var(--white3);padding:16px;">No posts yet</div>'; return; }
     list.innerHTML = posts.map(function(p) {
-      var dt = new Date(p.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var dt = new Date(p.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'});
       var replied = p.admin_reply ? '<div style="background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px;font-size:13px;color:var(--white2);"><strong style="color:var(--lime);">Admin Reply:</strong> '+p.admin_reply+'</div>' : '';
       return '<div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;" data-id="'+p.id+'">'+
-        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:10px;">'+
           '<div style="display:flex;align-items:center;gap:10px;">'+
-            '<div style="width:32px;height:32px;background:var(--lime-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--lime);">'+(p.username||'S')[0].toUpperCase()+'</div>'+
+            '<div style="width:30px;height:30px;background:var(--lime-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--lime);">'+(p.username||'S')[0].toUpperCase()+'</div>'+
             '<div><div style="font-size:13px;font-weight:700;color:var(--white);">'+(p.username||'Student')+'</div><div style="font-size:11px;color:var(--white3);">'+dt+'</div></div>'+
           '</div>'+
-          '<button onclick="deleteForumPost('+p.id+',this)" style="padding:5px 12px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.3);color:var(--coral);border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;">🗑 Delete</button>'+
+          '<button onclick="deleteForumPost('+p.id+',this)" style="padding:5px 10px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.3);color:var(--coral);border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;flex-shrink:0;">🗑</button>'+
         '</div>'+
-        '<div style="font-size:14px;color:var(--white2);line-height:1.6;margin-bottom:10px;">'+(p.message||'')+'</div>'+
+        '<div style="font-size:14px;color:var(--white2);line-height:1.6;margin-bottom:8px;">'+(p.message||'')+'</div>'+
         replied+
-        '<div style="margin-top:10px;display:flex;gap:8px;">'+
-          '<input type="text" placeholder="Type admin reply..." style="flex:1;padding:8px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;" id="reply-'+p.id+'">'+
-          '<button onclick="submitAdminReply('+p.id+')" style="padding:8px 14px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit;">Reply</button>'+
+        '<div style="margin-top:8px;display:flex;gap:8px;">'+
+          '<input type="text" placeholder="Type admin reply..." style="flex:1;padding:8px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;" id="reply-'+p.id+'" onkeydown="if(event.key===\'Enter\')submitAdminReply('+p.id+')">'+
+          '<button onclick="submitAdminReply('+p.id+')" style="padding:8px 12px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;font-family:inherit;">Reply</button>'+
         '</div>'+
       '</div>';
     }).join('');
@@ -2916,10 +2923,9 @@ async function deleteForumPost(id, btn) {
     await fetch(API_BASE + '/forum/posts/' + id, { method:'DELETE' });
     btn.closest('[data-id]').remove();
     toast('🗑 Post deleted');
-    // Refresh public feed
     var r2 = await fetch(API_BASE + '/forum/posts');
     renderQ(await r2.json());
-  } catch(e) { toast('❌ Delete failed'); btn.textContent = '🗑 Delete'; }
+  } catch(e) { toast('❌ Delete failed'); btn.textContent = '🗑'; }
 }
 
 async function submitAdminReply(postId) {
@@ -2929,14 +2935,13 @@ async function submitAdminReply(postId) {
   try {
     var r = await fetch(API_BASE + '/forum/posts/' + postId + '/reply', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ reply })
+      body: JSON.stringify({ reply: reply })
     });
     var d = await r.json();
     if (d.success) {
       toast('✅ Reply posted!');
       inp.value = '';
       loadAdminForum();
-      // Refresh public forum feed
       var r2 = await fetch(API_BASE + '/forum/posts');
       renderQ(await r2.json());
     }
@@ -2945,221 +2950,238 @@ async function submitAdminReply(postId) {
 
 async function loadAdminChats() {
   var list = document.getElementById('adminChatList');
-  if (!list) return;
-  list.innerHTML = '<div style="color:#555;font-size:13px;">Loading sessions...</div>';
+  var detail = document.getElementById('adminChatDetail');
+  if (list) list.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Loading sessions...</div>';
+  if (detail) detail.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Click a session on the left to view the conversation</div>';
   try {
     var r = await fetch(API_BASE + '/ai/sessions');
     var sessions = await r.json();
-    if (!sessions.length) { list.innerHTML = '<div style="color:#555;">No AI sessions yet</div>'; return; }
+    var el = document.getElementById('adm-chats'); if(el) el.textContent = sessions.length || '0';
+    if (!list) return;
+    if (!sessions.length) { list.innerHTML = '<div style="color:var(--white3);padding:16px;">No AI sessions yet</div>'; return; }
     list.innerHTML = sessions.map(function(s) {
       var dt = new Date(s.last_active).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      var preview = (s.last_message || '').slice(0, 60);
-      return '<button onclick="loadAdminChatDetail(\''+s.session_id+'\')" style="width:100%;text-align:left;background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px;cursor:pointer;margin-bottom:6px;transition:border-color 0.15s;" onmouseover="this.style.borderColor=\'#c8f135\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.07)\'">'
-        +'<div style="font-size:11px;color:#c8f135;font-weight:700;margin-bottom:4px;">'+s.session_id+'</div>'
-        +'<div style="font-size:12px;color:#ccc;margin-bottom:4px;">'+preview+'</div>'
-        +'<div style="font-size:10px;color:#555;">'+s.message_count+' messages · '+dt+'</div>'
+      var preview = (s.last_message || 'No messages').slice(0, 55);
+      return '<button onclick="openChatSession(\''+s.session_id+'\')" style="width:100%;text-align:left;background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;margin-bottom:6px;font-family:inherit;" onmouseover="this.style.borderColor=\'var(--lime)\'" onmouseout="this.style.borderColor=\'var(--border)\'">'
+        +'<div style="font-size:11px;color:var(--lime);font-weight:700;margin-bottom:3px;">'+s.session_id+'</div>'
+        +'<div style="font-size:12px;color:var(--white2);margin-bottom:3px;">'+preview+'</div>'
+        +'<div style="font-size:10px;color:var(--white3);">'+s.message_count+' msgs · '+dt+'</div>'
         +'</button>';
     }).join('');
-  } catch(e) { list.innerHTML = '<div style="color:#ff6b52;">Failed to load</div>'; }
+  } catch(e) { if(list) list.innerHTML = '<div style="color:var(--coral);padding:16px;">Failed: '+e.message+'</div>'; }
 }
 
-async function loadAdminChatDetail(sid) {
-  document.getElementById('adminSessionId') && (document.getElementById('adminSessionId').value = sid);
+async function openChatSession(sid) {
   var detail = document.getElementById('adminChatDetail');
   if (!detail) return;
-  detail.innerHTML = '<div style="color:#555;font-size:13px;">Loading...</div>';
+  detail.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Loading...</div>';
   try {
     var r = await fetch(API_BASE + '/ai/history/' + sid);
     var msgs = await r.json();
-    detail.innerHTML = '<div style="font-size:11px;color:#c8f135;margin-bottom:12px;font-weight:700;">Session: '+sid+'</div>'
-      + '<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;margin-bottom:12px;">'
-      + msgs.map(function(m) {
-          var isUser = m.role === 'user';
-          return '<div style="padding:8px 12px;border-radius:10px;font-size:13px;max-width:85%;'
-            +(isUser ? 'background:rgba(200,241,53,0.1);color:#c8f135;align-self:flex-end;margin-left:auto;' : 'background:#1e1e2e;color:#ccc;')
-            +'">'+m.content+'</div>';
-        }).join('')
-      + '</div>'
-      + '<div style="display:flex;gap:8px;">'
-      + '<input id="adminReplyText" placeholder="Type reply to student..." style="flex:1;padding:9px 12px;background:#1e1e2e;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;outline:none;">'
-      + '<button onclick="sendAdminReply()" style="padding:9px 16px;background:#c8f135;color:#0a0a0f;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">Reply</button>'
-      + '</div>';
-  } catch(e) { detail.innerHTML = '<div style="color:#ff6b52;">Failed: '+e.message+'</div>'; }
+    if (!msgs.length) { detail.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">No messages in this session</div>'; return; }
+    detail.innerHTML =
+      '<div style="font-size:11px;color:var(--lime);margin-bottom:12px;font-weight:700;word-break:break-all;">📱 '+sid+'</div>'+
+      '<div style="display:flex;flex-direction:column;gap:8px;max-height:380px;overflow-y:auto;margin-bottom:12px;padding-right:4px;">'+
+      msgs.map(function(m) {
+        var isUser = m.role === 'user';
+        return '<div style="padding:8px 12px;border-radius:10px;font-size:13px;max-width:85%;line-height:1.5;'+
+          (isUser
+            ? 'background:rgba(200,241,53,0.1);color:var(--lime);align-self:flex-end;margin-left:auto;border:1px solid rgba(200,241,53,0.15);'
+            : 'background:var(--ink3);color:var(--white2);border:1px solid var(--border);')+
+          '">'+m.content+'</div>';
+      }).join('')+
+      '</div>'+
+      '<div style="display:flex;gap:8px;">'+
+        '<input id="chatReplyInp" placeholder="Type reply to inject into student chat..." style="flex:1;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;outline:none;">'+
+        '<button onclick="sendAdminChatReply(\''+sid+'\')" style="padding:9px 16px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;font-size:13px;">Send</button>'+
+      '</div>';
+  } catch(e) { detail.innerHTML = '<div style="color:var(--coral);padding:16px;">Failed: '+e.message+'</div>'; }
 }
 
-async function sendAdminReply() {
-  var sid   = (document.getElementById('adminSessionId').value||'').trim();
-  var reply = (document.getElementById('adminReplyText').value||'').trim();
-  if (!sid || !reply) { toast('Need session ID and reply text'); return; }
+async function sendAdminChatReply(sid) {
+  var inp = document.getElementById('chatReplyInp');
+  var reply = inp ? inp.value.trim() : '';
+  if (!sid || !reply) { toast('⚠️ Type a reply first'); return; }
   try {
-    await fetch(API_BASE + '/ai/admin-reply', {
+    var r = await fetch(API_BASE + '/ai/admin-reply', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ sessionId: sid, reply })
+      body: JSON.stringify({ sessionId: sid, reply: reply })
     });
-    document.getElementById('adminReplyText').value = '';
-    toast('✅ Reply injected into student session');
-    loadAdminChat();
-  } catch(e) { toast('❌ Failed to send reply'); }
+    var d = await r.json();
+    if (d.success) {
+      if (inp) inp.value = '';
+      toast('✅ Reply injected into student session!');
+      openChatSession(sid);
+    } else { toast('❌ '+(d.error||'Failed')); }
+  } catch(e) { toast('❌ Failed: '+e.message); }
 }
 
 async function loadAdminUsers() {
   var tbody = document.getElementById('adminUsersBody');
   if (!tbody) return;
-  tbody.innerHTML = '<tr><td colspan="3" style="padding:32px;text-align:center;color:var(--white3);">Loading...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">Loading...</td></tr>';
   try {
     var r = await fetch(API_BASE + '/auth/users');
     var users = await r.json();
-    // Also update dashboard user count
-    var uc = document.getElementById('adm-users');
-    if (uc) uc.textContent = users.length || 0;
-    if (!users.length) { tbody.innerHTML = '<tr><td colspan="3" style="padding:32px;text-align:center;color:var(--white3);">No registered users yet</td></tr>'; return; }
+    var uc = document.getElementById('adm-users'); if(uc) uc.textContent = users.length || 0;
+    if (!users.length) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">No registered users yet</td></tr>'; return; }
     tbody.innerHTML = users.map(function(u) {
       var dt = new Date(u.created_at).toLocaleDateString('en-KE',{year:'numeric',month:'short',day:'numeric'});
       return '<tr style="border-top:1px solid rgba(255,255,255,0.04);">'+
-        '<td style="padding:12px 16px;color:var(--white);font-weight:600;">'+(u.username||'—')+'</td>'+
+        '<td style="padding:12px 16px;color:#fff;font-weight:600;">'+(u.username||'—')+'</td>'+
         '<td style="padding:12px 16px;color:var(--white3);">'+(u.email||'—')+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white3);">'+(u.grade||'—')+'</td>'+
+        '<td style="padding:12px 16px;color:var(--white3);">'+(u.county||'—')+'</td>'+
+        '<td style="padding:12px 16px;">'+(u.is_admin?'<span style="color:var(--lime);font-size:11px;font-weight:700;">✅ Admin</span>':'—')+'</td>'+
         '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+dt+'</td>'+
       '</tr>';
     }).join('');
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="3" style="padding:24px;text-align:center;color:var(--coral);">Failed to load: '+e.message+'</td></tr>';
-  }
+  } catch(e) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty" style="color:#ff6b52;">Failed: '+e.message+'</td></tr>'; }
 }
 
 function renderEscalationQueue(posts) {
   var el = document.getElementById('escalationList');
   if (!el) return;
   var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && p.message && p.message.length > 60; }).slice(0,5);
-  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:8px;">No pending escalations 🎉</div>'; return; }
+  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No pending questions 🎉</div>'; return; }
   el.innerHTML = flagged.map(function(p) {
-    return '<div style="background:rgba(255,107,82,0.06);border:1px solid rgba(255,107,82,0.15);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start;">'+
-      '<span style="font-size:20px;">❓</span>'+
+    return '<div style="background:rgba(255,107,82,0.06);border:1px solid rgba(255,107,82,0.15);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">'+
+      '<span style="font-size:18px;">❓</span>'+
       '<div style="flex:1;">'+
-        '<div style="font-size:13px;color:var(--white2);margin-bottom:8px;">'+(p.message||'').slice(0,120)+'...</div>'+
-        '<div style="display:flex;gap:8px;">'+
-          '<input type="text" placeholder="Quick reply..." style="flex:1;padding:7px 10px;background:var(--ink3);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:inherit;font-size:12px;" id="esc-'+p.id+'">'+
-          '<button onclick="submitAdminReply('+p.id+')" style="padding:7px 12px;background:var(--lime);color:var(--ink);border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;font-family:inherit;">Reply</button>'+
+        '<div style="font-size:13px;color:var(--white2);margin-bottom:6px;">'+(p.message||'').slice(0,120)+'...</div>'+
+        '<div style="display:flex;gap:6px;">'+
+          '<input type="text" placeholder="Quick reply..." style="flex:1;padding:6px 10px;background:var(--ink3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;font-size:12px;" id="esc-'+p.id+'">'+
+          '<button onclick="var i=document.getElementById(\'esc-'+p.id+'\');if(i&&i.value)submitAdminReply('+p.id+')" style="padding:6px 10px;background:var(--lime);color:var(--ink);border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:11px;font-family:inherit;">Reply</button>'+
         '</div>'+
       '</div>'+
     '</div>';
   }).join('');
 }
 
-/* ════════════════════════════════════════════════════════════
-   DEADLINE TICKER
-════════════════════════════════════════════════════════════ */
-var deadlines = JSON.parse(localStorage.getItem('bpDeadlines') || '[]');
-// Defaults if empty
-if (!deadlines.length) {
-  deadlines = [
-    { name:'KUCCPS 2026 Application', date:'2026-06-30', status:'Open', url:'https://students.kuccps.net' },
-    { name:'KMTC September Intake', date:'2026-05-15', status:'Open', url:'https://admissions.kmtc.ac.ke' },
-    { name:'HELB Loan Application', date:'2026-07-31', status:'Open', url:'https://helb.co.ke' },
-    { name:'TVET Admissions 2026', date:'2026-04-30', status:'Closing Soon', url:'https://tvetcdacc.go.ke' },
-  ];
-  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
-}
-
-function initDeadlineTicker() {
-  if (typeof deadlines !== 'undefined') renderDeadlineTicker();
-}
-
-function daysUntil(dateStr) {
-  var diff = new Date(dateStr) - new Date();
-  return Math.ceil(diff / (1000*60*60*24));
-}
-
-function renderDeadlineTicker() {
-  var ticker = document.getElementById('deadlineTicker');
-  var inner  = document.getElementById('tickerInner');
-  if (!ticker || !inner) return;
-  if (!deadlines || !Array.isArray(deadlines)) return;
-  var open = deadlines.filter(function(d){ return d.status !== 'Closed'; });
-  if (!open.length) return;
-  ticker.style.display = 'block';
-  var items = open.concat(open); // duplicate for seamless loop
-  inner.innerHTML = items.map(function(d) {
-    var days = daysUntil(d.date);
-    var urgency = days <= 7 ? 'var(--coral)' : days <= 30 ? '#f59e0b' : 'var(--lime)';
-    var badge = days > 0 ? days + ' days left' : 'Closing today!';
-    var statusDot = d.status === 'Closing Soon' ? '🔴' : d.status === 'Open' ? '🟢' : '⚫';
-    return '<a href="'+(d.url||'#')+'" target="_blank" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;padding:0 20px;">'+
-      '<span style="font-size:13px;">'+statusDot+' <strong style="color:'+urgency+';">'+d.name+'</strong></span>'+
-      '<span style="font-size:11px;background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:10px;color:'+urgency+';">'+badge+'</span>'+
-      '<span style="color:rgba(255,255,255,0.2);">│</span>'+
-    '</a>';
-  }).join('');
-}
-
-function addDeadline() {
-  var n = (document.getElementById('dlName').value||'').trim();
-  var d = document.getElementById('dlDate').value;
-  var s = document.getElementById('dlStatus').value;
-  if (!n || !d) { toast('Enter name and date'); return; }
-  deadlines.unshift({ name:n, date:d, status:s, url:'' });
-  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
-  renderDeadlineTicker();
-  renderAdminDeadlines();
-  document.getElementById('dlName').value = '';
-  toast('✅ Deadline added to ticker!');
-}
-
-function addDeadline2() {
-  var n = (document.getElementById('dlName2').value||'').trim();
-  var d = document.getElementById('dlDate2').value;
-  var u = (document.getElementById('dlUrl2').value||'').trim();
-  if (!n || !d) { toast('Enter name and date'); return; }
-  deadlines.unshift({ name:n, date:d, status:'Open', url:u });
-  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
-  renderDeadlineTicker();
-  renderAdminDeadlines();
-  document.getElementById('dlName2').value = '';
-  document.getElementById('dlDate2').value = '';
-  document.getElementById('dlUrl2').value = '';
-  toast('✅ Deadline added!');
-}
-
-function renderAdminDeadlines() {
+async function loadAdminDeadlines() {
   var el = document.getElementById('adminDeadlineList');
-  var el2 = document.getElementById('adminDeadlinesFull');
-  var html = deadlines.map(function(d, i) {
-    var days = daysUntil(d.date);
-    var urgency = days <= 7 ? 'var(--coral)' : days <= 30 ? '#f59e0b' : 'var(--lime)';
-    return '<div style="background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">'+
-      '<div style="flex:1;">'+
-        '<div style="font-size:13px;font-weight:700;color:var(--white);">'+d.name+'</div>'+
-        '<div style="font-size:11px;color:var(--white3);margin-top:2px;">'+d.date+' · '+d.status+'</div>'+
-      '</div>'+
-      '<div style="font-size:12px;font-weight:700;color:'+urgency+';white-space:nowrap;">'+(days>0?days+'d left':'Closed')+'</div>'+
-      '<button onclick="removeDeadline('+i+')" style="padding:4px 10px;background:rgba(255,107,82,0.1);border:1px solid rgba(255,107,82,0.2);color:var(--coral);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">✕</button>'+
-    '</div>';
-  }).join('') || '<div style="color:var(--white3);font-size:13px;padding:8px;">No deadlines added yet</div>';
-  if (el)  el.innerHTML  = html;
-  if (el2) el2.innerHTML = html;
+  if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE + '/deadlines', { headers: adminHeader() });
+    var items = await r.json();
+    if (!el) return;
+    if (!items.length) { el.innerHTML = '<div class="adm-empty">No deadlines yet</div>'; return; }
+    el.innerHTML = items.map(function(d) {
+      var days = Math.ceil((new Date(d.deadline) - new Date()) / 86400000);
+      var urgency = days <= 7 ? 'var(--coral)' : days <= 30 ? '#f59e0b' : 'var(--lime)';
+      return '<div style="background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">'+
+        '<div><div style="font-size:13px;font-weight:700;color:#fff;">'+d.title+'</div><div style="font-size:11px;color:#666;margin-top:2px;">'+d.type+' · '+d.status+'</div></div>'+
+        '<div style="font-size:12px;font-weight:700;color:'+urgency+';white-space:nowrap;">'+(days>0?days+'d left':'Closed')+'</div>'+
+        '<button onclick="deleteDeadlineAdmin('+d.id+')" style="padding:4px 10px;background:rgba(255,107,82,0.1);border:1px solid rgba(255,107,82,0.2);color:var(--coral);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">✕</button>'+
+      '</div>';
+    }).join('');
+  } catch(e) { if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
 }
 
-function removeDeadline(i) {
-  deadlines.splice(i, 1);
-  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
-  renderDeadlineTicker();
-  renderAdminDeadlines();
-  toast('Deadline removed');
+async function addDeadlineAdmin() {
+  var title  = (document.getElementById('dlTitle').value||'').trim();
+  var date   = document.getElementById('dlDate').value;
+  var type   = document.getElementById('dlType').value;
+  var status = document.getElementById('dlStatus').value;
+  var link   = (document.getElementById('dlLink').value||'').trim();
+  if (!title || !date) { toast('⚠️ Title and date are required'); return; }
+  try {
+    var r = await fetch(API_BASE+'/admin/deadlines', {
+      method:'POST', headers: adminHeader(),
+      body: JSON.stringify({ title: title, deadline: date, type: type, status: status, link: link||null })
+    });
+    var d = await r.json();
+    if (d.id) {
+      toast('✅ Deadline added!');
+      document.getElementById('dlTitle').value = '';
+      document.getElementById('dlDate').value  = '';
+      document.getElementById('dlLink').value  = '';
+      loadAdminDeadlines();
+    } else toast('❌ '+(d.error||'Failed'));
+  } catch(e){ toast('❌ Network error'); }
 }
 
-function addDeadline3() {
-  var n = (document.getElementById('dlName3').value||'').trim();
-  var d = document.getElementById('dlDate3').value;
-  var c = document.getElementById('dlCat3').value;
-  var s = document.getElementById('dlStat3').value;
-  if (!n || !d) { toast('Enter name and date'); return; }
-  var statusMap = { OPEN:'Open', CLOSING_SOON:'Closing Soon', CLOSED:'Closed' };
-  deadlines.unshift({ name:n, date:d, status:statusMap[s]||'Open', cat:c, url:'' });
-  localStorage.setItem('bpDeadlines', JSON.stringify(deadlines));
-  renderDeadlineTicker();
-  renderAdminDeadlines();
-  document.getElementById('dlName3').value = '';
-  document.getElementById('dlDate3').value = '';
-  toast('✅ Deadline added to ticker!');
+async function deleteDeadlineAdmin(id) {
+  if (!confirm('Delete this deadline?')) return;
+  try {
+    await fetch(API_BASE+'/admin/deadlines/'+id, { method:'DELETE', headers: adminHeader() });
+    toast('🗑 Deleted');
+    loadAdminDeadlines();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function loadAdminBookings() {
+  var el = document.getElementById('adminBookingsList');
+  if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE+'/admin/bookings', { headers: adminHeader() });
+    var items = await r.json();
+    if (!el) return;
+    var pending = items.filter(function(b){ return b.status !== 'DONE'; }).length;
+    var pb = document.getElementById('adm-bookings'); if(pb) pb.textContent = pending;
+    if (!items.length) { el.innerHTML = '<div class="adm-empty">No bookings yet</div>'; return; }
+    el.innerHTML = items.map(function(b){
+      var dt = new Date(b.created_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var sc = b.status==='DONE'?'#c8f135':b.status==='IN PROGRESS'?'#00e5cc':'#f59e0b';
+      return '<div class="booking-item">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;">'+
+          '<div>'+
+            '<div style="font-weight:700;color:#fff;font-size:14px;">'+b.name+' <span style="font-size:11px;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;color:#888;">'+b.service+'</span></div>'+
+            '<div style="font-size:12px;color:#888;margin-top:2px;">📱 '+b.phone+(b.email?' · 📧 '+b.email:'')+'</div>'+
+            (b.message?'<div style="font-size:13px;color:#ccc;margin-top:4px;">'+b.message+'</div>':'')+
+          '</div>'+
+          '<div style="text-align:right;flex-shrink:0;">'+
+            '<div style="font-size:11px;color:'+sc+';font-weight:700;margin-bottom:4px;">'+b.status+'</div>'+
+            '<div style="font-size:11px;color:#555;">'+dt+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+          '<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'IN PROGRESS\')" style="padding:5px 10px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);color:#00e5cc;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">In Progress</button>'+
+          '<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'DONE\')" style="padding:5px 10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);color:#c8f135;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">Mark Done</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  } catch(e){ if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
+}
+
+async function updateBookingStatus(id, status) {
+  try {
+    await fetch(API_BASE+'/admin/bookings/'+id+'/status', {
+      method:'PATCH', headers: adminHeader(),
+      body: JSON.stringify({ status: status })
+    });
+    toast('✅ Updated to: '+status);
+    loadAdminBookings();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function submitBooking() {
+  var name    = document.getElementById('bkName')    ? document.getElementById('bkName').value.trim()    : '';
+  var phone   = document.getElementById('bkPhone')   ? document.getElementById('bkPhone').value.trim()   : '';
+  var email   = document.getElementById('bkEmail')   ? document.getElementById('bkEmail').value.trim()   : '';
+  var service = document.getElementById('bkService') ? document.getElementById('bkService').value         : '';
+  var message = document.getElementById('bkMessage') ? document.getElementById('bkMessage').value.trim() : '';
+  if (!name || !phone || !service) { toast('⚠️ Fill in name, phone and service'); return; }
+  var btn = document.getElementById('bkSubmitBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+  try {
+    var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+    var r = await fetch(API_BASE+'/bookings', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name: name, phone: phone, email: email, service: service, message: message, user_id: user ? user.id : null })
+    });
+    var d = await r.json();
+    if (d.success) {
+      toast('✅ Booking submitted! We will contact you soon.');
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+    } else {
+      toast('❌ '+(d.error||'Failed'));
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+    }
+  } catch(e){
+    toast('❌ Network error');
+    if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3824,6 +3846,7 @@ async function postQWithUser() {
 
 </body>
 </html>
+
 
 
 
