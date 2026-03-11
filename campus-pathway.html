@@ -2813,6 +2813,9 @@ function logoutUser() {
 /* ════════════════════════════════════════════════════════════
    ADMIN PANEL
 ════════════════════════════════════════════════════════════ */
+
+
+/* ─ ADMIN ─ */
 function openAdminPanel() {
   var el = document.getElementById('adminOverlay');
   if (!el) return;
@@ -3183,7 +3186,7 @@ async function submitBooking() {
     if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
   }
 }
-
+  
 /* ════════════════════════════════════════════════════════════
    SUBJECT REQUIREMENTS OVERLAY — openable from courses section
 ════════════════════════════════════════════════════════════ */
@@ -3851,6 +3854,7 @@ async function postQWithUser() {
 
 </body>
 </html>
+
 
 
 
