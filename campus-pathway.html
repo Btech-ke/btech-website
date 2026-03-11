@@ -682,21 +682,151 @@ footer {
   .app-grid { grid-template-columns: repeat(2, 1fr); }
   .ai-layout { grid-template-columns: 1fr; }
 }
+
+/* == TABLET <= 900px == */
 @media (max-width: 900px) {
-  nav { padding: 0 24px; }
+  nav { padding: 0 20px; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
-  .section { padding: 72px 24px; }
-  .section-full { padding: 72px 24px; }
+  .section { padding: 64px 20px; }
+  .section-full { padding: 64px 20px; }
   .calc-layout, .course-layout, .forum-layout, .auth-grid { grid-template-columns: 1fr; }
+  .hero { padding: 100px 20px 64px; }
+  .hero h1 { font-size: clamp(38px,7vw,64px); letter-spacing: -1.5px; }
+  .hero-sub { font-size: 15px; margin: 16px auto 36px; }
+  .hero-metrics { max-width: 100%; }
 }
-@media (max-width: 600px) {
-  .tools-grid { grid-template-columns: 1fr; }
-  .app-grid { grid-template-columns: 1fr; }
-  .amount-row { grid-template-columns: repeat(2, 1fr); }
-  .donate-card { padding: 28px; }
-  .hero-metrics { flex-direction: row; }
-  footer { padding: 36px 24px; flex-direction: column; text-align: center; }
+
+/* == MOBILE <= 640px == */
+@media (max-width: 640px) {
+  /* NAV */
+  nav { height: 56px; padding: 0 16px; }
+  .nav-logo { font-size: 15px; gap: 8px; }
+  .nav-logo-pill { font-size: 9px; padding: 2px 7px; }
+  .hamburger { gap: 4px; }
+  .hamburger span { width: 18px; }
+  .mobile-nav { top: 56px; padding: 20px 16px; gap: 3px; }
+  .mobile-nav a { font-size: 16px; padding: 12px 16px; }
+
+  /* HERO */
+  .hero { min-height: unset; padding: 76px 16px 40px; }
+  .hero-orb { opacity: 0.5; }
+  .hero-tag { font-size: 10px; padding: 5px 14px; margin-bottom: 20px; letter-spacing: 0.8px; }
+  .hero-tag-dot { width: 5px; height: 5px; }
+  .hero h1 { font-size: 34px; letter-spacing: -1px; line-height: 1.05; }
+  .hero-sub { font-size: 14px; margin: 14px auto 28px; max-width: 320px; }
+  .hero-actions { gap: 8px; }
+  .btn-lime { padding: 12px 22px; font-size: 13px; }
+  .btn-ghost { padding: 12px 22px; font-size: 13px; }
+  .hero-metrics {
+    flex-direction: row; flex-wrap: nowrap;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; margin-top: 32px;
+    max-width: 100%; border-radius: var(--r-sm);
+  }
+  .hero-metrics::-webkit-scrollbar { display: none; }
+  .metric { min-width: 100px; padding: 16px 12px; flex-shrink: 0; }
+  .metric-num { font-size: 22px; }
+  .metric-label { font-size: 9px; }
+
+  /* SECTIONS */
+  .section { padding: 44px 16px; }
+  .section-full { padding: 44px 16px; }
+  .eyebrow { font-size: 10px; margin-bottom: 10px; }
+  .heading { font-size: 26px; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .subheading { font-size: 14px; }
+
+  /* TOOLS */
+  .tools-grid { grid-template-columns: 1fr; gap: 1px; margin-top: 28px; }
+  .tool-item { padding: 20px 16px; display: flex; align-items: flex-start; gap: 14px; }
+  .tool-num { display: none; }
+  .tool-icon-wrap { width: 40px; height: 40px; border-radius: 12px; font-size: 18px; flex-shrink: 0; margin-bottom: 0; }
+  .tool-item h3 { font-size: 15px; margin-bottom: 4px; }
+  .tool-item p { font-size: 12.5px; line-height: 1.5; }
+  .tool-link { font-size: 12px; margin-top: 8px; }
+
+  /* CALCULATOR */
+  .calc-layout { gap: 14px; margin-top: 28px; }
+  .card { padding: 22px 16px; }
+  .card h3 { font-size: 18px; margin-bottom: 18px; }
+  .fld-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .fld { margin-bottom: 12px; }
+  .fld select, .fld input { padding: 10px 12px; font-size: 13px; }
+  .calc-result { min-height: 180px; padding: 28px 16px; }
+  .score-big { font-size: 64px; }
+  .btn-primary, .btn-outline { padding: 13px; font-size: 13px; }
+
+  /* COURSES */
+  .course-layout { gap: 14px; margin-top: 24px; }
+  .grade-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .grade-pill { padding: 10px 12px; font-size: 12px; }
+  .grade-pill small { display: none; }
+  .course-block-head { padding: 14px 16px; }
+  .course-block-head h4 { font-size: 13.5px; }
+  .course-block-body { padding: 12px 16px; }
+  .course-entry { font-size: 12.5px; padding: 8px 10px; gap: 8px; }
+
+  /* APPLICATIONS */
+  .app-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 28px; }
+  .app-card { padding: 18px 16px; border-radius: var(--r-sm); }
+  .app-card h3 { font-size: 15px; margin-bottom: 6px; }
+  .app-card p { font-size: 12.5px; margin-bottom: 12px; }
+  .app-icon { width: 38px; height: 38px; font-size: 18px; }
+  .deadline-row { margin-bottom: 12px; padding-bottom: 12px; }
+  .deadline-row span:first-child { font-size: 11px; }
+  .countdown { font-size: 11px; }
+  .app-btn { padding: 11px; font-size: 13px; }
+
+  /* FORUM */
+  .forum-layout { gap: 20px; }
+  .post-card { padding: 18px 14px; }
+  .post-card h3 { font-size: 15px; }
+  .post-card textarea { font-size: 13px; min-height: 80px; }
+  .post-row { flex-direction: column; gap: 8px; }
+  .post-row input, .post-row button { width: 100%; }
+  .post-row button { padding: 12px; }
+  .q-item { padding: 14px; }
+  .q-body { font-size: 13px; }
+  .sidebar-card { padding: 18px 14px; }
+  .tip-row { font-size: 12.5px; gap: 10px; }
+  .contact-row { font-size: 12.5px; gap: 8px; }
+
+  /* AI */
+  .chat-top { padding: 13px 14px; gap: 8px; }
+  .chat-top-title { font-size: 14px; }
+  .chat-top-sub { font-size: 11px; }
+  .chat-msgs { min-height: 220px; max-height: 300px; padding: 12px; gap: 10px; }
+  .msg-bub { font-size: 13px; padding: 10px 12px; max-width: 88%; }
+  .chat-input-row { padding: 10px 12px; gap: 8px; }
+  .chat-input-row input { font-size: 13px; padding: 10px 12px; }
+  .chat-input-row button { padding: 10px 16px; font-size: 13px; }
+  .ai-feat { padding: 14px 12px; gap: 12px; }
+  .ai-feat-icon { width: 36px; height: 36px; font-size: 16px; }
+  .ai-feat h4 { font-size: 13.5px; }
+  .ai-feat p { font-size: 12.5px; }
+
+  /* AUTH */
+  .auth-grid { gap: 12px; margin-top: 28px; }
+  .auth-card { padding: 22px 16px; }
+  .auth-card h3 { font-size: 19px; margin-bottom: 18px; }
+
+  /* DONATE */
+  .donate-card { padding: 22px 16px; }
+  .amount-row { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+
+  /* FOOTER */
+  footer { padding: 32px 16px 20px !important; }
+  footer > div > div:first-child { grid-template-columns: 1fr !important; gap: 24px !important; }
+
+  /* TOAST */
+  .toast { left: 12px; right: 12px; bottom: 16px; text-align: center; font-size: 13px; }
+}
+
+/* Very small */
+@media (max-width: 380px) {
+  .hero h1 { font-size: 28px; }
+  .fld-row { grid-template-columns: 1fr; }
+  .grade-list { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -733,121 +863,170 @@ footer {
 </div>
 
 <!-- M-PESA DONATION MODAL -->
-<!-- ═══════════════════════════════════════════════════════════
-     PROFESSIONAL M-PESA PAYMENT MODAL
-═══════════════════════════════════════════════════════════ -->
-<div id="mpesaModal" onclick="if(event.target===this)closeMpesaModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:16px;">
-<div id="mpModalCard" style="background:#111118;border:1px solid rgba(255,255,255,0.08);border-radius:24px;max-width:420px;width:100%;position:relative;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6);animation:fadeUp 0.3s ease;">
+<div id="mpesaModal" onclick="if(event.target===this)closeMpesaModal()"
+  style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.8);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:16px;">
 
-  <!-- Header bar -->
-  <div style="background:linear-gradient(135deg,#00a651 0%,#007a3d 100%);padding:20px 24px 16px;position:relative;">
-    <button onclick="closeMpesaModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
-    <!-- M-Pesa logo row -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-      <div style="width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#00a651;letter-spacing:-1px;">M</div>
-      <div>
-        <div style="color:#fff;font-weight:700;font-size:15px;line-height:1;">M-Pesa</div>
-        <div style="color:rgba(255,255,255,0.7);font-size:11px;">Lipa na M-Pesa · Secure</div>
+<div id="mpModalCard" style="background:#0d0d18;border:1px solid rgba(255,255,255,0.1);border-radius:28px;max-width:400px;width:100%;position:relative;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,0.7);animation:fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);">
+
+  <!-- TOP GRADIENT HEADER -->
+  <div style="background:linear-gradient(135deg,#005c2e 0%,#00a651 60%,#00c860 100%);padding:22px 22px 18px;position:relative;overflow:hidden;">
+    <!-- Subtle pattern overlay -->
+    <div style="position:absolute;inset:0;opacity:0.08;background-image:radial-gradient(circle at 20% 50%,#fff 1px,transparent 1px),radial-gradient(circle at 80% 20%,#fff 1px,transparent 1px);background-size:30px 30px;"></div>
+    <!-- Close -->
+    <button onclick="closeMpesaModal()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.15);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;z-index:2;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.2)'">✕</button>
+    <!-- Logo row -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;position:relative;z-index:1;">
+      <div style="width:44px;height:44px;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+        <span style="font-weight:900;font-size:18px;color:#00a651;letter-spacing:-1.5px;">M</span>
       </div>
-      <div style="margin-left:auto;display:flex;gap:6px;">
-        <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">🔒 SSL</span>
-        <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">⚡ Instant</span>
+      <div>
+        <div style="color:#fff;font-weight:800;font-size:17px;line-height:1;letter-spacing:-0.3px;">M-Pesa</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:11px;margin-top:2px;font-weight:500;">Lipa Na M-Pesa · Secure Payment</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px;position:relative;z-index:1;">
+        <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);font-size:9.5px;padding:3px 9px;border-radius:20px;font-weight:700;display:flex;align-items:center;gap:4px;">🔒 SSL</div>
+        <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);font-size:9.5px;padding:3px 9px;border-radius:20px;font-weight:700;">⚡ Instant</div>
       </div>
     </div>
-    <div style="color:rgba(255,255,255,0.85);font-size:12px;">Support BTECHPLUS — keeping campus guidance free for every Kenyan student 🇰🇪</div>
+    <div style="color:rgba(255,255,255,0.8);font-size:12.5px;line-height:1.5;position:relative;z-index:1;">Support BTECHPLUS — keeping campus guidance <strong style="color:#fff;">free for every Kenyan student</strong> 🇰🇪</div>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div id="mpStepIndicator" style="display:flex;align-items:center;justify-content:center;padding:14px 24px;gap:0;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);">
+    <div class="mp-step-dot active" id="mpi-1">
+      <div class="mp-dot-circle">1</div>
+      <div class="mp-dot-label">Amount</div>
+    </div>
+    <div class="mp-step-line" id="mpline-1"></div>
+    <div class="mp-step-dot" id="mpi-2">
+      <div class="mp-dot-circle">2</div>
+      <div class="mp-dot-label">Phone</div>
+    </div>
+    <div class="mp-step-line" id="mpline-2"></div>
+    <div class="mp-step-dot" id="mpi-3">
+      <div class="mp-dot-circle">3</div>
+      <div class="mp-dot-label">Confirm</div>
+    </div>
   </div>
 
   <!-- STEP 1 — Choose amount -->
-  <div id="mpStep1" style="padding:24px;">
-    <p style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 10px;font-weight:700;">Choose Amount</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
-      <button onclick="setAmount(50)"   class="amt-btn" data-amt="50">KES 50</button>
-      <button onclick="setAmount(100)"  class="amt-btn active" data-amt="100">KES 100</button>
-      <button onclick="setAmount(200)"  class="amt-btn" data-amt="200">KES 200</button>
-      <button onclick="setAmount(500)"  class="amt-btn" data-amt="500">KES 500</button>
-      <button onclick="setAmount(1000)" class="amt-btn" data-amt="1000">KES 1,000</button>
-      <button onclick="setAmount('custom')" class="amt-btn" data-amt="custom">Custom</button>
+  <div id="mpStep1" style="padding:22px 22px 18px;">
+    <p style="font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:2px;margin:0 0 12px;font-weight:700;">Select Donation Amount</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+      <button onclick="setAmount(50)"   class="mp-amt-btn" data-amt="50">KES 50</button>
+      <button onclick="setAmount(100)"  class="mp-amt-btn active" data-amt="100">KES 100</button>
+      <button onclick="setAmount(200)"  class="mp-amt-btn" data-amt="200">KES 200</button>
+      <button onclick="setAmount(500)"  class="mp-amt-btn" data-amt="500">KES 500</button>
+      <button onclick="setAmount(1000)" class="mp-amt-btn" data-amt="1000">KES 1,000</button>
+      <button onclick="setAmount('custom')" class="mp-amt-btn" data-amt="custom" style="font-size:11px;">✏️ Custom</button>
     </div>
     <div id="customAmtWrap" style="display:none;margin-bottom:14px;">
-      <div style="display:flex;align-items:center;border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.04);">
-        <span style="padding:0 14px;color:#aaa;font-size:13px;font-weight:600;border-right:1px solid rgba(255,255,255,0.1);">KES</span>
-        <input id="customAmt" type="number" min="10" placeholder="Enter amount" style="flex:1;padding:12px 14px;background:transparent;border:none;color:#fff;font-size:16px;outline:none;font-family:inherit;">
+      <div style="display:flex;align-items:center;border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.04);transition:border-color 0.2s;" onfocusin="this.style.borderColor='rgba(0,166,81,0.6)'" onfocusout="this.style.borderColor='rgba(255,255,255,0.12)'">
+        <span style="padding:0 14px;color:rgba(255,255,255,0.4);font-size:13px;font-weight:600;border-right:1px solid rgba(255,255,255,0.08);">KES</span>
+        <input id="customAmt" type="number" min="1" placeholder="Enter amount" style="flex:1;padding:13px 14px;background:transparent;border:none;color:#fff;font-size:16px;outline:none;font-family:inherit;">
       </div>
     </div>
-    <button onclick="goToStep2()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;">
-      <span>Continue</span><span>→</span>
+    <button onclick="goToStep2()" style="width:100%;padding:15px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(0,166,81,0.3);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 12px 32px rgba(0,166,81,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 24px rgba(0,166,81,0.3)'">
+      Continue <span style="font-size:16px;">→</span>
     </button>
-    <button onclick="closeMpesaModal()" style="width:100%;padding:8px;background:transparent;color:#666;border:none;cursor:pointer;font-size:12px;margin-top:6px;font-family:inherit;">Maybe later</button>
+    <button onclick="closeMpesaModal()" style="width:100%;padding:8px;background:transparent;color:rgba(255,255,255,0.3);border:none;cursor:pointer;font-size:12px;margin-top:8px;font-family:inherit;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Maybe later</button>
   </div>
 
   <!-- STEP 2 — Enter phone -->
-  <div id="mpStep2" style="display:none;padding:24px;">
-    <button onclick="showMpStep(1)" style="background:none;border:none;color:#00a651;cursor:pointer;font-size:12px;margin-bottom:16px;padding:0;font-family:inherit;display:flex;align-items:center;gap:4px;">← Back</button>
-    
-    <!-- Amount display -->
-    <div style="background:rgba(0,166,81,0.08);border:1px solid rgba(0,166,81,0.2);border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+  <div id="mpStep2" style="display:none;padding:22px 22px 18px;">
+    <button onclick="showMpStep(1)" style="background:none;border:none;color:#00a651;cursor:pointer;font-size:12.5px;margin-bottom:18px;padding:0;font-family:inherit;display:flex;align-items:center;gap:5px;font-weight:600;">← Back</button>
+
+    <!-- Amount summary pill -->
+    <div style="background:rgba(0,166,81,0.08);border:1px solid rgba(0,166,81,0.2);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;">
       <div>
-        <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:700;">AMOUNT</div>
-        <div style="font-size:26px;font-weight:800;color:#00a651;font-family:'Fraunces',serif;" id="step2AmtDisplay">KES 100</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:3px;">Donating</div>
+        <div style="font-size:28px;font-weight:800;color:#00a651;font-family:'Fraunces',serif;line-height:1;" id="step2AmtDisplay">KES 100</div>
       </div>
-      <div style="text-align:right;">
-        <div style="font-size:10px;color:#888;margin-bottom:4px;">Minimum KES 1</div>
-        <div style="width:36px;height:36px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:14px;margin-left:auto;">M</div>
-      </div>
+      <div style="width:44px;height:44px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:18px;letter-spacing:-1px;box-shadow:0 4px 16px rgba(0,166,81,0.3);">M</div>
     </div>
 
     <!-- Phone input -->
-    <div style="margin-bottom:16px;">
-      <label style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1.5px;display:block;margin-bottom:8px;font-weight:700;">M-PESA NUMBER</label>
-      <div style="display:flex;align-items:center;border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.04);transition:border-color 0.2s;" id="phoneInputWrap">
-        <span style="padding:0 14px;font-size:18px;border-right:1px solid rgba(255,255,255,0.1);">📱</span>
-        <input id="mpesaPhone" type="tel" placeholder="07XX · 01XX · 2547XX" maxlength="13"
-          style="flex:1;padding:13px 14px;background:transparent;border:none;color:#fff;font-size:16px;outline:none;font-family:inherit;letter-spacing:1px;"
+    <div style="margin-bottom:18px;">
+      <label style="font-size:9.5px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;display:block;margin-bottom:10px;font-weight:700;">M-Pesa Phone Number</label>
+      <div style="display:flex;align-items:center;border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.04);transition:border-color 0.2s;" id="phoneInputWrap">
+        <span style="padding:0 14px;font-size:20px;border-right:1px solid rgba(255,255,255,0.08);">📱</span>
+        <input id="mpesaPhone" type="tel" placeholder="07XX XXX XXX · 2547XX" maxlength="13"
+          style="flex:1;padding:14px 14px;background:transparent;border:none;color:#fff;font-size:16px;outline:none;font-family:inherit;letter-spacing:0.5px;"
           oninput="formatPhone(this);onPhoneInput(this)"
           onkeydown="if(event.key==='Enter')submitDonation()">
-        <span id="phoneCheck" style="padding:0 14px;font-size:16px;opacity:0;transition:opacity 0.2s;">✓</span>
+        <span id="phoneCheck" style="padding:0 14px;font-size:18px;opacity:0;transition:opacity 0.25s;color:#00a651;">✓</span>
       </div>
-      <div style="font-size:11px;color:#666;margin-top:6px;">Safaricom M-Pesa number</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:7px;">Safaricom M-Pesa numbers only (07xx / 01xx)</div>
     </div>
 
-    <button id="stkBtn" onclick="submitDonation()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity 0.2s;">
-      <span style="font-size:20px;">M</span>
+    <button id="stkBtn" onclick="submitDonation()"
+      style="width:100%;padding:15px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 24px rgba(0,166,81,0.3);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+      <span style="font-size:20px;font-weight:900;letter-spacing:-1px;line-height:1;">M</span>
       <span id="stkBtnText">Pay with M-Pesa</span>
     </button>
-    <p style="font-size:11px;color:#555;text-align:center;margin-top:10px;line-height:1.6;">🔒 Secured by Safaricom Daraja API · Your PIN never leaves your phone</p>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;">
+      <span style="font-size:11px;color:rgba(255,255,255,0.25);">🔒 Secured by Safaricom Daraja API</span>
+      <span style="color:rgba(255,255,255,0.1);font-size:11px;">·</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.25);">PIN never leaves your phone</span>
+    </div>
   </div>
 
-  <!-- STEP 3 — Waiting -->
-  <div id="mpStep3" style="display:none;padding:32px 24px;text-align:center;">
-    <div style="width:64px;height:64px;background:rgba(0,166,81,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid rgba(0,166,81,0.3);">
-      <span style="font-size:28px;animation:spin 2s linear infinite;display:inline-block;">📱</span>
+  <!-- STEP 3 — Waiting for PIN -->
+  <div id="mpStep3" style="display:none;padding:36px 24px;text-align:center;">
+    <!-- Animated phone ring -->
+    <div style="position:relative;width:80px;height:80px;margin:0 auto 20px;">
+      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid rgba(0,166,81,0.15);"></div>
+      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#00a651;animation:mpSpin 1s linear infinite;"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <div style="width:54px;height:54px;background:rgba(0,166,81,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,166,81,0.25);">
+          <span style="font-size:24px;animation:mpPulse 1.5s ease-in-out infinite;">📱</span>
+        </div>
+      </div>
     </div>
-    <h3 style="font-size:18px;color:#fff;margin:0 0 8px;font-family:'Fraunces',serif;">Check Your Phone!</h3>
-    <p style="font-size:13px;color:#aaa;line-height:1.7;margin:0 0 6px;">STK Push sent to <strong id="phoneSent" style="color:#00a651;"></strong>.</p>
-    <p style="font-size:13px;color:#aaa;line-height:1.7;margin:0 0 20px;">Enter your M-Pesa PIN to complete payment.</p>
+    <h3 style="font-size:20px;color:#fff;margin:0 0 8px;font-family:'Fraunces',serif;font-weight:700;">Check Your Phone!</h3>
+    <p style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 0 4px;">STK Push sent to <strong id="phoneSent" style="color:#00a651;font-weight:700;"></strong></p>
+    <p style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 0 22px;">Enter your M-Pesa PIN to complete the payment.</p>
     <!-- Progress bar -->
-    <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-bottom:8px;">
-      <div id="progressBar" style="height:100%;background:linear-gradient(90deg,#00a651,#00e573);width:0%;border-radius:2px;transition:width 55s linear;"></div>
+    <div style="height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-bottom:8px;border-radius:10px;">
+      <div id="progressBar" style="height:100%;background:linear-gradient(90deg,#00a651,#00e573);width:0%;border-radius:10px;transition:width 55s linear;"></div>
     </div>
-    <div id="waitTimer" style="font-size:11px;color:#555;margin-bottom:16px;">Waiting...</div>
-    <button onclick="closeMpesaModal()" style="background:transparent;border:1px solid rgba(255,255,255,0.1);color:#666;font-size:12px;padding:8px 20px;border-radius:20px;cursor:pointer;font-family:inherit;">Close · payment continues</button>
+    <div id="waitTimer" style="font-size:11px;color:rgba(255,255,255,0.2);margin-bottom:20px;">Awaiting confirmation...</div>
+    <div style="background:rgba(0,166,81,0.06);border:1px solid rgba(0,166,81,0.15);border-radius:12px;padding:12px 16px;margin-bottom:18px;text-align:left;">
+      <div style="font-size:11px;color:#00a651;font-weight:700;margin-bottom:6px;">How to complete:</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.8;">1. Open the M-Pesa popup on your phone<br>2. Enter your 4–6 digit M-Pesa PIN<br>3. Press OK to confirm payment</div>
+    </div>
+    <button onclick="closeMpesaModal()" style="background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);font-size:12px;padding:9px 22px;border-radius:20px;cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.2)';this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='rgba(255,255,255,0.3)'">Close · payment continues in background</button>
   </div>
 
   <!-- STEP 4 — Success -->
-  <div id="mpStep4" style="display:none;padding:32px 24px;text-align:center;">
-    <div style="width:72px;height:72px;background:rgba(0,166,81,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid #00a651;">
-      <span style="font-size:32px;">✓</span>
-    </div>
-    <h3 style="font-size:22px;color:#00a651;margin:0 0 8px;font-family:'Fraunces',serif;">Payment Confirmed!</h3>
-    <p style="font-size:13px;color:#aaa;line-height:1.6;margin:0 0 20px;">Transaction successful.<br>Asante sana for supporting BTECHPLUS! 💚</p>
-    <div style="display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-      <div id="receiptBadge" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:6px 14px;font-size:12px;color:#aaa;display:flex;align-items:center;gap:6px;">
-        <span>🧾</span><span id="receiptNum">—</span>
+  <div id="mpStep4" style="display:none;padding:36px 24px;text-align:center;">
+    <!-- Success icon -->
+    <div style="width:80px;height:80px;margin:0 auto 20px;position:relative;">
+      <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,166,81,0.12);border:2px solid rgba(0,166,81,0.3);animation:mpSuccessRing 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;"></div>
+      <div style="position:absolute;inset:8px;border-radius:50%;background:linear-gradient(135deg,#00a651,#007a3d);display:flex;align-items:center;justify-content:center;animation:mpSuccessPop 0.5s 0.1s cubic-bezier(0.175,0.885,0.32,1.275) both;opacity:0;box-shadow:0 8px 24px rgba(0,166,81,0.4);">
+        <span style="font-size:24px;color:#fff;font-weight:900;">✓</span>
       </div>
-      <div id="amtBadge" style="background:rgba(0,166,81,0.1);border:1px solid rgba(0,166,81,0.2);border-radius:20px;padding:6px 14px;font-size:12px;color:#00a651;font-weight:700;">KES <span id="confirmedAmt">—</span></div>
     </div>
-    <button onclick="closeMpesaModal()" style="padding:13px 32px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;">Continue Learning 🎓</button>
-    <button onclick="resetMpModal()" style="display:block;width:100%;padding:8px;background:transparent;color:#666;border:none;cursor:pointer;font-size:12px;margin-top:6px;font-family:inherit;">Make Another Donation</button>
+    <h3 style="font-size:24px;color:#00a651;margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;letter-spacing:-0.5px;">Payment Confirmed!</h3>
+    <p style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 0 22px;">Asante sana for supporting BTECHPLUS! 💚<br>Your generosity keeps this free for all students.</p>
+    <!-- Receipt card -->
+    <div style="background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Receipt No.</span>
+        <span id="receiptNum" style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:700;font-family:'IBM Plex Mono',monospace;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Amount Paid</span>
+        <span style="font-size:16px;color:#00a651;font-weight:800;">KES <span id="confirmedAmt">—</span></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
+        <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Status</span>
+        <span style="background:rgba(0,166,81,0.15);border:1px solid rgba(0,166,81,0.3);color:#00a651;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;">✓ PAID</span>
+      </div>
+    </div>
+    <button onclick="closeMpesaModal()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;box-shadow:0 8px 24px rgba(0,166,81,0.3);margin-bottom:8px;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Continue Learning 🎓</button>
+    <button onclick="resetMpModal()" style="width:100%;padding:9px;background:transparent;color:rgba(255,255,255,0.3);border:none;cursor:pointer;font-size:12px;font-family:inherit;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Make Another Donation</button>
   </div>
 
 </div><!-- end card -->
@@ -856,20 +1035,53 @@ footer {
 <style>
 @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 @keyframes spin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* ── NEW M-PESA MODAL STYLES ── */
+@keyframes mpSpin { to { transform: rotate(360deg); } }
+@keyframes mpPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.8} }
+@keyframes mpSuccessRing { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes mpSuccessPop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+
+/* Step indicator */
+.mp-step-dot { display:flex;flex-direction:column;align-items:center;gap:4px; }
+.mp-dot-circle {
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.3);font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.mp-dot-label { font-size:9px;color:rgba(255,255,255,0.25);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;transition:color 0.3s; }
+.mp-step-dot.active .mp-dot-circle { background:#00a651;border-color:#00a651;color:#fff;box-shadow:0 0 0 4px rgba(0,166,81,0.2); }
+.mp-step-dot.active .mp-dot-label { color:#00a651; }
+.mp-step-dot.done .mp-dot-circle { background:rgba(0,166,81,0.2);border-color:rgba(0,166,81,0.4);color:#00a651; }
+.mp-step-dot.done .mp-dot-label { color:rgba(0,166,81,0.7); }
+.mp-step-line { flex:1;height:1.5px;background:rgba(255,255,255,0.07);margin:0 8px;min-width:32px;align-self:center;transition:background 0.3s; }
+.mp-step-line.done { background:rgba(0,166,81,0.4); }
+
+/* Amount buttons */
+.mp-amt-btn {
+  padding:11px 6px;
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:12px;color:rgba(255,255,255,0.6);
+  font-size:12.5px;font-weight:700;cursor:pointer;
+  transition:all 0.18s;font-family:inherit;
+  letter-spacing:-0.2px;
+}
+.mp-amt-btn:hover { background:rgba(0,166,81,0.1);border-color:rgba(0,166,81,0.4);color:#00a651;transform:translateY(-1px); }
+.mp-amt-btn.active { background:rgba(0,166,81,0.15);border-color:#00a651;color:#00a651;box-shadow:0 0 0 3px rgba(0,166,81,0.12); }
+
+/* Keep legacy .amt-btn working for donate section */
 .amt-btn {
   padding:10px 6px;
   background:rgba(255,255,255,0.04);
   border:1.5px solid rgba(255,255,255,0.09);
-  border-radius:10px;
-  color:#ccc;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  transition:all 0.18s;
-  font-family:inherit;
+  border-radius:10px;color:#ccc;
+  font-size:12px;font-weight:700;cursor:pointer;transition:all 0.18s;font-family:inherit;
 }
-.amt-btn:hover { background:rgba(0,166,81,0.1); border-color:rgba(0,166,81,0.4); color:#00a651; }
-.amt-btn.active { background:rgba(0,166,81,0.15); border-color:#00a651; color:#00a651; }
+.amt-btn:hover { background:rgba(0,166,81,0.1);border-color:rgba(0,166,81,0.4);color:#00a651; }
+.amt-btn.active { background:rgba(0,166,81,0.15);border-color:#00a651;color:#00a651; }
 </style>
 
 
@@ -905,9 +1117,6 @@ footer {
 </style>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-orb hero-orb-1"></div>
-
 <section class="hero">
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
@@ -2552,8 +2761,11 @@ function showMpStep(n) {
     const el = document.getElementById('mpStep'+i);
     if (el) el.style.display = (i===n) ? 'block' : 'none';
   });
+  updateMpStepUI(n);
 }
 function setAmount(a) {
+  // update both modal btns and donate-section btns
+  document.querySelectorAll('.mp-amt-btn').forEach(function(b){ b.classList.remove('active'); });
   document.querySelectorAll('.amt-btn').forEach(function(b){ b.classList.remove('active'); });
   var btn = document.querySelector('[data-amt="'+a+'"]');
   if (btn) btn.classList.add('active');
@@ -2598,8 +2810,24 @@ function onPhoneInput(inp) {
   if (wrap) wrap.style.borderColor = valid ? '#00a651' : 'rgba(255,255,255,0.12)';
   if (check) { check.style.opacity = valid ? '1' : '0'; check.style.color = '#00a651'; }
 }
+function updateMpStepUI(n) {
+  // Step indicator dots
+  [1,2,3].forEach(function(i){
+    var dot = document.getElementById('mpi-'+i);
+    var line = document.getElementById('mpline-'+i);
+    if (!dot) return;
+    dot.classList.remove('active','done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+    if (line) line.classList.toggle('done', i < n);
+  });
+  // Hide indicator on step 3/4 (processing/success)
+  var ind = document.getElementById('mpStepIndicator');
+  if (ind) ind.style.display = (n <= 2) ? '' : 'none';
+}
 function resetMpModal() {
   selectedAmt = 100;
+  document.querySelectorAll('.mp-amt-btn').forEach(function(b){ b.classList.remove('active'); });
   document.querySelectorAll('.amt-btn').forEach(function(b){ b.classList.remove('active'); });
   var b100 = document.querySelector('[data-amt="100"]');
   if (b100) b100.classList.add('active');
@@ -3832,4 +4060,3 @@ async function postQWithUser() {
 
 </body>
 </html>
-
