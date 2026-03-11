@@ -1172,7 +1172,7 @@ footer {
       </div>
       <div class="sidebar-card reveal">
         <h4>📞 Key Contacts</h4>
-        <div class="contact-row"><div class="contact-badge" style="background:var(--lime);color:var(--ink);">B</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">BTECHPLUS Support</div><a href="tel:+254113996609" style="color:var(--lime);font-size:12px;text-decoration:none;">0113 996 609</a> · <a href="mailto:btechkenya@gmail.com" style="color:var(--lime);font-size:12px;text-decoration:none;">btechkenya@gmail.com</a></div></div>
+        <div class="contact-row"><div class="contact-badge" style="background:var(--lime);color:var(--ink);">B</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">BTECHPLUS Support</div><a href="tel:+254113996609" style="color:var(--lime);font-size:12px;text-decoration:none;">0113 996 609</a> · <a href="/cdn-cgi/l/email-protection#fe9c8a9b9d96959b90879fbe99939f9792d09d9193" style="color:var(--lime);font-size:12px;text-decoration:none;"><span class="__cf_email__" data-cfemail="ee8c9a8b8d86858b80978fae89838f8782c08d8183">[email&#160;protected]</span></a></div></div>
         <div class="contact-row"><div class="contact-badge">K</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS</div><span style="font-size:12px;color:var(--white3);">0800 724 444 (Toll Free)</span></div></div>
         <div class="contact-row"><div class="contact-badge">M</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KMTC</div><span style="font-size:12px;color:var(--white3);">020 272 6440</span></div></div>
         <div class="contact-row"><div class="contact-badge">H</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">HELB</div><span style="font-size:12px;color:var(--white3);">0711 052 000</span></div></div>
@@ -1350,7 +1350,7 @@ footer {
       <button id="atab-dashboard" class="admin-tab active" onclick="showAdminTab('dashboard')">📊 Dashboard</button>
       <button id="atab-donations" class="admin-tab" onclick="showAdminTab('donations')">💳 Donations</button>
       <button id="atab-forum"     class="admin-tab" onclick="showAdminTab('forum')">💬 Forum</button>
-      <button id="atab-chat"      class="admin-tab" onclick="showAdminTab('chat')">🤖 AI Chat</button>
+      <button id="atab-chats"     class="admin-tab" onclick="showAdminTab('chats');loadAdminChats()">🤖 AI Chat</button>
       <button id="atab-deadlines" class="admin-tab" onclick="showAdminTab('deadlines')">📅 Deadlines</button>
       <button id="atab-users"     class="admin-tab" onclick="showAdminTab('users')">👥 Users</button>
     </div>
@@ -1441,24 +1441,21 @@ footer {
     </div>
 
     <!-- ── TAB: AI CHAT ── -->
-    <div id="adminTab-chat" class="admin-tab-content" style="display:none;">
-      <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0 0 8px;">🤖 AI Conversations</h2>
-      <p style="color:var(--white3);font-size:13px;margin:0 0 24px;">Enter a student session ID to view their conversation and inject an admin reply.</p>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;">
-        <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Session ID</label>
-        <div style="display:flex;gap:10px;">
-          <input id="adminSessionId" type="text" placeholder="bp_abc123..." style="flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
-          <button onclick="loadAdminChat()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">Load Chat</button>
+    <div id="adminTab-chats" class="admin-tab-content" style="display:none;">
+      <div style="display:flex;gap:16px;height:520px;">
+        <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <h3 style="font-size:15px;font-weight:800;color:var(--white);margin:0;">💬 Student Sessions</h3>
+            <button onclick="loadAdminChats()" style="padding:5px 10px;background:var(--ink3);border:1px solid var(--border);color:var(--lime);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">↻ Refresh</button>
+          </div>
+          <div id="adminChatList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;">
+            <div style="color:var(--white3);font-size:13px;padding:16px;">Loading sessions...</div>
+          </div>
         </div>
-      </div>
-      <div id="adminChatLog" style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;min-height:200px;max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:16px;">
-        <div style="color:var(--white3);font-size:13px;">Enter session ID above to load chat</div>
-      </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
-        <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Admin Reply (injected into student chat)</label>
-        <div style="display:flex;gap:10px;">
-          <textarea id="adminReplyText" placeholder="Type your reply to the student..." rows="3" style="flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;resize:none;"></textarea>
-          <button onclick="sendAdminReply()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;align-self:flex-end;">Send Reply</button>
+        <div style="flex:1;background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;">
+          <div id="adminChatDetail" style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--white3);font-size:13px;">
+            Click a session on the left to view the conversation
+          </div>
         </div>
       </div>
     </div>
@@ -1535,7 +1532,7 @@ footer {
         <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:10px;">BTECHPLUS</div>
         <p style="font-size:13px;color:var(--white3);line-height:1.7;margin-bottom:16px;">Kenya's #1 campus pathway platform helping KCSE students find their best course, college and career path. 100% free.</p>
         <div style="display:flex;gap:10px;">
-          <a href="mailto:btechkenya@gmail.com" style="background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">✉ Email Us</a>
+          <a href="/cdn-cgi/l/email-protection#77150312141f1c12190e1637101a161e1b5914181a" style="background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">✉ Email Us</a>
           <a href="https://wa.me/254113996609" target="_blank" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">💬 WhatsApp</a>
         </div>
       </div>
@@ -1557,7 +1554,7 @@ footer {
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div>
             <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Email</div>
-            <a href="mailto:btechkenya@gmail.com" style="color:var(--white2);text-decoration:none;font-size:13px;">btechkenya@gmail.com</a>
+            <a href="/cdn-cgi/l/email-protection#a4c6d0c1c7cccfc1caddc5e4c3c9c5cdc88ac7cbc9" style="color:var(--white2);text-decoration:none;font-size:13px;"><span class="__cf_email__" data-cfemail="2e4c5a4b4d46454b40574f6e49434f4742004d4143">[email&#160;protected]</span></a>
           </div>
           <div>
             <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Phone / WhatsApp</div>
@@ -1585,7 +1582,7 @@ footer {
       <div style="font-size:12px;color:var(--white3);">© 2026 BTECHPLUS Campus Pathway · Made with 💚 for Kenyan Students</div>
       <div style="display:flex;align-items:center;gap:16px;">
         <span style="font-size:12px;color:var(--white3);">📞 0113 996 609</span>
-        <span style="font-size:12px;color:var(--white3);">✉ btechkenya@gmail.com</span>
+        <span style="font-size:12px;color:var(--white3);">✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4022342523282b252e392100272d21292c6e232f2d">[email&#160;protected]</a></span>
         <span style="font-size:20px;">🇰🇪</span>
       </div>
     </div>
@@ -1594,7 +1591,7 @@ footer {
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ═══ GLOBALS — declared first to avoid Temporal Dead Zone crashes ══════════ */
 var searchTriggerCount   = 0;
 var mpesaShownThisSession = false;
@@ -3689,7 +3686,7 @@ async function postQWithUser() {
       <div>
         <div style="font-size:13px;font-weight:700;color:var(--lime);">Call / WhatsApp to Book</div>
         <div style="font-size:15px;font-weight:700;color:var(--white);">0113 996 609</div>
-        <div style="font-size:11px;color:var(--white3);">btechkenya@gmail.com</div>
+        <div style="font-size:11px;color:var(--white3);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f193859492999a949f8890b1969c90989ddf929e9c">[email&#160;protected]</a></div>
       </div>
     </div>
     <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:block;width:100%;padding:14px;background:var(--lime);color:var(--ink);border-radius:12px;font-weight:700;font-size:15px;text-align:center;text-decoration:none;box-sizing:border-box;">Visit Online Cyber →</a>
@@ -3763,26 +3760,7 @@ async function postQWithUser() {
   </div>
 
   <!-- ── AI CHATS ───────────────────────────────────────────────────────── -->
-  <div id="adminTab-chats" class="admin-tab-content">
-  <div style="display:flex;gap:16px;height:520px;">
-    <!-- LEFT: session list -->
-    <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <h3 style="font-size:15px;font-weight:800;color:var(--white);margin:0;">💬 Student Sessions</h3>
-        <button onclick="loadAdminChats()" style="padding:5px 10px;background:var(--ink3);border:1px solid var(--border);color:var(--lime);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">↻ Refresh</button>
-      </div>
-      <div id="adminChatList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;">
-        <div style="color:var(--white3);font-size:13px;padding:16px;">Loading sessions...</div>
-      </div>
-    </div>
-    <!-- RIGHT: conversation detail -->
-    <div style="flex:1;background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;">
-      <div id="adminChatDetail" style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--white3);font-size:13px;">
-        Click a session on the left to view the conversation
-      </div>
-    </div>
-  </div>
-</div>
+  <div id="adminTab-chats2" class="admin-tab-content" style="display:none;"></div>
 
   <!-- ── USERS ──────────────────────────────────────────────────────────── -->
   <div id="adminTab-users" class="admin-tab-content" style="display:none;">
@@ -3854,10 +3832,3 @@ async function postQWithUser() {
 
 </body>
 </html>
-
-
-
-
-
-
-
