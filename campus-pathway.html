@@ -2943,25 +2943,48 @@ async function submitAdminReply(postId) {
   } catch(e) { toast('❌ Reply failed'); }
 }
 
-async function loadAdminChat() {
-  var sid = (document.getElementById('adminSessionId').value||'').trim();
-  if (!sid) { toast('Enter a session ID first'); return; }
-  var log = document.getElementById('adminChatLog');
-  if (log) log.innerHTML = '<div style="color:var(--white3);">Loading...</div>';
+async function loadAdminChats() {
+  var list = document.getElementById('adminChatList');
+  if (!list) return;
+  list.innerHTML = '<div style="color:#555;font-size:13px;">Loading sessions...</div>';
+  try {
+    var r = await fetch(API_BASE + '/ai/sessions');
+    var sessions = await r.json();
+    if (!sessions.length) { list.innerHTML = '<div style="color:#555;">No AI sessions yet</div>'; return; }
+    list.innerHTML = sessions.map(function(s) {
+      var dt = new Date(s.last_active).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var preview = (s.last_message || '').slice(0, 60);
+      return '<button onclick="loadAdminChatDetail(\''+s.session_id+'\')" style="width:100%;text-align:left;background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px;cursor:pointer;margin-bottom:6px;transition:border-color 0.15s;" onmouseover="this.style.borderColor=\'#c8f135\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.07)\'">'
+        +'<div style="font-size:11px;color:#c8f135;font-weight:700;margin-bottom:4px;">'+s.session_id+'</div>'
+        +'<div style="font-size:12px;color:#ccc;margin-bottom:4px;">'+preview+'</div>'
+        +'<div style="font-size:10px;color:#555;">'+s.message_count+' messages · '+dt+'</div>'
+        +'</button>';
+    }).join('');
+  } catch(e) { list.innerHTML = '<div style="color:#ff6b52;">Failed to load</div>'; }
+}
+
+async function loadAdminChatDetail(sid) {
+  document.getElementById('adminSessionId') && (document.getElementById('adminSessionId').value = sid);
+  var detail = document.getElementById('adminChatDetail');
+  if (!detail) return;
+  detail.innerHTML = '<div style="color:#555;font-size:13px;">Loading...</div>';
   try {
     var r = await fetch(API_BASE + '/ai/history/' + sid);
     var msgs = await r.json();
-    if (!log) return;
-    if (!msgs.length) { log.innerHTML = '<div style="color:var(--white3);">No messages found</div>'; return; }
-    log.innerHTML = msgs.map(function(m) {
-      var isAI = m.role==='assistant';
-      return '<div style="display:flex;gap:10px;align-items:flex-start;justify-content:'+(isAI?'flex-start':'flex-end')+';">'+
-        (isAI?'<div style="width:28px;height:28px;background:var(--lime-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🤖</div>':'') +
-        '<div style="max-width:75%;padding:10px 14px;background:'+(isAI?'var(--ink3)':'var(--lime-dim)')+';border-radius:12px;font-size:13px;color:'+(isAI?'var(--white2)':'var(--white)')+';line-height:1.6;">'+m.content+'</div>'+
-        (!isAI?'<div style="width:28px;height:28px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">👤</div>':'') +
-      '</div>';
-    }).join('');
-  } catch(e) { if(log) log.innerHTML = '<div style="color:var(--coral);">Failed: '+e.message+'</div>'; }
+    detail.innerHTML = '<div style="font-size:11px;color:#c8f135;margin-bottom:12px;font-weight:700;">Session: '+sid+'</div>'
+      + '<div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;margin-bottom:12px;">'
+      + msgs.map(function(m) {
+          var isUser = m.role === 'user';
+          return '<div style="padding:8px 12px;border-radius:10px;font-size:13px;max-width:85%;'
+            +(isUser ? 'background:rgba(200,241,53,0.1);color:#c8f135;align-self:flex-end;margin-left:auto;' : 'background:#1e1e2e;color:#ccc;')
+            +'">'+m.content+'</div>';
+        }).join('')
+      + '</div>'
+      + '<div style="display:flex;gap:8px;">'
+      + '<input id="adminReplyText" placeholder="Type reply to student..." style="flex:1;padding:9px 12px;background:#1e1e2e;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;outline:none;">'
+      + '<button onclick="sendAdminReply()" style="padding:9px 16px;background:#c8f135;color:#0a0a0f;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">Reply</button>'
+      + '</div>';
+  } catch(e) { detail.innerHTML = '<div style="color:#ff6b52;">Failed: '+e.message+'</div>'; }
 }
 
 async function sendAdminReply() {
@@ -3801,6 +3824,7 @@ async function postQWithUser() {
 
 </body>
 </html>
+
 
 
 
