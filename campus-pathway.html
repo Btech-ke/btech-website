@@ -2682,41 +2682,12 @@ function addMsg(role, text, id) {
   box.scrollTop = box.scrollHeight;
 }
 
-/* Chat polling — checks for new messages (admin replies) every 8 seconds */
-var chatPollTimer = null;
-var chatMsgCount = 0;
-
-function startChatPolling() {
-  if (chatPollTimer) return; // already running
-  chatPollTimer = setInterval(pollAdminReplies, 8000);
-}
-
-async function pollAdminReplies() {
-  try {
-    var r = await fetch(API_BASE + '/ai/history/' + SESSION_ID);
-    if (!r.ok) return;
-    var msgs = await r.json();
-    if (msgs.length <= chatMsgCount) return;
-    // New messages since last poll — re-render chat
-    var box = document.getElementById('chatMsgs');
-    if (!box) return;
-    box.innerHTML = '';
-    msgs.forEach(function(m) {
-      var isAdminMsg = m.content && m.content.startsWith('[ADMIN]');
-      var text = isAdminMsg ? '👨‍💼 <strong>BTECHPLUS Team:</strong> ' + m.content.replace('[ADMIN] ', '') : m.content;
-      addMsg(m.role === 'user' ? 'user' : 'ai', text);
-    });
-    chatMsgCount = msgs.length;
-  } catch(e) {}
-}
-
 async function sendAI() {
   var inp = document.getElementById('aiQ');
   var q = inp.value.trim();
   if (!q) return;
   addMsg('user', q);
   inp.value = '';
-  startChatPolling();
   var tid = 'typing_' + Date.now();
   addMsg('ai', '⏳ Thinking...', tid);
 
@@ -3095,11 +3066,6 @@ function showAdminTab(tab) {
 
 function loadAdminData() {}
 
-function adminHeader() {
-  var token = localStorage.getItem('bpToken') || '';
-  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
-}
-
 async function loadAdminDashboard() {
   try {
     var r = await fetch(API_BASE + '/mpesa/donations');
@@ -3115,7 +3081,7 @@ async function loadAdminDashboard() {
     renderEscalationQueue(posts);
   } catch(e) {}
   try {
-    var r3 = await fetch(API_BASE + '/admin/users', { headers: adminHeader() });
+    var r3 = await fetch(API_BASE + '/auth/users');
     var users = await r3.json();
     var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users)?users.length:'—';
   } catch(e) {}
@@ -3283,8 +3249,7 @@ async function loadAdminUsers() {
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">Loading...</td></tr>';
   try {
-    var r = await fetch(API_BASE + '/admin/users', { headers: adminHeader() });
-    if (r.status === 401 || r.status === 403) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty" style="color:#ff6b52;">⚠️ Session expired — please log in again as admin</td></tr>'; return; }
+    var r = await fetch(API_BASE + '/auth/users');
     var users = await r.json();
     var uc = document.getElementById('adm-users'); if(uc) uc.textContent = users.length || 0;
     if (!users.length) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">No registered users yet</td></tr>'; return; }
@@ -3305,8 +3270,8 @@ async function loadAdminUsers() {
 function renderEscalationQueue(posts) {
   var el = document.getElementById('escalationList');
   if (!el) return;
-  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && !p.is_deleted && p.message; }).slice(0,10);
-  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No unanswered questions 🎉</div>'; return; }
+  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && p.message && p.message.length > 60; }).slice(0,5);
+  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No pending questions 🎉</div>'; return; }
   el.innerHTML = flagged.map(function(p) {
     return '<div style="background:rgba(255,107,82,0.06);border:1px solid rgba(255,107,82,0.15);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">'+
       '<span style="font-size:18px;">❓</span>'+
@@ -3325,7 +3290,7 @@ async function loadAdminDeadlines() {
   var el = document.getElementById('adminDeadlineList');
   if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
   try {
-    var r = await fetch(API_BASE + '/admin/deadlines', { headers: adminHeader() });
+    var r = await fetch(API_BASE + '/deadlines', { headers: adminHeader() });
     var items = await r.json();
     if (!el) return;
     if (!items.length) { el.innerHTML = '<div class="adm-empty">No deadlines yet</div>'; return; }
@@ -3680,51 +3645,219 @@ function openCyberOverlay() {
 /* ════════════════════════════════════════════════════════════
    UPDATED checkAuthState — wire admin button
 ════════════════════════════════════════════════════════════ */
+function checkAuthState() {
+  var user       = JSON.parse(localStorage.getItem('bpUser') || 'null');
+  var authForms  = document.getElementById('authForms');
+  var dashPanel  = document.getElementById('dashPanel');
+  var navLogin   = document.getElementById('navLoginBtn');
+  var navLogout  = document.getElementById('navLogoutBtn');
+  var adminPanel = document.getElementById('adminPanel'); // old inline panel if exists
 
-/* ── DEADLINE TICKER — loads from backend on page load ── */
-async function initDeadlineTicker() {
+  if (user && user.email) {
+    if (authForms)  authForms.style.display  = 'none';
+    if (dashPanel)  dashPanel.style.display  = 'block';
+    if (navLogin)   navLogin.style.display   = 'none';
+    if (navLogout)  navLogout.style.display  = 'block';
+    if (adminPanel) adminPanel.style.display = 'none';
+
+    var initials = (user.name || user.email).split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+    var av = document.getElementById('avatarCircle'); if(av) av.textContent = initials;
+    var dn = document.getElementById('dashName');     if(dn) dn.textContent = user.name || 'Student';
+    var de = document.getElementById('dashEmail');    if(de) de.textContent = user.email;
+    var saved = localStorage.getItem('bpCluster');
+    if (saved) { var dc=document.getElementById('dashCluster'); if(dc) dc.textContent=saved; }
+    var savedG = localStorage.getItem('bpGrade');
+    if (savedG) { var dg=document.getElementById('dashGrade'); if(dg) dg.textContent=savedG; }
+
+    // Admin button in nav
+    var navLinks = document.querySelector('.nav-links');
+    var existingAdminLink = document.getElementById('adminNavLink');
+    if (user.email === ADMIN_EMAIL) {
+      if (navLinks && !existingAdminLink) {
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#" id="adminNavLink" onclick="openAdminPanel();return false;" style="color:var(--lime);font-weight:700;">⚙ Admin</a>';
+        if (navLinks.lastElementChild) navLinks.insertBefore(li, navLinks.lastElementChild);
+        else navLinks.appendChild(li);
+      }
+    } else {
+      if (existingAdminLink) existingAdminLink.closest('li').remove();
+    }
+  } else {
+    if (authForms)  authForms.style.display  = 'grid';
+    if (dashPanel)  dashPanel.style.display  = 'none';
+    if (navLogin)   navLogin.style.display   = 'block';
+    if (navLogout)  navLogout.style.display  = 'none';
+    if (adminPanel) adminPanel.style.display = 'none';
+    var adminLink = document.getElementById('adminNavLink');
+    if (adminLink && adminLink.parentElement) adminLink.parentElement.remove();
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   UPDATED renderQ — show admin replies in forum
+════════════════════════════════════════════════════════════ */
+function renderQ(posts) {
+  var data = posts || questions;
+  var feed = document.getElementById('qFeed');
+  if (!feed) return;
+  feed.innerHTML = data.map(function(q) {
+    var initial = (q.name || q.username || 'S')[0].toUpperCase();
+    var text    = q.text || q.message || '';
+    var when    = q.time || (q.created_at ? new Date(q.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : 'Just now');
+    var name    = q.name || q.username || 'Student';
+    var reply   = q.admin_reply ? '<div style="margin-top:8px;padding:10px 14px;background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);border-radius:0 8px 8px 0;font-size:12px;color:var(--white2);"><span style="font-size:11px;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:0.5px;">✅ BTECHPLUS Reply</span><br>'+q.admin_reply+'</div>' : '';
+    return '<div class="q-item"><div class="q-header"><div class="q-av">'+initial+'</div><span class="q-name">'+name+'</span><span class="q-when">'+when+'</span></div><div class="q-body">'+text+'</div>'+reply+'</div>';
+  }).join('');
+}
+
+async function addDeadlineAdmin() {
+  var title  = (document.getElementById('dlTitle').value||'').trim();
+  var date   = document.getElementById('dlDate').value;
+  var type   = document.getElementById('dlType').value;
+  var status = document.getElementById('dlStatus').value;
+  var link   = (document.getElementById('dlLink').value||'').trim();
+  if (!title || !date) { toast('⚠️ Title and date are required'); return; }
   try {
-    var r = await fetch(API_BASE + '/deadlines');
-    if (!r.ok) return;
+    var r = await fetch(API_BASE+'/admin/deadlines', {
+      method:'POST', headers: adminHeader(),
+      body: JSON.stringify({ title, deadline: date, type, status, link: link||null })
+    });
+    var d = await r.json();
+    if (d.id) {
+      toast('✅ Deadline added!');
+      document.getElementById('dlTitle').value = '';
+      document.getElementById('dlDate').value  = '';
+      document.getElementById('dlLink').value  = '';
+      loadAdminDeadlines();
+    } else toast('❌ '+(d.error||'Failed'));
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function deleteDeadlineAdmin(id) {
+  if (!confirm('Delete this deadline?')) return;
+  try {
+    await fetch(API_BASE+'/admin/deadlines/'+id, { method:'DELETE', headers: adminHeader() });
+    toast('🗑 Deleted'); loadAdminDeadlines();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function loadAdminBookings() {
+  var el = document.getElementById('adminBookingsList');
+  if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE+'/admin/bookings', { headers: adminHeader() });
     var items = await r.json();
-    if (!Array.isArray(items) || !items.length) return;
-    var now = new Date();
-    var active = items.filter(function(d) { return d.deadline && new Date(d.deadline) > now; });
-    if (!active.length) return;
-    var inner = document.getElementById('tickerInner');
-    var ticker = document.getElementById('deadlineTicker');
-    if (!inner || !ticker) return;
-    var html = active.map(function(d) {
-      var days = Math.ceil((new Date(d.deadline) - now) / 86400000);
-      var color = days <= 7 ? '#ff6b52' : days <= 30 ? '#f59e0b' : '#c8f135';
-      var badge = days <= 7 ? '🔴' : days <= 30 ? '🟡' : '🟢';
-      return '<span style="font-size:12px;color:var(--white2);white-space:nowrap;">'
-        + badge + ' <strong style="color:' + color + ';">' + d.title + '</strong>'
-        + ' &nbsp;·&nbsp;<span style="color:#888;">' + (d.type || 'Deadline') + '</span>'
-        + ' &nbsp;·&nbsp;<strong style="color:' + color + ';">' + days + 'd left</strong>'
-        + '</span> &nbsp;❯&nbsp;';
+    if (!el) return;
+    if (!items.length) { el.innerHTML = '<div class="adm-empty">No bookings yet</div>'; return; }
+    el.innerHTML = items.map(function(b){
+      var dt = new Date(b.created_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var sc = b.status==='DONE'?'#c8f135':b.status==='IN PROGRESS'?'#00e5cc':'#f59e0b';
+      return '<div class="booking-item">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;">'
+        +'<div>'
+        +'<div style="font-weight:700;color:#fff;font-size:14px;">'+b.name+' <span style="font-size:11px;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;color:#888;margin-left:6px;">'+b.service+'</span></div>'
+        +'<div style="font-size:12px;color:#888;margin-top:2px;">📱 '+b.phone+(b.email?' · 📧 '+b.email:'')+'</div>'
+        +(b.message?'<div style="font-size:13px;color:#ccc;margin-top:6px;">'+b.message+'</div>':'')
+        +'</div>'
+        +'<div style="text-align:right;flex-shrink:0;">'
+        +'<div style="font-size:11px;color:'+sc+';font-weight:700;margin-bottom:6px;">'+b.status+'</div>'
+        +'<div style="font-size:11px;color:#555;">'+dt+'</div>'
+        +'</div></div>'
+        +'<div style="display:flex;gap:6px;">'
+        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'IN PROGRESS\')" style="padding:5px 10px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);color:#00e5cc;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">In Progress</button>'
+        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'DONE\')" style="padding:5px 10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);color:#c8f135;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">Mark Done</button>'
+        +'</div></div>';
     }).join('');
-    inner.innerHTML = html + html;
-    ticker.style.display = 'block';
-  } catch(e) {}
+  } catch(e){ if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
 }
 
-/* ── Load public forum posts on page init ── */
-async function initPublicForum() {
+async function updateBookingStatus(id, status) {
   try {
-    var r = await fetch(API_BASE + '/forum/posts');
-    if (!r.ok) return;
-    var posts = await r.json();
-    if (Array.isArray(posts)) renderQ(posts);
-  } catch(e) {}
+    await fetch(API_BASE+'/admin/bookings/'+id+'/status', {
+      method:'PATCH', headers: adminHeader(),
+      body: JSON.stringify({ status })
+    });
+    toast('✅ Updated to: '+status);
+    loadAdminBookings();
+  } catch(e){ toast('❌ Network error'); }
 }
 
-/* ── Page startup ── */
-window.addEventListener('load', function() {
-  initDeadlineTicker();
-  initPublicForum();
-});
+// Override openAdminPanel to use new dashboard loader
+function openAdminPanel() {
+  var el = document.getElementById('adminOverlay');
+  if (!el) return;
+  el.style.display = 'block';
+  showAdminTab('dashboard');
+  loadAdminDashboard();
+}
 
+/* ── CONTACT / KEY CONTACTS ────────────────────────────── */
+var BTECHPLUS_CONTACTS = {
+  email:    'btechkenya@gmail.com',
+  phone:    '0113996609',
+  whatsapp: 'https://wa.me/254113996609',
+  cyber:    'https://btechplus.com/online-cyber.html',
+};
+
+/* ── BOOKING FORM (public) ─────────────────────────────── */
+async function submitBooking() {
+  var name    = (document.getElementById('bkName')   ? document.getElementById('bkName').value.trim()    : '');
+  var phone   = (document.getElementById('bkPhone')  ? document.getElementById('bkPhone').value.trim()   : '');
+  var email   = (document.getElementById('bkEmail')  ? document.getElementById('bkEmail').value.trim()   : '');
+  var service = (document.getElementById('bkService')? document.getElementById('bkService').value         : '');
+  var message = (document.getElementById('bkMessage')? document.getElementById('bkMessage').value.trim() : '');
+  if (!name || !phone || !service) { toast('⚠️ Fill in name, phone and service'); return; }
+  var btn = document.getElementById('bkSubmitBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+  try {
+    var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+    var r = await fetch(API_BASE+'/bookings', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, phone, email, service, message, user_id: user ? user.id : null })
+    });
+    var d = await r.json();
+    if (d.success) {
+      toast('✅ Booking #'+d.booking_id+' submitted! We will contact you soon.');
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+      ['bkName','bkPhone','bkEmail','bkMessage'].forEach(function(id){
+        var el = document.getElementById(id); if(el) el.value='';
+      });
+    } else {
+      toast('❌ '+(d.error||'Failed'));
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+    }
+  } catch(e){
+    toast('❌ Network error');
+    if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+  }
+}
+
+/* ── POSTQ updated with user info ─────────────────────── */
+async function postQWithUser() {
+  if (postQBusy) return;
+  var txtEl  = document.getElementById('qText');
+  var nameEl = document.getElementById('qName');
+  var t = txtEl  ? txtEl.value.trim()  : '';
+  var n = nameEl ? nameEl.value.trim() : '';
+  var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+  if (!n) n = user ? user.username : 'Student';
+  if (!t) { toast('⚠️ Please type your question first.'); return; }
+  postQBusy = true;
+  questions.unshift({ name:n, text:t, time:'Just now' });
+  renderQ();
+  if (txtEl) txtEl.value = '';
+  toast('✅ Question posted!');
+  try {
+    await fetch(API_BASE + '/forum/posts', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username: n, message: t, user_id: user ? user.id : null })
+    });
+  } catch(e) { /* local render already done */ }
+  setTimeout(function(){ postQBusy = false; }, 2000);
+}
+
+
+</script>
 
 <!-- ══════════════════════════════════════════════════════════
      SUBJECT REQUIREMENTS OVERLAY
