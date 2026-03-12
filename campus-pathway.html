@@ -1301,10 +1301,16 @@ footer {
         <button class="app-btn" onclick="go('#ai')">Ask AI for Help →</button>
       </div>
     </div>
+    <!-- DYNAMIC DEADLINES from admin -->
+    <div id="dynamicDeadlinesSection" style="display:none;margin-top:40px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div class="eyebrow" style="margin-bottom:0;">📅 Live Updates</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin:0;letter-spacing:-0.5px;">Application <em style="color:var(--lime);font-style:italic;">Deadline Alerts</em></h3>
+      </div>
+      <div id="dynamicDeadlineCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
+    </div>
   </div>
 </section>
-
-<!-- FORUM -->
 <section id="forum" class="section">
   <div class="eyebrow">Student Forum</div>
   <h2 class="heading">Ask. Learn.<br><em>Connect.</em></h2>
@@ -2793,9 +2799,11 @@ function checkAuthState() {
       var shortName = (displayName.split(' ')[0] || 'Account').slice(0, 12);
       navLoginBtn.textContent = '👤 ' + shortName;
     }
-    // Show admin panel if admin
-    if (user.email === ADMIN_EMAIL || user.username === ADMIN_USERNAME || user.email === 'admin@btechplus.com') {
-      if (adminPanel) { adminPanel.style.display = 'block'; loadAdminData(); }
+    // Show admin panel button ONLY if verified admin (email check + session token present)
+    var token = localStorage.getItem('bpToken') || '';
+    var isAdmin = token && (user.email === ADMIN_EMAIL || user.username === ADMIN_USERNAME || user.email === 'admin@btechplus.com');
+    if (isAdmin) {
+      if (adminPanel) { adminPanel.style.display = 'block'; }
       // Add admin nav link
       const navLinks = document.querySelector('.nav-links');
       if (navLinks && !document.getElementById('adminNavLink')) {
@@ -2803,6 +2811,9 @@ function checkAuthState() {
         li.innerHTML = '<a href="#" onclick="openAdminPanel();return false;" id="adminNavLink" style="padding:7px 14px;background:rgba(200,241,53,0.1);color:var(--lime);border:1px solid rgba(200,241,53,0.3);border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">⚙ Admin</a>';
         navLinks.insertBefore(li, navLinks.lastElementChild);
       }
+    } else {
+      // Not admin — hide panel even if user is logged in
+      if (adminPanel) adminPanel.style.display = 'none';
     }
   } else {
     // Logged out
@@ -3062,9 +3073,9 @@ async function loadAdminChats() {
       var dt      = s.last_active ? new Date(s.last_active).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
       var preview = (s.last_message || 'No messages').slice(0, 45);
       var unanswered = !s.has_admin_reply;
-      return '<button data-sid="' + s.session_id + '" onclick="openChatSession(\"' + s.session_id + '\")" '
+      return '<button data-sid="' + s.session_id + '" onclick="openChatSession(\''+s.session_id+'\')" '
         + 'style="width:100%;text-align:left;background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;font-family:inherit;transition:all .15s;" '
-        + 'onmouseover="this.style.borderColor=\"var(--lime)\"" onmouseout="if(window._activeChatSid!==this.dataset.sid)this.style.borderColor=\"var(--border)\"" '
+        + 'onmouseover="this.style.borderColor=\'var(--lime)\'" onmouseout="if(window._activeChatSid!==this.dataset.sid)this.style.borderColor=\'var(--border)\'">'
         + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">'
         + '<span style="font-size:11px;color:var(--lime);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">' + s.session_id.slice(0,24) + '...</span>'
         + (unanswered ? '<span style="width:7px;height:7px;background:var(--coral);border-radius:50%;flex-shrink:0;"></span>' : '')
@@ -3267,6 +3278,7 @@ async function addDeadline2() {
       loadAdminDeadlinesForDash();
       loadAdminDeadlines();
       initDeadlineTicker();
+      loadPublicDeadlines();
     } else toast('❌ '+(d.error||'Failed'));
   } catch(e){ toast('❌ Network error: '+e.message); }
 }
@@ -3315,6 +3327,7 @@ async function addDeadlineAdmin() {
       var dlL = document.getElementById('dlLink');  if(dlL) dlL.value = '';
       loadAdminDeadlines();
       initDeadlineTicker();
+      loadPublicDeadlines();
     } else toast('❌ '+(d.error||'Failed'));
   } catch(e){ toast('❌ Network error'); }
 }
@@ -3655,6 +3668,13 @@ function renderQ(posts) {
 
 // Override openAdminPanel to use new dashboard loader
 function openAdminPanel() {
+  var user = JSON.parse(localStorage.getItem('bpUser') || 'null');
+  var token = localStorage.getItem('bpToken') || '';
+  var isAdmin = token && user && (user.email === ADMIN_EMAIL || user.username === ADMIN_USERNAME || user.email === 'admin@btechplus.com');
+  if (!isAdmin) {
+    toast('⛔ Admin access denied. Please log in as an admin.');
+    return;
+  }
   var el = document.getElementById('adminOverlay');
   if (!el) return;
   el.style.display = 'block';
@@ -3748,11 +3768,42 @@ async function initDeadlineTicker() {
         + '</span> &nbsp;&nbsp;〉&nbsp;&nbsp;';
     }).join('');
     var label = '<span style="font-size:10px;font-weight:800;color:var(--lime);text-transform:uppercase;letter-spacing:2px;padding:2px 10px;background:var(--lime-dim);border-radius:4px;flex-shrink:0;margin-right:16px;">📅 DEADLINES</span>';
-    inner.innerHTML = html + html;
+    inner.innerHTML = label + html + label + html;
     ticker.style.display = 'block';
     document.body.style.paddingBottom = '40px';
   } catch(e) {}
 }
+
+async function loadPublicDeadlines() {
+  try {
+    var r = await fetch(API_BASE + '/deadlines');
+    if (!r.ok) return;
+    var items = await r.json();
+    if (!Array.isArray(items) || !items.length) return;
+    var now = new Date();
+    var active = items.filter(function(d){ return d.deadline && new Date(d.deadline) > now; });
+    if (!active.length) return;
+    var section = document.getElementById('dynamicDeadlinesSection');
+    var container = document.getElementById('dynamicDeadlineCards');
+    if (!section || !container) return;
+    section.style.display = 'block';
+    container.innerHTML = active.map(function(d) {
+      var days = Math.ceil((new Date(d.deadline) - now) / 86400000);
+      var urgColor = days <= 7 ? '#ff6b52' : days <= 30 ? '#f59e0b' : '#c8f135';
+      var urgBadge = days <= 7 ? '🔴 URGENT' : days <= 30 ? '🟡 CLOSING SOON' : '🟢 OPEN';
+      var statusColor = days <= 7 ? 'rgba(255,107,82,0.12)' : days <= 30 ? 'rgba(245,158,11,0.12)' : 'rgba(200,241,53,0.12)';
+      var dl_date = new Date(d.deadline).toLocaleDateString('en-KE',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+      return '<div class="app-card reveal" style="border-color:' + urgColor + '22;">'
+        + '<div class="app-card-top"><div class="app-icon">📅</div><span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;background:' + statusColor + ';color:' + urgColor + ';letter-spacing:0.5px;">' + urgBadge + '</span></div>'
+        + '<h3 style="font-size:15px;">' + d.title + '</h3>'
+        + '<p style="font-size:13px;color:var(--white3);">' + (d.type||'Application') + (d.status ? ' · ' + d.status : '') + '</p>'
+        + '<div class="deadline-row"><span>📆 ' + dl_date + '</span><span style="font-weight:800;color:' + urgColor + ';">' + days + ' day' + (days===1?'':'s') + ' left</span></div>'
+        + (d.link ? '<a href="' + d.link + '" target="_blank" class="app-btn">Apply Now →</a>' : '<button class="app-btn" onclick="go(\'#ai\')">Ask AI for Help →</button>')
+        + '</div>';
+    }).join('');
+  } catch(e) {}
+}
+
 
 async function initPublicForum() {
   try {
@@ -3800,6 +3851,7 @@ window.addEventListener('DOMContentLoaded', function() {
   checkAuthState();
   initDeadlineTicker();
   initPublicForum();
+  loadPublicDeadlines();
 });
 
 </script>
