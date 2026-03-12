@@ -845,8 +845,8 @@ footer {
     <li><a href="#courses">Courses</a></li>
     <li><a href="#forum">Forum</a></li>
     <li><a href="#ai">AI</a></li>
-    <li><a href="#account" class="nav-cta" id="navLoginBtn">My Account</a></li>
-    <li><a href="#" class="nav-cta" id="navLogoutBtn" onclick="logoutUser();return false;" style="display:none;background:rgba(255,107,82,0.2);color:var(--coral);border:1px solid rgba(255,107,82,0.3);">Sign Out</a></li>
+    <li><a href="#account" class="nav-cta" id="navLoginBtn" style="background:var(--lime);color:var(--ink);font-weight:800;">My Account</a></li>
+    <li id="navLogoutLi" style="display:none;"><a href="#" id="navLogoutBtn" onclick="logoutUser();return false;" style="display:block;padding:7px 14px;background:rgba(255,107,82,0.12);color:var(--coral);border:1px solid rgba(255,107,82,0.25);border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">Sign Out</a></li>
     <li><a href="#donate" class="nav-donate" onclick="openMpesaModal();return false;">Support Us 💚</a></li>
   </ul>
   <div class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
@@ -868,27 +868,18 @@ footer {
 
 <div id="mpModalCard" style="background:#0d0d18;border:1px solid rgba(255,255,255,0.1);border-radius:28px;max-width:400px;width:100%;position:relative;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,0.7);animation:fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);">
 
-  <!-- TOP GRADIENT HEADER -->
-  <div style="background:linear-gradient(135deg,#005c2e 0%,#00a651 60%,#00c860 100%);padding:22px 22px 18px;position:relative;overflow:hidden;">
-    <!-- Subtle pattern overlay -->
-    <div style="position:absolute;inset:0;opacity:0.08;background-image:radial-gradient(circle at 20% 50%,#fff 1px,transparent 1px),radial-gradient(circle at 80% 20%,#fff 1px,transparent 1px);background-size:30px 30px;"></div>
-    <!-- Close -->
-    <button onclick="closeMpesaModal()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.15);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;z-index:2;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.2)'">✕</button>
-    <!-- Logo row -->
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;position:relative;z-index:1;">
-      <div style="width:44px;height:44px;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);">
-        <span style="font-weight:900;font-size:18px;color:#00a651;letter-spacing:-1.5px;">M</span>
+  <!-- MODAL HEADER -->
+  <div style="background:linear-gradient(135deg,#005c2e 0%,#00a651 100%);padding:20px 22px 16px;position:relative;">
+    <button onclick="closeMpesaModal()" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:40px;height:40px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-weight:900;font-size:17px;color:#00a651;">M</span>
       </div>
       <div>
-        <div style="color:#fff;font-weight:800;font-size:17px;line-height:1;letter-spacing:-0.3px;">M-Pesa</div>
-        <div style="color:rgba(255,255,255,0.65);font-size:11px;margin-top:2px;font-weight:500;">Lipa Na M-Pesa · Secure Payment</div>
-      </div>
-      <div style="margin-left:auto;display:flex;gap:6px;position:relative;z-index:1;">
-        <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);font-size:9.5px;padding:3px 9px;border-radius:20px;font-weight:700;display:flex;align-items:center;gap:4px;">🔒 SSL</div>
-        <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);font-size:9.5px;padding:3px 9px;border-radius:20px;font-weight:700;">⚡ Instant</div>
+        <div style="color:#fff;font-weight:800;font-size:16px;line-height:1.2;">Donate via M-Pesa</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:12px;margin-top:2px;">Keep BTECHPLUS free for all Kenyan students 🇰🇪</div>
       </div>
     </div>
-    <div style="color:rgba(255,255,255,0.8);font-size:12.5px;line-height:1.5;position:relative;z-index:1;">Support BTECHPLUS — keeping campus guidance <strong style="color:#fff;">free for every Kenyan student</strong> 🇰🇪</div>
   </div>
 
   <!-- STEP INDICATOR -->
@@ -965,10 +956,8 @@ footer {
       <span id="stkBtnText">Pay with M-Pesa</span>
     </button>
 
-    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;">
-      <span style="font-size:11px;color:rgba(255,255,255,0.25);">🔒 Secured by Safaricom Daraja API</span>
-      <span style="color:rgba(255,255,255,0.1);font-size:11px;">·</span>
-      <span style="font-size:11px;color:rgba(255,255,255,0.25);">PIN never leaves your phone</span>
+    <div style="text-align:center;margin-top:10px;">
+      <span style="font-size:11px;color:rgba(255,255,255,0.25);">Your M-Pesa PIN stays on your phone — never shared</span>
     </div>
   </div>
 
@@ -1365,7 +1354,7 @@ footer {
         <textarea id="qText" placeholder="e.g. What cluster points do I need for Nursing at KU?"></textarea>
         <div class="post-row">
           <input type="text" id="qName" placeholder="Your name (optional)">
-          <button class="post-btn" onclick="postQWithUser()">Post Question</button>
+          <button onclick="postQWithUser()" style="padding:12px 24px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;white-space:nowrap;">Post Question</button>
         </div>
       </div>
       <div class="q-feed" id="qFeed"></div>
@@ -1567,18 +1556,20 @@ footer {
   <div class="donate-inner">
     <div class="eyebrow" style="justify-content:center;">Support Us</div>
     <h2 class="heading">Keep BTECHPLUS<br><em>Free for All</em></h2>
-    <p style="color:var(--white2); font-size:16px; line-height:1.7;">BTECHPLUS is 100% free for every Kenyan student. If it's helped you, support us to keep helping thousands more.</p>
+    <p style="color:var(--white2); font-size:16px; line-height:1.7; margin-bottom:32px;">BTECHPLUS is 100% free for every Kenyan student. Your support keeps it alive for thousands more. 🇰🇪</p>
     <div class="donate-card reveal">
-      <p style="font-size:13px; color:var(--white3); margin-bottom:16px; text-transform:uppercase; letter-spacing:1px; font-weight:600;">Choose an amount (KES)</p>
+      <p style="font-size:11px; color:var(--white3); margin-bottom:14px; text-transform:uppercase; letter-spacing:1.5px; font-weight:700;">Choose Amount (KES)</p>
       <div class="amount-row">
-        <button class="amt-btn" onclick="setAmt(50,this)">KES 50</button>
-        <button class="amt-btn" onclick="setAmt(100,this)">KES 100</button>
-        <button class="amt-btn" onclick="setAmt(250,this)">KES 250</button>
-        <button class="amt-btn" onclick="setAmt(500,this)">KES 500</button>
+        <button class="amt-btn" onclick="setAmt(50,this)">50</button>
+        <button class="amt-btn active" onclick="setAmt(100,this)">100</button>
+        <button class="amt-btn" onclick="setAmt(250,this)">250</button>
+        <button class="amt-btn" onclick="setAmt(500,this)">500</button>
       </div>
-      <div class="fld"><label>Or enter custom amount</label><input type="number" id="donAmt" placeholder="e.g. 150"></div>
-      <button class="btn-teal" onclick="donateNow()">💚 Donate via M-Pesa</button>
-      <div id="donMsg"></div>
+      <div class="fld" style="margin-bottom:18px;"><label>Custom Amount</label><input type="number" id="donAmt" placeholder="e.g. 150 KES"></div>
+      <button class="btn-primary" onclick="donateNow()" style="background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;">
+        💚 Donate via M-Pesa
+      </button>
+      <div id="donMsg" style="margin-top:10px;font-size:13px;"></div>
     </div>
   </div>
 </section>
@@ -1590,174 +1581,6 @@ footer {
   </button>
 </div>
 
-<!-- FULL ADMIN OVERLAY — full screen, tabbed -->
-<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0a0a0f;overflow-y:auto;">
-  <!-- Admin top bar -->
-  <div style="background:#111118;border-bottom:1px solid rgba(255,255,255,0.07);padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:10;">
-    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--lime);padding:16px 0;margin-right:24px;">⚙ BTECHPLUS Admin</div>
-    <!-- Tab buttons -->
-    <div style="display:flex;gap:0;overflow-x:auto;flex:1;">
-      <button id="atab-dashboard" class="admin-tab active" onclick="showAdminTab('dashboard')">📊 Dashboard</button>
-      <button id="atab-donations" class="admin-tab" onclick="showAdminTab('donations')">💳 Donations</button>
-      <button id="atab-forum"     class="admin-tab" onclick="showAdminTab('forum')">💬 Forum</button>
-      <button id="atab-chats"     class="admin-tab" onclick="showAdminTab('chats');loadAdminChats()">🤖 AI Chat</button>
-      <button id="atab-deadlines" class="admin-tab" onclick="showAdminTab('deadlines')">📅 Deadlines</button>
-      <button id="atab-users"     class="admin-tab" onclick="showAdminTab('users')">👥 Users</button>
-    </div>
-    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:8px 16px;background:rgba(255,107,82,0.15);border:1px solid rgba(255,107,82,0.3);color:var(--coral);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;margin-left:12px;">✕ Close</button>
-  </div>
-
-  <div style="max-width:1200px;margin:0 auto;padding:32px 24px;">
-
-    <!-- ── TAB: DASHBOARD ── -->
-    <div id="adminTab-dashboard" class="admin-tab-content">
-      <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0 0 24px;">Overview</h2>
-      <!-- Stats row -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;">
-        <div class="adm-stat-card" style="border-color:rgba(200,241,53,0.2);">
-          <div style="font-size:36px;font-weight:800;color:var(--lime);" id="adm-donations">—</div>
-          <div style="font-size:12px;color:var(--white3);">Total Donations</div>
-        </div>
-        <div class="adm-stat-card" style="border-color:rgba(0,229,204,0.2);">
-          <div style="font-size:28px;font-weight:800;color:var(--teal);" id="adm-revenue">—</div>
-          <div style="font-size:12px;color:var(--white3);">KES Raised</div>
-        </div>
-        <div class="adm-stat-card" style="border-color:rgba(167,139,250,0.2);">
-          <div style="font-size:36px;font-weight:800;color:var(--violet);" id="adm-posts">—</div>
-          <div style="font-size:12px;color:var(--white3);">Forum Posts</div>
-        </div>
-        <div class="adm-stat-card" style="border-color:rgba(0,166,81,0.2);">
-          <div style="font-size:36px;font-weight:800;color:#00a651;" id="adm-users">—</div>
-          <div style="font-size:12px;color:var(--white3);">Registered Users</div>
-        </div>
-      </div>
-      <!-- Escalation queue -->
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <h4 style="margin:0;font-size:15px;color:var(--white);">❓ Unanswered Questions (Need Reply)</h4>
-          <button onclick="loadAdminDashboard()" style="padding:6px 14px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;">↻ Refresh</button>
-        </div>
-        <div id="escalationList" style="display:flex;flex-direction:column;gap:10px;">
-          <div style="color:var(--white3);font-size:13px;">Loading...</div>
-        </div>
-      </div>
-      <!-- Deadline quick add -->
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
-        <h4 style="margin:0 0 16px;font-size:15px;color:var(--white);">📅 Quick Add Deadline to Ticker</h4>
-        <div style="display:grid;grid-template-columns:1fr 160px 140px auto;gap:10px;align-items:end;">
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Application / Event Name</label>
-            <input id="dlName2" type="text" placeholder="e.g. KUCCPS 2026 Opens" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Deadline Date</label>
-            <input id="dlDate2" type="date" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Portal URL</label>
-            <input id="dlUrl2" type="url" placeholder="https://..." style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
-          <button onclick="addDeadline2()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">+ Add</button>
-        </div>
-        <div id="adminDeadlineList" style="margin-top:16px;display:flex;flex-direction:column;gap:8px;"></div>
-      </div>
-    </div>
-
-    <!-- ── TAB: DONATIONS ── -->
-    <div id="adminTab-donations" class="admin-tab-content" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-        <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0;">💳 Donations</h2>
-        <button onclick="loadAdminDonations()" style="padding:8px 18px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">↻ Refresh</button>
-      </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:13px;">
-            <thead><tr style="background:rgba(255,255,255,0.03);">
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Phone</th>
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Amount</th>
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Receipt</th>
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Status</th>
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Date</th>
-            </tr></thead>
-            <tbody id="adminDonBody"><tr><td colspan="5" style="padding:32px;text-align:center;color:var(--white3);">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── TAB: FORUM ── -->
-    <div id="adminTab-forum" class="admin-tab-content" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-        <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0;">💬 Forum Posts</h2>
-        <button onclick="loadAdminForum()" style="padding:8px 18px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">↻ Refresh</button>
-      </div>
-      <div id="adminForumList" style="display:flex;flex-direction:column;gap:12px;">
-        <div style="color:var(--white3);">Loading...</div>
-      </div>
-    </div>
-
-    <!-- ── TAB: AI CHAT ── -->
-    <div id="adminTab-chats" class="admin-tab-content" style="display:none;">
-      <div style="display:flex;gap:16px;height:520px;">
-        <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-            <h3 style="font-size:15px;font-weight:800;color:var(--white);margin:0;">💬 Student Sessions</h3>
-            <button onclick="loadAdminChats()" style="padding:5px 10px;background:var(--ink3);border:1px solid var(--border);color:var(--lime);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">↻ Refresh</button>
-          </div>
-          <div id="adminChatList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;">
-            <div style="color:var(--white3);font-size:13px;padding:16px;">Loading sessions...</div>
-          </div>
-        </div>
-        <div style="flex:1;background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;">
-          <div id="adminChatDetail" style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--white3);font-size:13px;">
-            Click a session on the left to view the conversation
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── TAB: DEADLINES ── -->
-    <div id="adminTab-deadlines" class="admin-tab-content" style="display:none;">
-      <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0 0 24px;">📅 Application Deadlines</h2>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px;">
-        <h4 style="margin:0 0 16px;font-size:14px;color:var(--white);">Add New Deadline</h4>
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end;">
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Event Name</label>
-            <input id="dlName3" type="text" placeholder="e.g. KUCCPS Application 2026" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Category</label>
-            <select id="dlCat3" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
-              <option>KUCCPS</option><option>KMTC</option><option>HELB</option><option>TVET</option><option>Bursary</option><option>General</option>
-            </select></div>
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Deadline Date</label>
-            <input id="dlDate3" type="date" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box;outline:none;"></div>
-          <div><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:4px;">Status</label>
-            <select id="dlStat3" style="width:100%;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
-              <option value="OPEN">🟢 Open</option><option value="CLOSING_SOON">🟡 Closing Soon</option><option value="CLOSED">🔴 Closed</option>
-            </select></div>
-          <button onclick="addDeadline3()" style="padding:9px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">+ Add</button>
-        </div>
-      </div>
-      <div id="adminDeadlinesFull" style="display:flex;flex-direction:column;gap:10px;">
-        <div style="color:var(--white3);font-size:13px;">Loading deadlines...</div>
-      </div>
-    </div>
-
-    <!-- ── TAB: USERS ── -->
-    <div id="adminTab-users" class="admin-tab-content" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-        <h2 style="font-family:'Fraunces',serif;font-size:28px;color:var(--white);margin:0;">👥 Registered Users</h2>
-        <button onclick="loadAdminUsers()" style="padding:8px 18px;background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">↻ Refresh</button>
-      </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:13px;">
-            <thead><tr style="background:rgba(255,255,255,0.03);">
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Username</th>
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Email</th>
-              <th style="padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;">Joined</th>
-            </tr></thead>
-            <tbody id="adminUsersBody"><tr><td colspan="3" style="padding:32px;text-align:center;color:var(--white3);">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- end inner -->
-</div><!-- end adminOverlay -->
 
 <style>
 .admin-tab {
@@ -2659,18 +2482,6 @@ let questions = [
   { name:'Kevin O.', text:'When does KUCCPS portal open for 2026 admissions?', time:'1 day ago' },
   { name:'Amina H.', text:'What are the best private universities in Kenya for Education?', time:'2 days ago' },
 ];
-function renderQ(posts) {
-  var data = posts || questions;
-  var feed = document.getElementById('qFeed');
-  if (!feed) return;
-  feed.innerHTML = data.map(function(q) {
-    var initial = (q.name || q.username || 'S')[0].toUpperCase();
-    var text = q.text || q.message || '';
-    var when = q.time || (q.created_at ? new Date(q.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : 'Just now');
-    var name = q.name || q.username || 'Student';
-    return '<div class="q-item"><div class="q-header"><div class="q-av">'+initial+'</div><span class="q-name">'+name+'</span><span class="q-when">'+when+'</span></div><div class="q-body">'+text+'</div></div>';
-  }).join('');
-}
 renderQ();
 
 /* ─ AI ─ */
@@ -2945,7 +2756,26 @@ async function submitDonation() {
     btnTxt.textContent = '💚 Send M-Pesa Prompt';
   }
 }
-function donateNow() { openMpesaModal(); }
+function setAmt(amt, btn) {
+  selectedAmt = amt;
+  var donEl = document.getElementById('donAmt');
+  if (donEl) donEl.value = '';
+  document.querySelectorAll('.amt-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+function donateNow() {
+  var customEl = document.getElementById('donAmt');
+  if (customEl && customEl.value) selectedAmt = parseInt(customEl.value) || selectedAmt;
+  openMpesaModal();
+  // Pre-set the amount in the modal
+  setTimeout(function(){
+    var d = document.getElementById('step2AmtDisplay');
+    if (d) d.textContent = 'KES ' + selectedAmt;
+    document.querySelectorAll('.mp-amt-btn').forEach(function(b){ b.classList.remove('active'); });
+    var btn = document.querySelector('.mp-amt-btn[data-amt="'+selectedAmt+'"]');
+    if (btn) btn.classList.add('active');
+  }, 100);
+}
 
 /* ─ AUTH ─────────────────────────────────────────────────────── */
 const ADMIN_EMAIL    = 'btechkenya@gmail.com';
@@ -2956,7 +2786,7 @@ function checkAuthState() {
   const authForms = document.getElementById('authForms');
   const dashPanel = document.getElementById('dashPanel');
   const navLogin  = document.getElementById('navLoginBtn');
-  const navLogout = document.getElementById('navLogoutBtn');
+  const navLogout = document.getElementById('navLogoutLi');
   const adminPanel = document.getElementById('adminPanel');
 
   if (user && user.email) {
@@ -2964,7 +2794,7 @@ function checkAuthState() {
     if (authForms) authForms.style.display = 'none';
     if (dashPanel) dashPanel.style.display = 'block';
     if (navLogin)  navLogin.style.display  = 'none';
-    if (navLogout) navLogout.style.display = 'block';
+    if (navLogout) navLogout.style.display = 'list-item';
 
     // Populate dashboard
     const displayName = user.username || user.name || 'Student';
@@ -2990,6 +2820,12 @@ function checkAuthState() {
       if (dg) dg.textContent = savedGrade;
     }
 
+    // Update My Account button to show user name
+    var navLoginBtn = document.getElementById('navLoginBtn');
+    if (navLoginBtn) {
+      var shortName = (displayName.split(' ')[0] || 'Account').slice(0, 12);
+      navLoginBtn.textContent = '👤 ' + shortName;
+    }
     // Show admin panel if admin
     if (user.email === ADMIN_EMAIL || user.username === ADMIN_USERNAME || user.email === 'admin@btechplus.com') {
       if (adminPanel) { adminPanel.style.display = 'block'; loadAdminData(); }
@@ -2997,7 +2833,7 @@ function checkAuthState() {
       const navLinks = document.querySelector('.nav-links');
       if (navLinks && !document.getElementById('adminNavLink')) {
         const li = document.createElement('li');
-        li.innerHTML = '<a href="#adminPanel" id="adminNavLink" style="color:var(--lime);">⚙ Admin</a>';
+        li.innerHTML = '<a href="#" onclick="openAdminPanel();return false;" id="adminNavLink" style="padding:7px 14px;background:rgba(200,241,53,0.1);color:var(--lime);border:1px solid rgba(200,241,53,0.3);border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">⚙ Admin</a>';
         navLinks.insertBefore(li, navLinks.lastElementChild);
       }
     }
@@ -3092,6 +2928,10 @@ async function registerUser() {
 function logoutUser() {
   localStorage.removeItem('bpUser');
   localStorage.removeItem('bpToken');
+  var navLoginBtn = document.getElementById('navLoginBtn');
+  if (navLoginBtn) navLoginBtn.textContent = 'My Account';
+  var adminNavLink = document.getElementById('adminNavLink');
+  if (adminNavLink && adminNavLink.parentElement) adminNavLink.parentElement.remove();
   checkAuthState();
   toast('👋 Signed out. See you soon!');
   go('#account');
@@ -3103,13 +2943,6 @@ function logoutUser() {
 
 
 /* ─ ADMIN ─ */
-function openAdminPanel() {
-  var el = document.getElementById('adminOverlay');
-  if (!el) return;
-  el.style.display = 'block';
-  showAdminTab('dashboard');
-  loadAdminDashboard();
-}
 
 function showAdminTab(tab) {
   document.querySelectorAll('.admin-tab-content').forEach(function(el){ el.style.display='none'; });
@@ -3118,6 +2951,7 @@ function showAdminTab(tab) {
   var t = document.getElementById('atab-'+tab);
   if (c) c.style.display = 'block';
   if (t) t.classList.add('active');
+  if (tab==='dashboard') loadAdminDashboard();
   if (tab==='donations') loadAdminDonations();
   if (tab==='forum') loadAdminForum();
   if (tab==='users') loadAdminUsers();
@@ -3147,6 +2981,7 @@ async function loadAdminDashboard() {
     var users = await r3.json();
     var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users)?users.length:'—';
   } catch(e) {}
+  loadAdminDeadlinesForDash();
   try {
     var r4 = await fetch(API_BASE + '/ai/sessions');
     var sess = await r4.json();
@@ -3326,13 +3161,13 @@ async function loadAdminUsers() {
         '<td style="padding:12px 16px;color:var(--white3);font-size:12px;">'+dt+'</td>'+
       '</tr>';
     }).join('');
-  } catch(e) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty" style="color:#ff6b52;">Failed: '+e.message+'</td></tr>'; }
+  } catch(e) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty" style="color:var(--coral);">⚠️ Failed to load users: '+(e.message||'Network error')+'</td></tr>'; }
 }
 
 function renderEscalationQueue(posts) {
   var el = document.getElementById('escalationList');
   if (!el) return;
-  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && p.message && p.message.length > 60; }).slice(0,5);
+  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && p.message; }).slice(0,8);
   if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No pending questions 🎉</div>'; return; }
   el.innerHTML = flagged.map(function(p) {
     return '<div style="background:rgba(255,107,82,0.06);border:1px solid rgba(255,107,82,0.15);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">'+
@@ -3346,6 +3181,28 @@ function renderEscalationQueue(posts) {
       '</div>'+
     '</div>';
   }).join('');
+}
+
+async function loadAdminDeadlinesForDash() {
+  var el = document.getElementById('adminDeadlineListDash');
+  if (!el) return;
+  try {
+    var r = await fetch(API_BASE + '/deadlines', { headers: adminHeader() });
+    var items = await r.json();
+    if (!items.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No deadlines added yet</div>'; return; }
+    var now = new Date();
+    el.innerHTML = items.map(function(d) {
+      var days = Math.ceil((new Date(d.deadline) - now) / 86400000);
+      var color = days <= 7 ? 'var(--coral)' : days <= 30 ? '#f59e0b' : 'var(--lime)';
+      return '<div style="background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;">'
+        +'<div><div style="font-size:13px;font-weight:700;color:#fff;">'+d.title+'</div>'
+        +'<div style="font-size:11px;color:#666;margin-top:2px;">'+new Date(d.deadline).toLocaleDateString('en-KE',{month:'short',day:'numeric',year:'numeric'})+'</div></div>'
+        +'<div style="display:flex;align-items:center;gap:8px;">'
+        +'<span style="font-size:12px;font-weight:700;color:'+color+';">'+(days>0?days+'d':'Closed')+'</span>'
+        +'<button onclick="deleteDeadlineAdmin('+d.id+')" style="padding:3px 8px;background:rgba(255,107,82,0.1);border:1px solid rgba(255,107,82,0.2);color:var(--coral);border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">✕</button>'
+        +'</div></div>';
+    }).join('');
+  } catch(e) { el.innerHTML = '<div style="color:var(--coral);font-size:13px;">Error loading</div>'; }
 }
 
 async function loadAdminDeadlines() {
@@ -3368,24 +3225,55 @@ async function loadAdminDeadlines() {
   } catch(e) { if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
 }
 
-function addDeadline2() {
-  // Map dlName2/dlDate2 → dlTitle/dlDate then call main function
-  var n = document.getElementById('dlName2'); var d2 = document.getElementById('dlDate2');
-  var dt = document.getElementById('dlTitle'); var dd = document.getElementById('dlDate');
-  if (dt && n) dt.value = n.value;
-  if (dd && d2) dd.value = d2.value;
-  addDeadlineAdmin();
+async function addDeadline2() {
+  var nameEl = document.getElementById('dlName2');
+  var dateEl = document.getElementById('dlDate2');
+  var urlEl  = document.getElementById('dlUrl2');
+  var title  = nameEl ? nameEl.value.trim() : '';
+  var date   = dateEl ? dateEl.value : '';
+  var link   = urlEl  ? urlEl.value.trim() : '';
+  if (!title || !date) { toast('⚠️ Name and deadline date are required'); return; }
+  try {
+    var r = await fetch(API_BASE+'/admin/deadlines', {
+      method:'POST', headers: adminHeader(),
+      body: JSON.stringify({ title: title, deadline: date, type: 'General', status: 'OPEN', link: link||null })
+    });
+    var d = await r.json();
+    if (d.id || d.success) {
+      toast('✅ Deadline added to ticker!');
+      if (nameEl) nameEl.value = '';
+      if (dateEl) dateEl.value = '';
+      if (urlEl)  urlEl.value  = '';
+      loadAdminDeadlinesForDash();
+      loadAdminDeadlines();
+      initDeadlineTicker();
+    } else toast('❌ '+(d.error||'Failed'));
+  } catch(e){ toast('❌ Network error: '+e.message); }
 }
-function addDeadline3() {
-  var n = document.getElementById('dlName3'); var d3 = document.getElementById('dlDate3');
-  var cat = document.getElementById('dlCat3'); var stat = document.getElementById('dlStat3');
-  var dt = document.getElementById('dlTitle'); var dd = document.getElementById('dlDate');
-  var dty = document.getElementById('dlType'); var ds = document.getElementById('dlStatus');
-  if (dt && n) dt.value = n.value;
-  if (dd && d3) dd.value = d3.value;
-  if (dty && cat) dty.value = cat.value;
-  if (ds && stat) ds.value = stat.value;
-  addDeadlineAdmin();
+async function addDeadline3() {
+  var nameEl = document.getElementById('dlName3');
+  var dateEl = document.getElementById('dlDate3');
+  var catEl  = document.getElementById('dlCat3');
+  var statEl = document.getElementById('dlStat3');
+  var title  = nameEl ? nameEl.value.trim() : '';
+  var date   = dateEl ? dateEl.value : '';
+  var type   = catEl  ? catEl.value  : 'General';
+  var status = statEl ? statEl.value : 'OPEN';
+  if (!title || !date) { toast('⚠️ Name and deadline date are required'); return; }
+  try {
+    var r = await fetch(API_BASE+'/admin/deadlines', {
+      method:'POST', headers: adminHeader(),
+      body: JSON.stringify({ title: title, deadline: date, type: type, status: status, link: null })
+    });
+    var d = await r.json();
+    if (d.id || d.success) {
+      toast('✅ Deadline added!');
+      if (nameEl) nameEl.value = '';
+      if (dateEl) dateEl.value = '';
+      loadAdminDeadlines();
+      initDeadlineTicker();
+    } else toast('❌ '+(d.error||'Failed'));
+  } catch(e){ toast('❌ Network error: '+e.message); }
 }
 async function addDeadlineAdmin() {
   var title  = (document.getElementById('dlTitle').value||'').trim();
@@ -3401,11 +3289,12 @@ async function addDeadlineAdmin() {
     });
     var d = await r.json();
     if (d.id || d.success) {
-      toast('✅ Deadline added!');
-      document.getElementById('dlTitle').value = '';
-      document.getElementById('dlDate').value  = '';
-      document.getElementById('dlLink').value  = '';
+      toast('✅ Deadline added to ticker!');
+      var dlT = document.getElementById('dlTitle'); if(dlT) dlT.value = '';
+      var dlD = document.getElementById('dlDate');  if(dlD) dlD.value = '';
+      var dlL = document.getElementById('dlLink');  if(dlL) dlL.value = '';
       loadAdminDeadlines();
+      initDeadlineTicker();
     } else toast('❌ '+(d.error||'Failed'));
   } catch(e){ toast('❌ Network error'); }
 }
@@ -3791,54 +3680,9 @@ function renderQ(posts) {
   }).join('');
 }
 
-async function deleteDeadlineAdmin(id) {
-  if (!confirm('Delete this deadline?')) return;
-  try {
-    await fetch(API_BASE+'/admin/deadlines/'+id, { method:'DELETE', headers: adminHeader() });
-    toast('🗑 Deleted'); loadAdminDeadlines();
-  } catch(e){ toast('❌ Network error'); }
-}
 
-async function loadAdminBookings() {
-  var el = document.getElementById('adminBookingsList');
-  if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
-  try {
-    var r = await fetch(API_BASE+'/admin/bookings', { headers: adminHeader() });
-    var items = await r.json();
-    if (!el) return;
-    if (!items.length) { el.innerHTML = '<div class="adm-empty">No bookings yet</div>'; return; }
-    el.innerHTML = items.map(function(b){
-      var dt = new Date(b.created_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      var sc = b.status==='DONE'?'#c8f135':b.status==='IN PROGRESS'?'#00e5cc':'#f59e0b';
-      return '<div class="booking-item">'
-        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;">'
-        +'<div>'
-        +'<div style="font-weight:700;color:#fff;font-size:14px;">'+b.name+' <span style="font-size:11px;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;color:#888;margin-left:6px;">'+b.service+'</span></div>'
-        +'<div style="font-size:12px;color:#888;margin-top:2px;">📱 '+b.phone+(b.email?' · 📧 '+b.email:'')+'</div>'
-        +(b.message?'<div style="font-size:13px;color:#ccc;margin-top:6px;">'+b.message+'</div>':'')
-        +'</div>'
-        +'<div style="text-align:right;flex-shrink:0;">'
-        +'<div style="font-size:11px;color:'+sc+';font-weight:700;margin-bottom:6px;">'+b.status+'</div>'
-        +'<div style="font-size:11px;color:#555;">'+dt+'</div>'
-        +'</div></div>'
-        +'<div style="display:flex;gap:6px;">'
-        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'IN PROGRESS\')" style="padding:5px 10px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);color:#00e5cc;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">In Progress</button>'
-        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'DONE\')" style="padding:5px 10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);color:#c8f135;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">Mark Done</button>'
-        +'</div></div>';
-    }).join('');
-  } catch(e){ if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
-}
 
-async function updateBookingStatus(id, status) {
-  try {
-    await fetch(API_BASE+'/admin/bookings/'+id+'/status', {
-      method:'PATCH', headers: adminHeader(),
-      body: JSON.stringify({ status })
-    });
-    toast('✅ Updated to: '+status);
-    loadAdminBookings();
-  } catch(e){ toast('❌ Network error'); }
-}
+
 
 // Override openAdminPanel to use new dashboard loader
 function openAdminPanel() {
@@ -3858,37 +3702,6 @@ var BTECHPLUS_CONTACTS = {
 };
 
 /* ── BOOKING FORM (public) ─────────────────────────────── */
-async function submitBooking() {
-  var name    = (document.getElementById('bkName')   ? document.getElementById('bkName').value.trim()    : '');
-  var phone   = (document.getElementById('bkPhone')  ? document.getElementById('bkPhone').value.trim()   : '');
-  var email   = (document.getElementById('bkEmail')  ? document.getElementById('bkEmail').value.trim()   : '');
-  var service = (document.getElementById('bkService')? document.getElementById('bkService').value         : '');
-  var message = (document.getElementById('bkMessage')? document.getElementById('bkMessage').value.trim() : '');
-  if (!name || !phone || !service) { toast('⚠️ Fill in name, phone and service'); return; }
-  var btn = document.getElementById('bkSubmitBtn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
-  try {
-    var user = JSON.parse(localStorage.getItem('bpUser')||'null');
-    var r = await fetch(API_BASE+'/bookings', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ name, phone, email, service, message, user_id: user ? user.id : null })
-    });
-    var d = await r.json();
-    if (d.success) {
-      toast('✅ Booking #'+d.booking_id+' submitted! We will contact you soon.');
-      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
-      ['bkName','bkPhone','bkEmail','bkMessage'].forEach(function(id){
-        var el = document.getElementById(id); if(el) el.value='';
-      });
-    } else {
-      toast('❌ '+(d.error||'Failed'));
-      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
-    }
-  } catch(e){
-    toast('❌ Network error');
-    if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
-  }
-}
 
 /* ── POSTQ updated with user info ─────────────────────── */
 async function postQWithUser() {
@@ -3957,14 +3770,18 @@ async function initDeadlineTicker() {
       var days = Math.ceil((new Date(d.deadline) - now) / 86400000);
       var color = days <= 7 ? '#ff6b52' : days <= 30 ? '#f59e0b' : '#c8f135';
       var badge = days <= 7 ? '🔴' : days <= 30 ? '🟡' : '🟢';
+      var dl_date = new Date(d.deadline).toLocaleDateString('en-KE',{month:'short',day:'numeric',year:'numeric'});
       return '<span style="font-size:12px;color:var(--white2);white-space:nowrap;">'
         + badge + ' <strong style="color:' + color + ';">' + d.title + '</strong>'
         + ' &nbsp;·&nbsp;<span style="color:#888;">' + (d.type||'Deadline') + '</span>'
-        + ' &nbsp;·&nbsp;<strong style="color:' + color + ';">' + days + 'd left</strong>'
-        + '</span> &nbsp;❯&nbsp;';
+        + ' &nbsp;·&nbsp;<span style="color:#888;">Due: ' + dl_date + '</span>'
+        + ' &nbsp;·&nbsp;<strong style="color:' + color + ';">' + (days > 0 ? days + 'd left' : 'CLOSED') + '</strong>'
+        + '</span> &nbsp;&nbsp;〉&nbsp;&nbsp;';
     }).join('');
+    var label = '<span style="font-size:10px;font-weight:800;color:var(--lime);text-transform:uppercase;letter-spacing:2px;padding:2px 10px;background:var(--lime-dim);border-radius:4px;flex-shrink:0;margin-right:16px;">📅 DEADLINES</span>';
     inner.innerHTML = html + html;
     ticker.style.display = 'block';
+    document.body.style.paddingBottom = '40px';
   } catch(e) {}
 }
 
@@ -4084,22 +3901,20 @@ window.addEventListener('DOMContentLoaded', function() {
 <!-- ══════════════════════════════════════════════════════════
      ADMIN PANEL OVERLAY (full screen)
 ══════════════════════════════════════════════════════════ -->
-<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:#0a0a0f;overflow-y:auto;">
+<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:var(--ink);overflow-y:auto;">
   <!-- Admin Nav -->
-  <div style="background:#111118;border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
-    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-      <div style="font-family:'Fraunces',serif;font-weight:700;font-size:17px;color:#c8f135;">⚙ BTECHPLUS Admin</div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap;">
-        <button onclick="showAdminTab('dashboard')" class="admin-tab active" id="atab-dashboard">📊 Dashboard</button>
-        <button onclick="showAdminTab('donations');loadAdminDonations()" class="admin-tab" id="atab-donations">💰 Donations</button>
-        <button onclick="showAdminTab('forum');loadAdminForum()" class="admin-tab" id="atab-forum">💬 Forum</button>
-        <button onclick="showAdminTab('chats');loadAdminChats()" class="admin-tab" id="atab-chats">🤖 AI Chats</button>
-        <button onclick="showAdminTab('users');loadAdminUsers()" class="admin-tab" id="atab-users">👥 Users</button>
-        <button onclick="showAdminTab('deadlines');loadAdminDeadlines()" class="admin-tab" id="atab-deadlines">📅 Deadlines</button>
-        <button onclick="showAdminTab('bookings');loadAdminBookings()" class="admin-tab" id="atab-bookings">📋 Bookings</button>
-      </div>
+  <div style="background:var(--ink2);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:16px;">
+    <div style="font-family:'Fraunces',serif;font-weight:700;font-size:16px;color:var(--lime);padding:16px 0;white-space:nowrap;flex-shrink:0;">⚙ Admin</div>
+    <div style="display:flex;gap:0;overflow-x:auto;flex:1;border-bottom:none;">
+      <button onclick="showAdminTab('dashboard')" class="admin-tab active" id="atab-dashboard">📊 Dashboard</button>
+      <button onclick="showAdminTab('donations')" class="admin-tab" id="atab-donations">💳 Donations</button>
+      <button onclick="showAdminTab('forum')" class="admin-tab" id="atab-forum">💬 Forum</button>
+      <button onclick="showAdminTab('chats')" class="admin-tab" id="atab-chats">🤖 AI Chats</button>
+      <button onclick="showAdminTab('users')" class="admin-tab" id="atab-users">👥 Users</button>
+      <button onclick="showAdminTab('deadlines')" class="admin-tab" id="atab-deadlines">📅 Deadlines</button>
+      <button onclick="showAdminTab('bookings')" class="admin-tab" id="atab-bookings">📋 Bookings</button>
     </div>
-    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:8px 16px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.3);color:#ff6b52;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">✕ Close</button>
+    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:7px 14px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);color:var(--coral);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;flex-shrink:0;">✕ Close</button>
   </div>
 
   <div style="max-width:1300px;margin:0 auto;padding:28px;">
@@ -4117,9 +3932,32 @@ window.addEventListener('DOMContentLoaded', function() {
     </div>
     <!-- Escalation queue -->
     <div class="adm-section">
-      <h3 style="margin:0 0 6px;font-size:15px;color:#fff;">🚨 AI Escalation Queue</h3>
-      <p style="font-size:12px;color:#666;margin:0 0 14px;">Sessions where AI couldn't answer — click to reply directly.</p>
-      <div id="escalationList" style="display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:15px;color:#fff;">❓ Unanswered Questions</h3>
+        <button onclick="loadAdminDashboard()" class="adm-btn-secondary" style="font-size:11px;padding:5px 12px;">↻ Refresh</button>
+      </div>
+      <div id="escalationList" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;"><div style="color:var(--white3);font-size:13px;">Loading...</div></div>
+    </div>
+
+    <!-- Quick Add Deadline -->
+    <div class="adm-section">
+      <h3 style="margin:0 0 14px;font-size:15px;color:#fff;">📅 Quick Add Deadline to Ticker</h3>
+      <div style="display:grid;grid-template-columns:1fr 160px 1fr auto;gap:10px;align-items:end;">
+        <div>
+          <label class="adm-label">Event / Application Name</label>
+          <input id="dlName2" type="text" placeholder="e.g. KUCCPS 2026 Opens" class="adm-input">
+        </div>
+        <div>
+          <label class="adm-label">Deadline Date</label>
+          <input id="dlDate2" type="date" class="adm-input">
+        </div>
+        <div>
+          <label class="adm-label">Portal URL (optional)</label>
+          <input id="dlUrl2" type="url" placeholder="https://..." class="adm-input">
+        </div>
+        <button onclick="addDeadline2()" style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;align-self:end;">+ Add</button>
+      </div>
+      <div id="adminDeadlineListDash" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"><div style="color:var(--white3);font-size:13px;">Loading deadlines...</div></div>
     </div>
   </div>
 
@@ -4147,7 +3985,22 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 
   <!-- ── AI CHATS ───────────────────────────────────────────────────────── -->
-  <div id="adminTab-chats2" class="admin-tab-content" style="display:none;"></div>
+  <div id="adminTab-chats" class="admin-tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#fff;">🤖 AI Chat Sessions</h3>
+      <button onclick="loadAdminChats()" class="adm-btn-secondary">↻ Refresh</button>
+    </div>
+    <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;height:520px;">
+      <div style="display:flex;flex-direction:column;gap:6px;overflow-y:auto;" id="adminChatList">
+        <div style="color:var(--white3);font-size:13px;padding:12px;">Loading sessions...</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;">
+        <div id="adminChatDetail" style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--white3);font-size:13px;">
+          Click a session on the left to view conversation
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── USERS ──────────────────────────────────────────────────────────── -->
   <div id="adminTab-users" class="admin-tab-content" style="display:none;">
@@ -4202,18 +4055,35 @@ window.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <!-- FLOATING DEADLINE TICKER (shows when admin adds deadlines) -->
-<div id="deadlineTicker" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:7000;background:linear-gradient(90deg,var(--ink2),var(--ink3));border-top:1px solid var(--border);padding:8px 0;overflow:hidden;">
-  <div id="tickerInner" style="display:flex;gap:40px;animation:tickerScroll 30s linear infinite;white-space:nowrap;padding-left:100%;"></div>
+<div id="deadlineTicker" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:7000;background:var(--ink2);border-top:1px solid var(--border);padding:9px 0;overflow:hidden;">
+  <div id="tickerInner" style="display:inline-flex;gap:48px;animation:tickerScroll 35s linear infinite;white-space:nowrap;will-change:transform;"></div>
 </div>
 <style>
 @keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-.admin-tab { padding:7px 14px;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--white3);font-family:inherit;font-size:12px;cursor:pointer;transition:0.2s; }
-.admin-tab.active,.admin-tab:hover { background:var(--lime-dim);border-color:var(--lime);color:var(--lime); }
+.ticker-wrap { padding-left: 48px; }
+.admin-tab { padding:8px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--white3);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;white-space:nowrap; }
+.admin-tab:hover { color:var(--white2);background:rgba(255,255,255,0.03); }
+.admin-tab.active { color:var(--lime);border-bottom-color:var(--lime); }
 .admin-tab-content { display:none; }
 .admin-tab-content.active { display:block; }
 .admin-stat-card { background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center; }
 .admin-stat-num { font-size:32px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif; }
 .admin-stat-label { font-size:12px;color:var(--white3);margin-top:4px; }
+.adm-section { background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px; }
+.adm-card { background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center; }
+.adm-num { font-size:28px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif; }
+.adm-lbl { font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-top:4px; }
+.adm-table-wrap { background:var(--ink2);border:1px solid var(--border);border-radius:14px;overflow:hidden; }
+.adm-table { width:100%;border-collapse:collapse;font-size:13px; }
+.adm-table thead tr { background:rgba(255,255,255,0.03); }
+.adm-table th { padding:12px 16px;text-align:left;color:var(--white3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:1px; }
+.adm-table td { padding:12px 16px;color:var(--white2);border-top:1px solid rgba(255,255,255,0.04); }
+.adm-empty { padding:32px;text-align:center;color:var(--white3);font-size:13px; }
+.adm-btn-secondary { padding:8px 16px;background:var(--lime-dim);border:1px solid rgba(200,241,53,0.3);color:var(--lime);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;transition:0.15s; }
+.adm-btn-secondary:hover { background:rgba(200,241,53,0.2); }
+.adm-input { width:100%;padding:9px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;box-sizing:border-box; }
+.adm-input:focus { outline:none;border-color:var(--lime); }
+.adm-label { font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;display:block;margin-bottom:5px; }
 @media(max-width:768px){ footer > div > div:first-child { grid-template-columns:1fr !important; } }
 </style>
 
