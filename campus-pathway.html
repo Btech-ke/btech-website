@@ -864,158 +864,120 @@ footer {
 
 <!-- M-PESA DONATION MODAL -->
 <div id="mpesaModal" onclick="if(event.target===this)closeMpesaModal()"
-  style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.8);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:16px;">
+  style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:16px;">
 
-<div id="mpModalCard" style="background:#0d0d18;border:1px solid rgba(255,255,255,0.1);border-radius:28px;max-width:400px;width:100%;position:relative;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,0.7);animation:fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);">
+<div id="mpModalCard" style="background:var(--ink2);border:1px solid var(--border2);border-radius:24px;max-width:400px;width:100%;position:relative;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);animation:fadeUp 0.3s cubic-bezier(0.16,1,0.3,1);">
 
-  <!-- MODAL HEADER -->
-  <div style="background:linear-gradient(135deg,#005c2e 0%,#00a651 100%);padding:20px 22px 16px;position:relative;">
-    <button onclick="closeMpesaModal()" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div style="width:40px;height:40px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <span style="font-weight:900;font-size:17px;color:#00a651;">M</span>
-      </div>
-      <div>
-        <div style="color:#fff;font-weight:800;font-size:16px;line-height:1.2;">Donate via M-Pesa</div>
-        <div style="color:rgba(255,255,255,0.7);font-size:12px;margin-top:2px;">Keep BTECHPLUS free for all Kenyan students 🇰🇪</div>
-      </div>
+  <!-- HEADER -->
+  <div style="padding:22px 22px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;position:relative;">
+    <button onclick="closeMpesaModal()" style="position:absolute;top:16px;right:16px;background:var(--ink3);border:1px solid var(--border);color:var(--white3);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
+    <div style="width:44px;height:44px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:20px;letter-spacing:-2px;flex-shrink:0;">M</div>
+    <div>
+      <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white);">Support BTECHPLUS</div>
+      <div style="font-size:12px;color:var(--white3);margin-top:2px;">Keep campus guidance free for every Kenyan student 🇰🇪</div>
     </div>
   </div>
 
   <!-- STEP INDICATOR -->
-  <div id="mpStepIndicator" style="display:flex;align-items:center;justify-content:center;padding:14px 24px;gap:0;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);">
-    <div class="mp-step-dot active" id="mpi-1">
-      <div class="mp-dot-circle">1</div>
-      <div class="mp-dot-label">Amount</div>
-    </div>
+  <div id="mpStepIndicator" style="display:flex;align-items:center;justify-content:center;padding:14px 22px 0;gap:0;">
+    <div class="mp-step-dot active" id="mpi-1"><div class="mp-dot-circle">1</div><div class="mp-dot-label">Amount</div></div>
     <div class="mp-step-line" id="mpline-1"></div>
-    <div class="mp-step-dot" id="mpi-2">
-      <div class="mp-dot-circle">2</div>
-      <div class="mp-dot-label">Phone</div>
-    </div>
+    <div class="mp-step-dot" id="mpi-2"><div class="mp-dot-circle">2</div><div class="mp-dot-label">Phone</div></div>
     <div class="mp-step-line" id="mpline-2"></div>
-    <div class="mp-step-dot" id="mpi-3">
-      <div class="mp-dot-circle">3</div>
-      <div class="mp-dot-label">Confirm</div>
-    </div>
+    <div class="mp-step-dot" id="mpi-3"><div class="mp-dot-circle">3</div><div class="mp-dot-label">Confirm</div></div>
   </div>
 
-  <!-- STEP 1 — Choose amount -->
-  <div id="mpStep1" style="padding:22px 22px 18px;">
-    <p style="font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:2px;margin:0 0 12px;font-weight:700;">Select Donation Amount</p>
+  <!-- STEP 1 — Amount -->
+  <div id="mpStep1" style="padding:18px 22px 22px;">
+    <p style="font-size:11px;color:var(--white3);margin:0 0 10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Choose amount (KES)</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
       <button onclick="setAmount(50)"   class="mp-amt-btn" data-amt="50">KES 50</button>
       <button onclick="setAmount(100)"  class="mp-amt-btn active" data-amt="100">KES 100</button>
       <button onclick="setAmount(200)"  class="mp-amt-btn" data-amt="200">KES 200</button>
       <button onclick="setAmount(500)"  class="mp-amt-btn" data-amt="500">KES 500</button>
       <button onclick="setAmount(1000)" class="mp-amt-btn" data-amt="1000">KES 1,000</button>
-      <button onclick="setAmount('custom')" class="mp-amt-btn" data-amt="custom" style="font-size:11px;">✏️ Custom</button>
+      <button onclick="setAmount('custom')" class="mp-amt-btn" data-amt="custom" style="font-size:11px;">Custom ✏️</button>
     </div>
-    <div id="customAmtWrap" style="display:none;margin-bottom:14px;">
-      <div style="display:flex;align-items:center;border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.04);transition:border-color 0.2s;" onfocusin="this.style.borderColor='rgba(0,166,81,0.6)'" onfocusout="this.style.borderColor='rgba(255,255,255,0.12)'">
-        <span style="padding:0 14px;color:rgba(255,255,255,0.4);font-size:13px;font-weight:600;border-right:1px solid rgba(255,255,255,0.08);">KES</span>
-        <input id="customAmt" type="number" min="1" placeholder="Enter amount" style="flex:1;padding:13px 14px;background:transparent;border:none;color:#fff;font-size:16px;outline:none;font-family:inherit;">
+    <div id="customAmtWrap" style="display:none;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;background:var(--ink3);border:1.5px solid var(--border2);border-radius:10px;overflow:hidden;">
+        <span style="padding:0 12px;color:var(--white3);font-size:13px;font-weight:700;border-right:1px solid var(--border);">KES</span>
+        <input id="customAmt" type="number" min="1" placeholder="Enter amount" style="flex:1;padding:12px;background:transparent;border:none;color:var(--white);font-size:16px;outline:none;font-family:inherit;">
       </div>
     </div>
-    <button onclick="goToStep2()" style="width:100%;padding:15px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(0,166,81,0.3);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 12px 32px rgba(0,166,81,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 24px rgba(0,166,81,0.3)'">
-      Continue <span style="font-size:16px;">→</span>
-    </button>
-    <button onclick="closeMpesaModal()" style="width:100%;padding:8px;background:transparent;color:rgba(255,255,255,0.3);border:none;cursor:pointer;font-size:12px;margin-top:8px;font-family:inherit;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Maybe later</button>
+    <button onclick="goToStep2()" style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">Continue →</button>
+    <button onclick="closeMpesaModal()" style="width:100%;padding:8px;background:transparent;color:var(--white3);border:none;cursor:pointer;font-size:12px;margin-top:6px;font-family:inherit;">Maybe later</button>
   </div>
 
-  <!-- STEP 2 — Enter phone -->
-  <div id="mpStep2" style="display:none;padding:22px 22px 18px;">
-    <button onclick="showMpStep(1)" style="background:none;border:none;color:#00a651;cursor:pointer;font-size:12.5px;margin-bottom:18px;padding:0;font-family:inherit;display:flex;align-items:center;gap:5px;font-weight:600;">← Back</button>
-
-    <!-- Amount summary pill -->
-    <div style="background:rgba(0,166,81,0.08);border:1px solid rgba(0,166,81,0.2);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;">
+  <!-- STEP 2 — Phone -->
+  <div id="mpStep2" style="display:none;padding:18px 22px 22px;">
+    <button onclick="showMpStep(1)" style="background:none;border:none;color:var(--lime);cursor:pointer;font-size:13px;margin-bottom:14px;padding:0;font-family:inherit;font-weight:700;">← Back</button>
+    <div style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
       <div>
-        <div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:3px;">Donating</div>
-        <div style="font-size:28px;font-weight:800;color:#00a651;font-family:'Fraunces',serif;line-height:1;" id="step2AmtDisplay">KES 100</div>
+        <div style="font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Donating</div>
+        <div style="font-size:28px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;line-height:1;" id="step2AmtDisplay">KES 100</div>
       </div>
-      <div style="width:44px;height:44px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:18px;letter-spacing:-1px;box-shadow:0 4px 16px rgba(0,166,81,0.3);">M</div>
+      <div style="width:38px;height:38px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:16px;">M</div>
     </div>
-
-    <!-- Phone input -->
-    <div style="margin-bottom:18px;">
-      <label style="font-size:9.5px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;display:block;margin-bottom:10px;font-weight:700;">M-Pesa Phone Number</label>
-      <div style="display:flex;align-items:center;border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.04);transition:border-color 0.2s;" id="phoneInputWrap">
-        <span style="padding:0 14px;font-size:20px;border-right:1px solid rgba(255,255,255,0.08);">📱</span>
-        <input id="mpesaPhone" type="tel" placeholder="07XX XXX XXX · 2547XX" maxlength="13"
-          style="flex:1;padding:14px 14px;background:transparent;border:none;color:#fff;font-size:16px;outline:none;font-family:inherit;letter-spacing:0.5px;"
-          oninput="formatPhone(this);onPhoneInput(this)"
-          onkeydown="if(event.key==='Enter')submitDonation()">
-        <span id="phoneCheck" style="padding:0 14px;font-size:18px;opacity:0;transition:opacity 0.25s;color:#00a651;">✓</span>
-      </div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:7px;">Safaricom M-Pesa numbers only (07xx / 01xx)</div>
+    <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;font-weight:700;">M-Pesa Number</label>
+    <div style="display:flex;align-items:center;background:var(--ink3);border:1.5px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:16px;" id="phoneInputWrap">
+      <span style="padding:0 14px;font-size:18px;border-right:1px solid var(--border);">📱</span>
+      <input id="mpesaPhone" type="tel" placeholder="07XX XXX XXX" maxlength="13"
+        style="flex:1;padding:13px 14px;background:transparent;border:none;color:var(--white);font-size:16px;outline:none;font-family:inherit;"
+        oninput="formatPhone(this);onPhoneInput(this)"
+        onkeydown="if(event.key==='Enter')submitDonation()">
+      <span id="phoneCheck" style="padding:0 14px;font-size:16px;opacity:0;transition:opacity .25s;color:#00a651;">✓</span>
     </div>
-
     <button id="stkBtn" onclick="submitDonation()"
-      style="width:100%;padding:15px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 24px rgba(0,166,81,0.3);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
-      <span style="font-size:20px;font-weight:900;letter-spacing:-1px;line-height:1;">M</span>
+      style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+      <span style="font-size:18px;font-weight:900;color:#00a651;line-height:1;">M</span>
       <span id="stkBtnText">Pay with M-Pesa</span>
     </button>
-
-    <div style="text-align:center;margin-top:10px;">
-      <span style="font-size:11px;color:rgba(255,255,255,0.25);">Your M-Pesa PIN stays on your phone — never shared</span>
-    </div>
   </div>
 
-  <!-- STEP 3 — Waiting for PIN -->
-  <div id="mpStep3" style="display:none;padding:36px 24px;text-align:center;">
-    <!-- Animated phone ring -->
-    <div style="position:relative;width:80px;height:80px;margin:0 auto 20px;">
-      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid rgba(0,166,81,0.15);"></div>
-      <div style="position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#00a651;animation:mpSpin 1s linear infinite;"></div>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-        <div style="width:54px;height:54px;background:rgba(0,166,81,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,166,81,0.25);">
-          <span style="font-size:24px;animation:mpPulse 1.5s ease-in-out infinite;">📱</span>
-        </div>
+  <!-- STEP 3 — Waiting -->
+  <div id="mpStep3" style="display:none;padding:40px 22px;text-align:center;">
+    <div style="position:relative;width:70px;height:70px;margin:0 auto 18px;">
+      <div style="position:absolute;inset:0;border-radius:50%;border:2.5px solid var(--border2);"></div>
+      <div style="position:absolute;inset:0;border-radius:50%;border:2.5px solid transparent;border-top-color:var(--lime);animation:mpSpin 1s linear infinite;"></div>
+      <div style="position:absolute;inset:8px;border-radius:50%;background:var(--ink3);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:22px;animation:mpPulse 1.5s ease-in-out infinite;">📱</span>
       </div>
     </div>
-    <h3 style="font-size:20px;color:#fff;margin:0 0 8px;font-family:'Fraunces',serif;font-weight:700;">Check Your Phone!</h3>
-    <p style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 0 4px;">STK Push sent to <strong id="phoneSent" style="color:#00a651;font-weight:700;"></strong></p>
-    <p style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 0 22px;">Enter your M-Pesa PIN to complete the payment.</p>
-    <!-- Progress bar -->
-    <div style="height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-bottom:8px;border-radius:10px;">
-      <div id="progressBar" style="height:100%;background:linear-gradient(90deg,#00a651,#00e573);width:0%;border-radius:10px;transition:width 55s linear;"></div>
+    <h3 style="font-size:19px;color:var(--white);margin:0 0 8px;font-family:'Fraunces',serif;font-weight:700;">Check Your Phone</h3>
+    <p style="font-size:13px;color:var(--white3);line-height:1.7;margin:0 0 18px;">Push sent to <strong id="phoneSent" style="color:var(--lime);"></strong><br>Enter your M-Pesa PIN to confirm.</p>
+    <div style="height:3px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:16px;">
+      <div id="progressBar" style="height:100%;background:var(--lime);width:0%;transition:width 55s linear;"></div>
     </div>
-    <div id="waitTimer" style="font-size:11px;color:rgba(255,255,255,0.2);margin-bottom:20px;">Awaiting confirmation...</div>
-    <div style="background:rgba(0,166,81,0.06);border:1px solid rgba(0,166,81,0.15);border-radius:12px;padding:12px 16px;margin-bottom:18px;text-align:left;">
-      <div style="font-size:11px;color:#00a651;font-weight:700;margin-bottom:6px;">How to complete:</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.8;">1. Open the M-Pesa popup on your phone<br>2. Enter your 4–6 digit M-Pesa PIN<br>3. Press OK to confirm payment</div>
-    </div>
-    <button onclick="closeMpesaModal()" style="background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);font-size:12px;padding:9px 22px;border-radius:20px;cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.2)';this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='rgba(255,255,255,0.3)'">Close · payment continues in background</button>
+    <div id="waitTimer" style="font-size:11px;color:var(--white3);margin-bottom:18px;">Awaiting confirmation...</div>
+    <button onclick="closeMpesaModal()" style="background:transparent;border:1px solid var(--border2);color:var(--white3);font-size:12px;padding:9px 22px;border-radius:20px;cursor:pointer;font-family:inherit;">Close — payment continues in background</button>
   </div>
 
   <!-- STEP 4 — Success -->
-  <div id="mpStep4" style="display:none;padding:36px 24px;text-align:center;">
-    <!-- Success icon -->
-    <div style="width:80px;height:80px;margin:0 auto 20px;position:relative;">
-      <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,166,81,0.12);border:2px solid rgba(0,166,81,0.3);animation:mpSuccessRing 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;"></div>
-      <div style="position:absolute;inset:8px;border-radius:50%;background:linear-gradient(135deg,#00a651,#007a3d);display:flex;align-items:center;justify-content:center;animation:mpSuccessPop 0.5s 0.1s cubic-bezier(0.175,0.885,0.32,1.275) both;opacity:0;box-shadow:0 8px 24px rgba(0,166,81,0.4);">
-        <span style="font-size:24px;color:#fff;font-weight:900;">✓</span>
+  <div id="mpStep4" style="display:none;padding:40px 22px;text-align:center;">
+    <div style="width:70px;height:70px;margin:0 auto 18px;position:relative;">
+      <div style="position:absolute;inset:0;border-radius:50%;background:rgba(200,241,53,0.1);border:2px solid rgba(200,241,53,0.3);animation:mpSuccessRing 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;"></div>
+      <div style="position:absolute;inset:8px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;animation:mpSuccessPop 0.5s 0.1s cubic-bezier(0.175,0.885,0.32,1.275) both;opacity:0;">
+        <span style="font-size:22px;color:var(--ink);font-weight:900;">✓</span>
       </div>
     </div>
-    <h3 style="font-size:24px;color:#00a651;margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;letter-spacing:-0.5px;">Payment Confirmed!</h3>
-    <p style="font-size:13.5px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 0 22px;">Asante sana for supporting BTECHPLUS! 💚<br>Your generosity keeps this free for all students.</p>
-    <!-- Receipt card -->
-    <div style="background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-        <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Receipt No.</span>
-        <span id="receiptNum" style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:700;font-family:'IBM Plex Mono',monospace;">—</span>
+    <h3 style="font-size:22px;color:var(--lime);margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;">Payment Confirmed!</h3>
+    <p style="font-size:13px;color:var(--white3);line-height:1.7;margin:0 0 18px;">Asante sana! 💚 Your support keeps BTECHPLUS free for all students.</p>
+    <div style="background:var(--ink3);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;text-align:left;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;">Receipt</span>
+        <span id="receiptNum" style="font-size:13px;color:var(--white);font-weight:700;font-family:'IBM Plex Mono',monospace;">—</span>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-        <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Amount Paid</span>
-        <span style="font-size:16px;color:#00a651;font-weight:800;">KES <span id="confirmedAmt">—</span></span>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;">Amount</span>
+        <span style="font-size:16px;color:var(--lime);font-weight:800;">KES <span id="confirmedAmt">—</span></span>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
-        <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Status</span>
-        <span style="background:rgba(0,166,81,0.15);border:1px solid rgba(0,166,81,0.3);color:#00a651;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;">✓ PAID</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;">
+        <span style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;">Status</span>
+        <span style="background:rgba(200,241,53,0.15);color:var(--lime);font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;">✓ PAID</span>
       </div>
     </div>
-    <button onclick="closeMpesaModal()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:14px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;box-shadow:0 8px 24px rgba(0,166,81,0.3);margin-bottom:8px;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">Continue Learning 🎓</button>
-    <button onclick="resetMpModal()" style="width:100%;padding:9px;background:transparent;color:rgba(255,255,255,0.3);border:none;cursor:pointer;font-size:12px;font-family:inherit;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Make Another Donation</button>
+    <button onclick="closeMpesaModal()" style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;font-size:14px;margin-bottom:8px;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">Continue Learning 🎓</button>
+    <button onclick="resetMpModal()" style="width:100%;padding:9px;background:transparent;color:var(--white3);border:none;cursor:pointer;font-size:12px;font-family:inherit;">Donate again</button>
   </div>
 
 </div><!-- end card -->
@@ -1557,19 +1519,24 @@ footer {
     <div class="eyebrow" style="justify-content:center;">Support Us</div>
     <h2 class="heading">Keep BTECHPLUS<br><em>Free for All</em></h2>
     <p style="color:var(--white2); font-size:16px; line-height:1.7; margin-bottom:32px;">BTECHPLUS is 100% free for every Kenyan student. Your support keeps it alive for thousands more. 🇰🇪</p>
-    <div class="donate-card reveal">
-      <p style="font-size:11px; color:var(--white3); margin-bottom:14px; text-transform:uppercase; letter-spacing:1.5px; font-weight:700;">Choose Amount (KES)</p>
-      <div class="amount-row">
+    <div class="donate-card reveal" style="max-width:480px;margin:0 auto;">
+      <!-- Amount grid -->
+      <p style="font-size:11px;color:var(--white3);margin:0 0 12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Quick Amount (KES)</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
         <button class="amt-btn" onclick="setAmt(50,this)">50</button>
         <button class="amt-btn active" onclick="setAmt(100,this)">100</button>
         <button class="amt-btn" onclick="setAmt(250,this)">250</button>
         <button class="amt-btn" onclick="setAmt(500,this)">500</button>
       </div>
-      <div class="fld" style="margin-bottom:18px;"><label>Custom Amount</label><input type="number" id="donAmt" placeholder="e.g. 150 KES"></div>
-      <button class="btn-primary" onclick="donateNow()" style="background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;">
+      <!-- Custom amount -->
+      <div style="display:flex;align-items:center;background:var(--ink3);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:20px;">
+        <span style="padding:0 14px;color:var(--white3);font-size:13px;font-weight:700;border-right:1px solid var(--border);">KES</span>
+        <input type="number" id="donAmt" placeholder="Or enter custom amount" style="flex:1;padding:13px 14px;background:transparent;border:none;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <button onclick="donateNow()" style="width:100%;padding:15px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;transition:opacity 0.2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
         💚 Donate via M-Pesa
       </button>
-      <div id="donMsg" style="margin-top:10px;font-size:13px;"></div>
+      <div id="donMsg" style="margin-top:10px;font-size:13px;text-align:center;"></div>
     </div>
   </div>
 </section>
@@ -2977,7 +2944,7 @@ async function loadAdminDashboard() {
     renderEscalationQueue(posts);
   } catch(e) {}
   try {
-    var r3 = await fetch(API_BASE + '/auth/users');
+    var r3 = await fetch(API_BASE + '/admin/users', { headers: adminHeader() });
     var users = await r3.json();
     var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users)?users.length:'—';
   } catch(e) {}
@@ -3074,53 +3041,106 @@ async function submitAdminReply(postId) {
 }
 
 async function loadAdminChats() {
-  var list = document.getElementById('adminChatList');
-  var detail = document.getElementById('adminChatDetail');
-  if (list) list.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Loading sessions...</div>';
-  if (detail) detail.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Click a session on the left to view the conversation</div>';
+  var list     = document.getElementById('adminChatList');
+  var detail   = document.getElementById('adminChatDetail');
+  var replyBox = document.getElementById('chatReplyBox');
+  if (list)    list.innerHTML = '<div style="color:var(--white3);font-size:12px;padding:12px;text-align:center;">Loading...</div>';
+  if (detail)  detail.innerHTML = '<div style="margin:auto;text-align:center;color:var(--white3);font-size:13px;">← Select a session</div>';
+  if (replyBox) replyBox.style.display = 'none';
+  window._activeChatSid = null;
   try {
-    var r = await fetch(API_BASE + '/ai/sessions');
+    var r = await fetch(API_BASE + '/ai/sessions', { headers: adminHeader() });
     var sessions = await r.json();
-    var el = document.getElementById('adm-chats'); if(el) el.textContent = sessions.length || '0';
+    var el = document.getElementById('adm-chats');
+    if (el) el.textContent = (sessions && sessions.length) || '0';
     if (!list) return;
-    if (!sessions.length) { list.innerHTML = '<div style="color:var(--white3);padding:16px;">No AI sessions yet</div>'; return; }
+    if (!sessions || !sessions.length) {
+      list.innerHTML = '<div style="color:var(--white3);font-size:12px;padding:12px;text-align:center;">No sessions yet</div>';
+      return;
+    }
     list.innerHTML = sessions.map(function(s) {
-      var dt = new Date(s.last_active).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      var preview = (s.last_message || 'No messages').slice(0, 55);
-      return '<button onclick="openChatSession(\''+s.session_id+'\')" style="width:100%;text-align:left;background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;margin-bottom:6px;font-family:inherit;" onmouseover="this.style.borderColor=\'var(--lime)\'" onmouseout="this.style.borderColor=\'var(--border)\'">'
-        +'<div style="font-size:11px;color:var(--lime);font-weight:700;margin-bottom:3px;">'+s.session_id+'</div>'
-        +'<div style="font-size:12px;color:var(--white2);margin-bottom:3px;">'+preview+'</div>'
-        +'<div style="font-size:10px;color:var(--white3);">'+s.message_count+' msgs · '+dt+'</div>'
-        +'</button>';
+      var dt      = s.last_active ? new Date(s.last_active).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+      var preview = (s.last_message || 'No messages').slice(0, 45);
+      var unanswered = !s.has_admin_reply;
+      return '<button data-sid="' + s.session_id + '" onclick="openChatSession(\"' + s.session_id + '\")" '
+        + 'style="width:100%;text-align:left;background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;font-family:inherit;transition:all .15s;" '
+        + 'onmouseover="this.style.borderColor=\"var(--lime)\"" onmouseout="if(window._activeChatSid!==this.dataset.sid)this.style.borderColor=\"var(--border)\"" '
+        + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">'
+        + '<span style="font-size:11px;color:var(--lime);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">' + s.session_id.slice(0,24) + '...</span>'
+        + (unanswered ? '<span style="width:7px;height:7px;background:var(--coral);border-radius:50%;flex-shrink:0;"></span>' : '')
+        + '</div>'
+        + '<div style="font-size:12px;color:var(--white2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px;">' + preview + '</div>'
+        + '<div style="font-size:10px;color:var(--white3);">' + (s.message_count || 0) + ' msgs · ' + dt + '</div>'
+        + '</button>';
     }).join('');
-  } catch(e) { if(list) list.innerHTML = '<div style="color:var(--coral);padding:16px;">Failed: '+e.message+'</div>'; }
+  } catch(e) {
+    if (list) list.innerHTML = '<div style="color:var(--coral);font-size:12px;padding:12px;">Error: ' + e.message + '</div>';
+  }
 }
 
 async function openChatSession(sid) {
-  var detail = document.getElementById('adminChatDetail');
+  window._activeChatSid = sid;
+  var detail   = document.getElementById('adminChatDetail');
+  var replyBox = document.getElementById('chatReplyBox');
   if (!detail) return;
-  detail.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">Loading...</div>';
+
+  // Highlight active session
+  document.querySelectorAll('#adminChatList button').forEach(function(b){
+    b.style.background = 'var(--ink3)'; b.style.borderColor = 'var(--border)';
+  });
+  var activeBtn = document.querySelector('#adminChatList button[data-sid="' + sid + '"]');
+  if (activeBtn) { activeBtn.style.background = 'rgba(200,241,53,0.08)'; activeBtn.style.borderColor = 'var(--lime)'; }
+
+  detail.innerHTML = '<div style="margin:auto;text-align:center;color:var(--white3);font-size:13px;">Loading...</div>';
+
   try {
-    var r = await fetch(API_BASE + '/ai/history/' + sid);
+    var r = await fetch(API_BASE + '/ai/history/' + sid, { headers: adminHeader() });
     var msgs = await r.json();
-    if (!msgs.length) { detail.innerHTML = '<div style="color:var(--white3);font-size:13px;padding:16px;">No messages in this session</div>'; return; }
-    detail.innerHTML =
-      '<div style="font-size:11px;color:var(--lime);margin-bottom:12px;font-weight:700;word-break:break-all;">📱 '+sid+'</div>'+
-      '<div style="display:flex;flex-direction:column;gap:8px;max-height:380px;overflow-y:auto;margin-bottom:12px;padding-right:4px;">'+
-      msgs.map(function(m) {
-        var isUser = m.role === 'user';
-        return '<div style="padding:8px 12px;border-radius:10px;font-size:13px;max-width:85%;line-height:1.5;'+
-          (isUser
-            ? 'background:rgba(200,241,53,0.1);color:var(--lime);align-self:flex-end;margin-left:auto;border:1px solid rgba(200,241,53,0.15);'
-            : 'background:var(--ink3);color:var(--white2);border:1px solid var(--border);')+
-          '">'+m.content+'</div>';
-      }).join('')+
-      '</div>'+
-      '<div style="display:flex;gap:8px;">'+
-        '<input id="chatReplyInp" placeholder="Type reply to inject into student chat..." style="flex:1;padding:9px 12px;background:var(--ink3);border:1px solid var(--border);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;outline:none;">'+
-        '<button onclick="sendAdminChatReply(\''+sid+'\')" style="padding:9px 16px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;font-size:13px;">Send</button>'+
-      '</div>';
-  } catch(e) { detail.innerHTML = '<div style="color:var(--coral);padding:16px;">Failed: '+e.message+'</div>'; }
+
+    if (!msgs || !msgs.length) {
+      detail.innerHTML = '<div style="margin:auto;text-align:center;color:var(--white3);font-size:13px;">No messages yet</div>';
+    } else {
+      detail.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;">' +
+        msgs.map(function(m) {
+          var isUser  = m.role === 'user';
+          var isAdmin = !isUser && m.content && m.content.startsWith('[ADMIN]');
+          var text    = isAdmin ? m.content.replace('[ADMIN] ', '') : (m.content || '');
+          var time    = m.created_at ? new Date(m.created_at).toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'}) : '';
+
+          if (isUser) {
+            return '<div style="display:flex;justify-content:flex-end;">'
+              + '<div style="max-width:80%;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);border-radius:14px 14px 3px 14px;padding:9px 13px;">'
+              + '<div style="font-size:13px;color:var(--lime);line-height:1.5;">' + text + '</div>'
+              + (time ? '<div style="font-size:10px;color:rgba(200,241,53,0.4);margin-top:3px;text-align:right;">' + time + '</div>' : '')
+              + '</div></div>';
+          } else if (isAdmin) {
+            return '<div style="display:flex;gap:8px;align-items:flex-start;">'
+              + '<div style="width:26px;height:26px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;">👨‍💼</div>'
+              + '<div style="max-width:80%;background:var(--ink3);border:1px solid var(--teal);border-radius:3px 14px 14px 14px;padding:9px 13px;">'
+              + '<div style="font-size:10px;color:var(--teal);font-weight:700;margin-bottom:3px;">BTECHPLUS TEAM</div>'
+              + '<div style="font-size:13px;color:var(--white2);line-height:1.5;">' + text + '</div>'
+              + (time ? '<div style="font-size:10px;color:var(--white3);margin-top:3px;">' + time + '</div>' : '')
+              + '</div></div>';
+          } else {
+            return '<div style="display:flex;gap:8px;align-items:flex-start;">'
+              + '<div style="width:26px;height:26px;background:var(--ink3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;">🤖</div>'
+              + '<div style="max-width:80%;background:var(--ink2);border:1px solid var(--border);border-radius:3px 14px 14px 14px;padding:9px 13px;">'
+              + '<div style="font-size:10px;color:var(--white3);font-weight:700;margin-bottom:3px;">AI ASSISTANT</div>'
+              + '<div style="font-size:13px;color:var(--white2);line-height:1.5;">' + text + '</div>'
+              + (time ? '<div style="font-size:10px;color:var(--white3);margin-top:3px;">' + time + '</div>' : '')
+              + '</div></div>';
+          }
+        }).join('') + '</div>';
+      setTimeout(function(){ detail.scrollTop = detail.scrollHeight; }, 50);
+    }
+
+    if (replyBox) { replyBox.style.display = 'flex'; }
+    var inp = document.getElementById('chatReplyInp');
+    if (inp) { inp.value = ''; inp.focus(); }
+
+  } catch(e) {
+    detail.innerHTML = '<div style="margin:auto;color:var(--coral);font-size:13px;">Error: ' + e.message + '</div>';
+  }
 }
 
 async function sendAdminChatReply(sid) {
@@ -3146,7 +3166,7 @@ async function loadAdminUsers() {
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">Loading...</td></tr>';
   try {
-    var r = await fetch(API_BASE + '/auth/users');
+    var r = await fetch(API_BASE + '/admin/users', { headers: adminHeader() });
     var users = await r.json();
     var uc = document.getElementById('adm-users'); if(uc) uc.textContent = users.length || 0;
     if (!users.length) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">No registered users yet</td></tr>'; return; }
@@ -3187,7 +3207,7 @@ async function loadAdminDeadlinesForDash() {
   var el = document.getElementById('adminDeadlineListDash');
   if (!el) return;
   try {
-    var r = await fetch(API_BASE + '/deadlines', { headers: adminHeader() });
+    var r = await fetch(API_BASE + '/admin/deadlines', { headers: adminHeader() });
     var items = await r.json();
     if (!items.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No deadlines added yet</div>'; return; }
     var now = new Date();
@@ -3209,7 +3229,7 @@ async function loadAdminDeadlines() {
   var el = document.getElementById('adminDeadlineList');
   if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
   try {
-    var r = await fetch(API_BASE + '/deadlines', { headers: adminHeader() });
+    var r = await fetch(API_BASE + '/admin/deadlines', { headers: adminHeader() });
     var items = await r.json();
     if (!el) return;
     if (!items.length) { el.innerHTML = '<div class="adm-empty">No deadlines yet</div>'; return; }
@@ -3615,57 +3635,6 @@ function openCyberOverlay() {
 /* ════════════════════════════════════════════════════════════
    UPDATED checkAuthState — wire admin button
 ════════════════════════════════════════════════════════════ */
-function checkAuthState() {
-  var user       = JSON.parse(localStorage.getItem('bpUser') || 'null');
-  var authForms  = document.getElementById('authForms');
-  var dashPanel  = document.getElementById('dashPanel');
-  var navLogin   = document.getElementById('navLoginBtn');
-  var navLogout  = document.getElementById('navLogoutBtn');
-  var adminPanel = document.getElementById('adminPanel'); // old inline panel if exists
-
-  if (user && user.email) {
-    if (authForms)  authForms.style.display  = 'none';
-    if (dashPanel)  dashPanel.style.display  = 'block';
-    if (navLogin)   navLogin.style.display   = 'none';
-    if (navLogout)  navLogout.style.display  = 'block';
-    if (adminPanel) adminPanel.style.display = 'none';
-
-    var initials = (user.name || user.email).split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
-    var av = document.getElementById('avatarCircle'); if(av) av.textContent = initials;
-    var dn = document.getElementById('dashName');     if(dn) dn.textContent = user.name || 'Student';
-    var de = document.getElementById('dashEmail');    if(de) de.textContent = user.email;
-    var saved = localStorage.getItem('bpCluster');
-    if (saved) { var dc=document.getElementById('dashCluster'); if(dc) dc.textContent=saved; }
-    var savedG = localStorage.getItem('bpGrade');
-    if (savedG) { var dg=document.getElementById('dashGrade'); if(dg) dg.textContent=savedG; }
-
-    // Admin button in nav
-    var navLinks = document.querySelector('.nav-links');
-    var existingAdminLink = document.getElementById('adminNavLink');
-    if (user.email === ADMIN_EMAIL) {
-      if (navLinks && !existingAdminLink) {
-        var li = document.createElement('li');
-        li.innerHTML = '<a href="#" id="adminNavLink" onclick="openAdminPanel();return false;" style="color:var(--lime);font-weight:700;">⚙ Admin</a>';
-        if (navLinks.lastElementChild) navLinks.insertBefore(li, navLinks.lastElementChild);
-        else navLinks.appendChild(li);
-      }
-    } else {
-      if (existingAdminLink) existingAdminLink.closest('li').remove();
-    }
-  } else {
-    if (authForms)  authForms.style.display  = 'grid';
-    if (dashPanel)  dashPanel.style.display  = 'none';
-    if (navLogin)   navLogin.style.display   = 'block';
-    if (navLogout)  navLogout.style.display  = 'none';
-    if (adminPanel) adminPanel.style.display = 'none';
-    var adminLink = document.getElementById('adminNavLink');
-    if (adminLink && adminLink.parentElement) adminLink.parentElement.remove();
-  }
-}
-
-/* ════════════════════════════════════════════════════════════
-   UPDATED renderQ — show admin replies in forum
-════════════════════════════════════════════════════════════ */
 function renderQ(posts) {
   var data = posts || questions;
   var feed = document.getElementById('qFeed');
@@ -3986,17 +3955,31 @@ window.addEventListener('DOMContentLoaded', function() {
 
   <!-- ── AI CHATS ───────────────────────────────────────────────────────── -->
   <div id="adminTab-chats" class="admin-tab-content" style="display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h3 style="margin:0;color:#fff;">🤖 AI Chat Sessions</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <h3 style="margin:0;color:#fff;font-size:15px;">🤖 AI Chat Sessions</h3>
       <button onclick="loadAdminChats()" class="adm-btn-secondary">↻ Refresh</button>
     </div>
-    <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;height:520px;">
-      <div style="display:flex;flex-direction:column;gap:6px;overflow-y:auto;" id="adminChatList">
-        <div style="color:var(--white3);font-size:13px;padding:12px;">Loading sessions...</div>
+    <div style="display:grid;grid-template-columns:270px 1fr;height:560px;background:var(--ink3);border-radius:16px;overflow:hidden;border:1px solid var(--border);">
+
+      <!-- Left: session list -->
+      <div style="display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--ink2);">
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Sessions</div>
+        <div id="adminChatList" style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;">
+          <div style="color:var(--white3);font-size:12px;padding:12px;text-align:center;">Loading...</div>
+        </div>
       </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;">
-        <div id="adminChatDetail" style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--white3);font-size:13px;">
-          Click a session on the left to view conversation
+
+      <!-- Right: conversation -->
+      <div style="display:flex;flex-direction:column;background:var(--ink);">
+        <div id="adminChatDetail" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="margin:auto;text-align:center;color:var(--white3);font-size:13px;">← Select a session</div>
+        </div>
+        <div id="chatReplyBox" style="padding:12px 14px;border-top:1px solid var(--border);display:none;gap:8px;align-items:center;">
+          <input id="chatReplyInp" placeholder="Type a reply — student sees it instantly..."
+            style="flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:20px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdminChatReply(window._activeChatSid);}">
+          <button onclick="sendAdminChatReply(window._activeChatSid)"
+            style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:20px;font-weight:800;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;">Send</button>
         </div>
       </div>
     </div>
