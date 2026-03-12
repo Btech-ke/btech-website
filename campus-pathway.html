@@ -859,7 +859,7 @@ footer {
   <a href="#forum" onclick="toggleNav()">Forum</a>
   <a href="#ai" onclick="toggleNav()">AI Assistant</a>
   <a href="#account" onclick="toggleNav()">My Account</a>
-  <a href="#donate" onclick="toggleNav()">Support Us</a>
+  <a href="#" onclick="openMpesaModal();toggleNav();return false;" style="background:linear-gradient(135deg,#00a651,#007a3d);color:#fff !important;border-radius:10px;padding:14px 16px;font-weight:700;display:block;text-align:center;margin-top:8px;">💚 Support Us — Donate via M-Pesa</a>
 </div>
 
 <!-- M-PESA DONATION MODAL -->
@@ -1492,32 +1492,73 @@ footer {
   </div>
 
   <!-- LOGGED IN DASHBOARD (shown when logged in) -->
-  <div id="dashPanel" style="display:none;max-width:700px;margin:0 auto;">
-    <div class="auth-card reveal" style="text-align:center;padding:40px;">
-      <div id="avatarCircle" style="width:72px;height:72px;background:var(--lime);color:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin:0 auto 16px;font-family:'Fraunces',serif;"></div>
-      <h3 id="dashName" style="font-size:22px;margin:0 0 4px;"></h3>
-      <p id="dashEmail" style="font-size:13px;color:var(--white3);margin:0 0 24px;"></p>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
-        <div style="background:var(--ink3);border-radius:12px;padding:16px;">
-          <div style="font-size:22px;font-weight:700;color:var(--lime);" id="dashCluster">—</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:4px;">Cluster Points</div>
+  <div id="dashPanel" style="display:none;max-width:760px;margin:0 auto;">
+
+    <!-- WELCOME HEADER -->
+    <div style="background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border2);border-radius:20px;padding:28px 28px 24px;margin-bottom:16px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(200,241,53,0.08),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div id="avatarCircle" style="width:60px;height:60px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;color:var(--white3);margin-bottom:3px;letter-spacing:0.5px;">Welcome back 👋</div>
+          <h3 id="dashName" style="font-size:22px;margin:0 0 2px;color:#fff;font-family:'Fraunces',serif;font-weight:700;"></h3>
+          <p id="dashEmail" style="font-size:12px;color:var(--white3);margin:0;"></p>
         </div>
-        <div style="background:var(--ink3);border-radius:12px;padding:16px;">
-          <div style="font-size:22px;font-weight:700;color:var(--teal);" id="dashGrade">—</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:4px;">Mean Grade</div>
-        </div>
-        <div style="background:var(--ink3);border-radius:12px;padding:16px;">
-          <div style="font-size:22px;font-weight:700;color:var(--coral);">Free</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:4px;">Account Type</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <button onclick="go('#calculator')" style="padding:10px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--white2);cursor:pointer;font-family:inherit;font-size:13px;">🧮 Calculator</button>
-        <button onclick="go('#courses')" style="padding:10px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--white2);cursor:pointer;font-family:inherit;font-size:13px;">📚 Courses</button>
-        <button onclick="go('#ai')" style="padding:10px 20px;background:var(--ink3);border:1px solid var(--border);border-radius:10px;color:var(--white2);cursor:pointer;font-family:inherit;font-size:13px;">🤖 Ask AI</button>
-        <button onclick="logoutUser()" style="padding:10px 20px;background:rgba(255,107,82,0.15);border:1px solid rgba(255,107,82,0.3);border-radius:10px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:13px;">Sign Out</button>
+        <button onclick="logoutUser()" style="padding:8px 16px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:12px;white-space:nowrap;">Sign Out</button>
       </div>
     </div>
+
+    <!-- STATS ROW -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
+        <div style="font-size:26px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;" id="dashCluster">—</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Cluster Points</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
+        <div style="font-size:26px;font-weight:800;color:var(--teal);font-family:'Fraunces',serif;" id="dashGrade">—</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Mean Grade</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Account</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-weight:700;">Quick Actions</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+        <button onclick="go('#calculator')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:22px;margin-bottom:6px;">🧮</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Cluster Calculator</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Calculate your points</div>
+        </button>
+        <button onclick="go('#courses')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:22px;margin-bottom:6px;">📚</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Course Generator</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Find your best courses</div>
+        </button>
+        <button onclick="go('#ai')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:22px;margin-bottom:6px;">🤖</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">AI Assistant</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Ask about admissions</div>
+        </button>
+        <button onclick="go('#forum')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:22px;margin-bottom:6px;">💬</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Forum</div>
+          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Ask the community</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- UPCOMING DEADLINES for logged-in user -->
+    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
+      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-weight:700;">⏰ Upcoming Deadlines</div>
+      <div id="dashDeadlines" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:13px;color:var(--white3);">Loading deadlines...</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -2682,41 +2723,30 @@ function addMsg(role, text, id) {
   box.scrollTop = box.scrollHeight;
 }
 
-/* Chat polling — checks for new messages (admin replies) every 8 seconds */
-var chatPollTimer = null;
-var chatMsgCount = 0;
-
-function startChatPolling() {
-  if (chatPollTimer) return; // already running
-  chatPollTimer = setInterval(pollAdminReplies, 8000);
-}
-
-async function pollAdminReplies() {
-  try {
-    var r = await fetch(API_BASE + '/ai/history/' + SESSION_ID);
-    if (!r.ok) return;
-    var msgs = await r.json();
-    if (msgs.length <= chatMsgCount) return;
-    // New messages since last poll — re-render chat
-    var box = document.getElementById('chatMsgs');
-    if (!box) return;
-    box.innerHTML = '';
-    msgs.forEach(function(m) {
-      var isAdminMsg = m.content && m.content.startsWith('[ADMIN]');
-      var text = isAdminMsg ? '👨‍💼 <strong>BTECHPLUS Team:</strong> ' + m.content.replace('[ADMIN] ', '') : m.content;
-      addMsg(m.role === 'user' ? 'user' : 'ai', text);
-    });
-    chatMsgCount = msgs.length;
-  } catch(e) {}
-}
-
 async function sendAI() {
   var inp = document.getElementById('aiQ');
   var q = inp.value.trim();
   if (!q) return;
+  // Check if admin has taken over this session
+  try {
+    var hist = await fetch(API_BASE + '/ai/history/' + SESSION_ID);
+    if (hist.ok) {
+      var msgs = await hist.json();
+      var hasAdminReply = msgs.some(function(m){ return m.role === 'assistant' && m.content && m.content.startsWith('[ADMIN]'); });
+      if (hasAdminReply) {
+        // Admin is handling — still add user message to DB but show admin notice
+        addMsg('user', q);
+        inp.value = '';
+        addMsg('ai', '👨‍💼 An admin is responding to your session. Your message has been recorded — please wait for their reply.');
+        // Still send to backend so admin sees it
+        try { await fetch(API_BASE + '/ai/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message: q, sessionId: SESSION_ID, skipAI: true }) }); } catch(e){}
+        startChatPolling();
+        return;
+      }
+    }
+  } catch(e){}
   addMsg('user', q);
   inp.value = '';
-  startChatPolling();
   var tid = 'typing_' + Date.now();
   addMsg('ai', '⏳ Thinking...', tid);
 
@@ -2937,13 +2967,16 @@ function checkAuthState() {
     if (navLogout) navLogout.style.display = 'block';
 
     // Populate dashboard
-    const initials = (user.name || user.email).split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const displayName = user.username || user.name || 'Student';
+    const initials = displayName.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2) || '?';
     const av = document.getElementById('avatarCircle');
     if (av) av.textContent = initials;
     const dn = document.getElementById('dashName');
-    if (dn) dn.textContent = user.name || 'Student';
+    if (dn) dn.textContent = displayName;
     const de = document.getElementById('dashEmail');
     if (de) de.textContent = user.email;
+    // Load upcoming deadlines into dashboard
+    loadDashDeadlines();
 
     // Load saved cluster
     const saved = localStorage.getItem('bpCluster');
@@ -3095,11 +3128,6 @@ function showAdminTab(tab) {
 
 function loadAdminData() {}
 
-function adminHeader() {
-  var token = localStorage.getItem('bpToken') || '';
-  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
-}
-
 async function loadAdminDashboard() {
   try {
     var r = await fetch(API_BASE + '/mpesa/donations');
@@ -3115,7 +3143,7 @@ async function loadAdminDashboard() {
     renderEscalationQueue(posts);
   } catch(e) {}
   try {
-    var r3 = await fetch(API_BASE + '/admin/users', { headers: adminHeader() });
+    var r3 = await fetch(API_BASE + '/auth/users');
     var users = await r3.json();
     var el4 = document.getElementById('adm-users'); if(el4) el4.textContent = Array.isArray(users)?users.length:'—';
   } catch(e) {}
@@ -3283,8 +3311,7 @@ async function loadAdminUsers() {
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">Loading...</td></tr>';
   try {
-    var r = await fetch(API_BASE + '/admin/users', { headers: adminHeader() });
-    if (r.status === 401 || r.status === 403) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty" style="color:#ff6b52;">⚠️ Session expired — please log in again as admin</td></tr>'; return; }
+    var r = await fetch(API_BASE + '/auth/users');
     var users = await r.json();
     var uc = document.getElementById('adm-users'); if(uc) uc.textContent = users.length || 0;
     if (!users.length) { tbody.innerHTML = '<tr><td colspan="6" class="adm-empty">No registered users yet</td></tr>'; return; }
@@ -3305,8 +3332,8 @@ async function loadAdminUsers() {
 function renderEscalationQueue(posts) {
   var el = document.getElementById('escalationList');
   if (!el) return;
-  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && !p.is_deleted && p.message; }).slice(0,10);
-  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No unanswered questions 🎉</div>'; return; }
+  var flagged = (posts||[]).filter(function(p){ return !p.admin_reply && p.message && p.message.length > 60; }).slice(0,5);
+  if (!flagged.length) { el.innerHTML = '<div style="color:var(--white3);font-size:13px;">No pending questions 🎉</div>'; return; }
   el.innerHTML = flagged.map(function(p) {
     return '<div style="background:rgba(255,107,82,0.06);border:1px solid rgba(255,107,82,0.15);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">'+
       '<span style="font-size:18px;">❓</span>'+
@@ -3325,7 +3352,7 @@ async function loadAdminDeadlines() {
   var el = document.getElementById('adminDeadlineList');
   if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
   try {
-    var r = await fetch(API_BASE + '/admin/deadlines', { headers: adminHeader() });
+    var r = await fetch(API_BASE + '/deadlines', { headers: adminHeader() });
     var items = await r.json();
     if (!el) return;
     if (!items.length) { el.innerHTML = '<div class="adm-empty">No deadlines yet</div>'; return; }
@@ -3341,6 +3368,25 @@ async function loadAdminDeadlines() {
   } catch(e) { if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
 }
 
+function addDeadline2() {
+  // Map dlName2/dlDate2 → dlTitle/dlDate then call main function
+  var n = document.getElementById('dlName2'); var d2 = document.getElementById('dlDate2');
+  var dt = document.getElementById('dlTitle'); var dd = document.getElementById('dlDate');
+  if (dt && n) dt.value = n.value;
+  if (dd && d2) dd.value = d2.value;
+  addDeadlineAdmin();
+}
+function addDeadline3() {
+  var n = document.getElementById('dlName3'); var d3 = document.getElementById('dlDate3');
+  var cat = document.getElementById('dlCat3'); var stat = document.getElementById('dlStat3');
+  var dt = document.getElementById('dlTitle'); var dd = document.getElementById('dlDate');
+  var dty = document.getElementById('dlType'); var ds = document.getElementById('dlStatus');
+  if (dt && n) dt.value = n.value;
+  if (dd && d3) dd.value = d3.value;
+  if (dty && cat) dty.value = cat.value;
+  if (ds && stat) ds.value = stat.value;
+  addDeadlineAdmin();
+}
 async function addDeadlineAdmin() {
   var title  = (document.getElementById('dlTitle').value||'').trim();
   var date   = document.getElementById('dlDate').value;
@@ -3354,7 +3400,7 @@ async function addDeadlineAdmin() {
       body: JSON.stringify({ title: title, deadline: date, type: type, status: status, link: link||null })
     });
     var d = await r.json();
-    if (d.id) {
+    if (d.id || d.success) {
       toast('✅ Deadline added!');
       document.getElementById('dlTitle').value = '';
       document.getElementById('dlDate').value  = '';
@@ -3680,8 +3726,221 @@ function openCyberOverlay() {
 /* ════════════════════════════════════════════════════════════
    UPDATED checkAuthState — wire admin button
 ════════════════════════════════════════════════════════════ */
+function checkAuthState() {
+  var user       = JSON.parse(localStorage.getItem('bpUser') || 'null');
+  var authForms  = document.getElementById('authForms');
+  var dashPanel  = document.getElementById('dashPanel');
+  var navLogin   = document.getElementById('navLoginBtn');
+  var navLogout  = document.getElementById('navLogoutBtn');
+  var adminPanel = document.getElementById('adminPanel'); // old inline panel if exists
 
-/* ── DEADLINE TICKER — loads from backend on page load ── */
+  if (user && user.email) {
+    if (authForms)  authForms.style.display  = 'none';
+    if (dashPanel)  dashPanel.style.display  = 'block';
+    if (navLogin)   navLogin.style.display   = 'none';
+    if (navLogout)  navLogout.style.display  = 'block';
+    if (adminPanel) adminPanel.style.display = 'none';
+
+    var initials = (user.name || user.email).split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+    var av = document.getElementById('avatarCircle'); if(av) av.textContent = initials;
+    var dn = document.getElementById('dashName');     if(dn) dn.textContent = user.name || 'Student';
+    var de = document.getElementById('dashEmail');    if(de) de.textContent = user.email;
+    var saved = localStorage.getItem('bpCluster');
+    if (saved) { var dc=document.getElementById('dashCluster'); if(dc) dc.textContent=saved; }
+    var savedG = localStorage.getItem('bpGrade');
+    if (savedG) { var dg=document.getElementById('dashGrade'); if(dg) dg.textContent=savedG; }
+
+    // Admin button in nav
+    var navLinks = document.querySelector('.nav-links');
+    var existingAdminLink = document.getElementById('adminNavLink');
+    if (user.email === ADMIN_EMAIL) {
+      if (navLinks && !existingAdminLink) {
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#" id="adminNavLink" onclick="openAdminPanel();return false;" style="color:var(--lime);font-weight:700;">⚙ Admin</a>';
+        if (navLinks.lastElementChild) navLinks.insertBefore(li, navLinks.lastElementChild);
+        else navLinks.appendChild(li);
+      }
+    } else {
+      if (existingAdminLink) existingAdminLink.closest('li').remove();
+    }
+  } else {
+    if (authForms)  authForms.style.display  = 'grid';
+    if (dashPanel)  dashPanel.style.display  = 'none';
+    if (navLogin)   navLogin.style.display   = 'block';
+    if (navLogout)  navLogout.style.display  = 'none';
+    if (adminPanel) adminPanel.style.display = 'none';
+    var adminLink = document.getElementById('adminNavLink');
+    if (adminLink && adminLink.parentElement) adminLink.parentElement.remove();
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   UPDATED renderQ — show admin replies in forum
+════════════════════════════════════════════════════════════ */
+function renderQ(posts) {
+  var data = posts || questions;
+  var feed = document.getElementById('qFeed');
+  if (!feed) return;
+  feed.innerHTML = data.map(function(q) {
+    var initial = (q.name || q.username || 'S')[0].toUpperCase();
+    var text    = q.text || q.message || '';
+    var when    = q.time || (q.created_at ? new Date(q.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : 'Just now');
+    var name    = q.name || q.username || 'Student';
+    var reply   = q.admin_reply ? '<div style="margin-top:8px;padding:10px 14px;background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);border-radius:0 8px 8px 0;font-size:12px;color:var(--white2);"><span style="font-size:11px;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:0.5px;">✅ BTECHPLUS Reply</span><br>'+q.admin_reply+'</div>' : '';
+    return '<div class="q-item"><div class="q-header"><div class="q-av">'+initial+'</div><span class="q-name">'+name+'</span><span class="q-when">'+when+'</span></div><div class="q-body">'+text+'</div>'+reply+'</div>';
+  }).join('');
+}
+
+async function deleteDeadlineAdmin(id) {
+  if (!confirm('Delete this deadline?')) return;
+  try {
+    await fetch(API_BASE+'/admin/deadlines/'+id, { method:'DELETE', headers: adminHeader() });
+    toast('🗑 Deleted'); loadAdminDeadlines();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+async function loadAdminBookings() {
+  var el = document.getElementById('adminBookingsList');
+  if (el) el.innerHTML = '<div class="adm-empty">Loading...</div>';
+  try {
+    var r = await fetch(API_BASE+'/admin/bookings', { headers: adminHeader() });
+    var items = await r.json();
+    if (!el) return;
+    if (!items.length) { el.innerHTML = '<div class="adm-empty">No bookings yet</div>'; return; }
+    el.innerHTML = items.map(function(b){
+      var dt = new Date(b.created_at).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      var sc = b.status==='DONE'?'#c8f135':b.status==='IN PROGRESS'?'#00e5cc':'#f59e0b';
+      return '<div class="booking-item">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;">'
+        +'<div>'
+        +'<div style="font-weight:700;color:#fff;font-size:14px;">'+b.name+' <span style="font-size:11px;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;color:#888;margin-left:6px;">'+b.service+'</span></div>'
+        +'<div style="font-size:12px;color:#888;margin-top:2px;">📱 '+b.phone+(b.email?' · 📧 '+b.email:'')+'</div>'
+        +(b.message?'<div style="font-size:13px;color:#ccc;margin-top:6px;">'+b.message+'</div>':'')
+        +'</div>'
+        +'<div style="text-align:right;flex-shrink:0;">'
+        +'<div style="font-size:11px;color:'+sc+';font-weight:700;margin-bottom:6px;">'+b.status+'</div>'
+        +'<div style="font-size:11px;color:#555;">'+dt+'</div>'
+        +'</div></div>'
+        +'<div style="display:flex;gap:6px;">'
+        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'IN PROGRESS\')" style="padding:5px 10px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);color:#00e5cc;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">In Progress</button>'
+        +'<button data-bid="'+b.id+'" onclick="updateBookingStatus(this.dataset.bid,\'DONE\')" style="padding:5px 10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);color:#c8f135;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">Mark Done</button>'
+        +'</div></div>';
+    }).join('');
+  } catch(e){ if(el) el.innerHTML = '<div class="adm-empty" style="color:#ff6b52;">Error loading</div>'; }
+}
+
+async function updateBookingStatus(id, status) {
+  try {
+    await fetch(API_BASE+'/admin/bookings/'+id+'/status', {
+      method:'PATCH', headers: adminHeader(),
+      body: JSON.stringify({ status })
+    });
+    toast('✅ Updated to: '+status);
+    loadAdminBookings();
+  } catch(e){ toast('❌ Network error'); }
+}
+
+// Override openAdminPanel to use new dashboard loader
+function openAdminPanel() {
+  var el = document.getElementById('adminOverlay');
+  if (!el) return;
+  el.style.display = 'block';
+  showAdminTab('dashboard');
+  loadAdminDashboard();
+}
+
+/* ── CONTACT / KEY CONTACTS ────────────────────────────── */
+var BTECHPLUS_CONTACTS = {
+  email:    'btechkenya@gmail.com',
+  phone:    '0113996609',
+  whatsapp: 'https://wa.me/254113996609',
+  cyber:    'https://btechplus.com/online-cyber.html',
+};
+
+/* ── BOOKING FORM (public) ─────────────────────────────── */
+async function submitBooking() {
+  var name    = (document.getElementById('bkName')   ? document.getElementById('bkName').value.trim()    : '');
+  var phone   = (document.getElementById('bkPhone')  ? document.getElementById('bkPhone').value.trim()   : '');
+  var email   = (document.getElementById('bkEmail')  ? document.getElementById('bkEmail').value.trim()   : '');
+  var service = (document.getElementById('bkService')? document.getElementById('bkService').value         : '');
+  var message = (document.getElementById('bkMessage')? document.getElementById('bkMessage').value.trim() : '');
+  if (!name || !phone || !service) { toast('⚠️ Fill in name, phone and service'); return; }
+  var btn = document.getElementById('bkSubmitBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+  try {
+    var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+    var r = await fetch(API_BASE+'/bookings', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, phone, email, service, message, user_id: user ? user.id : null })
+    });
+    var d = await r.json();
+    if (d.success) {
+      toast('✅ Booking #'+d.booking_id+' submitted! We will contact you soon.');
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+      ['bkName','bkPhone','bkEmail','bkMessage'].forEach(function(id){
+        var el = document.getElementById(id); if(el) el.value='';
+      });
+    } else {
+      toast('❌ '+(d.error||'Failed'));
+      if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+    }
+  } catch(e){
+    toast('❌ Network error');
+    if (btn) { btn.disabled=false; btn.textContent='Submit Request'; }
+  }
+}
+
+/* ── POSTQ updated with user info ─────────────────────── */
+async function postQWithUser() {
+  if (postQBusy) return;
+  var txtEl  = document.getElementById('qText');
+  var nameEl = document.getElementById('qName');
+  var t = txtEl  ? txtEl.value.trim()  : '';
+  var n = nameEl ? nameEl.value.trim() : '';
+  var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+  if (!n) n = user ? user.username : 'Student';
+  if (!t) { toast('⚠️ Please type your question first.'); return; }
+  postQBusy = true;
+  questions.unshift({ name:n, text:t, time:'Just now' });
+  renderQ();
+  if (txtEl) txtEl.value = '';
+  toast('✅ Question posted!');
+  try {
+    await fetch(API_BASE + '/forum/posts', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ username: n, message: t, user_id: user ? user.id : null })
+    });
+  } catch(e) { /* local render already done */ }
+  setTimeout(function(){ postQBusy = false; }, 2000);
+}
+
+
+async function loadDashDeadlines() {
+  var el = document.getElementById('dashDeadlines');
+  if (!el) return;
+  try {
+    var r = await fetch(API_BASE + '/deadlines');
+    if (!r.ok) { el.innerHTML = '<div style="font-size:13px;color:var(--white3);">Could not load deadlines</div>'; return; }
+    var items = await r.json();
+    var now = new Date();
+    var active = (items||[]).filter(function(d){ return d.deadline && new Date(d.deadline) > now; }).slice(0,4);
+    if (!active.length) { el.innerHTML = '<div style="font-size:13px;color:var(--white3);">No upcoming deadlines</div>'; return; }
+    el.innerHTML = active.map(function(d) {
+      var days = Math.ceil((new Date(d.deadline) - now) / 86400000);
+      var color = days <= 7 ? '#ff6b52' : days <= 30 ? '#f59e0b' : '#c8f135';
+      var badge = days <= 7 ? '🔴' : days <= 30 ? '🟡' : '🟢';
+      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--ink3);border-radius:10px;gap:10px;">'
+        + '<div style="display:flex;align-items:center;gap:10px;min-width:0;">'
+        + '<span style="font-size:16px;flex-shrink:0;">' + badge + '</span>'
+        + '<div style="min-width:0;"><div style="font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + d.title + '</div>'
+        + '<div style="font-size:11px;color:#666;margin-top:1px;">' + (d.type||'Deadline') + ' · ' + new Date(d.deadline).toLocaleDateString('en-KE',{month:'short',day:'numeric',year:'numeric'}) + '</div></div>'
+        + '</div>'
+        + '<div style="font-size:12px;font-weight:700;color:' + color + ';white-space:nowrap;flex-shrink:0;">' + days + 'd left</div>'
+        + '</div>';
+    }).join('');
+  } catch(e) { el.innerHTML = '<div style="font-size:13px;color:var(--white3);">Could not load deadlines</div>'; }
+}
+
 async function initDeadlineTicker() {
   try {
     var r = await fetch(API_BASE + '/deadlines');
@@ -3689,7 +3948,7 @@ async function initDeadlineTicker() {
     var items = await r.json();
     if (!Array.isArray(items) || !items.length) return;
     var now = new Date();
-    var active = items.filter(function(d) { return d.deadline && new Date(d.deadline) > now; });
+    var active = items.filter(function(d){ return d.deadline && new Date(d.deadline) > now; });
     if (!active.length) return;
     var inner = document.getElementById('tickerInner');
     var ticker = document.getElementById('deadlineTicker');
@@ -3700,7 +3959,7 @@ async function initDeadlineTicker() {
       var badge = days <= 7 ? '🔴' : days <= 30 ? '🟡' : '🟢';
       return '<span style="font-size:12px;color:var(--white2);white-space:nowrap;">'
         + badge + ' <strong style="color:' + color + ';">' + d.title + '</strong>'
-        + ' &nbsp;·&nbsp;<span style="color:#888;">' + (d.type || 'Deadline') + '</span>'
+        + ' &nbsp;·&nbsp;<span style="color:#888;">' + (d.type||'Deadline') + '</span>'
         + ' &nbsp;·&nbsp;<strong style="color:' + color + ';">' + days + 'd left</strong>'
         + '</span> &nbsp;❯&nbsp;';
     }).join('');
@@ -3709,7 +3968,6 @@ async function initDeadlineTicker() {
   } catch(e) {}
 }
 
-/* ── Load public forum posts on page init ── */
 async function initPublicForum() {
   try {
     var r = await fetch(API_BASE + '/forum/posts');
@@ -3719,8 +3977,41 @@ async function initPublicForum() {
   } catch(e) {}
 }
 
-/* ── Page startup ── */
-window.addEventListener('load', function() {
+/* Chat polling — checks for admin replies every 8 seconds */
+var chatPollTimer = null;
+var chatMsgCount = 0;
+function startChatPolling() {
+  if (chatPollTimer) return;
+  chatPollTimer = setInterval(pollAdminReplies, 8000);
+}
+async function pollAdminReplies() {
+  try {
+    var r = await fetch(API_BASE + '/ai/history/' + SESSION_ID);
+    if (!r.ok) return;
+    var msgs = await r.json();
+    if (msgs.length <= chatMsgCount) return;
+    var box = document.getElementById('chatMsgs');
+    if (!box) return;
+    box.innerHTML = '';
+    msgs.forEach(function(m) {
+      var isAdmin = m.content && m.content.startsWith('[ADMIN]');
+      var text = isAdmin ? '👨‍💼 <strong>BTECHPLUS Team:</strong> ' + m.content.replace('[ADMIN] ','') : m.content;
+      addMsg(m.role === 'user' ? 'user' : 'ai', text);
+    });
+    chatMsgCount = msgs.length;
+  } catch(e) {}
+}
+
+/* adminHeader — attaches JWT to admin API calls */
+function adminHeader() {
+  var token = localStorage.getItem('bpToken') || '';
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+}
+
+
+/* ── PAGE INIT: restore session + load ticker + forum ── */
+window.addEventListener('DOMContentLoaded', function() {
+  checkAuthState();
   initDeadlineTicker();
   initPublicForum();
 });
@@ -3924,6 +4215,15 @@ window.addEventListener('load', function() {
 .admin-stat-num { font-size:32px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif; }
 .admin-stat-label { font-size:12px;color:var(--white3);margin-top:4px; }
 @media(max-width:768px){ footer > div > div:first-child { grid-template-columns:1fr !important; } }
+</style>
+
+
+<!-- FLOATING DONATE BUTTON — mobile only -->
+<button id="floatDonateBtn" onclick="openMpesaModal()" style="display:none;position:fixed;bottom:80px;right:16px;z-index:8000;background:linear-gradient(135deg,#00a651,#007a3d);color:#fff;border:none;border-radius:50px;padding:12px 18px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(0,166,81,0.4);display:flex;align-items:center;gap:6px;">💚 Donate</button>
+<style>
+@media (max-width: 900px) {
+  #floatDonateBtn { display:flex !important; }
+}
 </style>
 
 </body>
