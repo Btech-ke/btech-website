@@ -851,7 +851,16 @@ footer {
   </ul>
   <div class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
 </nav>
-<div class="mobile-nav" id="mobileNav">
+
+<!-- TOP DEADLINE ANNOUNCEMENT BAR — shows when deadlines exist -->
+<div id="topAnnouncementBar" style="display:none;position:fixed;top:64px;left:0;right:0;z-index:490;background:linear-gradient(90deg,rgba(200,241,53,0.08),rgba(0,229,204,0.06));border-bottom:1px solid rgba(200,241,53,0.15);overflow:hidden;height:34px;">
+  <div id="topTickerInner" style="display:inline-flex;align-items:center;gap:48px;animation:tickerScroll 30s linear infinite;white-space:nowrap;height:34px;padding:0 16px;will-change:transform;"></div>
+</div>
+<style>
+#topAnnouncementBar.active ~ * .hero,
+body.has-ticker .hero { padding-top: calc(128px + 34px) !important; }
+body.has-ticker nav ~ * { --ticker-offset: 34px; }
+</style>
   <a href="#tools" onclick="toggleNav()">Student Tools</a>
   <a href="#applications" onclick="toggleNav()">Applications</a>
   <a href="#calculator" onclick="toggleNav()">Cluster Calculator</a>
@@ -1452,65 +1461,68 @@ footer {
   <div id="dashPanel" style="display:none;max-width:760px;margin:0 auto;">
 
     <!-- WELCOME HEADER -->
-    <div style="background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border2);border-radius:20px;padding:28px 28px 24px;margin-bottom:16px;position:relative;overflow:hidden;">
+    <div class="dash-welcome-card" style="background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border2);border-radius:20px;padding:28px 28px 24px;margin-bottom:16px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(200,241,53,0.08),transparent 70%);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <div id="avatarCircle" style="width:60px;height:60px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;"></div>
+        <div id="avatarCircle" style="width:56px;height:56px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;"></div>
         <div style="flex:1;min-width:0;">
-          <div style="font-size:12px;color:var(--white3);margin-bottom:3px;letter-spacing:0.5px;">Welcome back 👋</div>
-          <h3 id="dashName" style="font-size:22px;margin:0 0 2px;color:#fff;font-family:'Fraunces',serif;font-weight:700;"></h3>
-          <p id="dashEmail" style="font-size:12px;color:var(--white3);margin:0;"></p>
+          <div style="font-size:11px;color:var(--white3);margin-bottom:2px;letter-spacing:0.5px;">Welcome back 👋</div>
+          <h3 id="dashName" style="font-size:20px;margin:0 0 2px;color:#fff;font-family:'Fraunces',serif;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></h3>
+          <p id="dashEmail" style="font-size:11px;color:var(--white3);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></p>
         </div>
-        <button onclick="logoutUser()" style="padding:8px 16px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:12px;white-space:nowrap;">Sign Out</button>
+        <button onclick="logoutUser()" style="padding:7px 14px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:12px;white-space:nowrap;flex-shrink:0;">Sign Out</button>
       </div>
     </div>
 
     <!-- STATS ROW -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
-        <div style="font-size:26px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;" id="dashCluster">—</div>
-        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Cluster Points</div>
+    <div class="dash-stats-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+      <div class="dash-stat-box" style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
+        <div class="dash-stat-num" style="font-size:26px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;" id="dashCluster">—</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Cluster Pts</div>
       </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
-        <div style="font-size:26px;font-weight:800;color:var(--teal);font-family:'Fraunces',serif;" id="dashGrade">—</div>
+      <div class="dash-stat-box" style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
+        <div class="dash-stat-num" style="font-size:26px;font-weight:800;color:var(--teal);font-family:'Fraunces',serif;" id="dashGrade">—</div>
         <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Mean Grade</div>
       </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
-        <div style="font-size:18px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div>
+      <div class="dash-stat-box" style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
+        <div class="dash-stat-num" style="font-size:16px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div>
         <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Account</div>
       </div>
     </div>
 
     <!-- QUICK ACTIONS -->
-    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
-      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-weight:700;">Quick Actions</div>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-        <button onclick="go('#calculator')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:22px;margin-bottom:6px;">🧮</div>
-          <div style="font-size:13px;font-weight:700;color:#fff;">Cluster Calculator</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Calculate your points</div>
+    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;font-weight:700;">Quick Actions</div>
+      <div class="dash-actions-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+        <button class="dash-action-btn" onclick="go('#calculator')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">🧮</div>
+          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Cluster Calc</div>
+          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Calculate your points</div>
         </button>
-        <button onclick="go('#courses')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:22px;margin-bottom:6px;">📚</div>
-          <div style="font-size:13px;font-weight:700;color:#fff;">Course Generator</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Find your best courses</div>
+        <button class="dash-action-btn" onclick="go('#courses')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">📚</div>
+          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Courses</div>
+          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Find your best courses</div>
         </button>
-        <button onclick="go('#ai')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:22px;margin-bottom:6px;">🤖</div>
-          <div style="font-size:13px;font-weight:700;color:#fff;">AI Assistant</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Ask about admissions</div>
+        <button class="dash-action-btn" onclick="go('#ai')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">🤖</div>
+          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">AI Assistant</div>
+          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Ask anything</div>
         </button>
-        <button onclick="go('#forum')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-size:22px;margin-bottom:6px;">💬</div>
-          <div style="font-size:13px;font-weight:700;color:#fff;">Forum</div>
-          <div style="font-size:11px;color:var(--white3);margin-top:2px;">Ask the community</div>
+        <button class="dash-action-btn" onclick="go('#forum')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">💬</div>
+          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Forum</div>
+          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Ask the community</div>
         </button>
       </div>
     </div>
 
     <!-- UPCOMING DEADLINES for logged-in user -->
-    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
-      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-weight:700;">⏰ Upcoming Deadlines</div>
+    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">⏰ Upcoming Deadlines</div>
+        <button onclick="go('#applications')" style="font-size:11px;color:var(--lime);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;">View All →</button>
+      </div>
       <div id="dashDeadlines" style="display:flex;flex-direction:column;gap:8px;">
         <div style="font-size:13px;color:var(--white3);">Loading deadlines...</div>
       </div>
@@ -2768,6 +2780,10 @@ function checkAuthState() {
     if (dashPanel) dashPanel.style.display = 'block';
     if (navLogin)  navLogin.style.display  = 'none';
     if (navLogout) navLogout.style.display = 'list-item';
+    // Mobile bottom nav
+    var bnav = document.getElementById('mobileBottomNav');
+    if (bnav) bnav.classList.add('visible');
+    document.body.classList.add('user-logged-in');
 
     // Populate dashboard
     const displayName = user.username || user.name || 'Student';
@@ -2819,6 +2835,10 @@ function checkAuthState() {
     // Logged out
     if (authForms) authForms.style.display = 'grid';
     if (dashPanel) dashPanel.style.display = 'none';
+    // Hide mobile bottom nav
+    var bnav = document.getElementById('mobileBottomNav');
+    if (bnav) bnav.classList.remove('visible');
+    document.body.classList.remove('user-logged-in');
     if (navLogin)  navLogin.style.display  = 'block';
     if (navLogout) navLogout.style.display = 'none';
     if (adminPanel) adminPanel.style.display = 'none';
@@ -3089,11 +3109,36 @@ async function loadAdminChats() {
   }
 }
 
+// Mobile admin chat panel helpers
+function adminChatShowList() {
+  var lp = document.getElementById('chatListPanel');
+  var dp = document.getElementById('chatDetailPanel');
+  var backBtn = document.getElementById('chatBackBtn');
+  if (lp) { lp.classList.remove('hide'); }
+  if (dp) { dp.classList.remove('force-show'); dp.classList.add('hide'); }
+  if (backBtn) backBtn.style.display = 'none';
+}
+function adminChatShowDetail() {
+  var lp = document.getElementById('chatListPanel');
+  var dp = document.getElementById('chatDetailPanel');
+  var backBtn = document.getElementById('chatBackBtn');
+  var isMobile = window.innerWidth <= 700;
+  if (isMobile) {
+    if (lp) lp.classList.add('hide');
+    if (dp) { dp.classList.remove('hide'); dp.classList.add('force-show'); }
+    if (backBtn) backBtn.style.display = 'inline-flex';
+  }
+}
+
+
 async function openChatSession(sid) {
   window._activeChatSid = sid;
   var detail   = document.getElementById('adminChatDetail');
   var replyBox = document.getElementById('chatReplyBox');
   if (!detail) return;
+
+  // On mobile: switch to detail panel
+  adminChatShowDetail();
 
   // Highlight active session
   document.querySelectorAll('#adminChatList button').forEach(function(b){
@@ -3148,6 +3193,7 @@ async function openChatSession(sid) {
     if (replyBox) { replyBox.style.display = 'flex'; }
     var inp = document.getElementById('chatReplyInp');
     if (inp) { inp.value = ''; inp.focus(); }
+    adminChatShowDetail();
 
   } catch(e) {
     detail.innerHTML = '<div style="margin:auto;color:var(--coral);font-size:13px;">Error: ' + e.message + '</div>';
@@ -3768,9 +3814,20 @@ async function initDeadlineTicker() {
         + '</span> &nbsp;&nbsp;〉&nbsp;&nbsp;';
     }).join('');
     var label = '<span style="font-size:10px;font-weight:800;color:var(--lime);text-transform:uppercase;letter-spacing:2px;padding:2px 10px;background:var(--lime-dim);border-radius:4px;flex-shrink:0;margin-right:16px;">📅 DEADLINES</span>';
-    inner.innerHTML = label + html + label + html;
-    ticker.style.display = 'block';
-    document.body.style.paddingBottom = '40px';
+    var fullContent = label + html + label + html;
+    // Primary: top announcement bar (always visible, below nav)
+    var topInner = document.getElementById('topTickerInner');
+    var topBar   = document.getElementById('topAnnouncementBar');
+    if (topInner && topBar) {
+      topInner.innerHTML = fullContent;
+      topBar.style.display = 'block';
+      document.body.classList.add('has-ticker');
+    }
+    // Secondary: bottom ticker (only on desktop, hidden on mobile where bottom nav lives)
+    if (inner && ticker) {
+      inner.innerHTML = fullContent;
+      ticker.style.display = 'block';
+    }
   } catch(e) {}
 }
 
@@ -3845,6 +3902,12 @@ function adminHeader() {
   return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
 }
 
+
+function setActiveBnav(id) {
+  document.querySelectorAll('.bnav-item').forEach(function(b){ b.classList.remove('active'); });
+  var el = document.getElementById('bnav-' + id);
+  if (el) el.classList.add('active');
+}
 
 /* ── PAGE INIT: restore session + load ticker + forum ── */
 window.addEventListener('DOMContentLoaded', function() {
@@ -3922,23 +3985,23 @@ window.addEventListener('DOMContentLoaded', function() {
 <!-- ══════════════════════════════════════════════════════════
      ADMIN PANEL OVERLAY (full screen)
 ══════════════════════════════════════════════════════════ -->
-<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:var(--ink);overflow-y:auto;">
+<div id="adminOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:var(--ink);overflow-y:auto;-webkit-overflow-scrolling:touch;">
   <!-- Admin Nav -->
-  <div style="background:var(--ink2);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:16px;">
-    <div style="font-family:'Fraunces',serif;font-weight:700;font-size:16px;color:var(--lime);padding:16px 0;white-space:nowrap;flex-shrink:0;">⚙ Admin</div>
-    <div style="display:flex;gap:0;overflow-x:auto;flex:1;border-bottom:none;">
-      <button onclick="showAdminTab('dashboard')" class="admin-tab active" id="atab-dashboard">📊 Dashboard</button>
+  <div style="background:var(--ink2);border-bottom:1px solid var(--border);padding:0 12px 0 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;gap:8px;">
+    <div style="font-family:'Fraunces',serif;font-weight:700;font-size:15px;color:var(--lime);padding:14px 0;white-space:nowrap;flex-shrink:0;">⚙</div>
+    <div style="display:flex;gap:0;overflow-x:auto;flex:1;border-bottom:none;scrollbar-width:none;-webkit-overflow-scrolling:touch;" class="admin-tab-scroll">
+      <button onclick="showAdminTab('dashboard')" class="admin-tab active" id="atab-dashboard">📊 Dash</button>
       <button onclick="showAdminTab('donations')" class="admin-tab" id="atab-donations">💳 Donations</button>
       <button onclick="showAdminTab('forum')" class="admin-tab" id="atab-forum">💬 Forum</button>
-      <button onclick="showAdminTab('chats')" class="admin-tab" id="atab-chats">🤖 AI Chats</button>
+      <button onclick="showAdminTab('chats')" class="admin-tab" id="atab-chats">🤖 Chats</button>
       <button onclick="showAdminTab('users')" class="admin-tab" id="atab-users">👥 Users</button>
       <button onclick="showAdminTab('deadlines')" class="admin-tab" id="atab-deadlines">📅 Deadlines</button>
       <button onclick="showAdminTab('bookings')" class="admin-tab" id="atab-bookings">📋 Bookings</button>
     </div>
-    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:7px 14px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);color:var(--coral);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;flex-shrink:0;">✕ Close</button>
+    <button onclick="document.getElementById('adminOverlay').style.display='none'" style="padding:6px 10px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);color:var(--coral);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;white-space:nowrap;flex-shrink:0;">✕</button>
   </div>
 
-  <div style="max-width:1300px;margin:0 auto;padding:28px;">
+  <div style="max-width:1300px;margin:0 auto;padding:16px;">
 
   <!-- ── DASHBOARD ─────────────────────────────────────────────────────── -->
   <div id="adminTab-dashboard" class="admin-tab-content">
@@ -4007,31 +4070,32 @@ window.addEventListener('DOMContentLoaded', function() {
 
   <!-- ── AI CHATS ───────────────────────────────────────────────────────── -->
   <div id="adminTab-chats" class="admin-tab-content" style="display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
       <h3 style="margin:0;color:#fff;font-size:15px;">🤖 AI Chat Sessions</h3>
-      <button onclick="loadAdminChats()" class="adm-btn-secondary">↻ Refresh</button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="chatBackBtn" onclick="adminChatShowList()" class="adm-btn-secondary" style="display:none;">← Sessions</button>
+        <button onclick="loadAdminChats()" class="adm-btn-secondary">↻ Refresh</button>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:270px 1fr;height:560px;background:var(--ink3);border-radius:16px;overflow:hidden;border:1px solid var(--border);">
-
+    <div class="admin-chat-wrap">
       <!-- Left: session list -->
-      <div style="display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--ink2);">
-        <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Sessions</div>
-        <div id="adminChatList" style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;">
+      <div class="admin-chat-list-panel" id="chatListPanel">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Sessions</div>
+        <div id="adminChatList" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px;display:flex;flex-direction:column;gap:4px;">
           <div style="color:var(--white3);font-size:12px;padding:12px;text-align:center;">Loading...</div>
         </div>
       </div>
-
       <!-- Right: conversation -->
-      <div style="display:flex;flex-direction:column;background:var(--ink);">
-        <div id="adminChatDetail" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
-          <div style="margin:auto;text-align:center;color:var(--white3);font-size:13px;">← Select a session</div>
+      <div class="admin-chat-detail-panel" id="chatDetailPanel">
+        <div id="adminChatDetail" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="margin:auto;text-align:center;color:var(--white3);font-size:13px;padding:20px;">← Tap a session to view</div>
         </div>
-        <div id="chatReplyBox" style="padding:12px 14px;border-top:1px solid var(--border);display:none;gap:8px;align-items:center;">
-          <input id="chatReplyInp" placeholder="Type a reply — student sees it instantly..."
-            style="flex:1;padding:10px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:20px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"
+        <div id="chatReplyBox" style="padding:10px 12px;border-top:1px solid var(--border);display:none;gap:8px;align-items:center;">
+          <input id="chatReplyInp" placeholder="Type a reply..."
+            style="flex:1;min-width:0;padding:10px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:20px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"
             onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdminChatReply(window._activeChatSid);}">
           <button onclick="sendAdminChatReply(window._activeChatSid)"
-            style="padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:20px;font-weight:800;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;">Send</button>
+            style="padding:10px 16px;background:var(--lime);color:var(--ink);border:none;border-radius:20px;font-weight:800;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;flex-shrink:0;">Send</button>
         </div>
       </div>
     </div>
@@ -4096,11 +4160,153 @@ window.addEventListener('DOMContentLoaded', function() {
 <style>
 @keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 .ticker-wrap { padding-left: 48px; }
+
+/* ── ADMIN CHAT RESPONSIVE ── */
+.admin-chat-wrap {
+  display:grid;
+  grid-template-columns:260px 1fr;
+  height:calc(100vh - 220px);
+  max-height:600px;
+  min-height:400px;
+  background:var(--ink3);
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+.admin-chat-list-panel {
+  display:flex; flex-direction:column;
+  border-right:1px solid var(--border);
+  background:var(--ink2);
+  overflow:hidden;
+  min-height:0;
+}
+.admin-chat-detail-panel {
+  display:flex; flex-direction:column;
+  background:var(--ink);
+  overflow:hidden;
+  min-height:0;
+}
+/* On mobile: stack vertically, show one panel at a time */
+@media(max-width:700px) {
+  .admin-chat-wrap {
+    grid-template-columns:1fr;
+    grid-template-rows:1fr;
+    height:calc(100vh - 160px);
+    max-height:none;
+    min-height:300px;
+  }
+  .admin-chat-list-panel {
+    border-right:none;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+  .admin-chat-detail-panel {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+  /* JS toggles these */
+  .admin-chat-list-panel.hide { display:none !important; }
+  .admin-chat-detail-panel.hide { display:none !important; }
+  /* By default on mobile: show list, hide detail */
+  .admin-chat-detail-panel:not(.force-show) {
+    display:none;
+  }
+}
+
+/* Ticker: JS controls display:block/none. On mobile push it above bottom nav */
+@media(max-width:900px) {
+  #deadlineTicker { bottom:60px; }
+}
+body.has-ticker { padding-bottom:44px; }
+@media(max-width:900px) {
+  body.has-ticker { padding-bottom:110px; }
+}
+
+/* ── DASHBOARD MOBILE POLISH ── */
+#dashPanel {
+  padding: 0 4px;
+}
+@media(max-width:640px) {
+  #dashPanel {
+    max-width:100% !important;
+    padding:0;
+  }
+  #dashPanel .dash-welcome-card {
+    border-radius:20px !important;
+    padding:22px 18px 20px !important;
+    margin-bottom:12px !important;
+  }
+  #dashPanel .dash-stats-row {
+    gap:8px !important;
+    margin-bottom:12px !important;
+  }
+  #dashPanel .dash-stat-box {
+    padding:16px 10px !important;
+    border-radius:14px !important;
+  }
+  #dashPanel .dash-stat-num {
+    font-size:24px !important;
+  }
+  #dashPanel .dash-actions-grid {
+    grid-template-columns:repeat(2,1fr) !important;
+    gap:10px !important;
+  }
+  #dashPanel .dash-action-btn {
+    padding:18px 14px !important;
+    border-radius:16px !important;
+  }
+  #dashPanel .dash-action-icon { font-size:24px !important; margin-bottom:6px !important; }
+  #dashPanel .dash-action-title { font-size:13px !important; }
+  #dashPanel .dash-action-sub { font-size:10px !important; color:var(--white3) !important; }
+}
+
+/* ── BOTTOM NAV (logged in, mobile) ── */
+#mobileBottomNav {
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:6000;
+  background:rgba(14,14,22,0.98);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding:6px 8px max(10px, env(safe-area-inset-bottom));
+  gap:0;
+  align-items:stretch;
+}
+#mobileBottomNav.visible { display:flex; }
+.bnav-item {
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:none;border:none;cursor:pointer;font-family:inherit;
+  color:rgba(244,244,242,0.4);font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.3px;padding:6px 4px 4px;transition:color 0.15s;
+  border-radius:10px;
+  position:relative;
+}
+.bnav-item:active { background:rgba(200,241,53,0.08); }
+.bnav-item.active { color:var(--lime); }
+.bnav-item.active .bnav-icon { transform:scale(1.1); }
+.bnav-icon { font-size:21px; line-height:1; transition:transform 0.2s; display:block; }
+.bnav-dot {
+  position:absolute;top:4px;right:calc(50% - 14px);
+  width:6px;height:6px;background:var(--coral);border-radius:50%;
+  display:none;
+}
+@media(max-width:900px) {
+  body.user-logged-in { padding-bottom:72px; }
+  #mobileBottomNav.visible { display:flex; }
+}
 .admin-tab { padding:8px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--white3);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;white-space:nowrap; }
 .admin-tab:hover { color:var(--white2);background:rgba(255,255,255,0.03); }
 .admin-tab.active { color:var(--lime);border-bottom-color:var(--lime); }
 .admin-tab-content { display:none; }
 .admin-tab-content.active { display:block; }
+.admin-tab-scroll::-webkit-scrollbar { display:none; }
+@media(max-width:600px) {
+  .admin-tab { padding:10px 11px;font-size:11px; }
+  #adminOverlay > div:last-child { padding:12px 10px !important; }
+}
 .admin-stat-card { background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center; }
 .admin-stat-num { font-size:32px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif; }
 .admin-stat-label { font-size:12px;color:var(--white3);margin-top:4px; }
@@ -4130,6 +4336,25 @@ window.addEventListener('DOMContentLoaded', function() {
   #floatDonateBtn { display:flex !important; }
 }
 </style>
+
+<!-- MOBILE BOTTOM NAV (shown when logged in on mobile) -->
+<div id="mobileBottomNav">
+  <button class="bnav-item active" id="bnav-home" onclick="go('#hero');setActiveBnav('home')">
+    <span class="bnav-icon">🏠</span>Home
+  </button>
+  <button class="bnav-item" id="bnav-calc" onclick="go('#calculator');setActiveBnav('calc')">
+    <span class="bnav-icon">🧮</span>Calc
+  </button>
+  <button class="bnav-item" id="bnav-courses" onclick="go('#courses');setActiveBnav('courses')">
+    <span class="bnav-icon">📚</span>Courses
+  </button>
+  <button class="bnav-item" id="bnav-ai" onclick="go('#ai');setActiveBnav('ai')">
+    <span class="bnav-icon">🤖</span>AI
+  </button>
+  <button class="bnav-item" id="bnav-account" onclick="go('#account');setActiveBnav('account')">
+    <span class="bnav-icon">👤</span>Me
+  </button>
+</div>
 
 </body>
 </html>
