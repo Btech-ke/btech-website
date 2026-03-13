@@ -1099,215 +1099,434 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
 <div class="hr"></div>
 
-<!-- TOOLS -->
-<section id="tools" class="section">
-  <div class="eyebrow">Student Tools</div>
-  <h2 class="heading">Everything You Need,<br><em>One Place</em></h2>
-  <p class="subheading">Powerful, focused tools built exclusively for Kenyan students navigating post-KCSE pathways.</p>
-  <div class="tools-grid">
-    <div class="tool-item reveal" onclick="go('#calculator')">
-      <span class="tool-num">01</span>
-      <div class="tool-icon-wrap icon-lime">🧮</div>
-      <h3>Cluster Calculator</h3>
-      <p>Instantly calculate your cluster points for any course using your KCSE subject grades.</p>
-      <span class="tool-link">Use Calculator →</span>
-    </div>
-    <div class="tool-item reveal" onclick="go('#courses')">
-      <span class="tool-num">02</span>
-      <div class="tool-icon-wrap icon-teal">📚</div>
-      <h3>Course Generator</h3>
-      <p>Discover hundreds of degree, diploma, and certificate programs matched to your grade.</p>
-      <span class="tool-link">Find Courses →</span>
-    </div>
-    <div class="tool-item reveal" onclick="go('#applications')">
-      <span class="tool-num">03</span>
-      <div class="tool-icon-wrap icon-coral">📋</div>
-      <h3>Application Tracker</h3>
-      <p>Live status of KUCCPS, KMTC, TTC and TVET portals with real deadline countdowns.</p>
-      <span class="tool-link">Track Now →</span>
-    </div>
-    <div class="tool-item reveal" onclick="go('#ai')">
-      <span class="tool-num">04</span>
-      <div class="tool-icon-wrap icon-violet">🤖</div>
-      <h3>BTECHPLUS AI</h3>
-      <p>Ask anything — courses, applications, cluster points, career guidance. Instant answers.</p>
-      <span class="tool-link">Ask AI →</span>
-    </div>
-    <div class="tool-item reveal" onclick="go('#forum')">
-      <span class="tool-num">05</span>
-      <div class="tool-icon-wrap icon-lime">💬</div>
-      <h3>Student Forum</h3>
-      <p>Ask questions and share experiences with thousands of students across all 47 counties.</p>
-      <span class="tool-link">Join Forum →</span>
-    </div>
-    <div class="tool-item reveal" onclick="go('#account')">
-      <span class="tool-num">06</span>
-      <div class="tool-icon-wrap icon-teal">👤</div>
-      <h3>Student Dashboard</h3>
-      <p>Create a free account to save results, bookmark courses, and get personalised guidance.</p>
-      <span class="tool-link">Get Started →</span>
-    </div>
-  </div>
-</section>
+<!-- ══ MAIN APP HOME ══ -->
+<section id="tools" class="section" style="padding-top:40px;padding-bottom:40px;">
 
-<div class="hr"></div>
-
-<!-- CALCULATOR -->
-<section id="calculator" class="section">
-  <div class="eyebrow">Cluster Calculator</div>
-  <h2 class="heading">What Are Your<br><em>Cluster Points?</em></h2>
-  <p class="subheading">Select your KCSE grades for the four subjects relevant to your target course cluster.</p>
-  <div class="calc-layout">
-    <div class="card reveal">
-      <h3>Enter Your Grades</h3>
-      <div class="fld-row">
-        <div class="fld">
-          <label>Mathematics</label>
-          <select id="m1"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
-        </div>
-        <div class="fld">
-          <label>English / Kiswahili</label>
-          <select id="m2"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
-        </div>
-        <div class="fld">
-          <label>Subject 3</label>
-          <select id="m3"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
-        </div>
-        <div class="fld">
-          <label>Subject 4</label>
-          <select id="m4"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="calcCluster()">Calculate Cluster Points</button>
-      <button class="btn-outline" onclick="saveCluster()">💾 Save Results — Login Required</button>
-    </div>
-    <div class="calc-result reveal" id="calcResult">
-      <div style="font-size:52px; margin-bottom:20px;">🎯</div>
-      <div class="score-placeholder">Enter your grades and tap <strong>Calculate</strong> to see your cluster points.</div>
-    </div>
-  </div>
-</section>
-
-<div class="hr"></div>
-
-<!-- COURSES -->
-<section id="courses" class="section">
-  <div class="eyebrow">Course Generator</div>
-  <h2 class="heading">Courses You<br><em>Qualify For</em></h2>
-  <p class="subheading">Select your mean grade to explore universities, KMTC, TTC and TVET programs available to you.</p>
-  <div class="course-layout">
-    <div class="reveal">
-      <div style="margin-bottom:12px;">
-        <input id="courseSearch" type="text" placeholder="🔍 Search programs, courses, campuses..." oninput="courseSearchTerm=this.value;renderCourses()" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:var(--white1);font-size:13px;outline:none;font-family:inherit;box-sizing:border-box;">
-      </div>
-      <div class="grade-list">
-        <button class="grade-pill active" onclick="pickGrade(this,'A')">Grade A <small>University</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'A-')">Grade A− <small>University</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'B+')">Grade B+ <small>University</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'B')">Grade B <small>Degree / Diploma</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'B-')">Grade B− <small>Degree / Diploma</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'C+')">Grade C+ <small>Diploma</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'C')">Grade C <small>Diploma</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'C-')">Grade C− <small>Certificate</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'D+')">Grade D+ <small>Certificate / TVET</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'D')">Grade D <small>TVET</small></button>
-        <button class="grade-pill" onclick="pickGrade(this,'D-')">Grade D− <small>TVET</small></button>
-      </div>
-    </div>
-    <!-- Minimum subject requirements button -->
-    <div style="margin-top:20px;text-align:center;">
-      <button onclick="openSubjectReqOverlay()" style="padding:12px 24px;background:rgba(200,241,53,0.08);border:1.5px solid rgba(200,241,53,0.3);color:var(--lime);border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;">
-        📋 View Minimum Subject Requirements
+  <!-- LOGGED OUT: clean feature cards that open overlays -->
+  <div id="guestHome">
+    <div class="eyebrow">Student Tools</div>
+    <h2 class="heading" style="margin-bottom:8px;">Everything You Need,<br><em>One Place</em></h2>
+    <p class="subheading" style="margin-bottom:36px;">Tap any tool to get started instantly.</p>
+    <div class="home-grid">
+      <button class="home-card hc-lime" onclick="openOverlay('calcOverlay')">
+        <div class="hc-icon">🧮</div>
+        <div class="hc-label">Cluster Calculator</div>
+        <div class="hc-sub">Find your cluster points</div>
+        <div class="hc-arrow">→</div>
+      </button>
+      <button class="home-card hc-teal" onclick="openOverlay('coursesOverlay')">
+        <div class="hc-icon">📚</div>
+        <div class="hc-label">Course Finder</div>
+        <div class="hc-sub">By grade & interest</div>
+        <div class="hc-arrow">→</div>
+      </button>
+      <button class="home-card hc-coral" onclick="openOverlay('deadlinesOverlay')">
+        <div class="hc-icon">📅</div>
+        <div class="hc-label">Deadlines</div>
+        <div class="hc-sub">Live application portals</div>
+        <div class="hc-arrow">→</div>
+      </button>
+      <button class="home-card hc-violet" onclick="openOverlay('forumOverlay')">
+        <div class="hc-icon">💬</div>
+        <div class="hc-label">Student Forum</div>
+        <div class="hc-sub">Ask the community</div>
+        <div class="hc-arrow">→</div>
+      </button>
+      <button class="home-card hc-teal" onclick="openOverlay('supportOverlay');startChatPolling()">
+        <div class="hc-icon">👨‍💼</div>
+        <div class="hc-label">Get Support</div>
+        <div class="hc-sub">Chat with our team</div>
+        <div class="hc-arrow">→</div>
+      </button>
+      <button class="home-card hc-lime" onclick="openOverlay('authOverlay')">
+        <div class="hc-icon">👤</div>
+        <div class="hc-label">My Account</div>
+        <div class="hc-sub">Login or register free</div>
+        <div class="hc-arrow">→</div>
       </button>
     </div>
-    <div class="courses-out reveal" id="courseOut"></div>
   </div>
+
+  <!-- LOGGED IN: dashboard -->
+  <div id="dashPanel" style="display:none;max-width:680px;margin:0 auto;">
+    <!-- WELCOME HEADER -->
+    <div style="background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border2);border-radius:20px;padding:22px 22px 18px;margin-bottom:14px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(200,241,53,0.08),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div id="avatarCircle" style="width:52px;height:52px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Welcome back 👋</div>
+          <h3 id="dashName" style="font-size:18px;margin:0 0 2px;color:#fff;font-family:'Fraunces',serif;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></h3>
+          <p id="dashEmail" style="font-size:11px;color:var(--white3);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></p>
+        </div>
+        <button onclick="logoutUser()" style="padding:6px 12px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:11px;white-space:nowrap;flex-shrink:0;">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;" id="dashCluster">—</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;">Cluster Pts</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:var(--teal);font-family:'Fraunces',serif;" id="dashGrade">—</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;">Mean Grade</div>
+      </div>
+      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:14px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div>
+        <div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;">Account</div>
+      </div>
+    </div>
+
+    <!-- TOOL CARDS (overlays) -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;">Your Tools</div>
+      <div class="home-grid">
+        <button class="home-card hc-lime" onclick="openOverlay('calcOverlay')">
+          <div class="hc-icon">🧮</div><div class="hc-label">Cluster Calc</div><div class="hc-sub">Calculate points</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card hc-teal" onclick="openOverlay('coursesOverlay')">
+          <div class="hc-icon">📚</div><div class="hc-label">Courses</div><div class="hc-sub">Find your path</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card hc-coral" onclick="openOverlay('deadlinesOverlay')">
+          <div class="hc-icon">📅</div><div class="hc-label">Deadlines</div><div class="hc-sub">Live portals</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card hc-violet" onclick="openOverlay('forumOverlay')">
+          <div class="hc-icon">💬</div><div class="hc-label">Forum</div><div class="hc-sub">Ask students</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card hc-teal" onclick="openOverlay('supportOverlay');startChatPolling()">
+          <div class="hc-icon">👨‍💼</div><div class="hc-label">Support</div><div class="hc-sub">Chat with us</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card hc-lime" onclick="openOverlay('donateOverlay')">
+          <div class="hc-icon">💚</div><div class="hc-label">Donate</div><div class="hc-sub">Support BTECHPLUS</div><div class="hc-arrow">→</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- UPCOMING DEADLINES -->
+    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">⏰ Upcoming Deadlines</div>
+        <button onclick="openOverlay('deadlinesOverlay')" style="font-size:11px;color:var(--lime);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;">View All →</button>
+      </div>
+      <div id="dashDeadlines" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:13px;color:var(--white3);">Loading deadlines...</div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
-<!-- MINIMUM SUBJECT REQUIREMENTS OVERLAY -->
-<div id="subjectReqOverlay" onclick="if(event.target===this)closeSubjectReqOverlay()" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);overflow-y:auto;padding:24px 16px;">
-  <div style="max-width:900px;margin:0 auto;background:#111118;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:32px;position:relative;animation:fadeUp 0.3s ease;">
-    <button onclick="closeSubjectReqOverlay()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.07);border:none;color:var(--white3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
-    <div style="margin-bottom:24px;">
-      <div style="font-size:11px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:6px;">Subject Requirements</div>
-      <h2 style="font-family:'Fraunces',serif;font-size:26px;color:var(--white);margin:0 0 8px;">Minimum KCSE Subject<br><em>Requirements 2025</em></h2>
-      <p style="color:var(--white3);font-size:13px;margin:0;">Subject grades and cluster requirements for all major career pathways in Kenya.</p>
+<!-- DONATE section (hidden, shown in overlay) -->
+<div id="donate" style="display:none;"></div>
+<!-- anchor targets for nav links -->
+<div id="calculator" style="display:none;"></div>
+<div id="courses" style="display:none;"></div>
+<div id="applications" style="display:none;"></div>
+<div id="forum" style="display:none;"></div>
+<div id="ai" style="display:none;"></div>
+<div id="account" style="display:none;"></div>
+
+<!-- ══════════════ HOME CARD STYLES ══════════════ -->
+<style>
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media(max-width:600px) { .home-grid { grid-template-columns: repeat(2, 1fr); } }
+.home-card {
+  background: var(--ink2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 14px 14px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.18s, border-color 0.18s, background 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.home-card:active { transform: scale(0.97); }
+.hc-icon { font-size: 26px; margin-bottom: 8px; line-height: 1; }
+.hc-label { font-size: 13px; font-weight: 800; color: var(--white); margin-bottom: 3px; }
+.hc-sub { font-size: 11px; color: var(--white3); line-height: 1.4; }
+.hc-arrow { position: absolute; top: 14px; right: 14px; font-size: 14px; opacity: 0.35; }
+.hc-lime { border-color: rgba(200,241,53,0.15); }
+.hc-lime:hover { border-color: var(--lime); background: rgba(200,241,53,0.05); }
+.hc-teal { border-color: rgba(0,229,204,0.12); }
+.hc-teal:hover { border-color: var(--teal); background: rgba(0,229,204,0.05); }
+.hc-coral { border-color: rgba(255,107,82,0.12); }
+.hc-coral:hover { border-color: var(--coral); background: rgba(255,107,82,0.05); }
+.hc-violet { border-color: rgba(167,139,250,0.12); }
+.hc-violet:hover { border-color: var(--violet); background: rgba(167,139,250,0.05); }
+
+/* ══ UNIVERSAL OVERLAY ══ */
+.bp-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 8500;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  animation: bpFadeIn 0.22s ease;
+}
+.bp-overlay.active { display: block; }
+@keyframes bpFadeIn { from { opacity:0; } to { opacity:1; } }
+.bp-sheet {
+  background: var(--ink2);
+  border: 1px solid var(--border2);
+  border-radius: 24px;
+  max-width: 760px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  animation: bpSlideUp 0.28s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes bpSlideUp { from { transform: translateY(32px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+.bp-sheet-wide { max-width: 1000px; }
+.bp-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--ink2);
+  z-index: 2;
+}
+.bp-sheet-title { font-size: 15px; font-weight: 800; color: var(--white); }
+.bp-sheet-sub { font-size: 11px; color: var(--white3); margin-top: 2px; }
+.bp-close {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.06);
+  border: none; border-radius: 50%;
+  color: var(--white3); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background 0.15s;
+}
+.bp-close:hover { background: rgba(255,107,82,0.15); color: var(--coral); }
+.bp-body { padding: 20px; }
+@media(max-width:600px) {
+  .bp-overlay { padding: 0; align-items: flex-end; }
+  .bp-sheet { border-radius: 24px 24px 0 0; margin: auto 0 0; max-width: 100%; }
+  .bp-body { padding: 16px; }
+}
+</style>
+
+<!-- ══════════════ OVERLAY: CALCULATOR ══════════════ -->
+<div id="calcOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('calcOverlay')">
+  <div class="bp-sheet">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">🧮 Cluster Calculator</div><div class="bp-sheet-sub">Enter your KCSE grades</div></div>
+      <button class="bp-close" onclick="closeOverlay('calcOverlay')">✕</button>
     </div>
-    <!-- Category tabs -->
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
-      <button class="sreq-tab active" onclick="showSReqTab('medicine')">🏥 Health</button>
-      <button class="sreq-tab" onclick="showSReqTab('engineering')">⚙️ Engineering</button>
-      <button class="sreq-tab" onclick="showSReqTab('law')">⚖️ Law & Business</button>
-      <button class="sreq-tab" onclick="showSReqTab('education')">📚 Education (TTC)</button>
-      <button class="sreq-tab" onclick="showSReqTab('kmtc')">🏥 KMTC Programs</button>
-      <button class="sreq-tab" onclick="showSReqTab('tvet')">🔧 TVET / Certificate</button>
-    </div>
-    <div id="sreqContent"></div>
-    <!-- Online cyber CTA -->
-    <div style="margin-top:24px;background:rgba(200,241,53,0.06);border:1.5px dashed rgba(200,241,53,0.25);border-radius:16px;padding:20px;text-align:center;">
-      <div style="font-size:18px;margin-bottom:8px;">🖥</div>
-      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">Need help with your application?</div>
-      <div style="font-size:13px;color:var(--white3);margin-bottom:14px;">We handle KUCCPS, KMTC, HELB & TVET applications at our Online Cyber. 100% success guaranteed.</div>
-      <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:inline-block;padding:11px 28px;background:var(--lime);color:var(--ink);border-radius:10px;font-weight:700;text-decoration:none;font-size:13px;">Book Application Help →</a>
+    <div class="bp-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Mathematics</label><select id="m1" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
+        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">English / Kiswahili</label><select id="m2" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
+        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Subject 3 <span style="color:var(--white3);font-weight:400;">(your 3rd best)</span></label><select id="m3" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
+        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Subject 4 <span style="color:var(--white3);font-weight:400;">(your 4th best)</span></label><select id="m4" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
+      </div>
+      <button class="btn-primary" style="width:100%;margin-bottom:10px;" onclick="calcCluster()">Calculate Cluster Points</button>
+      <button class="btn-outline" style="width:100%;" onclick="saveCluster()">💾 Save Results</button>
+      <div class="calc-result" id="calcResult" style="margin-top:16px;min-height:80px;display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;color:var(--white3);font-size:13px;">Enter grades above and tap Calculate</div>
+      </div>
     </div>
   </div>
 </div>
-<style>
-.sreq-tab { padding:8px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--white3);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s; }
-.sreq-tab:hover { border-color:var(--lime);color:var(--lime); }
-.sreq-tab.active { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime); }
-</style>
 
-<div class="hr"></div>
-
-<!-- APPLICATIONS -->
-<section id="applications" class="section-full bg-ink2">
-  <div class="section-full-inner">
-    <div class="eyebrow">Live Applications</div>
-    <h2 class="heading">Open Portals &<br><em>Deadlines</em></h2>
-    <p class="subheading">Live application deadlines — updated by the BTECHPLUS team.</p>
-
-    <!-- Dynamic deadlines grid — fully admin-controlled -->
-    <div id="publicDeadlinesGrid" class="app-grid" style="margin-top:40px;">
-      <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--white3);">
-        <div style="font-size:32px;margin-bottom:12px;">📅</div>
-        <div style="font-size:14px;">Loading deadlines...</div>
+<!-- ══════════════ OVERLAY: COURSES ══════════════ -->
+<div id="coursesOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('coursesOverlay')">
+  <div class="bp-sheet bp-sheet-wide">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">📚 Course Finder</div><div class="bp-sheet-sub">Select your grade to explore courses</div></div>
+      <button class="bp-close" onclick="closeOverlay('coursesOverlay')">✕</button>
+    </div>
+    <div class="bp-body">
+      <div style="margin-bottom:12px;">
+        <input id="courseSearch" type="text" placeholder="🔍 Search courses, programs, campuses..." oninput="courseSearchTerm=this.value;renderCourses()" style="width:100%;padding:10px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-size:13px;outline:none;font-family:inherit;box-sizing:border-box;">
       </div>
+      <div class="grade-list" style="margin-bottom:16px;">
+        <button class="grade-pill active" onclick="pickGrade(this,'A')">A <small>University</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'A-')">A− <small>University</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'B+')">B+ <small>University</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'B')">B <small>Degree/Diploma</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'B-')">B− <small>Diploma</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'C+')">C+ <small>Diploma</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'C')">C <small>Diploma</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'C-')">C− <small>Certificate</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'D+')">D+ <small>TVET</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'D')">D <small>TVET</small></button>
+        <button class="grade-pill" onclick="pickGrade(this,'D-')">D− <small>TVET</small></button>
+      </div>
+      <button onclick="openSubjectReqOverlay()" style="width:100%;padding:11px;background:rgba(200,241,53,0.07);border:1.5px solid rgba(200,241,53,0.25);color:var(--lime);border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:16px;">📋 View Subject Requirements</button>
+      <div class="courses-out" id="courseOut"></div>
     </div>
-
-    <!-- Empty state shown when no deadlines -->
-    <div id="noDeadlinesMsg" style="display:none;text-align:center;padding:60px 20px;">
-      <div style="font-size:48px;margin-bottom:16px;">📋</div>
-      <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;">No active deadlines right now</div>
-      <div style="font-size:14px;color:var(--white3);margin-bottom:24px;">Check back soon — the BTECHPLUS team updates this regularly.</div>
-      <button onclick="go('#ai')" style="padding:12px 28px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;">Ask AI About Applications →</button>
-    </div>
-
   </div>
-</section>
-<section id="forum" class="section">
-  <div class="eyebrow">Student Forum</div>
-  <h2 class="heading">Ask. Learn.<br><em>Connect.</em></h2>
-  <p class="subheading" style="margin-bottom:48px;">Post questions and get answers from peers across every county in Kenya.</p>
-  <div class="forum-layout">
-    <div>
-      <div class="post-card reveal">
-        <h3>Post a Question</h3>
-        <textarea id="qText" placeholder="e.g. What cluster points do I need for Nursing at KU?"></textarea>
-        <div class="post-row">
-          <input type="text" id="qName" placeholder="Your name (optional)">
-          <button onclick="postQWithUser()" style="padding:12px 24px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;white-space:nowrap;">Post Question</button>
+</div>
+
+<!-- ══════════════ OVERLAY: DEADLINES ══════════════ -->
+<div id="deadlinesOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('deadlinesOverlay')">
+  <div class="bp-sheet bp-sheet-wide">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">📅 Open Portals & Deadlines</div><div class="bp-sheet-sub">Updated by the BTECHPLUS team</div></div>
+      <button class="bp-close" onclick="closeOverlay('deadlinesOverlay')">✕</button>
+    </div>
+    <div class="bp-body">
+      <div id="publicDeadlinesGrid" class="app-grid" style="margin-top:0;">
+        <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--white3);">
+          <div style="font-size:32px;margin-bottom:12px;">📅</div>
+          <div style="font-size:14px;">Loading deadlines...</div>
         </div>
       </div>
-      <div class="q-feed" id="qFeed"></div>
+      <div id="noDeadlinesMsg" style="display:none;text-align:center;padding:48px 20px;">
+        <div style="font-size:40px;margin-bottom:12px;">📋</div>
+        <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px;">No active deadlines right now</div>
+        <div style="font-size:13px;color:var(--white3);margin-bottom:20px;">Check back soon — we update this regularly.</div>
+        <button onclick="closeOverlay('deadlinesOverlay');openOverlay('supportOverlay')" style="padding:11px 24px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">Ask Us About Applications →</button>
+      </div>
     </div>
-    <div>
-      <div class="sidebar-card reveal">
-        <h4>💡 Quick Tips</h4>
-        <div class="tip-row"><div class="tip-n">1</div>KUCCPS opens every May–June for university placement applications.</div>
-        <div class="tip-row"><div class="tip-n">2</div>Minimum C+ required for most degree programs at public universities.</div>
-        <div class="tip-row"><div class="tip-n">3</div>KMTC needs C− for certificate and C for diploma nursing programs.</div>
-        <div class="tip-row"><div class="tip-n">4</div>Cluster points use 4 specific subjects per course — use the calculator above.</div>
+  </div>
+</div>
+
+<!-- ══════════════ OVERLAY: FORUM ══════════════ -->
+<div id="forumOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('forumOverlay')">
+  <div class="bp-sheet bp-sheet-wide">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">💬 Student Forum</div><div class="bp-sheet-sub">Ask. Learn. Connect.</div></div>
+      <button class="bp-close" onclick="closeOverlay('forumOverlay')">✕</button>
+    </div>
+    <div class="bp-body">
+      <div class="forum-layout">
+        <div>
+          <div class="post-card" style="background:var(--ink3);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;">
+            <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--white);">Post a Question</h3>
+            <textarea id="qText" placeholder="e.g. What cluster points do I need for Nursing at KU?" style="width:100%;padding:12px;background:var(--ink);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;resize:vertical;min-height:80px;outline:none;box-sizing:border-box;margin-bottom:10px;"></textarea>
+            <div class="post-row" style="display:flex;gap:10px;">
+              <input type="text" id="qName" placeholder="Your name (optional)" style="flex:1;padding:10px 12px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <button onclick="postQWithUser()" style="padding:10px 20px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Post</button>
+            </div>
+          </div>
+          <div class="q-feed" id="qFeed"></div>
+        </div>
+        <div>
+          <div style="background:var(--ink3);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;">
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--white);">💡 Quick Tips</h4>
+            <div class="tip-row"><div class="tip-n">1</div>KUCCPS opens every May–June for university placements.</div>
+            <div class="tip-row"><div class="tip-n">2</div>Minimum C+ required for most degrees at public universities.</div>
+            <div class="tip-row"><div class="tip-n">3</div>KMTC needs C− for certificate, C for diploma programs.</div>
+            <div class="tip-row"><div class="tip-n">4</div>Cluster points use 4 specific subjects — use the calculator!</div>
+          </div>
+          <div style="background:var(--ink3);border:1px solid var(--border);border-radius:16px;padding:18px;">
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white);">📞 Need Direct Help?</h4>
+            <p style="font-size:12px;color:var(--white3);margin-bottom:12px;">Our team handles KUCCPS, KMTC, HELB & TVET applications.</p>
+            <a href="https://wa.me/254113996609" target="_blank" style="display:block;padding:11px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;border-radius:10px;font-weight:700;font-size:13px;text-align:center;text-decoration:none;">💬 WhatsApp Us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ OVERLAY: SUPPORT CHAT ══════════════ -->
+<div id="supportOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('supportOverlay')">
+  <div class="bp-sheet" style="max-width:600px;">
+    <div class="bp-sheet-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:8px;height:8px;background:#00e57a;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px #00e57a;"></div>
+        <div><div class="bp-sheet-title">BTECHPLUS Team</div><div class="bp-sheet-sub">Human Support · We reply ASAP</div></div>
+      </div>
+      <button class="bp-close" onclick="closeOverlay('supportOverlay')">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;height:min(520px,70vh);">
+      <div class="chat-msgs" id="chatMsgs" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
+        <div class="msg ai">
+          <div class="msg-av">👨‍💼</div>
+          <div class="msg-bub">Hi! 👋 Welcome to BTECHPLUS support. Send us your question about courses, cluster points, KUCCPS, KMTC, HELB loans or applications — our team will reply shortly.</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;">
+        <input type="text" id="aiQ" placeholder="Type your question here..." onkeydown="if(event.key==='Enter') sendAI()" style="flex:1;padding:11px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:20px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+        <button onclick="sendAI()" style="padding:11px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ OVERLAY: AUTH (login/register) ══════════════ -->
+<div id="authOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('authOverlay')">
+  <div class="bp-sheet" style="max-width:480px;">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">👤 My Account</div><div class="bp-sheet-sub">Login or create a free account</div></div>
+      <button class="bp-close" onclick="closeOverlay('authOverlay')">✕</button>
+    </div>
+    <div class="bp-body">
+      <div id="authForms" style="display:grid;gap:16px;">
+        <div class="auth-card">
+          <h3>Sign In</h3>
+          <div class="fld"><label>Email Address</label><input type="email" id="liEmail" placeholder="you@email.com"></div>
+          <div class="fld"><label>Password</label><input type="password" id="liPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginUser()"></div>
+          <button class="btn-primary" onclick="loginUser()" id="loginBtn">Login to Account</button>
+          <div id="liMsg" style="margin-top:10px;font-size:13px;"></div>
+        </div>
+        <div class="auth-card">
+          <h3>Create Free Account</h3>
+          <div class="fld"><label>Full Name</label><input type="text" id="regName" placeholder="Your full name"></div>
+          <div class="fld"><label>Email Address</label><input type="email" id="regEmail" placeholder="you@email.com"></div>
+          <div class="fld"><label>Password</label><input type="password" id="regPw" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')registerUser()"></div>
+          <button class="btn-primary" onclick="registerUser()" id="registerBtn">Create Account</button>
+          <div id="regMsg" style="margin-top:10px;font-size:13px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ OVERLAY: DONATE ══════════════ -->
+<div id="donateOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('donateOverlay')">
+  <div class="bp-sheet" style="max-width:440px;">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">💚 Support BTECHPLUS</div><div class="bp-sheet-sub">Keep this platform free for every student</div></div>
+      <button class="bp-close" onclick="closeOverlay('donateOverlay')">✕</button>
+    </div>
+    <div class="bp-body">
+      <p style="font-size:13px;color:var(--white3);margin-bottom:20px;line-height:1.6;">BTECHPLUS is 100% free for every Kenyan student. Your support keeps it alive for thousands more. 🇰🇪</p>
+      <p style="font-size:11px;color:var(--white3);margin:0 0 10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Quick Amount (KES)</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
+        <button class="amt-btn" onclick="setAmt(50,this)">50</button>
+        <button class="amt-btn active" onclick="setAmt(100,this)">100</button>
+        <button class="amt-btn" onclick="setAmt(250,this)">250</button>
+        <button class="amt-btn" onclick="setAmt(500,this)">500</button>
+      </div>
+      <div style="display:flex;align-items:center;background:var(--ink3);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:18px;">
+        <span style="padding:0 14px;color:var(--white3);font-size:13px;font-weight:700;border-right:1px solid var(--border);">KES</span>
+        <input type="number" id="donAmt" placeholder="Or enter custom amount" style="flex:1;padding:13px 14px;background:transparent;border:none;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <button onclick="donateNow()" style="width:100%;padding:15px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;">💚 Donate via M-Pesa</button>
+      <div id="donMsg" style="margin-top:10px;font-size:13px;text-align:center;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL TRIGGER -->
+<div id="adminPanel" style="display:none;text-align:center;padding:16px 0 0;">
+  <button onclick="openAdminPanel()" style="padding:12px 28px;background:linear-gradient(135deg,#c8f135,#a0cc00);color:#0a0a0f;border:none;border-radius:14px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;">⚙ Open Admin Panel</button>
+</div>
+
+<style>
+.admin-tab { padding:14px 18px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--white3);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;white-space:nowrap;transition:all 0.15s; }
+.admin-tab:hover { color:var(--white2); }
+.admin-tab.active { color:var(--lime);border-bottom-color:var(--lime); }
+.adm-stat-card { background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px 20px;text-align:center; }
+</style>
         <div class="tip-row"><div class="tip-n">5</div>HELB loans available to all students at accredited institutions, apply online.</div>
       </div>
       <div class="sidebar-card reveal">
@@ -1348,203 +1567,6 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
     </div>
   </div>
 </section>
-
-<div class="hr"></div>
-
-<!-- AI -->
-<section id="ai" class="section-full ai-section">
-  <div class="section-full-inner">
-    <div class="eyebrow">Student Support</div>
-    <h2 class="heading">Ask the <em>BTECHPLUS Team</em></h2>
-    <p class="subheading" style="margin-bottom:48px;">Send us your question about courses, cluster points, KUCCPS, KMTC, HELB or applications — we'll reply directly.</p>
-    <div class="ai-layout">
-      <div class="chat-card reveal">
-        <div class="chat-top">
-          <div class="status-dot"></div>
-          <span class="chat-top-title">BTECHPLUS Team</span>
-          <span class="chat-top-sub">Human Support · We reply ASAP</span>
-        </div>
-        <div class="chat-msgs" id="chatMsgs">
-          <div class="msg ai">
-            <div class="msg-av">👨‍💼</div>
-            <div class="msg-bub">Hi! 👋 Welcome to BTECHPLUS support. Send us your question about courses, cluster points, KUCCPS, KMTC, HELB loans or applications — our team will reply shortly.</div>
-          </div>
-        </div>
-        <div class="chat-input-row">
-          <input type="text" id="aiQ" placeholder="Type your question here..." onkeydown="if(event.key==='Enter') sendAI()">
-          <button onclick="sendAI()">Send</button>
-        </div>
-      </div>
-      <div class="ai-feature-list">
-        <div class="ai-feat reveal">
-          <div class="ai-feat-icon">🎯</div>
-          <div><h4>Course Matching</h4><p>Share your grades and interests — get tailored course recommendations from our team.</p></div>
-        </div>
-        <div class="ai-feat reveal">
-          <div class="ai-feat-icon">📊</div>
-          <div><h4>Cluster Guidance</h4><p>Ask what cluster points are needed for any specific course at any university in Kenya.</p></div>
-        </div>
-        <div class="ai-feat reveal">
-          <div class="ai-feat-icon">📝</div>
-          <div><h4>Application Help</h4><p>Step-by-step support for KUCCPS, KMTC, TTC and private university applications.</p></div>
-        </div>
-        <div class="ai-feat reveal">
-          <div class="ai-feat-icon">💬</div>
-          <div><h4>Direct Support</h4><p>Real answers from the BTECHPLUS team — no bots, no guessing.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ACCOUNT -->
-<section id="account" class="section">
-  <div class="eyebrow">Student Account</div>
-  <h2 class="heading">Save Your<br><em>Progress</em></h2>
-  <p class="subheading" style="margin-bottom:0;">Free account to save cluster results, bookmark courses and track applications.</p>
-
-  <!-- AUTH FORMS (shown when logged out) -->
-  <div id="authForms" class="auth-grid">
-    <div class="auth-card reveal">
-      <h3>Sign In</h3>
-      <div class="fld"><label>Email Address</label><input type="email" id="liEmail" placeholder="you@email.com"></div>
-      <div class="fld"><label>Password</label><input type="password" id="liPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginUser()"></div>
-      <button class="btn-primary" onclick="loginUser()" id="loginBtn">Login to Account</button>
-      <div id="liMsg" style="margin-top:10px;font-size:13px;"></div>
-    </div>
-    <div class="auth-card reveal">
-      <h3>Create Free Account</h3>
-      <div class="fld"><label>Full Name</label><input type="text" id="regName" placeholder="Your full name"></div>
-      <div class="fld"><label>Email Address</label><input type="email" id="regEmail" placeholder="you@email.com"></div>
-      <div class="fld"><label>Password</label><input type="password" id="regPw" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')registerUser()"></div>
-      <button class="btn-primary" onclick="registerUser()" id="registerBtn">Create Account</button>
-      <div id="regMsg" style="margin-top:10px;font-size:13px;"></div>
-    </div>
-  </div>
-
-  <!-- LOGGED IN DASHBOARD (shown when logged in) -->
-  <div id="dashPanel" style="display:none;max-width:760px;margin:0 auto;">
-
-    <!-- WELCOME HEADER -->
-    <div class="dash-welcome-card" style="background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border2);border-radius:20px;padding:28px 28px 24px;margin-bottom:16px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(200,241,53,0.08),transparent 70%);pointer-events:none;"></div>
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <div id="avatarCircle" style="width:56px;height:56px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;"></div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:11px;color:var(--white3);margin-bottom:2px;letter-spacing:0.5px;">Welcome back 👋</div>
-          <h3 id="dashName" style="font-size:20px;margin:0 0 2px;color:#fff;font-family:'Fraunces',serif;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></h3>
-          <p id="dashEmail" style="font-size:11px;color:var(--white3);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></p>
-        </div>
-        <button onclick="logoutUser()" style="padding:7px 14px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:12px;white-space:nowrap;flex-shrink:0;">Sign Out</button>
-      </div>
-    </div>
-
-    <!-- STATS ROW -->
-    <div class="dash-stats-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
-      <div class="dash-stat-box" style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
-        <div class="dash-stat-num" style="font-size:26px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;" id="dashCluster">—</div>
-        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Cluster Pts</div>
-      </div>
-      <div class="dash-stat-box" style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
-        <div class="dash-stat-num" style="font-size:26px;font-weight:800;color:var(--teal);font-family:'Fraunces',serif;" id="dashGrade">—</div>
-        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Mean Grade</div>
-      </div>
-      <div class="dash-stat-box" style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;">
-        <div class="dash-stat-num" style="font-size:16px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div>
-        <div style="font-size:10px;color:var(--white3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Account</div>
-      </div>
-    </div>
-
-    <!-- QUICK ACTIONS -->
-    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;">
-      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;font-weight:700;">Quick Actions</div>
-      <div class="dash-actions-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-        <button class="dash-action-btn" onclick="go('#calculator')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">🧮</div>
-          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Cluster Calc</div>
-          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Calculate your points</div>
-        </button>
-        <button class="dash-action-btn" onclick="go('#courses')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">📚</div>
-          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Courses</div>
-          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Find your best courses</div>
-        </button>
-        <button class="dash-action-btn" onclick="go('#ai')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">🤖</div>
-          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Support</div>
-          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Ask anything</div>
-        </button>
-        <button class="dash-action-btn" onclick="go('#forum')" style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;transition:border-color 0.2s;width:100%;" onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div class="dash-action-icon" style="font-size:22px;margin-bottom:6px;">💬</div>
-          <div class="dash-action-title" style="font-size:13px;font-weight:700;color:#fff;">Forum</div>
-          <div class="dash-action-sub" style="font-size:11px;color:var(--white3);margin-top:2px;">Ask the community</div>
-        </button>
-      </div>
-    </div>
-
-    <!-- UPCOMING DEADLINES for logged-in user -->
-    <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:18px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">⏰ Upcoming Deadlines</div>
-        <button onclick="go('#applications')" style="font-size:11px;color:var(--lime);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;">View All →</button>
-      </div>
-      <div id="dashDeadlines" style="display:flex;flex-direction:column;gap:8px;">
-        <div style="font-size:13px;color:var(--white3);">Loading deadlines...</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- DONATE -->
-<section id="donate" class="section-full donate-section">
-  <div class="donate-inner">
-    <div class="eyebrow" style="justify-content:center;">Support Us</div>
-    <h2 class="heading">Keep BTECHPLUS<br><em>Free for All</em></h2>
-    <p style="color:var(--white2); font-size:16px; line-height:1.7; margin-bottom:32px;">BTECHPLUS is 100% free for every Kenyan student. Your support keeps it alive for thousands more. 🇰🇪</p>
-    <div class="donate-card reveal" style="max-width:480px;margin:0 auto;">
-      <!-- Amount grid -->
-      <p style="font-size:11px;color:var(--white3);margin:0 0 12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Quick Amount (KES)</p>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
-        <button class="amt-btn" onclick="setAmt(50,this)">50</button>
-        <button class="amt-btn active" onclick="setAmt(100,this)">100</button>
-        <button class="amt-btn" onclick="setAmt(250,this)">250</button>
-        <button class="amt-btn" onclick="setAmt(500,this)">500</button>
-      </div>
-      <!-- Custom amount -->
-      <div style="display:flex;align-items:center;background:var(--ink3);border:1px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:20px;">
-        <span style="padding:0 14px;color:var(--white3);font-size:13px;font-weight:700;border-right:1px solid var(--border);">KES</span>
-        <input type="number" id="donAmt" placeholder="Or enter custom amount" style="flex:1;padding:13px 14px;background:transparent;border:none;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
-      </div>
-      <button onclick="donateNow()" style="width:100%;padding:15px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;transition:opacity 0.2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
-        💚 Donate via M-Pesa
-      </button>
-      <div id="donMsg" style="margin-top:10px;font-size:13px;text-align:center;"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ADMIN PANEL TRIGGER (shown after login if admin) -->
-<div id="adminPanel" style="display:none;text-align:center;padding:24px 0 0;">
-  <button onclick="openAdminPanel()" style="padding:14px 32px;background:linear-gradient(135deg,#c8f135,#a0cc00);color:#0a0a0f;border:none;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;letter-spacing:0.5px;">
-    ⚙ Open Admin Panel
-  </button>
-</div>
-
-
-<style>
-.admin-tab {
-  padding:14px 18px;background:transparent;border:none;border-bottom:2px solid transparent;
-  color:var(--white3);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;
-  white-space:nowrap;transition:all 0.15s;
-}
-.admin-tab:hover { color:var(--white2); }
-.admin-tab.active { color:var(--lime);border-bottom-color:var(--lime); }
-.adm-stat-card {
-  background:var(--ink2);border:1px solid var(--border);border-radius:16px;
-  padding:24px 20px;text-align:center;
-}
-</style>
 
 <!-- FOOTER -->
 <footer style="background:var(--ink2);border-top:1px solid var(--border);padding:48px 48px 32px;margin-top:0;">
@@ -1629,7 +1651,39 @@ var SESSION_ID           = localStorage.getItem('btechplus_session') || (functio
 })();
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* ─ UTILS ─ */
-function go(sel) { document.querySelector(sel).scrollIntoView({ behavior:'smooth' }); }
+/* ── Overlay system ── */
+var _overlayMap = {
+  '#calculator': 'calcOverlay',
+  '#courses':    'coursesOverlay',
+  '#applications': 'deadlinesOverlay',
+  '#forum':      'forumOverlay',
+  '#ai':         'supportOverlay',
+  '#account':    'authOverlay',
+  '#donate':     'donateOverlay'
+};
+function openOverlay(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  // If opening courses overlay, trigger initial render
+  if (id === 'coursesOverlay') { setTimeout(renderCourses, 50); }
+  // If opening deadlines overlay, reload
+  if (id === 'deadlinesOverlay') { setTimeout(loadPublicDeadlines, 50); }
+  // If opening forum overlay, reload
+  if (id === 'forumOverlay') { setTimeout(initPublicForum, 50); }
+}
+function closeOverlay(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('active');
+  document.body.style.overflow = '';
+}
+function go(sel) {
+  var ovId = _overlayMap[sel];
+  if (ovId) { openOverlay(ovId); return; }
+  var el = document.querySelector(sel);
+  if (el) el.scrollIntoView({ behavior:'smooth' });
+}
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
@@ -2709,16 +2763,20 @@ function checkAuthState() {
   const user = JSON.parse(localStorage.getItem('bpUser') || 'null');
   const authForms = document.getElementById('authForms');
   const dashPanel = document.getElementById('dashPanel');
+  const guestHome = document.getElementById('guestHome');
   const navLogin  = document.getElementById('navLoginBtn');
   const navLogout = document.getElementById('navLogoutLi');
   const adminPanel = document.getElementById('adminPanel');
 
   if (user && user.email) {
-    // Logged in
+    // Logged in — show dashboard, hide guest home
     if (authForms) authForms.style.display = 'none';
     if (dashPanel) dashPanel.style.display = 'block';
+    if (guestHome) guestHome.style.display = 'none';
     if (navLogin)  navLogin.style.display  = 'none';
     if (navLogout) navLogout.style.display = 'list-item';
+    // Close auth overlay if open
+    closeOverlay('authOverlay');
     // Mobile bottom nav
     var bnav = document.getElementById('mobileBottomNav');
     if (bnav) bnav.classList.add('visible');
@@ -2733,33 +2791,20 @@ function checkAuthState() {
     if (dn) dn.textContent = displayName;
     const de = document.getElementById('dashEmail');
     if (de) de.textContent = user.email;
-    // Load upcoming deadlines into dashboard
     loadDashDeadlines();
 
-    // Load saved cluster
     const saved = localStorage.getItem('bpCluster');
-    if (saved) {
-      const dc = document.getElementById('dashCluster');
-      if (dc) dc.textContent = saved;
-    }
+    if (saved) { const dc = document.getElementById('dashCluster'); if (dc) dc.textContent = saved; }
     const savedGrade = localStorage.getItem('bpGrade');
-    if (savedGrade) {
-      const dg = document.getElementById('dashGrade');
-      if (dg) dg.textContent = savedGrade;
-    }
+    if (savedGrade) { const dg = document.getElementById('dashGrade'); if (dg) dg.textContent = savedGrade; }
 
-    // Update My Account button to show user name
     var navLoginBtn = document.getElementById('navLoginBtn');
-    if (navLoginBtn) {
-      var shortName = (displayName.split(' ')[0] || 'Account').slice(0, 12);
-      navLoginBtn.textContent = '👤 ' + shortName;
-    }
-    // Show admin panel button ONLY if verified admin (email check + session token present)
+    if (navLoginBtn) { navLoginBtn.textContent = '👤 ' + (displayName.split(' ')[0] || 'Account').slice(0,12); }
+
     var token = localStorage.getItem('bpToken') || '';
     var isAdmin = token && (user.email === ADMIN_EMAIL || user.username === ADMIN_USERNAME || user.email === 'admin@btechplus.com');
     if (isAdmin) {
-      if (adminPanel) { adminPanel.style.display = 'block'; }
-      // Add admin nav link
+      if (adminPanel) adminPanel.style.display = 'block';
       const navLinks = document.querySelector('.nav-links');
       if (navLinks && !document.getElementById('adminNavLink')) {
         const li = document.createElement('li');
@@ -2767,14 +2812,13 @@ function checkAuthState() {
         navLinks.insertBefore(li, navLinks.lastElementChild);
       }
     } else {
-      // Not admin — hide panel even if user is logged in
       if (adminPanel) adminPanel.style.display = 'none';
     }
   } else {
-    // Logged out
+    // Logged out — show guest home
     if (authForms) authForms.style.display = 'grid';
     if (dashPanel) dashPanel.style.display = 'none';
-    // Hide mobile bottom nav
+    if (guestHome) guestHome.style.display = 'block';
     var bnav = document.getElementById('mobileBottomNav');
     if (bnav) bnav.classList.remove('visible');
     document.body.classList.remove('user-logged-in');
@@ -2871,7 +2915,6 @@ function logoutUser() {
   if (adminNavLink && adminNavLink.parentElement) adminNavLink.parentElement.remove();
   checkAuthState();
   toast('👋 Signed out. See you soon!');
-  go('#account');
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3407,14 +3450,11 @@ async function submitBooking() {
    SUBJECT REQUIREMENTS OVERLAY — openable from courses section
 ════════════════════════════════════════════════════════════ */
 function openSubjectReqOverlay() {
-  var el = document.getElementById('subjectReqOverlay');
-  if (el) { el.style.display = 'block'; if(document.body) document.body.style.overflow='hidden'; }
+  openOverlay('subjectReqOverlay');
   showSReqTab('medicine');
 }
 function closeSubjectReqOverlay() {
-  var el = document.getElementById('subjectReqOverlay');
-  if (el) el.style.display = 'none';
-  if(document.body) document.body.style.overflow = '';
+  closeOverlay('subjectReqOverlay');
 }
 function showSReqTab(tab) {
   document.querySelectorAll('.sreq-tab').forEach(function(b){ b.classList.remove('active'); });
@@ -3999,6 +4039,39 @@ window.addEventListener('DOMContentLoaded', function() {
     <a href="https://wa.me/254113996609?text=Hi BTECHPLUS, I need help with my application" target="_blank" style="display:block;width:100%;padding:12px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;border-radius:12px;font-weight:700;font-size:14px;text-align:center;text-decoration:none;box-sizing:border-box;margin-top:8px;">💬 WhatsApp Us Now</a>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SUBJECT REQUIREMENTS OVERLAY
+══════════════════════════════════════════════════════════ -->
+<div id="subjectReqOverlay" class="bp-overlay" onclick="if(event.target===this)closeSubjectReqOverlay()">
+  <div class="bp-sheet bp-sheet-wide">
+    <div class="bp-sheet-head">
+      <div><div class="bp-sheet-title">📋 Minimum Subject Requirements</div><div class="bp-sheet-sub">KCSE grades needed per career pathway — 2025</div></div>
+      <button class="bp-close" onclick="closeSubjectReqOverlay()">✕</button>
+    </div>
+    <div class="bp-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+        <button class="sreq-tab active" onclick="showSReqTab('medicine')">🏥 Health</button>
+        <button class="sreq-tab" onclick="showSReqTab('engineering')">⚙️ Engineering</button>
+        <button class="sreq-tab" onclick="showSReqTab('law')">⚖️ Law & Business</button>
+        <button class="sreq-tab" onclick="showSReqTab('education')">📚 Education</button>
+        <button class="sreq-tab" onclick="showSReqTab('kmtc')">🏥 KMTC</button>
+        <button class="sreq-tab" onclick="showSReqTab('tvet')">🔧 TVET</button>
+      </div>
+      <div id="sreqContent"></div>
+      <div style="margin-top:20px;background:rgba(200,241,53,0.06);border:1.5px dashed rgba(200,241,53,0.25);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px;">🖥 Need help with your application?</div>
+        <div style="font-size:12px;color:var(--white3);margin-bottom:12px;">We handle KUCCPS, KMTC, HELB & TVET — 100% success guaranteed.</div>
+        <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:inline-block;padding:10px 24px;background:var(--lime);color:var(--ink);border-radius:10px;font-weight:700;text-decoration:none;font-size:13px;">Book Application Help →</a>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+.sreq-tab { padding:8px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--white3);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s; }
+.sreq-tab:hover { border-color:var(--lime);color:var(--lime); }
+.sreq-tab.active { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime); }
+</style>
 
 <!-- ══════════════════════════════════════════════════════════
      ADMIN PANEL OVERLAY (full screen)
