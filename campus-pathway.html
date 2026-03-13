@@ -1265,59 +1265,24 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
   <div class="section-full-inner">
     <div class="eyebrow">Live Applications</div>
     <h2 class="heading">Open Portals &<br><em>Deadlines</em></h2>
-    <p class="subheading">Real-time status of all major application portals with live countdown timers.</p>
-    <div class="app-grid">
-      <div class="app-card reveal">
-        <div class="app-card-top"><div class="app-icon">🎓</div><span class="pill-open">CLOSED</span></div>
-        <h3>KUCCPS University</h3>
-        <p>Degree and diploma placements for all public universities and colleges across Kenya.</p>
-        <div class="deadline-row"><span> Deadline: 15 July 2026</span><span class="countdown count-green" id="kuccps">—</span></div>
-        <a href="https://students.kuccps.net" target="_blank" class="app-btn">Visit Site →</a>
-      </div>
-      <div class="app-card reveal">
-        <div class="app-card-top"><div class="app-icon">🏥</div><span class="pill-open">Open</span></div>
-        <h3>KMTC Admissions</h3>
-        <p>Nursing, clinical medicine, pharmacy and all allied health programs nationwide.</p>
-        <div class="deadline-row"><span> Deadline:  March 13, 2026.</span><span class="countdown count-green" id="kmtc">—</span></div>
-        <a href="https://students.kuccps.net" target="_blank" class="app-btn">Apply →</a>
-      </div>
-      <div class="app-card reveal">
-        <div class="app-card-top"><div class="app-icon"></div><span class="pill-open">Closed</span></div>
-        <h3>TTC — Teacher Training</h3>
-        <p>Diploma in Education programs for primary and secondary level teaching across Kenya.</p>
-        <div class="deadline-row"><span> Deadline: TBD </span><span class="countdown count-yellow" id="ttc">—</span></div>
-        <button class="app-btn">View TTC Details →</button>
-      </div>
-      <div class="app-card reveal">
-        <div class="app-card-top"><div class="app-icon"></div><span class="pill-open">Open</span></div>
-        <h3>TVET Placement</h3>
-        <p>Artisan, craft and technician courses across all 47 counties via KUCCPS portal.</p>
-        <div class="deadline-row"><span> Deadline: March 18, 2026.</span><span class="countdown count-green" id="tvet">—</span></div>
-        <a href="https://students.kuccps.net" target="_blank" class="app-btn">Apply via KUCCPS →</a>
-      </div>
-      <div class="app-card reveal">
-        <div class="app-card-top"><div class="app-icon"></div><span class="pill-rolling">Closed</span></div>
-        <h3>HELB Student Loans</h3>
-        <p>Higher Education Loans Board — loans and bursaries for all accredited institution students.</p>
-        <div class="deadline-row"><span>Rolling Applications</span><span class="countdown count-green">Always Open</span></div>
-        <a href="https://portal.hef.co.ke" target="_blank" class="app-btn">Visit HELB Site→</a>
-      </div>
-      <div class="app-card reveal">
-        <div class="app-card-top"><div class="app-icon"></div><span class="pill-open">Open</span></div>
-        <h3>Private Universities</h3>
-        <p>Strathmore, USIU, Daystar, KCA, MKU and more — intake September 2026 now open.</p>
-        <div class="deadline-row"><span> Intake: Sep 2026</span><span class="countdown count-green">Multiple Dates</span></div>
-        <button class="app-btn" onclick="go('#ai')">Ask AI for Help →</button>
+    <p class="subheading">Live application deadlines — updated by the BTECHPLUS team.</p>
+
+    <!-- Dynamic deadlines grid — fully admin-controlled -->
+    <div id="publicDeadlinesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:40px;">
+      <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--white3);">
+        <div style="font-size:32px;margin-bottom:12px;">📅</div>
+        <div style="font-size:14px;">Loading deadlines...</div>
       </div>
     </div>
-    <!-- DYNAMIC DEADLINES from admin -->
-    <div id="dynamicDeadlinesSection" style="display:none;margin-top:40px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-        <div class="eyebrow" style="margin-bottom:0;">📅 Live Updates</div>
-        <h3 style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin:0;letter-spacing:-0.5px;">Application <em style="color:var(--lime);font-style:italic;">Deadline Alerts</em></h3>
-      </div>
-      <div id="dynamicDeadlineCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
+
+    <!-- Empty state shown when no deadlines -->
+    <div id="noDeadlinesMsg" style="display:none;text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">📋</div>
+      <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;">No active deadlines right now</div>
+      <div style="font-size:14px;color:var(--white3);margin-bottom:24px;">Check back soon — the BTECHPLUS team updates this regularly.</div>
+      <button onclick="go('#ai')" style="padding:12px 28px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;">Ask AI About Applications →</button>
     </div>
+
   </div>
 </section>
 <section id="forum" class="section">
@@ -2523,24 +2488,27 @@ async function sendAI() {
   var inp = document.getElementById('aiQ');
   var q = inp.value.trim();
   if (!q) return;
-  // Check if admin has taken over this session
+
+  // Check if admin has taken over this session — if so, AI stays SILENT
   try {
     var hist = await fetch(API_BASE + '/ai/history/' + SESSION_ID);
     if (hist.ok) {
       var msgs = await hist.json();
-      var hasAdminReply = msgs.some(function(m){ return m.role === 'assistant' && m.content && m.content.startsWith('[ADMIN]'); });
+      var hasAdminReply = msgs.some(function(m){
+        return m.role === 'assistant' && m.content && m.content.startsWith('[ADMIN]');
+      });
       if (hasAdminReply) {
-        // Admin is handling — still add user message to DB but show admin notice
+        // Save user message to DB so admin sees it, but AI says nothing
         addMsg('user', q);
         inp.value = '';
-        addMsg('ai', '👨‍💼 An admin is responding to your session. Your message has been recorded — please wait for their reply.');
-        // Still send to backend so admin sees it
+        addMsg('ai', '👨‍💼 <strong>BTECHPLUS Team</strong> is handling your session. Your message has been sent — please wait for their reply.');
         try { await fetch(API_BASE + '/ai/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message: q, sessionId: SESSION_ID, skipAI: true }) }); } catch(e){}
         startChatPolling();
         return;
       }
     }
   } catch(e){}
+
   addMsg('user', q);
   inp.value = '';
   var tid = 'typing_' + Date.now();
@@ -3252,8 +3220,8 @@ function renderEscalationQueue(posts) {
       '<div style="flex:1;">'+
         '<div style="font-size:13px;color:var(--white2);margin-bottom:6px;">'+(p.message||'').slice(0,120)+'...</div>'+
         '<div style="display:flex;gap:6px;">'+
-          '<input type="text" placeholder="Quick reply..." style="flex:1;padding:6px 10px;background:var(--ink3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;font-size:12px;" id="esc-'+p.id+'">'+
-          '<button onclick="var i=document.getElementById(\'esc-'+p.id+'\');if(i&&i.value)submitAdminReply('+p.id+')" style="padding:6px 10px;background:var(--lime);color:var(--ink);border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:11px;font-family:inherit;">Reply</button>'+
+          '<input type="text" placeholder="Quick reply..." style="flex:1;padding:6px 10px;background:var(--ink3);border:1px solid var(--border);border-radius:6px;color:#fff;font-family:inherit;font-size:12px;" id="reply-'+p.id+'" onkeydown="if(event.key===\'Enter\')submitAdminReply('+p.id+')">'+
+          '<button onclick="submitAdminReply('+p.id+')" style="padding:6px 12px;background:var(--lime);color:var(--ink);border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:11px;font-family:inherit;white-space:nowrap;">Reply</button>'+
         '</div>'+
       '</div>'+
     '</div>';
@@ -3384,6 +3352,9 @@ async function deleteDeadlineAdmin(id) {
     await fetch(API_BASE+'/admin/deadlines/'+id, { method:'DELETE', headers: adminHeader() });
     toast('🗑 Deleted');
     loadAdminDeadlines();
+    loadAdminDeadlinesForDash();
+    initDeadlineTicker();
+    loadPublicDeadlines();
   } catch(e){ toast('❌ Network error'); }
 }
 
@@ -3832,33 +3803,67 @@ async function initDeadlineTicker() {
 }
 
 async function loadPublicDeadlines() {
+  var grid  = document.getElementById('publicDeadlinesGrid');
+  var noMsg = document.getElementById('noDeadlinesMsg');
   try {
     var r = await fetch(API_BASE + '/deadlines');
-    if (!r.ok) return;
+    if (!r.ok) throw new Error('fetch failed');
     var items = await r.json();
-    if (!Array.isArray(items) || !items.length) return;
+    if (!grid) return;
+
+    if (!Array.isArray(items) || !items.length) {
+      grid.style.display = 'none';
+      if (noMsg) noMsg.style.display = 'block';
+      return;
+    }
+
     var now = new Date();
-    var active = items.filter(function(d){ return d.deadline && new Date(d.deadline) > now; });
-    if (!active.length) return;
-    var section = document.getElementById('dynamicDeadlinesSection');
-    var container = document.getElementById('dynamicDeadlineCards');
-    if (!section || !container) return;
-    section.style.display = 'block';
-    container.innerHTML = active.map(function(d) {
-      var days = Math.ceil((new Date(d.deadline) - now) / 86400000);
-      var urgColor = days <= 7 ? '#ff6b52' : days <= 30 ? '#f59e0b' : '#c8f135';
-      var urgBadge = days <= 7 ? '🔴 URGENT' : days <= 30 ? '🟡 CLOSING SOON' : '🟢 OPEN';
-      var statusColor = days <= 7 ? 'rgba(255,107,82,0.12)' : days <= 30 ? 'rgba(245,158,11,0.12)' : 'rgba(200,241,53,0.12)';
-      var dl_date = new Date(d.deadline).toLocaleDateString('en-KE',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-      return '<div class="app-card reveal" style="border-color:' + urgColor + '22;">'
-        + '<div class="app-card-top"><div class="app-icon">📅</div><span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;background:' + statusColor + ';color:' + urgColor + ';letter-spacing:0.5px;">' + urgBadge + '</span></div>'
-        + '<h3 style="font-size:15px;">' + d.title + '</h3>'
-        + '<p style="font-size:13px;color:var(--white3);">' + (d.type||'Application') + (d.status ? ' · ' + d.status : '') + '</p>'
-        + '<div class="deadline-row"><span>📆 ' + dl_date + '</span><span style="font-weight:800;color:' + urgColor + ';">' + days + ' day' + (days===1?'':'s') + ' left</span></div>'
-        + (d.link ? '<a href="' + d.link + '" target="_blank" class="app-btn">Apply Now →</a>' : '<button class="app-btn" onclick="go(\'#ai\')">Ask AI for Help →</button>')
+    // Sort: open/soonest first, then closed
+    items.sort(function(a,b){
+      var da = new Date(a.deadline), db = new Date(b.deadline);
+      var aOpen = da > now, bOpen = db > now;
+      if (aOpen && !bOpen) return -1;
+      if (!aOpen && bOpen) return 1;
+      return da - db;
+    });
+
+    if (noMsg) noMsg.style.display = 'none';
+    grid.style.display = 'grid';
+
+    grid.innerHTML = items.map(function(d) {
+      var dl       = new Date(d.deadline);
+      var days     = Math.ceil((dl - now) / 86400000);
+      var isOpen   = days > 0;
+      var isUrgent = isOpen && days <= 7;
+      var isSoon   = isOpen && days <= 30 && days > 7;
+
+      var urgColor  = isUrgent ? '#ff6b52' : isSoon ? '#f59e0b' : isOpen ? '#c8f135' : '#666';
+      var badgeBg   = isUrgent ? 'rgba(255,107,82,0.15)' : isSoon ? 'rgba(245,158,11,0.15)' : isOpen ? 'rgba(200,241,53,0.12)' : 'rgba(255,255,255,0.05)';
+      var badgeText = isUrgent ? '🔴 URGENT' : isSoon ? '🟡 CLOSING SOON' : isOpen ? '🟢 ' + (d.status||'OPEN') : '⚫ CLOSED';
+      var dl_date   = dl.toLocaleDateString('en-KE',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+      var timeLeft  = isOpen ? (days + ' day' + (days===1?'':'s') + ' left') : 'Deadline passed';
+      var icon      = d.type==='KUCCPS' ? '🎓' : d.type==='KMTC' ? '🏥' : d.type==='HELB' ? '💰' : d.type==='TVET' ? '🔧' : d.type==='County Bursary' ? '🏦' : '📋';
+
+      return '<div class="app-card reveal" style="border-color:' + urgColor + '44;' + (isOpen ? '' : 'opacity:0.55;') + '">'
+        + '<div class="app-card-top">'
+        + '<div class="app-icon">' + icon + '</div>'
+        + '<span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;background:' + badgeBg + ';color:' + urgColor + ';letter-spacing:0.5px;">' + badgeText + '</span>'
+        + '</div>'
+        + '<h3 style="font-size:15px;margin-bottom:6px;">' + d.title + '</h3>'
+        + '<p style="font-size:12px;color:var(--white3);margin-bottom:12px;">' + (d.type||'Application') + '</p>'
+        + '<div class="deadline-row" style="margin-bottom:14px;">'
+        + '<span style="font-size:12px;">📆 ' + dl_date + '</span>'
+        + '<span style="font-weight:800;font-size:13px;color:' + urgColor + ';">' + timeLeft + '</span>'
+        + '</div>'
+        + (d.link
+          ? '<a href="' + d.link + '" target="_blank" class="app-btn"' + (isOpen ? '' : ' style="opacity:0.5;pointer-events:none;"') + '>Apply Now →</a>'
+          : '<button class="app-btn" onclick="go(\'#ai\')"' + (isOpen ? '' : ' style="opacity:0.5;"') + '>Ask AI →</button>')
         + '</div>';
     }).join('');
-  } catch(e) {}
+
+  } catch(e) {
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--white3);font-size:13px;">Could not load deadlines. Try refreshing.</div>';
+  }
 }
 
 
