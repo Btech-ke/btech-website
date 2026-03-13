@@ -1268,7 +1268,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
     <p class="subheading">Live application deadlines — updated by the BTECHPLUS team.</p>
 
     <!-- Dynamic deadlines grid — fully admin-controlled -->
-    <div id="publicDeadlinesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:40px;">
+    <div id="publicDeadlinesGrid" class="app-grid" style="margin-top:40px;">
       <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--white3);">
         <div style="font-size:32px;margin-bottom:12px;">📅</div>
         <div style="font-size:14px;">Loading deadlines...</div>
@@ -3815,20 +3815,29 @@ async function initDeadlineTicker() {
 async function loadPublicDeadlines() {
   var grid  = document.getElementById('publicDeadlinesGrid');
   var noMsg = document.getElementById('noDeadlinesMsg');
+  if (!grid) return;
+
+  // Show loading state
+  grid.style.removeProperty('display');
+  grid.style.visibility = 'visible';
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--white3);"><div style="font-size:32px;margin-bottom:12px;">📅</div><div style="font-size:14px;">Loading deadlines...</div></div>';
+  if (noMsg) noMsg.style.display = 'none';
+
   try {
     var items = await fetchDeadlines();
-    if (!grid) return;
 
-    if (!items.length) {
-      grid.style.display = 'none';
+    if (!items || !items.length) {
+      grid.style.visibility = 'hidden';
       if (noMsg) noMsg.style.display = 'block';
       return;
     }
 
     var now = new Date();
-    // Sort: open/soonest first, then closed
-    items.sort(function(a,b){
-      var da = new Date(a.deadline), db = new Date(b.deadline);
+
+    // Safe sort — guard against null deadlines
+    items.sort(function(a, b) {
+      var da = a.deadline ? new Date(a.deadline) : new Date(0);
+      var db = b.deadline ? new Date(b.deadline) : new Date(0);
       var aOpen = da > now, bOpen = db > now;
       if (aOpen && !bOpen) return -1;
       if (!aOpen && bOpen) return 1;
@@ -3836,42 +3845,53 @@ async function loadPublicDeadlines() {
     });
 
     if (noMsg) noMsg.style.display = 'none';
-    grid.style.display = 'grid';
+    grid.style.removeProperty('display');  // let CSS class control display
+    grid.style.visibility = 'visible';
 
     grid.innerHTML = items.map(function(d) {
+      if (!d || !d.deadline) return '';          // skip malformed entries
       var dl       = new Date(d.deadline);
       var days     = Math.ceil((dl - now) / 86400000);
       var isOpen   = days > 0;
       var isUrgent = isOpen && days <= 7;
       var isSoon   = isOpen && days <= 30 && days > 7;
+      var title    = d.title  || 'Application';
+      var type     = d.type   || 'General';
+      var status   = d.status || (isOpen ? 'OPEN' : 'CLOSED');
+      var link     = d.link   || '';
 
       var urgColor  = isUrgent ? '#ff6b52' : isSoon ? '#f59e0b' : isOpen ? '#c8f135' : '#666';
       var badgeBg   = isUrgent ? 'rgba(255,107,82,0.15)' : isSoon ? 'rgba(245,158,11,0.15)' : isOpen ? 'rgba(200,241,53,0.12)' : 'rgba(255,255,255,0.05)';
-      var badgeText = isUrgent ? '🔴 URGENT' : isSoon ? '🟡 CLOSING SOON' : isOpen ? '🟢 ' + (d.status||'OPEN') : '⚫ CLOSED';
-      var dl_date   = dl.toLocaleDateString('en-KE',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-      var timeLeft  = isOpen ? (days + ' day' + (days===1?'':'s') + ' left') : 'Deadline passed';
-      var icon      = d.type==='KUCCPS' ? '🎓' : d.type==='KMTC' ? '🏥' : d.type==='HELB' ? '💰' : d.type==='TVET' ? '🔧' : d.type==='County Bursary' ? '🏦' : '📋';
+      var badgeText = isUrgent ? '🔴 URGENT' : isSoon ? '🟡 CLOSING SOON' : isOpen ? '🟢 ' + status : '⚫ CLOSED';
+      var dl_date   = dl.toLocaleDateString('en-KE', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+      var timeLeft  = isOpen ? (days + ' day' + (days === 1 ? '' : 's') + ' left') : 'Deadline passed';
+      var icon      = type === 'KUCCPS' ? '🎓' : type === 'KMTC' ? '🏥' : type === 'HELB' ? '💰' : type === 'TVET' ? '🔧' : type === 'County Bursary' ? '🏦' : '📋';
 
-      return '<div class="app-card reveal" style="border-color:' + urgColor + '44;' + (isOpen ? '' : 'opacity:0.55;') + '">'
+      return '<div class="app-card" style="border-color:' + urgColor + '44;' + (isOpen ? '' : 'opacity:0.55;') + '">'
         + '<div class="app-card-top">'
-        + '<div class="app-icon">' + icon + '</div>'
+        + '<div class="app-icon" style="font-size:28px;">' + icon + '</div>'
         + '<span style="font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;background:' + badgeBg + ';color:' + urgColor + ';letter-spacing:0.5px;">' + badgeText + '</span>'
         + '</div>'
-        + '<h3 style="font-size:15px;margin-bottom:6px;">' + d.title + '</h3>'
-        + '<p style="font-size:12px;color:var(--white3);margin-bottom:12px;">' + (d.type||'Application') + '</p>'
+        + '<h3 style="font-size:15px;margin-bottom:6px;color:#fff;">' + title + '</h3>'
+        + '<p style="font-size:12px;color:var(--white3);margin-bottom:12px;">' + type + '</p>'
         + '<div class="deadline-row" style="margin-bottom:14px;">'
-        + '<span style="font-size:12px;">📆 ' + dl_date + '</span>'
+        + '<span style="font-size:12px;color:var(--white2);">📆 ' + dl_date + '</span>'
         + '<span style="font-weight:800;font-size:13px;color:' + urgColor + ';">' + timeLeft + '</span>'
         + '</div>'
-        + (d.link
-          ? '<a href="' + d.link + '" target="_blank" class="app-btn"' + (isOpen ? '' : ' style="opacity:0.5;pointer-events:none;"') + '>Apply Now →</a>'
+        + (link
+          ? '<a href="' + link + '" target="_blank" rel="noopener" class="app-btn"' + (isOpen ? '' : ' style="opacity:0.5;pointer-events:none;"') + '>Apply Now →</a>'
           : '<button class="app-btn" onclick="go(\'#ai\')"' + (isOpen ? '' : ' style="opacity:0.5;"') + '>Ask AI →</button>')
         + '</div>';
-    }).join('');
+    }).filter(Boolean).join('');
+
+    // If all items were malformed
+    if (!grid.innerHTML.trim()) {
+      grid.style.visibility = 'hidden';
+      if (noMsg) noMsg.style.display = 'block';
+    }
 
   } catch(e) {
-    // On error: show empty state, not error message
-    if (grid) grid.style.display = 'none';
+    grid.style.visibility = 'hidden';
     if (noMsg) noMsg.style.display = 'block';
   }
 }
