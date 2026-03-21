@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECHPLUS — Campus Pathway</title>
+<title>BTECHPLUS — Campus Pathway | Kenya's #1 KCSE Guide</title>
+<meta name="description" content="Find your course, college and career path after KCSE. Free cluster calculator, 1000+ programmes, KUCCPS tracker, KMTC & TVET guides for every Kenyan student.">
+<meta name="keywords" content="KUCCPS, KCSE courses, Kenya university, KMTC, TVET, cluster points, campus pathway, Kenya students">
+<meta property="og:title" content="BTECHPLUS — Find Your Campus Path After KCSE">
+<meta property="og:description" content="Free step-by-step guide for Kenyan students. Cluster calculator, course finder, KUCCPS tracker and more.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a0a0f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet">
@@ -1581,12 +1587,6 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 </div>
 
 <div class="hr"></div>
-
-<!-- ══════════════════════════════════════════════════════════
-     VISIBLE ONBOARDING WIZARD — prominent section on the page
-══════════════════════════════════════════════════════════ -->
-
-
 
 
 <!-- ╔═ MAIN APP HOME ═╗ -->
@@ -3277,7 +3277,6 @@ function goToStep2() {
   var customEl = document.getElementById('customAmt');
   var custom = customEl ? (parseInt(customEl.value) || 0) : 0;
   var finalAmt = (selectedAmt === 0 || selectedAmt === '0' || selectedAmt === 'custom') ? custom : Number(selectedAmt);
-  console.log('goToStep2: selectedAmt='+selectedAmt+' custom='+custom+' final='+finalAmt);
   if (!finalAmt || finalAmt < 10) {
     toast('⚠️ Please choose or enter a valid amount (min KES 10)');
     return;
