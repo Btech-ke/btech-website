@@ -63,12 +63,12 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   height: 64px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px;
-  background: rgba(10,10,15,0.88);
+  padding: 0 40px;
+  background: rgba(8,8,14,0.96);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(200,241,53,0.12);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4);
 }
 
 .nav-logo {
@@ -83,27 +83,29 @@ nav {
   background: var(--lime);
   color: var(--ink);
   font-family: 'Outfit', sans-serif;
-  font-size: 10px; font-weight: 800;
+  font-size: 10px; font-weight: 900;
   letter-spacing: 1.5px; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 4px;
+  padding: 3px 8px; border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(200,241,53,0.35);
 }
 
 .nav-links {
   list-style: none; display: flex; gap: 2px; align-items: center;
 }
 .nav-links a {
-  text-decoration: none; color: var(--white3);
-  font-size: 13.5px; font-weight: 500;
-  padding: 7px 14px; border-radius: 8px;
-  transition: color 0.2s, background 0.2s;
+  text-decoration: none; color: rgba(244,244,242,0.75);
+  font-size: 13px; font-weight: 600;
+  padding: 7px 13px; border-radius: 8px;
+  transition: color 0.18s, background 0.18s;
+  letter-spacing: 0.1px;
 }
-.nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+.nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.07); }
 .nav-links .nav-cta {
   background: var(--lime); color: var(--ink);
-  font-weight: 700; margin-left: 8px;
-  border-radius: 8px;
+  font-weight: 800; margin-left: 6px;
+  border-radius: 8px; letter-spacing: 0.2px;
 }
-.nav-links .nav-cta:hover { background: #d9f54a; color: var(--ink); }
+.nav-links .nav-cta:hover { background: #d4f840; color: var(--ink); }
 
 
 
@@ -978,14 +980,6 @@ footer {
 body.has-ticker .hero { padding-top: calc(128px + 34px) !important; }
 body.has-ticker nav ~ * { --ticker-offset: 34px; }
 </style>
-  <a href="#tools" onclick="toggleNav()">Student Tools</a>
-  <a href="#applications" onclick="toggleNav()">Applications</a>
-  <a href="#calculator" onclick="toggleNav()">Cluster Calculator</a>
-  <a href="#courses" onclick="toggleNav()">Course Generator</a>
-  <a href="#forum" onclick="toggleNav()">Forum</a>
-  <a href="#ai" onclick="toggleNav()">Support</a>
-  <a href="#account" onclick="toggleNav()">My Account</a>
-  <a href="#" onclick="openMpesaModal();toggleNav();return false;" style="background:linear-gradient(135deg,#00a651,#007a3d);color:#fff !important;border-radius:10px;padding:14px 16px;font-weight:700;display:block;text-align:center;margin-top:8px;"> Support Us — Donate via M-Pesa</a>
 </div>
 
 <!-- M-PESA DONATION MODAL -->
@@ -1194,7 +1188,16 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 </style>
 
 <!-- HERO -->
-<section id="heroSection" style="min-height:100svh;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 20px 40px;text-align:center;position:relative;overflow:hidden;">
+<section id="heroSection" style="min-height:100svh;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 20px 36px;text-align:center;position:relative;overflow:hidden;">
+<style>
+@media(max-width:640px){
+  #heroSection { min-height:auto !important; padding:72px 16px 28px !important; }
+  #heroSection h1 { font-size:32px !important; margin-bottom:10px !important; letter-spacing:-1px; }
+  #heroSection p  { font-size:13.5px !important; margin-bottom:18px !important; }
+  #heroGradePicker { gap:6px !important; }
+  #heroGradePicker .gp-btn { padding:8px 10px !important; font-size:14px !important; min-width:40px !important; }
+}
+</style>
 
   <!-- Background: real photo from Kenyan campus life via unsplash -->
   <div style="position:absolute;inset:0;z-index:0;">
@@ -1246,15 +1249,22 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       <div id="heroPathResult" style="display:none;text-align:left;background:rgba(10,10,15,0.85);border:1px solid var(--border2);border-radius:16px;padding:18px 20px;backdrop-filter:blur(10px);margin-bottom:16px;animation:fadeUp 0.3s ease;"></div>
     </div>
 
-    <!-- Secondary actions -->
+    <!-- Secondary actions — now includes wizard trigger -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;animation:riseIn 0.7s 0.32s ease both;">
+      <button onclick="openOverlay('wizardOverlayNew')"
+        style="display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:var(--ink);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 4px 20px rgba(200,241,53,0.3);transition:transform 0.18s,box-shadow 0.18s;"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(200,241,53,0.4)'"
+        onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(200,241,53,0.3)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>
+        Get My Step-by-Step Guide
+      </button>
       <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:7px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Join KUCCPS Group
+         style="display:inline-flex;align-items:center;gap:7px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        KUCCPS Group
       </a>
-      <button onclick="openOverlay('calcOverlay')" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:var(--white2);padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">
-        Cluster Calculator
+      <button onclick="openOverlay('calcOverlay')" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:var(--white2);padding:12px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">
+        Calculator
       </button>
     </div>
 
@@ -1287,137 +1297,10 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
 <div class="hr"></div>
 
-}
-</style>
-
 <!-- ══════════════════════════════════════════════════════════
      VISIBLE ONBOARDING WIZARD — prominent section on the page
 ══════════════════════════════════════════════════════════ -->
-<section id="wizardSection" style="padding:0 20px 48px;max-width:680px;margin:0 auto;">
-  <div style="background:linear-gradient(135deg,#14141f 0%,#0e1a12 100%);border:1px solid rgba(200,241,53,0.2);border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.5);">
 
-    <!-- Header -->
-    <div style="padding:28px 28px 0;text-align:center;">
-      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);padding:5px 16px;border-radius:100px;font-size:11px;font-weight:800;color:var(--lime);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">
-        <span style="width:6px;height:6px;background:var(--lime);border-radius:50%;animation:blink 2s infinite;"></span>
-        Step-by-Step Guide
-      </div>
-      <h2 style="font-family:'Fraunces',serif;font-size:clamp(22px,4vw,32px);font-weight:700;color:var(--white);letter-spacing:-0.8px;margin-bottom:8px;">Find Your Campus Path in <em style="color:var(--lime);">4 Steps</em></h2>
-      <p style="font-size:13px;color:var(--white3);line-height:1.6;max-width:420px;margin:0 auto 24px;">Answer 4 quick questions — we'll show you exactly which courses, colleges and portals match YOU.</p>
-    </div>
-
-    <!-- Step indicators -->
-    <div style="display:flex;justify-content:center;gap:0;padding:0 28px;margin-bottom:0;" id="wiz-indicators">
-      <div class="wiz-ind active" id="wiz-ind-1">
-        <div class="wiz-ind-circle">1</div>
-        <div class="wiz-ind-label">Who are you?</div>
-      </div>
-      <div class="wiz-ind-line" id="wiz-line-1"></div>
-      <div class="wiz-ind" id="wiz-ind-2">
-        <div class="wiz-ind-circle">2</div>
-        <div class="wiz-ind-label">Your grade</div>
-      </div>
-      <div class="wiz-ind-line" id="wiz-line-2"></div>
-      <div class="wiz-ind" id="wiz-ind-3">
-        <div class="wiz-ind-circle">3</div>
-        <div class="wiz-ind-label">Your interest</div>
-      </div>
-      <div class="wiz-ind-line" id="wiz-line-3"></div>
-      <div class="wiz-ind" id="wiz-ind-4">
-        <div class="wiz-ind-circle">4</div>
-        <div class="wiz-ind-label">Your path</div>
-      </div>
-    </div>
-
-    <!-- Progress bar -->
-    <div style="height:3px;background:rgba(255,255,255,0.06);margin:16px 0 0;">
-      <div id="wiz-progress" style="height:100%;background:linear-gradient(90deg,var(--lime),var(--teal));width:25%;transition:width 0.4s ease;border-radius:0 2px 2px 0;"></div>
-    </div>
-
-    <!-- ── STEP 1: Who are you ── -->
-    <div id="wizS1" style="padding:24px 28px 28px;">
-      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:16px;">Who are you right now?</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="wiz-choice" onclick="wizStep(2,'form4leaver')">
-          <div class="wiz-choice-icon" style="background:rgba(200,241,53,0.12);color:var(--lime);">🎓</div>
-          <div><div class="wiz-choice-title">Form 4 Leaver — I have my KCSE results <span style="background:var(--lime);color:var(--ink);font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:0.5px;vertical-align:middle;margin-left:4px;">MOST COMMON</span></div><div class="wiz-choice-sub">Ready to apply for university, KMTC or TVET</div></div>
-        </button>
-        <button class="wiz-choice" onclick="wizStep(2,'waiting')">
-          <div class="wiz-choice-icon" style="background:rgba(0,229,204,0.1);color:var(--teal);">⏳</div>
-          <div><div class="wiz-choice-title">Still waiting for KCSE results</div><div class="wiz-choice-sub">Just sat exams or results not out yet</div></div>
-        </button>
-        <button class="wiz-choice" onclick="wizStep(2,'parent')">
-          <div class="wiz-choice-icon" style="background:rgba(167,139,250,0.1);color:var(--violet);">👨‍👩‍👧</div>
-          <div><div class="wiz-choice-title">Parent / Guardian</div><div class="wiz-choice-sub">Researching options for my child</div></div>
-        </button>
-        <button class="wiz-choice" onclick="wizStep(4,'incollege')">
-          <div class="wiz-choice-icon" style="background:rgba(255,107,82,0.1);color:var(--coral);">🏛️</div>
-          <div><div class="wiz-choice-title">Already in college / university</div><div class="wiz-choice-sub">Need HELB, transfer or upgrade info</div></div>
-        </button>
-      </div>
-    </div>
-
-    <!-- ── STEP 2: Grade ── -->
-    <div id="wizS2" style="display:none;padding:24px 28px 28px;">
-      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;">What is your mean grade?</div>
-      <p style="font-size:12px;color:var(--white3);margin-bottom:18px;">Every grade has great options — be honest for the best guidance.</p>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;">
-        <button class="wiz-grade-btn" onclick="wizGrade('A')">A</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('A-')">A−</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('B+')">B+</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('B')">B</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('B-')">B−</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('C+')">C+</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('C')">C</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('C-')">C−</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('D+')">D+</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('D')">D</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('D-')">D−</button>
-        <button class="wiz-grade-btn" onclick="wizGrade('E')" style="color:var(--violet);border-color:rgba(167,139,250,0.3);">E</button>
-      </div>
-      <button onclick="wizStep(1,null)" class="wiz-back-btn">← Back</button>
-    </div>
-
-    <!-- ── STEP 3: Field ── -->
-    <div id="wizS3" style="display:none;padding:24px 28px 28px;">
-      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;">What field interests you?</div>
-      <p style="font-size:12px;color:var(--white3);margin-bottom:18px;">Pick the area you're most drawn to — you can always explore others later.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
-        <button class="wiz-field-btn" onclick="wizField('health')">🏥 Health &amp; Medicine</button>
-        <button class="wiz-field-btn" onclick="wizField('engineering')">⚙️ Engineering &amp; Tech</button>
-        <button class="wiz-field-btn" onclick="wizField('business')">💼 Business &amp; Law</button>
-        <button class="wiz-field-btn" onclick="wizField('education')">📚 Education</button>
-        <button class="wiz-field-btn" onclick="wizField('computing')">💻 IT &amp; Computing</button>
-        <button class="wiz-field-btn" onclick="wizField('agriculture')">🌱 Agriculture</button>
-        <button class="wiz-field-btn" onclick="wizField('tvet')">🔧 TVET / Vocational</button>
-        <button class="wiz-field-btn" onclick="wizField('any')" style="border-style:dashed;">🤔 Not sure yet</button>
-      </div>
-      <button onclick="wizStep(2,null)" class="wiz-back-btn">← Back</button>
-    </div>
-
-    <!-- ── STEP 4: Result ── -->
-    <div id="wizS4" style="display:none;padding:24px 28px 28px;">
-      <div style="font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:800;margin-bottom:8px;">✅ Your Personalised Path</div>
-      <div id="wizResult" style="margin-bottom:16px;"></div>
-      <div id="wizActions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
-      <!-- WhatsApp always shown -->
-      <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:12px;padding:14px;margin-bottom:16px;">
-        <div style="font-size:11px;font-weight:800;color:#25d366;margin-bottom:8px;">📲 Get live help &amp; deadline alerts</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            KUCCPS WhatsApp Group
-          </a>
-          <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.3);color:var(--lime);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">
-            📢 BTECHPLUS Channel
-          </a>
-        </div>
-      </div>
-      <button onclick="wizReset()" class="wiz-back-btn">↺ Start Over</button>
-    </div>
-
-  </div>
-</section>
 
 
 
@@ -5254,85 +5137,120 @@ body.has-ticker { padding-bottom:44px; }
 
 <!-- ══════════════════════════ KUCCPS TRACKER OVERLAY ══════════════════════════ -->
 <div id="trackerOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('trackerOverlay')">
-<div class="bp-sheet" style="max-width:540px;">
-  <div style="padding:24px 22px 20px;">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-      <div>
-        <div style="font-size:10px;color:#25d366;text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Application Tracker</div>
-        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);">KUCCPS Status Tracker</div>
+<div class="bp-sheet" style="max-width:560px;">
+  <div class="bp-sheet-head">
+    <div>
+      <div class="bp-sheet-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        KUCCPS Application Tracker
       </div>
-      <button class="bp-close" onclick="closeOverlay('trackerOverlay')">&#x2715;</button>
+      <div class="bp-sheet-sub">Track every stage — from results to placement</div>
     </div>
-    <p style="font-size:13px;color:var(--white3);margin:0 0 20px;line-height:1.6;">Track every stage of your KUCCPS application — from submitting choices to placement confirmation.</p>
+    <button class="bp-close" onclick="closeOverlay('trackerOverlay')">&#x2715;</button>
+  </div>
+  <div class="bp-body">
 
-    <!-- Application Steps -->
-    <div style="margin-bottom:20px;">
-      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:12px;">Your Application Journey</div>
-      <div id="trackerSteps" style="display:flex;flex-direction:column;gap:0;">
-        <!-- Steps rendered by JS -->
+    <!-- Check Status Tool -->
+    <div style="background:linear-gradient(135deg,rgba(200,241,53,0.07),rgba(0,229,204,0.04));border:1px solid rgba(200,241,53,0.2);border-radius:16px;padding:18px;margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px;">🔍 Check Your KUCCPS Placement</div>
+      <p style="font-size:12px;color:var(--white3);margin:0 0 14px;line-height:1.5;">Enter your KCSE details below — we'll guide you to the right portal page.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div>
+          <label style="font-size:10px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">KCSE Index Number</label>
+          <input id="trackerIndexNo" type="text" placeholder="e.g. 12345678901" maxlength="11"
+            style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:var(--white);font-family:monospace;font-size:14px;outline:none;box-sizing:border-box;letter-spacing:1px;"
+            onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+            oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,11)">
+          <div style="font-size:10px;color:var(--white3);margin-top:4px;">11 digits e.g. 12345678901</div>
+        </div>
+        <div>
+          <label style="font-size:10px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">KCSE Year</label>
+          <select id="trackerYear"
+            style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;"
+            onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="checkTrackerStatus()" style="width:100%;padding:12px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;transition:background 0.18s,transform 0.18s;box-shadow:0 4px 16px rgba(200,241,53,0.2);"
+        onmouseover="this.style.background='#d4f840'" onmouseout="this.style.background='var(--lime)'">
+        Check My Placement Status →
+      </button>
+      <div id="trackerResult" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- Journey Tracker -->
+    <div style="margin-bottom:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;">Your Application Journey</div>
+        <button onclick="resetTracker()" style="font-size:11px;color:var(--white3);background:none;border:none;cursor:pointer;font-family:inherit;">Reset ↺</button>
+      </div>
+      <div id="trackerSteps" style="display:flex;flex-direction:column;gap:0;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;">
+        <!-- Rendered by JS -->
       </div>
     </div>
 
-    <!-- Index Number Input -->
-    <div style="background:var(--ink3);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:700;color:var(--white);margin-bottom:10px;">🔍 Check Application Status</div>
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <input id="trackerIndexNo" type="text" placeholder="KCSE Index No. (e.g. 12345678)" 
-          style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"
-          onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='var(--border2)'">
-        <button onclick="checkTrackerStatus()" style="padding:10px 16px;background:var(--lime);color:var(--ink);border:none;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;">Check</button>
-      </div>
-      <div id="trackerResult" style="font-size:12px;color:var(--white3);"></div>
-    </div>
-
-    <!-- Portal Links -->
-    <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px;">Quick Portal Links</div>
+    <!-- Quick Portal Links -->
+    <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:10px;">Official Portals</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
-      <a href="https://students.kuccps.net" target="_blank" rel="noopener" 
-         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
-         onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-        <span style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS Portal</span>
-        <span style="font-size:11px;color:var(--white3);">Submit choices &amp; check placement</span>
+      <a href="https://students.kuccps.net" target="_blank" rel="noopener" class="tracker-portal-link" style="--c:var(--lime);">
+        <div style="font-size:18px;margin-bottom:4px;">🎓</div>
+        <div style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS Portal</div>
+        <div style="font-size:10px;color:var(--white3);">Choices &amp; placement</div>
       </a>
-      <a href="https://www.knec-portal.ac.ke" target="_blank" rel="noopener"
-         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
-         onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
-        <span style="font-size:12px;font-weight:700;color:var(--white);">KNEC Portal</span>
-        <span style="font-size:11px;color:var(--white3);">Verify KCSE results &amp; slips</span>
+      <a href="https://www.knec-portal.ac.ke" target="_blank" rel="noopener" class="tracker-portal-link" style="--c:var(--teal);">
+        <div style="font-size:18px;margin-bottom:4px;">📋</div>
+        <div style="font-size:12px;font-weight:700;color:var(--white);">KNEC Portal</div>
+        <div style="font-size:10px;color:var(--white3);">Verify KCSE results</div>
       </a>
-      <a href="https://www.helb.co.ke" target="_blank" rel="noopener"
-         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
-         onmouseover="this.style.borderColor='var(--violet)'" onmouseout="this.style.borderColor='var(--border)'">
-        <span style="font-size:12px;font-weight:700;color:var(--white);">HELB Portal</span>
-        <span style="font-size:11px;color:var(--white3);">Apply for student loan</span>
+      <a href="https://portal.hef.co.ke" target="_blank" rel="noopener" class="tracker-portal-link" style="--c:var(--violet);">
+        <div style="font-size:18px;margin-bottom:4px;">💰</div>
+        <div style="font-size:12px;font-weight:700;color:var(--white);">HELB Portal</div>
+        <div style="font-size:10px;color:var(--white3);">Apply for student loan</div>
       </a>
-      <a href="https://kmtc.ac.ke/admission" target="_blank" rel="noopener"
-         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
-         onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
-        <span style="font-size:12px;font-weight:700;color:var(--white);">KMTC Admissions</span>
-        <span style="font-size:11px;color:var(--white3);">Medical training colleges</span>
+      <a href="https://admissions.kmtc.ac.ke" target="_blank" rel="noopener" class="tracker-portal-link" style="--c:var(--coral);">
+        <div style="font-size:18px;margin-bottom:4px;">🏥</div>
+        <div style="font-size:12px;font-weight:700;color:var(--white);">KMTC Admissions</div>
+        <div style="font-size:10px;color:var(--white3);">Medical training</div>
       </a>
     </div>
 
-    <!-- WhatsApp Notification Signup -->
-    <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:14px;padding:14px;">
-      <div style="font-size:12px;font-weight:700;color:#25d366;margin-bottom:6px;">📲 Get Deadline Alerts on WhatsApp</div>
-      <p style="font-size:12px;color:var(--white3);margin:0 0 10px;line-height:1.5;">Never miss a KUCCPS window. Join our group and channel for instant notifications.</p>
+    <!-- WhatsApp -->
+    <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.18);border-radius:12px;padding:14px;">
+      <div style="font-size:11px;font-weight:800;color:#25d366;margin-bottom:8px;">📲 Never miss a KUCCPS deadline</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener"
-           style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">
+           style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#25d366;color:#fff;padding:9px 12px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           KUCCPS Group
         </a>
         <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener"
-           style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);color:var(--lime);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">
-          BTECHPLUS Channel
+           style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.3);color:var(--lime);padding:9px 12px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">
+          📢 BTECHPLUS Channel
         </a>
       </div>
     </div>
+
   </div>
 </div>
 </div>
+
+<style>
+.tracker-portal-link {
+  display:flex;flex-direction:column;padding:14px 14px 12px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;text-decoration:none;transition:all 0.18s;
+}
+.tracker-portal-link:hover {
+  background:rgba(255,255,255,0.06);border-color:var(--c,var(--lime));
+  transform:translateY(-2px);
+}
+</style>
 
 <!-- ══════════════════════════ STUDENT PROFILE OVERLAY ══════════════════════════ -->
 <div id="profileOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('profileOverlay')">
@@ -5623,52 +5541,6 @@ body.has-ticker { padding-bottom:44px; }
 @media(max-width:500px){
   #wiz1,#wiz2,#wiz3,#wiz4{padding:20px 14px 18px !important;}
   .wiz-g{font-size:14px !important;padding:10px 4px !important;}
-<style>
-/* ── Wizard Step Indicators ── */
-.wiz-ind { display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto; }
-.wiz-ind-circle { width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--white3);transition:all 0.3s; }
-.wiz-ind.active .wiz-ind-circle { background:var(--lime);color:var(--ink);border-color:var(--lime);box-shadow:0 0 12px rgba(200,241,53,0.3); }
-.wiz-ind.done .wiz-ind-circle { background:rgba(200,241,53,0.15);color:var(--lime);border-color:rgba(200,241,53,0.4); }
-.wiz-ind-label { font-size:10px;color:var(--white3);font-weight:600;text-align:center;white-space:nowrap; }
-.wiz-ind.active .wiz-ind-label { color:var(--lime); }
-.wiz-ind.done .wiz-ind-label { color:var(--white3); }
-.wiz-ind-line { flex:1;height:1.5px;background:rgba(255,255,255,0.08);align-self:center;margin:0 4px;margin-bottom:20px;transition:background 0.3s; }
-.wiz-ind-line.done { background:rgba(200,241,53,0.4); }
-
-/* ── Wizard Choice Cards ── */
-.wiz-choice { display:flex;align-items:center;gap:14px;width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.18s; }
-.wiz-choice:hover { background:rgba(200,241,53,0.05);border-color:rgba(200,241,53,0.3);transform:translateX(4px); }
-.wiz-choice-icon { width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0; }
-.wiz-choice-title { font-size:13.5px;font-weight:700;color:var(--white);margin-bottom:2px; }
-.wiz-choice-sub { font-size:11.5px;color:var(--white3); }
-
-/* ── Wizard Grade Buttons ── */
-.wiz-grade-btn { padding:14px 8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-family:'Fraunces',serif;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.15s; }
-.wiz-grade-btn:hover,.wiz-grade-btn.selected { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime);transform:scale(1.05); }
-
-/* ── Wizard Field Buttons ── */
-.wiz-field-btn { padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center; }
-.wiz-field-btn:hover { background:rgba(200,241,53,0.07);border-color:rgba(200,241,53,0.3);color:var(--white); }
-
-/* ── Wizard Action Buttons ── */
-.wiz-action-btn { display:flex;align-items:center;gap:12px;width:100%;background:var(--ink3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:13px 16px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.18s;text-decoration:none;color:inherit; }
-.wiz-action-btn:hover { border-color:var(--lime);background:rgba(200,241,53,0.05); }
-.wiz-action-btn.primary { background:var(--lime);color:var(--ink);border-color:var(--lime); }
-.wiz-action-btn.primary:hover { background:#d4f840; }
-
-/* ── Back button ── */
-.wiz-back-btn { background:none;border:none;color:var(--white3);cursor:pointer;font-size:13px;font-family:inherit;padding:4px 0;transition:color 0.15s; }
-.wiz-back-btn:hover { color:var(--white2); }
-
-@media(max-width:500px){
-  #wizardSection { padding:0 12px 36px; }
-  .wiz-ind-label { display:none; }
-  .wiz-grade-btn { font-size:15px;padding:12px 4px; }
-  .wiz-choice { padding:12px 14px;gap:12px; }
-  .wiz-choice-title { font-size:13px; }
-}
-</style>
-
 <!-- ══════════════════════════ NEW FEATURES JS ══════════════════════════ -->
 <script>
 /* ══════════════════════════════════════════════════════
@@ -5844,30 +5716,42 @@ function markTrackerDone(id) {
 }
 
 function checkTrackerStatus() {
-  var inp = document.getElementById('trackerIndexNo');
-  var res = document.getElementById('trackerResult');
+  var inp  = document.getElementById('trackerIndexNo');
+  var yrEl = document.getElementById('trackerYear');
+  var res  = document.getElementById('trackerResult');
   if (!inp || !res) return;
-  var idx = inp.value.trim();
+
+  var idx = inp.value.replace(/\D/g,'');
+  var yr  = yrEl ? yrEl.value : '2024';
+
   if (!idx) {
-    res.innerHTML = '<span style="color:var(--coral);">⚠️ Please enter your KCSE Index Number first.</span>';
-    inp.focus();
-    return;
+    res.innerHTML = '<div style="padding:10px 12px;background:rgba(255,107,82,0.08);border:1px solid rgba(255,107,82,0.2);border-radius:8px;font-size:12px;color:var(--coral);">⚠️ Please enter your KCSE Index Number.</div>';
+    inp.focus(); return;
   }
-  if (!/^\d{7,10}$/.test(idx)) {
-    res.innerHTML = '<span style="color:var(--coral);">⚠️ Index number should be 7–10 digits (numbers only).</span>';
-    inp.focus();
-    return;
+  if (idx.length !== 11) {
+    res.innerHTML = '<div style="padding:10px 12px;background:rgba(255,107,82,0.08);border:1px solid rgba(255,107,82,0.2);border-radius:8px;font-size:12px;color:var(--coral);">⚠️ Index number must be exactly 11 digits. You entered '+idx.length+' digit(s).</div>';
+    inp.focus(); return;
   }
-  res.innerHTML = '<div style="padding:10px 12px;background:rgba(0,229,204,0.07);border:1px solid rgba(0,229,204,0.2);border-radius:8px;">'
-    +'<div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:4px;">Index No: '+idx+' — How to check your status:</div>'
-    +'<div style="font-size:12px;color:var(--white3);line-height:1.6;">'
-    +'1. Visit <a href="https://students.kuccps.net" target="_blank" style="color:var(--lime);font-weight:700;">students.kuccps.net</a><br>'
-    +'2. Click <strong style="color:var(--white2);">"Check Placement Status"</strong><br>'
-    +'3. Enter your index number: <strong style="color:var(--white);font-family:monospace;font-size:13px;">'+idx+'</strong><br>'
-    +'4. Enter your KCSE year and date of birth'
+
+  res.innerHTML = '<div style="padding:14px;background:rgba(0,229,204,0.06);border:1px solid rgba(0,229,204,0.18);border-radius:12px;">'
+    +'<div style="font-size:12px;font-weight:800;color:var(--teal);margin-bottom:10px;">✅ How to check placement for Index No. '+idx+' ('+yr+')</div>'
+    +'<div style="font-size:12px;color:var(--white2);line-height:1.9;">'
+    +'<strong style="color:var(--white);">Step 1:</strong> Visit <a href="https://students.kuccps.net" target="_blank" style="color:var(--lime);font-weight:700;">students.kuccps.net</a><br>'
+    +'<strong style="color:var(--white);">Step 2:</strong> Click <span style="background:rgba(200,241,53,0.1);color:var(--lime);padding:1px 7px;border-radius:4px;font-weight:700;">"Check Placement"</span> on the homepage<br>'
+    +'<strong style="color:var(--white);">Step 3:</strong> Enter your index number: <code style="background:rgba(255,255,255,0.08);color:var(--white);padding:2px 8px;border-radius:5px;font-size:13px;letter-spacing:1px;">'+idx+'</code><br>'
+    +'<strong style="color:var(--white);">Step 4:</strong> Enter KCSE year: <strong style="color:var(--lime);">'+yr+'</strong> and your date of birth'
     +'</div>'
-    +'<a href="https://students.kuccps.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 14px;background:var(--lime);color:var(--ink);border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">Open KUCCPS Portal →</a>'
+    +'<a href="https://students.kuccps.net" target="_blank" rel="noopener" '
+    +'style="display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:10px 18px;background:var(--lime);color:var(--ink);border-radius:9px;font-size:13px;font-weight:800;text-decoration:none;">'
+    +'🎓 Open KUCCPS Portal Now →</a>'
     +'</div>';
+}
+
+function resetTracker() {
+  if(!confirm('Reset all your tracker progress?')) return;
+  localStorage.removeItem('bp_tracker_step');
+  renderTrackerSteps();
+  if(typeof toast==='function') toast('↺ Tracker reset');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -5981,6 +5865,161 @@ function clearProfile() {
   if(typeof toast==='function') toast('🗑 Profile cleared');
 }
 </script>
+
+<!-- ══════════════════════════════════════════════════════════
+     WIZARD OVERLAY — step-by-step guide (opens from hero button)
+══════════════════════════════════════════════════════════ -->
+<div id="wizardOverlayNew" class="bp-overlay" onclick="if(event.target===this)closeOverlay('wizardOverlayNew')">
+<div class="bp-sheet" style="max-width:520px;">
+
+  <!-- Header -->
+  <div style="padding:22px 22px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:800;margin-bottom:4px;">Campus Pathway Guide</div>
+        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);">Find Your Path in 4 Steps</div>
+      </div>
+      <button class="bp-close" onclick="closeOverlay('wizardOverlayNew')">&#x2715;</button>
+    </div>
+    <!-- Step indicators -->
+    <div style="display:flex;align-items:center;gap:0;padding-bottom:18px;" id="wiz-indicators">
+      <div class="wiz-ind active" id="wiz-ind-1"><div class="wiz-ind-circle">1</div><div class="wiz-ind-label">Who</div></div>
+      <div class="wiz-ind-line" id="wiz-line-1"></div>
+      <div class="wiz-ind" id="wiz-ind-2"><div class="wiz-ind-circle">2</div><div class="wiz-ind-label">Grade</div></div>
+      <div class="wiz-ind-line" id="wiz-line-2"></div>
+      <div class="wiz-ind" id="wiz-ind-3"><div class="wiz-ind-circle">3</div><div class="wiz-ind-label">Interest</div></div>
+      <div class="wiz-ind-line" id="wiz-line-3"></div>
+      <div class="wiz-ind" id="wiz-ind-4"><div class="wiz-ind-circle">4</div><div class="wiz-ind-label">Your Path</div></div>
+    </div>
+    <!-- Progress bar -->
+    <div style="height:3px;background:rgba(255,255,255,0.06);margin:0 -22px;">
+      <div id="wiz-progress" style="height:100%;background:linear-gradient(90deg,var(--lime),var(--teal));width:25%;transition:width 0.4s ease;border-radius:0 2px 2px 0;"></div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="wizS1" style="padding:22px;">
+    <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:4px;">Who are you right now?</div>
+    <p style="font-size:12px;color:var(--white3);margin-bottom:16px;">This helps us show exactly what applies to you.</p>
+    <div style="display:flex;flex-direction:column;gap:9px;">
+      <button class="wiz-choice" onclick="wizStep(2,'form4leaver')">
+        <div class="wiz-choice-icon" style="background:rgba(200,241,53,0.12);color:var(--lime);">🎓</div>
+        <div><div class="wiz-choice-title">Form 4 Leaver — I have my KCSE results <span style="background:var(--lime);color:var(--ink);font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;vertical-align:middle;margin-left:4px;">MOST COMMON</span></div><div class="wiz-choice-sub">Ready to apply for university, KMTC or TVET</div></div>
+        <span style="margin-left:auto;color:var(--white3);font-size:16px;">→</span>
+      </button>
+      <button class="wiz-choice" onclick="wizStep(2,'waiting')">
+        <div class="wiz-choice-icon" style="background:rgba(0,229,204,0.1);color:var(--teal);">⏳</div>
+        <div><div class="wiz-choice-title">Waiting for KCSE results</div><div class="wiz-choice-sub">Just sat exams or results not out yet</div></div>
+        <span style="margin-left:auto;color:var(--white3);font-size:16px;">→</span>
+      </button>
+      <button class="wiz-choice" onclick="wizStep(2,'parent')">
+        <div class="wiz-choice-icon" style="background:rgba(167,139,250,0.1);color:var(--violet);">👨‍👩‍👧</div>
+        <div><div class="wiz-choice-title">Parent / Guardian</div><div class="wiz-choice-sub">Researching options for my child</div></div>
+        <span style="margin-left:auto;color:var(--white3);font-size:16px;">→</span>
+      </button>
+      <button class="wiz-choice" onclick="wizStep(4,'incollege')">
+        <div class="wiz-choice-icon" style="background:rgba(255,107,82,0.1);color:var(--coral);">🏛️</div>
+        <div><div class="wiz-choice-title">Already in college / university</div><div class="wiz-choice-sub">Need HELB, transfer or upgrade info</div></div>
+        <span style="margin-left:auto;color:var(--white3);font-size:16px;">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="wizS2" style="display:none;padding:22px;">
+    <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:4px;">What is your mean grade?</div>
+    <p style="font-size:12px;color:var(--white3);margin-bottom:16px;">Every grade has great options — be honest for the best guidance.</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;">
+      <button class="wiz-grade-btn" onclick="wizGrade('A')">A</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('A-')">A−</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('B+')">B+</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('B')">B</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('B-')">B−</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('C+')">C+</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('C')">C</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('C-')">C−</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('D+')">D+</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('D')">D</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('D-')">D−</button>
+      <button class="wiz-grade-btn" onclick="wizGrade('E')" style="color:var(--violet);border-color:rgba(167,139,250,0.3);">E</button>
+    </div>
+    <button onclick="wizStep(1,null)" class="wiz-back-btn">← Back</button>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="wizS3" style="display:none;padding:22px;">
+    <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:4px;">What field interests you?</div>
+    <p style="font-size:12px;color:var(--white3);margin-bottom:16px;">Pick the area you're most drawn to — you can always explore others later.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <button class="wiz-field-btn" onclick="wizField('health')">🏥 Health &amp; Medicine</button>
+      <button class="wiz-field-btn" onclick="wizField('engineering')">⚙️ Engineering &amp; Tech</button>
+      <button class="wiz-field-btn" onclick="wizField('business')">💼 Business &amp; Law</button>
+      <button class="wiz-field-btn" onclick="wizField('education')">📚 Education</button>
+      <button class="wiz-field-btn" onclick="wizField('computing')">💻 IT &amp; Computing</button>
+      <button class="wiz-field-btn" onclick="wizField('agriculture')">🌱 Agriculture</button>
+      <button class="wiz-field-btn" onclick="wizField('tvet')">🔧 TVET / Vocational</button>
+      <button class="wiz-field-btn" onclick="wizField('any')" style="border-style:dashed;">🤔 Not sure yet</button>
+    </div>
+    <button onclick="wizStep(2,null)" class="wiz-back-btn">← Back</button>
+  </div>
+
+  <!-- STEP 4 result -->
+  <div id="wizS4" style="display:none;padding:22px;">
+    <div style="font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:800;margin-bottom:10px;">✅ Your Personalised Path</div>
+    <div id="wizResult" style="margin-bottom:14px;"></div>
+    <div id="wizActions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+    <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.18);border-radius:12px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:800;color:#25d366;margin-bottom:8px;">📲 Get deadline alerts &amp; live help</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#25d366;color:#fff;padding:9px 12px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;min-width:120px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          KUCCPS Group
+        </a>
+        <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.3);color:var(--lime);padding:9px 12px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;min-width:120px;">
+          📢 BTECHPLUS Channel
+        </a>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="wizReset()" class="wiz-back-btn" style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:9px;color:var(--white3);">↺ Start Over</button>
+      <button onclick="closeOverlay('wizardOverlayNew')" style="flex:1;padding:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:9px;color:var(--white3);cursor:pointer;font-family:inherit;font-size:13px;">Explore Site →</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<style>
+/* ── Wizard overlay step indicators ── */
+.wiz-ind { display:flex;flex-direction:column;align-items:center;gap:5px;flex:0 0 auto; }
+.wiz-ind-circle { width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--white3);transition:all 0.3s; }
+.wiz-ind.active .wiz-ind-circle { background:var(--lime);color:var(--ink);border-color:var(--lime);box-shadow:0 0 14px rgba(200,241,53,0.4); }
+.wiz-ind.done   .wiz-ind-circle { background:rgba(200,241,53,0.15);color:var(--lime);border-color:rgba(200,241,53,0.4);content:'✓'; }
+.wiz-ind-label { font-size:10px;color:var(--white3);font-weight:600;white-space:nowrap; }
+.wiz-ind.active .wiz-ind-label { color:var(--lime); }
+.wiz-ind-line { flex:1;height:1.5px;background:rgba(255,255,255,0.08);align-self:center;margin:0 6px;margin-bottom:18px;min-width:20px;transition:background 0.3s; }
+.wiz-ind-line.done { background:rgba(200,241,53,0.45); }
+/* ── Choice cards ── */
+.wiz-choice { display:flex;align-items:center;gap:12px;width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:13px;padding:13px 15px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.18s; }
+.wiz-choice:hover { background:rgba(200,241,53,0.05);border-color:rgba(200,241,53,0.3);transform:translateX(3px); }
+.wiz-choice-icon { width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+.wiz-choice-title { font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;line-height:1.3; }
+.wiz-choice-sub { font-size:11px;color:var(--white3); }
+/* ── Grade buttons ── */
+.wiz-grade-btn { padding:14px 6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-family:'Fraunces',serif;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.15s; }
+.wiz-grade-btn:hover,.wiz-grade-btn.selected { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime);transform:scale(1.06); }
+/* ── Field buttons ── */
+.wiz-field-btn { padding:13px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:var(--white2);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center;line-height:1.3; }
+.wiz-field-btn:hover { background:rgba(200,241,53,0.07);border-color:rgba(200,241,53,0.3);color:var(--white); }
+/* ── Action buttons ── */
+.wiz-action-btn { display:flex;align-items:center;gap:12px;width:100%;background:var(--ink3);border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:12px 15px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.18s;text-decoration:none;color:inherit; }
+.wiz-action-btn:hover { border-color:rgba(200,241,53,0.4);background:rgba(200,241,53,0.04); }
+.wiz-action-btn.primary { background:var(--lime);color:var(--ink);border-color:var(--lime); }
+.wiz-action-btn.primary:hover { background:#d4f840; }
+/* ── Back button ── */
+.wiz-back-btn { background:none;border:none;color:var(--white3);cursor:pointer;font-size:13px;font-family:inherit;padding:4px 0;transition:color 0.15s; }
+.wiz-back-btn:hover { color:var(--white2); }
+</style>
 
 </body>
 </html>
