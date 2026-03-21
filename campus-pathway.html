@@ -102,15 +102,9 @@ nav {
   border-radius: 8px;
 }
 .nav-links .nav-cta:hover { background: #d9f54a; color: var(--ink); }
-.nav-links .nav-donate {
-  background: var(--lime); color: var(--ink) !important;
-  font-weight: 700; margin-left: 6px;
-  border-radius: 20px; padding: 6px 16px !important;
-  animation: donatePulse 2.5s ease-in-out infinite;
-}
-.nav-links .nav-donate:hover { background: #d9f54a; transform: scale(1.04); }
-@keyframes donatePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200,241,53,0.5); }
+
+
+
   50% { box-shadow: 0 0 0 7px rgba(200,241,53,0); }
 }
 
@@ -948,7 +942,6 @@ footer {
     <li><a href="#ai">AI</a></li>
     <li><a href="#account" class="nav-cta" id="navLoginBtn" style="background:var(--lime);color:var(--ink);font-weight:800;">My Account</a></li>
     <li id="navLogoutLi" style="display:none;"><a href="#" id="navLogoutBtn" onclick="logoutUser();return false;" style="display:block;padding:7px 14px;background:rgba(255,107,82,0.12);color:var(--coral);border:1px solid rgba(255,107,82,0.25);border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">Sign Out</a></li>
-    <li><a href="#donate" class="nav-donate" onclick="openMpesaModal();return false;">Support Us 💚</a></li>
   </ul>
   <div class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></div>
 </nav>
@@ -984,7 +977,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
   <a href="#forum" onclick="toggleNav()">Forum</a>
   <a href="#ai" onclick="toggleNav()">Support</a>
   <a href="#account" onclick="toggleNav()">My Account</a>
-  <a href="#" onclick="openMpesaModal();toggleNav();return false;" style="background:linear-gradient(135deg,#00a651,#007a3d);color:#fff !important;border-radius:10px;padding:14px 16px;font-weight:700;display:block;text-align:center;margin-top:8px;">💚 Support Us — Donate via M-Pesa</a>
+  <a href="#" onclick="openMpesaModal();toggleNav();return false;" style="background:linear-gradient(135deg,#00a651,#007a3d);color:#fff !important;border-radius:10px;padding:14px 16px;font-weight:700;display:block;text-align:center;margin-top:8px;"> Support Us — Donate via M-Pesa</a>
 </div>
 
 <!-- M-PESA DONATION MODAL -->
@@ -995,11 +988,11 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
   <!-- HEADER -->
   <div style="padding:22px 22px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;position:relative;">
-    <button onclick="closeMpesaModal()" style="position:absolute;top:16px;right:16px;background:var(--ink3);border:1px solid var(--border);color:var(--white3);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
+    <button onclick="closeMpesaModal()" style="position:absolute;top:16px;right:16px;background:var(--ink3);border:1px solid var(--border);color:var(--white3);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
     <div style="width:44px;height:44px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:20px;letter-spacing:-2px;flex-shrink:0;">M</div>
     <div>
       <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white);">Support BTECHPLUS</div>
-      <div style="font-size:12px;color:var(--white3);margin-top:2px;">Keep campus guidance free for every Kenyan student 🇰🇪</div>
+      <div style="font-size:12px;color:var(--white3);margin-top:2px;">Keep campus guidance free for every Kenyan student </div>
     </div>
   </div>
 
@@ -1021,7 +1014,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       <button onclick="setAmount(200)"  class="mp-amt-btn" data-amt="200">KES 200</button>
       <button onclick="setAmount(500)"  class="mp-amt-btn" data-amt="500">KES 500</button>
       <button onclick="setAmount(1000)" class="mp-amt-btn" data-amt="1000">KES 1,000</button>
-      <button onclick="setAmount('custom')" class="mp-amt-btn" data-amt="custom" style="font-size:11px;">Custom ✏️</button>
+      <button onclick="setAmount('custom')" class="mp-amt-btn" data-amt="custom" style="font-size:11px;">Custom </button>
     </div>
     <div id="customAmtWrap" style="display:none;margin-bottom:12px;">
       <div style="display:flex;align-items:center;background:var(--ink3);border:1.5px solid var(--border2);border-radius:10px;overflow:hidden;">
@@ -1045,12 +1038,12 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
     </div>
     <label style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;font-weight:700;">M-Pesa Number</label>
     <div style="display:flex;align-items:center;background:var(--ink3);border:1.5px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:16px;" id="phoneInputWrap">
-      <span style="padding:0 14px;font-size:18px;border-right:1px solid var(--border);">📱</span>
+      <span style="padding:0 14px;font-size:18px;border-right:1px solid var(--border);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
       <input id="mpesaPhone" type="tel" placeholder="07XX XXX XXX" maxlength="13"
         style="flex:1;padding:13px 14px;background:transparent;border:none;color:var(--white);font-size:16px;outline:none;font-family:inherit;"
         oninput="formatPhone(this);onPhoneInput(this)"
         onkeydown="if(event.key==='Enter')submitDonation()">
-      <span id="phoneCheck" style="padding:0 14px;font-size:16px;opacity:0;transition:opacity .25s;color:#00a651;">✓</span>
+      <span id="phoneCheck" style="padding:0 14px;font-size:16px;opacity:0;transition:opacity .25s;color:#00a651;">&#x2713;</span>
     </div>
     <button id="stkBtn" onclick="submitDonation()"
       style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
@@ -1065,7 +1058,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       <div style="position:absolute;inset:0;border-radius:50%;border:2.5px solid var(--border2);"></div>
       <div style="position:absolute;inset:0;border-radius:50%;border:2.5px solid transparent;border-top-color:var(--lime);animation:mpSpin 1s linear infinite;"></div>
       <div style="position:absolute;inset:8px;border-radius:50%;background:var(--ink3);display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:22px;animation:mpPulse 1.5s ease-in-out infinite;">📱</span>
+        <span style="font-size:22px;animation:mpPulse 1.5s ease-in-out infinite;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
       </div>
     </div>
     <h3 style="font-size:19px;color:var(--white);margin:0 0 8px;font-family:'Fraunces',serif;font-weight:700;">Check Your Phone</h3>
@@ -1082,11 +1075,11 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
     <div style="width:70px;height:70px;margin:0 auto 18px;position:relative;">
       <div style="position:absolute;inset:0;border-radius:50%;background:rgba(200,241,53,0.1);border:2px solid rgba(200,241,53,0.3);animation:mpSuccessRing 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;"></div>
       <div style="position:absolute;inset:8px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;animation:mpSuccessPop 0.5s 0.1s cubic-bezier(0.175,0.885,0.32,1.275) both;opacity:0;">
-        <span style="font-size:22px;color:var(--ink);font-weight:900;">✓</span>
+        <span style="font-size:22px;color:var(--ink);font-weight:900;">&#x2713;</span>
       </div>
     </div>
     <h3 style="font-size:22px;color:var(--lime);margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;">Payment Confirmed!</h3>
-    <p style="font-size:13px;color:var(--white3);line-height:1.7;margin:0 0 18px;">Asante sana! 💚 Your support keeps BTECHPLUS free for all students.</p>
+    <p style="font-size:13px;color:var(--white3);line-height:1.7;margin:0 0 18px;">Asante sana!  Your support keeps BTECHPLUS free for all students.</p>
     <div style="background:var(--ink3);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;text-align:left;">
       <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
         <span style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;">Receipt</span>
@@ -1098,10 +1091,10 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;">
         <span style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;">Status</span>
-        <span style="background:rgba(200,241,53,0.15);color:var(--lime);font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;">✓ PAID</span>
+        <span style="background:rgba(200,241,53,0.15);color:var(--lime);font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;">&#x2713; PAID</span>
       </div>
     </div>
-    <button onclick="closeMpesaModal()" style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;font-size:14px;margin-bottom:8px;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">Continue Learning 🎓</button>
+    <button onclick="closeMpesaModal()" style="width:100%;padding:14px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;font-size:14px;margin-bottom:8px;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">Continue Learning <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></button>
     <button onclick="resetMpModal()" style="width:100%;padding:9px;background:transparent;color:var(--white3);border:none;cursor:pointer;font-size:12px;font-family:inherit;">Donate again</button>
   </div>
 
@@ -1262,7 +1255,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 <div style="background:linear-gradient(90deg,rgba(37,211,102,0.06),rgba(200,241,53,0.04),rgba(37,211,102,0.06));border-top:1px solid rgba(37,211,102,0.1);border-bottom:1px solid rgba(255,255,255,0.05);padding:14px 40px;">
   <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
     <div style="display:flex;align-items:center;gap:10px;">
-      <span style="font-size:20px;">🇰🇪</span>
+      <span style="font-size:20px;"></span>
       <div>
         <div style="font-size:13px;font-weight:700;color:var(--white);">Join thousands of Kenyan students</div>
         <div style="font-size:11px;color:var(--white3);">KUCCPS alerts, deadlines &amp; peer support</div>
@@ -1342,7 +1335,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
         <div id="avatarCircle" style="width:52px;height:52px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;"></div>
         <div style="flex:1;min-width:0;">
-          <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Welcome back 👋</div>
+          <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Welcome back <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 11V7a2 2 0 00-4 0v4"/><path d="M14 11V5a2 2 0 00-4 0v6"/><path d="M10 11V4a2 2 0 00-4 0v7"/><path d="M6 11v3a6 6 0 0012 0v-5"/></svg></div>
           <h3 id="dashName" style="font-size:18px;margin:0 0 2px;color:#fff;font-family:'Fraunces',serif;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></h3>
           <p id="dashEmail" style="font-size:11px;color:var(--white3);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></p>
         </div>
@@ -1361,7 +1354,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;">Mean Grade</div>
       </div>
       <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-        <div style="font-size:14px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div>
+        <div style="font-size:14px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE &#x2713;</div>
         <div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;">Account</div>
       </div>
     </div>
@@ -1371,22 +1364,22 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;">Your Tools</div>
       <div class="home-grid">
         <button class="home-card hc-lime" onclick="openOverlay('calcOverlay')">
-          <div class="hc-icon">🧮</div><div class="hc-label">Cluster Calc</div><div class="hc-sub">Calculate points</div><div class="hc-arrow">→</div>
+          <div class="hc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div><div class="hc-label">Cluster Calc</div><div class="hc-sub">Calculate points</div><div class="hc-arrow">→</div>
         </button>
         <button class="home-card hc-teal" onclick="openOverlay('coursesOverlay')">
-          <div class="hc-icon">📚</div><div class="hc-label">Courses</div><div class="hc-sub">Find your path</div><div class="hc-arrow">→</div>
+          <div class="hc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><div class="hc-label">Courses</div><div class="hc-sub">Find your path</div><div class="hc-arrow">→</div>
         </button>
         <button class="home-card hc-coral" onclick="openOverlay('deadlinesOverlay')">
-          <div class="hc-icon">📅</div><div class="hc-label">Deadlines</div><div class="hc-sub">Live portals</div><div class="hc-arrow">→</div>
+          <div class="hc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="hc-label">Deadlines</div><div class="hc-sub">Live portals</div><div class="hc-arrow">→</div>
         </button>
         <button class="home-card hc-violet" onclick="openOverlay('forumOverlay')">
-          <div class="hc-icon">💬</div><div class="hc-label">Forum</div><div class="hc-sub">Ask students</div><div class="hc-arrow">→</div>
+          <div class="hc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="hc-label">Forum</div><div class="hc-sub">Ask students</div><div class="hc-arrow">→</div>
         </button>
         <button class="home-card hc-teal" onclick="openOverlay('supportOverlay');startChatPolling()">
-          <div class="hc-icon">👨‍💼</div><div class="hc-label">Support</div><div class="hc-sub">Chat with us</div><div class="hc-arrow">→</div>
+          <div class="hc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div><div class="hc-label">Support</div><div class="hc-sub">Chat with us</div><div class="hc-arrow">→</div>
         </button>
         <button class="home-card hc-lime" onclick="openOverlay('donateOverlay')">
-          <div class="hc-icon">💚</div><div class="hc-label">Donate</div><div class="hc-sub">Support BTECHPLUS</div><div class="hc-arrow">→</div>
+          <div class="hc-icon"></div><div class="hc-label">Donate</div><div class="hc-sub">Support BTECHPLUS</div><div class="hc-arrow">→</div>
         </button>
       </div>
     </div>
@@ -1509,37 +1502,65 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
 <!-- ══════════════ OVERLAY: CALCULATOR ══════════════ -->
 <div id="calcOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('calcOverlay')">
-  <div class="bp-sheet">
+  <div class="bp-sheet" style="max-width:520px;">
     <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">🧮 Cluster Calculator</div><div class="bp-sheet-sub">Enter your KCSE grades</div></div>
-      <button class="bp-close" onclick="closeOverlay('calcOverlay')">✕</button>
+      <div>
+        <div class="bp-sheet-title">Cluster Points Calculator</div>
+        <div class="bp-sheet-sub">KCSE grades &rarr; cluster score out of 48</div>
+      </div>
+      <button class="bp-close" onclick="closeOverlay('calcOverlay')">&#x2715;</button>
     </div>
     <div class="bp-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Mathematics</label><select id="m1" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
-        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">English / Kiswahili</label><select id="m2" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
-        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Subject 3 <span style="color:var(--white3);font-weight:400;">(your 3rd best)</span></label><select id="m3" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
-        <div class="fld"><label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Subject 4 <span style="color:var(--white3);font-weight:400;">(your 4th best)</span></label><select id="m4" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select></div>
+
+      <!-- How it works -->
+      <div style="background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--lime);margin-bottom:4px;">How cluster points are calculated</div>
+        <div style="font-size:12px;color:var(--white3);line-height:1.7;">
+          Maths + (English <em>or</em> Kiswahili, whichever is higher) + your 2 best other subjects.<br>
+          <strong style="color:var(--white2);">You do not need to know your course.</strong> Just enter your actual grades — we calculate your score and show what you qualify for.
+        </div>
       </div>
-      <button class="btn-primary" style="width:100%;margin-bottom:10px;" onclick="calcCluster()">Calculate Cluster Points</button>
-      <button class="btn-outline" style="width:100%;" onclick="saveCluster()">💾 Save Results</button>
-      <div class="calc-result" id="calcResult" style="margin-top:16px;min-height:80px;display:flex;align-items:center;justify-content:center;">
-        <div style="text-align:center;color:var(--white3);font-size:13px;">Enter grades above and tap Calculate</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="fld">
+          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Mathematics</label>
+          <select id="m1" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
+        </div>
+        <div class="fld">
+          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">English or Kiswahili <span style="color:var(--lime);font-size:10px;">(higher one)</span></label>
+          <select id="m2" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
+        </div>
+        <div class="fld" style="grid-column:1/-1;">
+          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">3rd Best Subject</label>
+          <select id="m3s" onchange="syncHiddenGrades()" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"><option value="">-- Select subject &amp; grade --</option><option value="12">Biology &mdash; A</option><option value="11">Biology &mdash; A−</option><option value="10">Biology &mdash; B+</option><option value="9">Biology &mdash; B</option><option value="8">Biology &mdash; B−</option><option value="7">Biology &mdash; C+</option><option value="6">Biology &mdash; C</option><option value="5">Biology &mdash; C−</option><option value="4">Biology &mdash; D+</option><option value="3">Biology &mdash; D</option><option value="2">Biology &mdash; D−</option><option value="12">Chemistry &mdash; A</option><option value="11">Chemistry &mdash; A−</option><option value="10">Chemistry &mdash; B+</option><option value="9">Chemistry &mdash; B</option><option value="8">Chemistry &mdash; B−</option><option value="7">Chemistry &mdash; C+</option><option value="6">Chemistry &mdash; C</option><option value="5">Chemistry &mdash; C−</option><option value="4">Chemistry &mdash; D+</option><option value="3">Chemistry &mdash; D</option><option value="2">Chemistry &mdash; D−</option><option value="12">Physics &mdash; A</option><option value="11">Physics &mdash; A−</option><option value="10">Physics &mdash; B+</option><option value="9">Physics &mdash; B</option><option value="8">Physics &mdash; B−</option><option value="7">Physics &mdash; C+</option><option value="6">Physics &mdash; C</option><option value="5">Physics &mdash; C−</option><option value="4">Physics &mdash; D+</option><option value="3">Physics &mdash; D</option><option value="2">Physics &mdash; D−</option><option value="12">Geography &mdash; A</option><option value="11">Geography &mdash; A−</option><option value="10">Geography &mdash; B+</option><option value="9">Geography &mdash; B</option><option value="8">Geography &mdash; B−</option><option value="7">Geography &mdash; C+</option><option value="6">Geography &mdash; C</option><option value="5">Geography &mdash; C−</option><option value="4">Geography &mdash; D+</option><option value="3">Geography &mdash; D</option><option value="2">Geography &mdash; D−</option><option value="12">History & Govt &mdash; A</option><option value="11">History & Govt &mdash; A−</option><option value="10">History & Govt &mdash; B+</option><option value="9">History & Govt &mdash; B</option><option value="8">History & Govt &mdash; B−</option><option value="7">History & Govt &mdash; C+</option><option value="6">History & Govt &mdash; C</option><option value="5">History & Govt &mdash; C−</option><option value="4">History & Govt &mdash; D+</option><option value="3">History & Govt &mdash; D</option><option value="2">History & Govt &mdash; D−</option><option value="12">Business Studies &mdash; A</option><option value="11">Business Studies &mdash; A−</option><option value="10">Business Studies &mdash; B+</option><option value="9">Business Studies &mdash; B</option><option value="8">Business Studies &mdash; B−</option><option value="7">Business Studies &mdash; C+</option><option value="6">Business Studies &mdash; C</option><option value="5">Business Studies &mdash; C−</option><option value="4">Business Studies &mdash; D+</option><option value="3">Business Studies &mdash; D</option><option value="2">Business Studies &mdash; D−</option><option value="12">Agriculture &mdash; A</option><option value="11">Agriculture &mdash; A−</option><option value="10">Agriculture &mdash; B+</option><option value="9">Agriculture &mdash; B</option><option value="8">Agriculture &mdash; B−</option><option value="7">Agriculture &mdash; C+</option><option value="6">Agriculture &mdash; C</option><option value="5">Agriculture &mdash; C−</option><option value="4">Agriculture &mdash; D+</option><option value="3">Agriculture &mdash; D</option><option value="2">Agriculture &mdash; D−</option><option value="12">CRE / IRE / HRE &mdash; A</option><option value="11">CRE / IRE / HRE &mdash; A−</option><option value="10">CRE / IRE / HRE &mdash; B+</option><option value="9">CRE / IRE / HRE &mdash; B</option><option value="8">CRE / IRE / HRE &mdash; B−</option><option value="7">CRE / IRE / HRE &mdash; C+</option><option value="6">CRE / IRE / HRE &mdash; C</option><option value="5">CRE / IRE / HRE &mdash; C−</option><option value="4">CRE / IRE / HRE &mdash; D+</option><option value="3">CRE / IRE / HRE &mdash; D</option><option value="2">CRE / IRE / HRE &mdash; D−</option><option value="12">Home Science &mdash; A</option><option value="11">Home Science &mdash; A−</option><option value="10">Home Science &mdash; B+</option><option value="9">Home Science &mdash; B</option><option value="8">Home Science &mdash; B−</option><option value="7">Home Science &mdash; C+</option><option value="6">Home Science &mdash; C</option><option value="5">Home Science &mdash; C−</option><option value="4">Home Science &mdash; D+</option><option value="3">Home Science &mdash; D</option><option value="2">Home Science &mdash; D−</option><option value="12">Art & Design &mdash; A</option><option value="11">Art & Design &mdash; A−</option><option value="10">Art & Design &mdash; B+</option><option value="9">Art & Design &mdash; B</option><option value="8">Art & Design &mdash; B−</option><option value="7">Art & Design &mdash; C+</option><option value="6">Art & Design &mdash; C</option><option value="5">Art & Design &mdash; C−</option><option value="4">Art & Design &mdash; D+</option><option value="3">Art & Design &mdash; D</option><option value="2">Art & Design &mdash; D−</option><option value="12">Music &mdash; A</option><option value="11">Music &mdash; A−</option><option value="10">Music &mdash; B+</option><option value="9">Music &mdash; B</option><option value="8">Music &mdash; B−</option><option value="7">Music &mdash; C+</option><option value="6">Music &mdash; C</option><option value="5">Music &mdash; C−</option><option value="4">Music &mdash; D+</option><option value="3">Music &mdash; D</option><option value="2">Music &mdash; D−</option><option value="12">Computer Studies &mdash; A</option><option value="11">Computer Studies &mdash; A−</option><option value="10">Computer Studies &mdash; B+</option><option value="9">Computer Studies &mdash; B</option><option value="8">Computer Studies &mdash; B−</option><option value="7">Computer Studies &mdash; C+</option><option value="6">Computer Studies &mdash; C</option><option value="5">Computer Studies &mdash; C−</option><option value="4">Computer Studies &mdash; D+</option><option value="3">Computer Studies &mdash; D</option><option value="2">Computer Studies &mdash; D−</option><option value="12">French &mdash; A</option><option value="11">French &mdash; A−</option><option value="10">French &mdash; B+</option><option value="9">French &mdash; B</option><option value="8">French &mdash; B−</option><option value="7">French &mdash; C+</option><option value="6">French &mdash; C</option><option value="5">French &mdash; C−</option><option value="4">French &mdash; D+</option><option value="3">French &mdash; D</option><option value="2">French &mdash; D−</option><option value="12">German &mdash; A</option><option value="11">German &mdash; A−</option><option value="10">German &mdash; B+</option><option value="9">German &mdash; B</option><option value="8">German &mdash; B−</option><option value="7">German &mdash; C+</option><option value="6">German &mdash; C</option><option value="5">German &mdash; C−</option><option value="4">German &mdash; D+</option><option value="3">German &mdash; D</option><option value="2">German &mdash; D−</option><option value="12">Arabic &mdash; A</option><option value="11">Arabic &mdash; A−</option><option value="10">Arabic &mdash; B+</option><option value="9">Arabic &mdash; B</option><option value="8">Arabic &mdash; B−</option><option value="7">Arabic &mdash; C+</option><option value="6">Arabic &mdash; C</option><option value="5">Arabic &mdash; C−</option><option value="4">Arabic &mdash; D+</option><option value="3">Arabic &mdash; D</option><option value="2">Arabic &mdash; D−</option></select>
+        </div>
+        <div class="fld" style="grid-column:1/-1;">
+          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">4th Best Subject</label>
+          <select id="m4s" onchange="syncHiddenGrades()" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"><option value="">-- Select subject &amp; grade --</option><option value="12">Biology &mdash; A</option><option value="11">Biology &mdash; A−</option><option value="10">Biology &mdash; B+</option><option value="9">Biology &mdash; B</option><option value="8">Biology &mdash; B−</option><option value="7">Biology &mdash; C+</option><option value="6">Biology &mdash; C</option><option value="5">Biology &mdash; C−</option><option value="4">Biology &mdash; D+</option><option value="3">Biology &mdash; D</option><option value="2">Biology &mdash; D−</option><option value="12">Chemistry &mdash; A</option><option value="11">Chemistry &mdash; A−</option><option value="10">Chemistry &mdash; B+</option><option value="9">Chemistry &mdash; B</option><option value="8">Chemistry &mdash; B−</option><option value="7">Chemistry &mdash; C+</option><option value="6">Chemistry &mdash; C</option><option value="5">Chemistry &mdash; C−</option><option value="4">Chemistry &mdash; D+</option><option value="3">Chemistry &mdash; D</option><option value="2">Chemistry &mdash; D−</option><option value="12">Physics &mdash; A</option><option value="11">Physics &mdash; A−</option><option value="10">Physics &mdash; B+</option><option value="9">Physics &mdash; B</option><option value="8">Physics &mdash; B−</option><option value="7">Physics &mdash; C+</option><option value="6">Physics &mdash; C</option><option value="5">Physics &mdash; C−</option><option value="4">Physics &mdash; D+</option><option value="3">Physics &mdash; D</option><option value="2">Physics &mdash; D−</option><option value="12">Geography &mdash; A</option><option value="11">Geography &mdash; A−</option><option value="10">Geography &mdash; B+</option><option value="9">Geography &mdash; B</option><option value="8">Geography &mdash; B−</option><option value="7">Geography &mdash; C+</option><option value="6">Geography &mdash; C</option><option value="5">Geography &mdash; C−</option><option value="4">Geography &mdash; D+</option><option value="3">Geography &mdash; D</option><option value="2">Geography &mdash; D−</option><option value="12">History & Govt &mdash; A</option><option value="11">History & Govt &mdash; A−</option><option value="10">History & Govt &mdash; B+</option><option value="9">History & Govt &mdash; B</option><option value="8">History & Govt &mdash; B−</option><option value="7">History & Govt &mdash; C+</option><option value="6">History & Govt &mdash; C</option><option value="5">History & Govt &mdash; C−</option><option value="4">History & Govt &mdash; D+</option><option value="3">History & Govt &mdash; D</option><option value="2">History & Govt &mdash; D−</option><option value="12">Business Studies &mdash; A</option><option value="11">Business Studies &mdash; A−</option><option value="10">Business Studies &mdash; B+</option><option value="9">Business Studies &mdash; B</option><option value="8">Business Studies &mdash; B−</option><option value="7">Business Studies &mdash; C+</option><option value="6">Business Studies &mdash; C</option><option value="5">Business Studies &mdash; C−</option><option value="4">Business Studies &mdash; D+</option><option value="3">Business Studies &mdash; D</option><option value="2">Business Studies &mdash; D−</option><option value="12">Agriculture &mdash; A</option><option value="11">Agriculture &mdash; A−</option><option value="10">Agriculture &mdash; B+</option><option value="9">Agriculture &mdash; B</option><option value="8">Agriculture &mdash; B−</option><option value="7">Agriculture &mdash; C+</option><option value="6">Agriculture &mdash; C</option><option value="5">Agriculture &mdash; C−</option><option value="4">Agriculture &mdash; D+</option><option value="3">Agriculture &mdash; D</option><option value="2">Agriculture &mdash; D−</option><option value="12">CRE / IRE / HRE &mdash; A</option><option value="11">CRE / IRE / HRE &mdash; A−</option><option value="10">CRE / IRE / HRE &mdash; B+</option><option value="9">CRE / IRE / HRE &mdash; B</option><option value="8">CRE / IRE / HRE &mdash; B−</option><option value="7">CRE / IRE / HRE &mdash; C+</option><option value="6">CRE / IRE / HRE &mdash; C</option><option value="5">CRE / IRE / HRE &mdash; C−</option><option value="4">CRE / IRE / HRE &mdash; D+</option><option value="3">CRE / IRE / HRE &mdash; D</option><option value="2">CRE / IRE / HRE &mdash; D−</option><option value="12">Home Science &mdash; A</option><option value="11">Home Science &mdash; A−</option><option value="10">Home Science &mdash; B+</option><option value="9">Home Science &mdash; B</option><option value="8">Home Science &mdash; B−</option><option value="7">Home Science &mdash; C+</option><option value="6">Home Science &mdash; C</option><option value="5">Home Science &mdash; C−</option><option value="4">Home Science &mdash; D+</option><option value="3">Home Science &mdash; D</option><option value="2">Home Science &mdash; D−</option><option value="12">Art & Design &mdash; A</option><option value="11">Art & Design &mdash; A−</option><option value="10">Art & Design &mdash; B+</option><option value="9">Art & Design &mdash; B</option><option value="8">Art & Design &mdash; B−</option><option value="7">Art & Design &mdash; C+</option><option value="6">Art & Design &mdash; C</option><option value="5">Art & Design &mdash; C−</option><option value="4">Art & Design &mdash; D+</option><option value="3">Art & Design &mdash; D</option><option value="2">Art & Design &mdash; D−</option><option value="12">Music &mdash; A</option><option value="11">Music &mdash; A−</option><option value="10">Music &mdash; B+</option><option value="9">Music &mdash; B</option><option value="8">Music &mdash; B−</option><option value="7">Music &mdash; C+</option><option value="6">Music &mdash; C</option><option value="5">Music &mdash; C−</option><option value="4">Music &mdash; D+</option><option value="3">Music &mdash; D</option><option value="2">Music &mdash; D−</option><option value="12">Computer Studies &mdash; A</option><option value="11">Computer Studies &mdash; A−</option><option value="10">Computer Studies &mdash; B+</option><option value="9">Computer Studies &mdash; B</option><option value="8">Computer Studies &mdash; B−</option><option value="7">Computer Studies &mdash; C+</option><option value="6">Computer Studies &mdash; C</option><option value="5">Computer Studies &mdash; C−</option><option value="4">Computer Studies &mdash; D+</option><option value="3">Computer Studies &mdash; D</option><option value="2">Computer Studies &mdash; D−</option><option value="12">French &mdash; A</option><option value="11">French &mdash; A−</option><option value="10">French &mdash; B+</option><option value="9">French &mdash; B</option><option value="8">French &mdash; B−</option><option value="7">French &mdash; C+</option><option value="6">French &mdash; C</option><option value="5">French &mdash; C−</option><option value="4">French &mdash; D+</option><option value="3">French &mdash; D</option><option value="2">French &mdash; D−</option><option value="12">German &mdash; A</option><option value="11">German &mdash; A−</option><option value="10">German &mdash; B+</option><option value="9">German &mdash; B</option><option value="8">German &mdash; B−</option><option value="7">German &mdash; C+</option><option value="6">German &mdash; C</option><option value="5">German &mdash; C−</option><option value="4">German &mdash; D+</option><option value="3">German &mdash; D</option><option value="2">German &mdash; D−</option><option value="12">Arabic &mdash; A</option><option value="11">Arabic &mdash; A−</option><option value="10">Arabic &mdash; B+</option><option value="9">Arabic &mdash; B</option><option value="8">Arabic &mdash; B−</option><option value="7">Arabic &mdash; C+</option><option value="6">Arabic &mdash; C</option><option value="5">Arabic &mdash; C−</option><option value="4">Arabic &mdash; D+</option><option value="3">Arabic &mdash; D</option><option value="2">Arabic &mdash; D−</option></select>
+        </div>
+      </div>
+      <input type="hidden" id="m3" value="12">
+      <input type="hidden" id="m4" value="12">
+
+      <button class="btn-primary" style="width:100%;padding:13px;" onclick="syncHiddenGrades();calcCluster()">Calculate My Cluster Points</button>
+      <div id="calcResult" style="margin-top:14px;min-height:60px;display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;color:var(--white3);font-size:13px;">Select your grades above, then tap Calculate</div>
       </div>
     </div>
   </div>
 </div>
 
+
 <!-- ══════════════ OVERLAY: COURSES ══════════════ -->
 <div id="coursesOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('coursesOverlay')">
   <div class="bp-sheet bp-sheet-wide">
     <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">📚 Course Finder</div><div class="bp-sheet-sub">Select your grade to explore courses</div></div>
-      <button class="bp-close" onclick="closeOverlay('coursesOverlay')">✕</button>
+      <div><div class="bp-sheet-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Course Finder</div><div class="bp-sheet-sub">Select your grade to explore courses</div></div>
+      <button class="bp-close" onclick="closeOverlay('coursesOverlay')">&#x2715;</button>
     </div>
     <div class="bp-body">
       <div style="margin-bottom:12px;">
-        <input id="courseSearch" type="text" placeholder="🔍 Search courses, programs, campuses..." oninput="courseSearchTerm=this.value;renderCourses()" style="width:100%;padding:10px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-size:13px;outline:none;font-family:inherit;box-sizing:border-box;">
+        <input id="courseSearch" type="text" placeholder="<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Search courses, programs, campuses..." oninput="courseSearchTerm=this.value;renderCourses()" style="width:100%;padding:10px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-size:13px;outline:none;font-family:inherit;box-sizing:border-box;">
       </div>
       <div class="grade-list" style="margin-bottom:16px;">
         <button class="grade-pill active" onclick="pickGrade(this,'A')">A <small>University</small></button>
@@ -1554,7 +1575,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <button class="grade-pill" onclick="pickGrade(this,'D')">D <small>TVET</small></button>
         <button class="grade-pill" onclick="pickGrade(this,'D-')">D− <small>TVET</small></button>
       </div>
-      <button onclick="openSubjectReqOverlay()" style="width:100%;padding:11px;background:rgba(200,241,53,0.07);border:1.5px solid rgba(200,241,53,0.25);color:var(--lime);border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:16px;">📋 View Subject Requirements</button>
+      <button onclick="openSubjectReqOverlay()" style="width:100%;padding:11px;background:rgba(200,241,53,0.07);border:1.5px solid rgba(200,241,53,0.25);color:var(--lime);border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:16px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg> View Subject Requirements</button>
       <div class="courses-out" id="courseOut"></div>
     </div>
   </div>
@@ -1564,18 +1585,18 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 <div id="deadlinesOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('deadlinesOverlay')">
   <div class="bp-sheet bp-sheet-wide">
     <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">📅 Open Portals & Deadlines</div><div class="bp-sheet-sub">Updated by the BTECHPLUS team</div></div>
-      <button class="bp-close" onclick="closeOverlay('deadlinesOverlay')">✕</button>
+      <div><div class="bp-sheet-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Open Portals & Deadlines</div><div class="bp-sheet-sub">Updated by the BTECHPLUS team</div></div>
+      <button class="bp-close" onclick="closeOverlay('deadlinesOverlay')">&#x2715;</button>
     </div>
     <div class="bp-body">
       <div id="publicDeadlinesGrid" class="app-grid" style="margin-top:0;">
         <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--white3);">
-          <div style="font-size:32px;margin-bottom:12px;">📅</div>
+          <div style="font-size:32px;margin-bottom:12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <div style="font-size:14px;">Loading deadlines...</div>
         </div>
       </div>
       <div id="noDeadlinesMsg" style="display:none;text-align:center;padding:48px 20px;">
-        <div style="font-size:40px;margin-bottom:12px;">📋</div>
+        <div style="font-size:40px;margin-bottom:12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
         <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px;">No active deadlines right now</div>
         <div style="font-size:13px;color:var(--white3);margin-bottom:20px;">Check back soon — we update this regularly.</div>
         <button onclick="closeOverlay('deadlinesOverlay');openOverlay('supportOverlay')" style="padding:11px 24px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">Ask Us About Applications →</button>
@@ -1588,8 +1609,8 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 <div id="forumOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('forumOverlay')">
   <div class="bp-sheet bp-sheet-wide">
     <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">💬 Student Forum</div><div class="bp-sheet-sub">Ask. Learn. Connect.</div></div>
-      <button class="bp-close" onclick="closeOverlay('forumOverlay')">✕</button>
+      <div><div class="bp-sheet-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Student Forum</div><div class="bp-sheet-sub">Ask. Learn. Connect.</div></div>
+      <button class="bp-close" onclick="closeOverlay('forumOverlay')">&#x2715;</button>
     </div>
     <div class="bp-body">
       <div class="forum-layout">
@@ -1606,16 +1627,16 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         </div>
         <div>
           <div style="background:var(--ink3);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;">
-            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--white);">💡 Quick Tips</h4>
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--white);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg> Quick Tips</h4>
             <div class="tip-row"><div class="tip-n">1</div>KUCCPS opens every May–June for university placements.</div>
             <div class="tip-row"><div class="tip-n">2</div>Minimum C+ required for most degrees at public universities.</div>
             <div class="tip-row"><div class="tip-n">3</div>KMTC needs C− for certificate, C for diploma programs.</div>
             <div class="tip-row"><div class="tip-n">4</div>Cluster points use 4 specific subjects — use the calculator!</div>
           </div>
           <div style="background:var(--ink3);border:1px solid var(--border);border-radius:16px;padding:18px;">
-            <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white);">📞 Need Direct Help?</h4>
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg> Need Direct Help?</h4>
             <p style="font-size:12px;color:var(--white3);margin-bottom:12px;">Our team handles KUCCPS, KMTC, HELB & TVET applications.</p>
-            <a href="https://wa.me/254113996609" target="_blank" style="display:block;padding:11px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;border-radius:10px;font-weight:700;font-size:13px;text-align:center;text-decoration:none;">💬 WhatsApp Us</a>
+            <a href="https://wa.me/254113996609" target="_blank" style="display:block;padding:11px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;border-radius:10px;font-weight:700;font-size:13px;text-align:center;text-decoration:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> WhatsApp Us</a>
           </div>
         </div>
       </div>
@@ -1631,13 +1652,13 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <div style="width:8px;height:8px;background:#00e57a;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px #00e57a;"></div>
         <div><div class="bp-sheet-title">BTECHPLUS Team</div><div class="bp-sheet-sub">Human Support · We reply ASAP</div></div>
       </div>
-      <button class="bp-close" onclick="closeOverlay('supportOverlay')">✕</button>
+      <button class="bp-close" onclick="closeOverlay('supportOverlay')">&#x2715;</button>
     </div>
     <div style="display:flex;flex-direction:column;height:min(520px,70vh);">
       <div class="chat-msgs" id="chatMsgs" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
         <div class="msg ai">
-          <div class="msg-av">👨‍💼</div>
-          <div class="msg-bub">Hi! 👋 Welcome to BTECHPLUS support. Send us your question about courses, cluster points, KUCCPS, KMTC, HELB loans or applications — our team will reply shortly.</div>
+          <div class="msg-av"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
+          <div class="msg-bub">Hi! <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 11V7a2 2 0 00-4 0v4"/><path d="M14 11V5a2 2 0 00-4 0v6"/><path d="M10 11V4a2 2 0 00-4 0v7"/><path d="M6 11v3a6 6 0 0012 0v-5"/></svg> Welcome to BTECHPLUS support. Send us your question about courses, cluster points, KUCCPS, KMTC, HELB loans or applications — our team will reply shortly.</div>
         </div>
       </div>
       <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;">
@@ -1652,8 +1673,8 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 <div id="authOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('authOverlay')">
   <div class="bp-sheet" style="max-width:480px;">
     <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">👤 My Account</div><div class="bp-sheet-sub">Login or create a free account</div></div>
-      <button class="bp-close" onclick="closeOverlay('authOverlay')">✕</button>
+      <div><div class="bp-sheet-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Account</div><div class="bp-sheet-sub">Login or create a free account</div></div>
+      <button class="bp-close" onclick="closeOverlay('authOverlay')">&#x2715;</button>
     </div>
     <div class="bp-body">
       <div id="authForms" style="display:grid;gap:16px;">
@@ -1681,11 +1702,11 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 <div id="donateOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('donateOverlay')">
   <div class="bp-sheet" style="max-width:440px;">
     <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">💚 Support BTECHPLUS</div><div class="bp-sheet-sub">Keep this platform free for every student</div></div>
-      <button class="bp-close" onclick="closeOverlay('donateOverlay')">✕</button>
+      <div><div class="bp-sheet-title"> Support BTECHPLUS</div><div class="bp-sheet-sub">Keep this platform free for every student</div></div>
+      <button class="bp-close" onclick="closeOverlay('donateOverlay')">&#x2715;</button>
     </div>
     <div class="bp-body">
-      <p style="font-size:13px;color:var(--white3);margin-bottom:20px;line-height:1.6;">BTECHPLUS is 100% free for every Kenyan student. Your support keeps it alive for thousands more. 🇰🇪</p>
+      <p style="font-size:13px;color:var(--white3);margin-bottom:20px;line-height:1.6;">BTECHPLUS is 100% free for every Kenyan student. Your support keeps it alive for thousands more. </p>
       <p style="font-size:11px;color:var(--white3);margin:0 0 10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Quick Amount (KES)</p>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
         <button class="amt-btn" onclick="setAmt(50,this)">50</button>
@@ -1697,7 +1718,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <span style="padding:0 14px;color:var(--white3);font-size:13px;font-weight:700;border-right:1px solid var(--border);">KES</span>
         <input type="number" id="donAmt" placeholder="Or enter custom amount" style="flex:1;padding:13px 14px;background:transparent;border:none;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
       </div>
-      <button onclick="donateNow()" style="width:100%;padding:15px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;">💚 Donate via M-Pesa</button>
+      <button onclick="donateNow()" style="width:100%;padding:15px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;"> Donate via M-Pesa</button>
       <div id="donMsg" style="margin-top:10px;font-size:13px;text-align:center;"></div>
     </div>
   </div>
@@ -1705,7 +1726,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
 <!-- ADMIN PANEL TRIGGER -->
 <div id="adminPanel" style="display:none;text-align:center;padding:16px 0 0;">
-  <button onclick="openAdminPanel()" style="padding:12px 28px;background:linear-gradient(135deg,#c8f135,#a0cc00);color:#0a0a0f;border:none;border-radius:14px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;">⚙ Open Admin Panel</button>
+  <button onclick="openAdminPanel()" style="padding:12px 28px;background:linear-gradient(135deg,#c8f135,#a0cc00);color:#0a0a0f;border:none;border-radius:14px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Open Admin Panel</button>
 </div>
 
 <style>
@@ -1717,35 +1738,35 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <div class="tip-row"><div class="tip-n">5</div>HELB loans available to all students at accredited institutions, apply online.</div>
       </div>
       <div class="sidebar-card reveal">
-        <h4>📞 Key Contacts</h4>
+        <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg> Key Contacts</h4>
         <div class="contact-row"><div class="contact-badge" style="background:var(--lime);color:var(--ink);">B</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">BTECHPLUS Support</div><a href="tel:+254113996609" style="color:var(--lime);font-size:12px;text-decoration:none;">0113 996 609</a> · <a href="/cdn-cgi/l/email-protection#fe9c8a9b9d96959b90879fbe99939f9792d09d9193" style="color:var(--lime);font-size:12px;text-decoration:none;"><span class="__cf_email__" data-cfemail="ee8c9a8b8d86858b80978fae89838f8782c08d8183">[email&#160;protected]</span></a></div></div>
         <div class="contact-row"><div class="contact-badge">K</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS</div><span style="font-size:12px;color:var(--white3);">0800 724 444 (Toll Free)</span></div></div>
         <div class="contact-row"><div class="contact-badge">M</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KMTC</div><span style="font-size:12px;color:var(--white3);">020 272 6440</span></div></div>
         <div class="contact-row"><div class="contact-badge">H</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">HELB</div><span style="font-size:12px;color:var(--white3);">0711 052 000</span></div></div>
         <div class="contact-row"><div class="contact-badge">N</div><div><div style="font-size:12px;font-weight:700;color:var(--white);">KNEC</div><span style="font-size:12px;color:var(--white3);">020 313 349</span></div></div>
         <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
-          <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:block;width:100%;padding:10px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:13px;text-align:center;text-decoration:none;box-sizing:border-box;">🖥 Book Application Help →</a>
+          <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:block;width:100%;padding:10px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:13px;text-align:center;text-decoration:none;box-sizing:border-box;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Book Application Help →</a>
         </div>
       </div>
       <!-- Subject Requirements Card -->
       <div class="sidebar-card reveal">
-        <h4>📐 Subject Requirements</h4>
+        <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="1 20 23 20 12 4 1 20"/></svg> Subject Requirements</h4>
         <p style="font-size:12px;color:var(--white3);margin-bottom:12px;">Key cluster subjects per course category:</p>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div onclick="openSubjectOverlay('medicine')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:12px;font-weight:600;color:var(--white);">🏥 Health Sciences</div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Health Sciences</div>
             <div style="font-size:11px;color:var(--white3);">BIO, CHE, PHY/MAT, ENG</div>
           </div>
           <div onclick="openSubjectOverlay('engineering')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:12px;font-weight:600;color:var(--white);">⚙️ Engineering & Tech</div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>️ Engineering & Tech</div>
             <div style="font-size:11px;color:var(--white3);">MAT A, PHY, CHE, ENG</div>
           </div>
           <div onclick="openSubjectOverlay('business')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:12px;font-weight:600;color:var(--white);">💼 Business & Law</div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg> Business & Law</div>
             <div style="font-size:11px;color:var(--white3);">MAT B, ENG, KIS, BST</div>
           </div>
           <div onclick="openSubjectOverlay('arts')" style="cursor:pointer;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);transition:0.2s;" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:12px;font-weight:600;color:var(--white);">🎨 Arts & Education</div>
+            <div style="font-size:12px;font-weight:600;color:var(--white);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Arts & Education</div>
             <div style="font-size:11px;color:var(--white3);">ENG/KIS, HIS/GEO, LIT</div>
           </div>
           <button onclick="openSubjectOverlay('all')" style="width:100%;padding:8px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--white3);font-size:12px;cursor:pointer;font-family:inherit;margin-top:4px;">View All Requirements →</button>
@@ -1764,20 +1785,20 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:10px;">BTECHPLUS</div>
         <p style="font-size:13px;color:var(--white3);line-height:1.7;margin-bottom:16px;">Kenya's #1 campus pathway platform helping KCSE students find their best course, college and career path. 100% free.</p>
         <div style="display:flex;gap:10px;">
-          <a href="/cdn-cgi/l/email-protection#77150312141f1c12190e1637101a161e1b5914181a" style="background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">✉ Email Us</a>
-          <a href="https://wa.me/254113996609" target="_blank" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;">💬 WhatsApp</a>
+          <a href="/cdn-cgi/l/email-protection#77150312141f1c12190e1637101a161e1b5914181a" style="background:var(--lime-dim);border:1px solid var(--lime);color:var(--lime);padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email Us</a>
+          <a href="https://wa.me/254113996609" target="_blank" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;font-weight:600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> WhatsApp</a>
         </div>
       </div>
       <!-- Quick Links -->
       <div>
         <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:14px;">Quick Links</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <a href="#courses" style="color:var(--white2);text-decoration:none;font-size:13px;">📚 Courses</a>
-          <a href="#calculator" style="color:var(--white2);text-decoration:none;font-size:13px;">🧮 Cluster Calculator</a>
-          <a href="#applications" style="color:var(--white2);text-decoration:none;font-size:13px;">📋 Applications</a>
-          <a href="#forum" style="color:var(--white2);text-decoration:none;font-size:13px;">💬 Student Forum</a>
-          <a href="#ai" style="color:var(--white2);text-decoration:none;font-size:13px;">💬 Support</a>
-          <a href="https://btechplus.com/online-cyber.html" target="_blank" style="color:var(--lime);text-decoration:none;font-size:13px;font-weight:600;">🖥 Online Cyber →</a>
+          <a href="#courses" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Courses</a>
+          <a href="#calculator" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg> Cluster Calculator</a>
+          <a href="#applications" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg> Applications</a>
+          <a href="#forum" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Student Forum</a>
+          <a href="#ai" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Support</a>
+          <a href="https://btechplus.com/online-cyber.html" target="_blank" style="color:var(--lime);text-decoration:none;font-size:13px;font-weight:600;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Online Cyber →</a>
         </div>
       </div>
       <!-- Contacts -->
@@ -1802,20 +1823,20 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
       <div>
         <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:14px;">Official Portals</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <a href="https://students.kuccps.net" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">🎓 KUCCPS Portal</a>
-          <a href="https://admissions.kmtc.ac.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">🏥 KMTC Admissions</a>
-          <a href="https://helb.co.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">💰 HELB Loans</a>
-          <a href="https://knec.ac.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">📜 KNEC</a>
-          <a href="https://tvetcdacc.go.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;">🔧 TVET CDACC</a>
+          <a href="https://students.kuccps.net" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> KUCCPS Portal</a>
+          <a href="https://admissions.kmtc.ac.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> KMTC Admissions</a>
+          <a href="https://helb.co.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> HELB Loans</a>
+          <a href="https://knec.ac.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> KNEC</a>
+          <a href="https://tvetcdacc.go.ke" target="_blank" style="color:var(--white2);text-decoration:none;font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> TVET CDACC</a>
         </div>
       </div>
     </div>
     <div style="border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-      <div style="font-size:12px;color:var(--white3);">© 2026 BTECHPLUS Campus Pathway · Made with 💚 for Kenyan Students</div>
+      <div style="font-size:12px;color:var(--white3);">© 2026 BTECHPLUS Campus Pathway · Made with  for Kenyan Students</div>
       <div style="display:flex;align-items:center;gap:16px;">
-        <span style="font-size:12px;color:var(--white3);">📞 0113 996 609</span>
-        <span style="font-size:12px;color:var(--white3);">✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4022342523282b252e392100272d21292c6e232f2d">[email&#160;protected]</a></span>
-        <span style="font-size:20px;">🇰🇪</span>
+        <span style="font-size:12px;color:var(--white3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg> 0113 996 609</span>
+        <span style="font-size:12px;color:var(--white3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4022342523282b252e392100272d21292c6e232f2d">[email&#160;protected]</a></span>
+        <span style="font-size:20px;"></span>
       </div>
     </div>
   </div>
@@ -4353,6 +4374,25 @@ function heroAutoPath(grade) {
   localStorage.setItem('bpGrade', grade);
 }
 
+
+function updateM34Label() {
+  var s3 = document.getElementById('m3s');
+  var s4 = document.getElementById('m4s');
+  var h3 = document.getElementById('m3');
+  var h4 = document.getElementById('m4');
+  if(s3 && h3 && s3.value) h3.value = s3.value.split('_')[0] || '12';
+  if(s4 && h4 && s4.value) h4.value = s4.value.split('_')[0] || '12';
+}
+
+
+function syncHiddenGrades() {
+  var s3 = document.getElementById('m3s');
+  var s4 = document.getElementById('m4s');
+  var h3 = document.getElementById('m3');
+  var h4 = document.getElementById('m4');
+  if (s3 && h3 && s3.value) h3.value = s3.value.split('_')[0] || '12';
+  if (s4 && h4 && s4.value) h4.value = s4.value.split('_')[0] || '12';
+}
 window.addEventListener('DOMContentLoaded', function() {
   checkAuthState();
   initDeadlineTicker();
