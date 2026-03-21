@@ -1085,21 +1085,59 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
   <h1>Your Path From<br><em>KCSE to Campus</em></h1>
   <p class="hero-sub">Calculate cluster points, discover courses, and track KUCCPS, KMTC & TVET applications — all in one clean platform.</p>
   <div class="hero-actions">
-    <button class="btn-lime" onclick="go('#calculator')">Calculate Cluster Points</button>
-    <button class="btn-ghost" onclick="go('#courses')">Find My Courses</button>
-    <button class="btn-ghost" onclick="go('#ai')">Ask AI Assistant</button>
+    <button class="btn-lime" onclick="openOverlay('wizardOverlay')" style="font-size:15px;padding:16px 36px;box-shadow:0 8px 32px rgba(200,241,53,0.35);display:inline-flex;align-items:center;gap:8px;">
+      🚀 Start Here &mdash; Find Your Path
+    </button>
+    <button class="btn-ghost" onclick="openOverlay('calcOverlay')">🧮 Cluster Calculator</button>
+    <button class="btn-ghost" onclick="openOverlay('coursesOverlay')">📚 Find Courses</button>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px;position:relative;z-index:1;animation:riseIn 0.9s 0.5s ease both;">
+    <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.35);color:#25d366;padding:9px 18px;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;"
+       onmouseover="this.style.background='rgba(37,211,102,0.22)'" onmouseout="this.style.background='rgba(37,211,102,0.12)'">
+      Join KUCCPS WhatsApp Group
+    </a>
+    <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.28);color:var(--lime);padding:9px 18px;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;"
+       onmouseover="this.style.background='rgba(200,241,53,0.16)'" onmouseout="this.style.background='rgba(200,241,53,0.08)'">
+      Follow BTECHPLUS Channel
+    </a>
   </div>
   <div class="hero-metrics">
-    <div class="metric"><div class="metric-num">1000<span>+</span></div><div class="metric-label">Courses</div></div>
-    <div class="metric"><div class="metric-num">47</div><div class="metric-label">Counties</div></div>
-    <div class="metric"><div class="metric-num">100<span>%</span></div><div class="metric-label">Free</div></div>
+    <div class="metric"><div class="metric-num" id="cnt-courses">0<span>+</span></div><div class="metric-label">Courses</div></div>
+    <div class="metric"><div class="metric-num" id="cnt-counties">0</div><div class="metric-label">Counties</div></div>
+    <div class="metric"><div class="metric-num" id="cnt-free">0<span>%</span></div><div class="metric-label">Free</div></div>
     <div class="metric"><div class="metric-num">24<span>/7</span></div><div class="metric-label">AI Help</div></div>
   </div>
 </section>
 
+<div style="background:linear-gradient(90deg,rgba(37,211,102,0.06),rgba(200,241,53,0.04),rgba(37,211,102,0.06));border-top:1px solid rgba(37,211,102,0.1);border-bottom:1px solid rgba(255,255,255,0.05);padding:14px 40px;">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px;">🇰🇪</span>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);">Join thousands of Kenyan students</div>
+        <div style="font-size:11px;color:var(--white3);">KUCCPS alerts, deadlines &amp; peer support</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;"
+         onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        KUCCPS Group
+      </a>
+      <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.3);color:var(--lime);padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;"
+         onmouseover="this.style.background='rgba(200,241,53,0.18)'" onmouseout="this.style.background='rgba(200,241,53,0.1)'">
+        BTECHPLUS Channel
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="hr"></div>
 
-<!-- ══ MAIN APP HOME ══ -->
+<!-- ╔═ MAIN APP HOME ═╗ -->
 <section id="tools" class="section" style="padding-top:40px;padding-bottom:40px;">
 
   <!-- LOGGED OUT: clean feature cards that open overlays -->
@@ -1705,19 +1743,35 @@ function calcCluster() {
   const vals = ['m1','m2','m3','m4'].map(id => parseInt(document.getElementById(id).value));
   const total = vals.reduce((a,b) => a+b, 0);
   const cluster = total.toFixed(2);
-  let msg = '', emoji = '';
-  if (total >= 40) { msg = 'Excellent! You qualify for top degree programs nationwide.'; emoji = '🎉'; }
-  else if (total >= 32) { msg = 'Great standing! Most degree programs are within reach.'; emoji = '👍'; }
-  else if (total >= 24) { msg = 'You qualify for diploma and many degree programs.'; emoji = '✅'; }
-  else if (total >= 16) { msg = 'You qualify for certificate and TVET programs.'; emoji = '📘'; }
-  else { msg = 'Consider TTC, TVET or artisan programs — there are great options.'; emoji = '💪'; }
-  document.getElementById('calcResult').innerHTML = `
-    <div style="font-size:42px; margin-bottom:16px;">${emoji}</div>
-    <div class="score-big">${cluster}</div>
-    <div class="score-label">Cluster Points / 48</div>
-    <div class="score-msg">${msg}</div>
-  `;
-  toast('✅ Cluster points calculated!');
+  const pct = Math.round((total/48)*100);
+  const bands = [
+    {min:40,label:'Top Universities',color:'#00e5cc',courses:'Medicine, Law, Pharmacy, Engineering'},
+    {min:32,label:'Most Degree Programs',color:'#c8f135',courses:'Nursing, CS, Commerce, Education'},
+    {min:24,label:'Diploma Programs',color:'#f59e0b',courses:'KMTC Diplomas, ICT, Business Diploma'},
+    {min:16,label:'Certificate Programs',color:'#ff6b52',courses:'TVET Certificates, Community Health'},
+    {min:0, label:'Artisan & TVET Entry',color:'#a78bfa',courses:'Artisan Certificates, Trade Tests'},
+  ];
+  const band = bands.find(b=>total>=b.min)||bands[bands.length-1];
+  const emoji = total>=40?'🎉':total>=32?'🏆':total>=24?'✅':total>=16?'📘':'💪';
+  const resEl = document.getElementById('calcResult');
+  if(resEl) resEl.innerHTML = '<div style="text-align:center;width:100%;padding:4px 0;">'
+    +'<div style="font-size:30px;margin-bottom:10px;">'+emoji+'</div>'
+    +'<div class="score-big">'+cluster+'</div>'
+    +'<div class="score-label" style="margin-bottom:16px;">out of 48 cluster points</div>'
+    +'<div style="background:rgba(255,255,255,0.05);border-radius:20px;height:10px;overflow:hidden;margin-bottom:5px;">'
+    +'<div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,'+band.color+'88,'+band.color+');border-radius:20px;transition:width 0.8s cubic-bezier(0.16,1,0.3,1);"></div></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--white3);margin-bottom:14px;"><span>0</span><span>12</span><span>24</span><span>36</span><span>48</span></div>'
+    +'<div style="background:rgba(255,255,255,0.03);border:1px solid '+band.color+'44;border-radius:12px;padding:13px;text-align:left;margin-bottom:14px;">'
+    +'<div style="font-size:10px;color:'+band.color+';font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">You qualify for</div>'
+    +'<div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px;">'+band.label+'</div>'
+    +'<div style="font-size:12px;color:var(--white3);">'+band.courses+'</div></div>'
+    +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
+    +'<button onclick="openOverlay(\'coursesOverlay\')" style="padding:9px 16px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">See My Courses</button>'
+    +'<button onclick="openOverlay(\'deadlinesOverlay\')" style="padding:9px 16px;background:rgba(255,255,255,0.07);color:var(--white2);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;cursor:pointer;">Applications</button>'
+    +'</div></div>';
+  localStorage.setItem('bpCluster', cluster);
+  toast('Cluster points: '+cluster+'!');
+  return;
 }
 function saveCluster() {
   if (!localStorage.getItem('bpUser')) { toast('⚠️ Please login first to save results.'); return; }
@@ -3965,6 +4019,83 @@ function setActiveBnav(id) {
 }
 
 /* ── PAGE INIT: restore session + load ticker + forum ── */
+
+/* ══ START HERE WIZARD ═══════════════════════════════════ */
+var _wiz = {};
+function wizPick(k,v){ _wiz[k]=v; }
+function wizGo(n){
+  [1,2,3,4].forEach(function(i){
+    var el=document.getElementById('wiz'+i);
+    if(el) el.style.display=(i===n?'block':'none');
+  });
+  var pb=document.getElementById('wizPB');
+  if(pb) pb.style.width=(n/4*100)+'%';
+  var sh=document.querySelector('#wizardOverlay .bp-sheet');
+  if(sh) sh.scrollTop=0;
+  if(n===4) _wizResult();
+}
+function wizBack(from){
+  var status=_wiz.status||'';
+  if(from===3&&(status==='results'||status==='waiting')) wizGo(2);
+  else wizGo(from-1);
+}
+function _wizResult(){
+  var grade=_wiz.grade||'';
+  var field=_wiz.field||'any';
+  var status=_wiz.status||'results';
+  var col={'A':'#00e5cc','A-':'#00e5cc','B+':'#c8f135','B':'#c8f135','B-':'#f59e0b','C+':'#f59e0b','C':'#f59e0b','C-':'#ff6b52','D+':'#ff6b52','D':'#ff6b52','D-':'#a78bfa'}[grade]||'var(--lime)';
+  var lbl={'A':'Top Universities — Medicine, Engineering, Law','A-':'University Degrees','B+':'Degrees & Diplomas','B':'Degrees, KMTC & Diplomas','B-':'Diplomas & some Degrees','C+':'KMTC & some Degrees','C':'KMTC Diplomas','C-':'TVET Diplomas & Certificates','D+':'TVET Certificates','D':'TVET Entry & Artisan','D-':'Artisan Certificates'}[grade]||'Multiple pathways available';
+  var msg='';
+  if(status==='waiting'){
+    msg='<div style="background:rgba(200,241,53,0.07);border:1px solid rgba(200,241,53,0.2);border-radius:12px;padding:14px;"><div style="font-size:12px;font-weight:700;color:var(--lime);margin-bottom:4px;">While waiting for results</div><div style="font-size:13px;color:var(--white2);line-height:1.6;">Use the Cluster Calculator to estimate your points. When results come, KUCCPS opens within 2-4 weeks.</div></div>';
+  } else if(status==='parent'){
+    msg='<div style="background:rgba(0,229,204,0.07);border:1px solid rgba(0,229,204,0.2);border-radius:12px;padding:14px;"><div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:4px;">For Parents</div><div style="font-size:13px;color:var(--white2);line-height:1.6;">Enter your child\'s grades in the Cluster Calculator to see which universities and courses they qualify for. Join our group for live updates.</div></div>';
+  } else if(status==='college'){
+    msg='<div style="background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.2);border-radius:12px;padding:14px;"><div style="font-size:12px;font-weight:700;color:var(--violet);margin-bottom:4px;">Already in college</div><div style="font-size:13px;color:var(--white2);line-height:1.6;">Apply for HELB at helb.co.ke. Need to transfer or upgrade? Chat with our team below.</div></div>';
+  } else if(grade){
+    msg='<div style="background:rgba(255,255,255,0.03);border:1px solid '+col+'44;border-radius:12px;padding:14px;display:flex;align-items:center;gap:14px;">'
+      +'<div style="font-size:38px;font-weight:800;color:'+col+';font-family:\'Fraunces\',serif;line-height:1;flex-shrink:0;">'+grade+'</div>'
+      +'<div><div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px;">'+lbl+'</div>'
+      +'<div style="font-size:12px;color:var(--white3);">Use Course Finder to see all programmes</div></div></div>';
+  }
+  var acts='';
+  if(status==='results'||status==='waiting'){
+    acts+='<button class="wiz-act" onclick="closeOverlay(\'wizardOverlay\');openOverlay(\'calcOverlay\')"><span class="wiz-act-i">\u{1f9ee}</span><div><div class="wiz-act-t">Calculate Cluster Points</div><div class="wiz-act-s">See your exact score for every course</div></div></button>';
+    if(grade) acts+='<button class="wiz-act" onclick="closeOverlay(\'wizardOverlay\');openOverlay(\'coursesOverlay\')"><span class="wiz-act-i">\u{1f4da}</span><div><div class="wiz-act-t">Find Courses for Grade '+grade+'</div><div class="wiz-act-s">1,000+ programmes filtered for you</div></div></button>';
+    acts+='<a class="wiz-act" href="https://students.kuccps.net" target="_blank" rel="noopener"><span class="wiz-act-i">\u{1f393}</span><div><div class="wiz-act-t">KUCCPS Portal</div><div class="wiz-act-s">students.kuccps.net — official application site</div></div></a>';
+  }
+  if(status==='college') acts+='<a class="wiz-act" href="https://portal.hef.co.ke" target="_blank" rel="noopener"><span class="wiz-act-i">\u{1f4b0}</span><div><div class="wiz-act-t">Apply for HELB Loan</div><div class="wiz-act-s">Apply after getting your admission letter</div></div></a>';
+  if(field==='health'||status==='college') acts+='<a class="wiz-act" href="https://admissions.kmtc.ac.ke" target="_blank" rel="noopener"><span class="wiz-act-i">\u{1f3e5}</span><div><div class="wiz-act-t">KMTC Portal</div><div class="wiz-act-s">Clinical Medicine, Nursing, Pharmacy &amp; more</div></div></a>';
+  acts+='<button class="wiz-act" onclick="closeOverlay(\'wizardOverlay\');openOverlay(\'supportOverlay\');startChatPolling()"><span class="wiz-act-i">\u{1f468}\u200d\u{1f4bc}</span><div><div class="wiz-act-t">Chat with BTECHPLUS Team</div><div class="wiz-act-s">Personal guidance — we reply fast</div></div></button>';
+  var r=document.getElementById('wizRes'); if(r) r.innerHTML=msg;
+  var a=document.getElementById('wizActs'); if(a) a.innerHTML=acts;
+}
+
+/* ══ ANIMATED COUNTERS ═══════════════════════════════════ */
+(function(){
+  var ran=false;
+  var el=document.querySelector('.hero-metrics');
+  if(!el) return;
+  function count(id,target,suf,ms){
+    var e=document.getElementById(id); if(!e) return;
+    var t0=null;
+    (function frame(t){
+      if(!t0) t0=t;
+      var p=Math.min((t-t0)/ms,1), ease=1-Math.pow(1-p,3);
+      e.innerHTML=Math.round(ease*target).toLocaleString()+suf;
+      if(p<1) requestAnimationFrame(frame);
+    })(performance.now());
+  }
+  new IntersectionObserver(function(en){
+    if(en[0].isIntersecting&&!ran){
+      ran=true;
+      count('cnt-courses',1000,'<span>+</span>',1600);
+      count('cnt-counties',47,'',1200);
+      count('cnt-free',100,'<span>%</span>',1400);
+    }
+  },{threshold:0.3}).observe(el);
+})();
+
 window.addEventListener('DOMContentLoaded', function() {
   checkAuthState();
   initDeadlineTicker();
@@ -4446,6 +4577,112 @@ body.has-ticker { padding-bottom:44px; }
     <span class="bnav-icon">👤</span>Me
   </button>
 </div>
+
+
+<!-- WIZARD OVERLAY -->
+<div id="wizardOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('wizardOverlay')">
+<div class="bp-sheet" style="max-width:500px;">
+  <div style="height:3px;background:rgba(255,255,255,0.06);"><div id="wizPB" style="height:100%;background:var(--lime);width:25%;transition:width 0.35s ease;"></div></div>
+
+  <!-- Step 1 -->
+  <div id="wiz1" style="padding:26px 22px 22px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <div><div style="font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Step 1 of 4</div>
+      <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--white);">Where are you right now? &#x1f393;</div></div>
+      <button class="bp-close" onclick="closeOverlay('wizardOverlay')">&#x2715;</button>
+    </div>
+    <p style="font-size:13px;color:var(--white3);margin:0 0 16px;line-height:1.6;">This helps us show you exactly what applies to you.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <button class="wiz-opt" onclick="wizPick('status','results');wizGo(2)"><span class="wiz-opt-i">&#x1f4cb;</span><div><div class="wiz-opt-t">I have my KCSE results</div><div class="wiz-opt-s">Ready to apply for courses</div></div><span>&#x2192;</span></button>
+      <button class="wiz-opt" onclick="wizPick('status','waiting');wizGo(2)"><span class="wiz-opt-i">&#x23f3;</span><div><div class="wiz-opt-t">Waiting for KCSE results</div><div class="wiz-opt-s">Still in school or just sat exams</div></div><span>&#x2192;</span></button>
+      <button class="wiz-opt" onclick="wizPick('status','parent');wizGo(3)"><span class="wiz-opt-i">&#x1f46a;</span><div><div class="wiz-opt-t">Parent / Guardian</div><div class="wiz-opt-s">Researching for my child</div></div><span>&#x2192;</span></button>
+      <button class="wiz-opt" onclick="wizPick('status','college');wizGo(4)"><span class="wiz-opt-i">&#x1f3eb;</span><div><div class="wiz-opt-t">Already in college / university</div><div class="wiz-opt-s">Need HELB, transfer or upgrade help</div></div><span>&#x2192;</span></button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div id="wiz2" style="display:none;padding:26px 22px 22px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <div><div style="font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Step 2 of 4</div>
+      <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--white);">What is your mean grade? &#x1f4ca;</div></div>
+      <button class="bp-close" onclick="closeOverlay('wizardOverlay')">&#x2715;</button>
+    </div>
+    <p style="font-size:13px;color:var(--white3);margin:0 0 14px;">Every grade has great options.</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+      <button class="wiz-g" onclick="wizPick('grade','A');wizGo(3)">A</button>
+      <button class="wiz-g" onclick="wizPick('grade','A-');wizGo(3)">A&#x2212;</button>
+      <button class="wiz-g" onclick="wizPick('grade','B+');wizGo(3)">B+</button>
+      <button class="wiz-g" onclick="wizPick('grade','B');wizGo(3)">B</button>
+      <button class="wiz-g" onclick="wizPick('grade','B-');wizGo(3)">B&#x2212;</button>
+      <button class="wiz-g" onclick="wizPick('grade','C+');wizGo(3)">C+</button>
+      <button class="wiz-g" onclick="wizPick('grade','C');wizGo(3)">C</button>
+      <button class="wiz-g" onclick="wizPick('grade','C-');wizGo(3)">C&#x2212;</button>
+      <button class="wiz-g" onclick="wizPick('grade','D+');wizGo(3)">D+</button>
+      <button class="wiz-g" onclick="wizPick('grade','D');wizGo(3)">D</button>
+      <button class="wiz-g" style="grid-column:3/5;" onclick="wizPick('grade','D-');wizGo(3)">D&#x2212; or below</button>
+    </div>
+    <button onclick="wizGo(1)" style="background:none;border:none;color:var(--white3);cursor:pointer;font-size:13px;font-family:inherit;padding:0;">&#x2190; Back</button>
+  </div>
+
+  <!-- Step 3 -->
+  <div id="wiz3" style="display:none;padding:26px 22px 22px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <div><div style="font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Step 3 of 4</div>
+      <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--white);">What field interests you? &#x1f4a1;</div></div>
+      <button class="bp-close" onclick="closeOverlay('wizardOverlay')">&#x2715;</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+      <button class="wiz-f" onclick="wizPick('field','health');wizGo(4)">&#x1f3e5; Health &amp; Medicine</button>
+      <button class="wiz-f" onclick="wizPick('field','engineering');wizGo(4)">&#x2699;&#xfe0f; Engineering &amp; Tech</button>
+      <button class="wiz-f" onclick="wizPick('field','business');wizGo(4)">&#x1f4bc; Business &amp; Law</button>
+      <button class="wiz-f" onclick="wizPick('field','education');wizGo(4)">&#x1f4da; Education &amp; Teaching</button>
+      <button class="wiz-f" onclick="wizPick('field','computing');wizGo(4)">&#x1f4bb; IT &amp; Computing</button>
+      <button class="wiz-f" onclick="wizPick('field','agriculture');wizGo(4)">&#x1f33e; Agriculture</button>
+      <button class="wiz-f" onclick="wizPick('field','tvet');wizGo(4)">&#x1f527; TVET / Vocational</button>
+      <button class="wiz-f" onclick="wizPick('field','any');wizGo(4)">&#x1f914; Not sure yet</button>
+    </div>
+    <button onclick="wizBack(3)" style="background:none;border:none;color:var(--white3);cursor:pointer;font-size:13px;font-family:inherit;padding:0;">&#x2190; Back</button>
+  </div>
+
+  <!-- Step 4: Result -->
+  <div id="wiz4" style="display:none;padding:26px 22px 22px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <div><div style="font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Your Path &#x1f3af;</div>
+      <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--white);">Here is your plan</div></div>
+      <button class="bp-close" onclick="closeOverlay('wizardOverlay')">&#x2715;</button>
+    </div>
+    <div id="wizRes" style="margin-bottom:12px;"></div>
+    <div id="wizActs" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+    <div style="padding:12px 14px;background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:12px;">
+      <div style="font-size:11px;font-weight:700;color:#25d366;margin-bottom:8px;">&#x1f4ac; Get live help from students &amp; our team</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:5px;background:#25d366;color:#fff;padding:7px 13px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none;">Join KUCCPS Group</a>
+        <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:5px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);color:var(--lime);padding:7px 13px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none;">BTECHPLUS Channel</a>
+      </div>
+    </div>
+    <button onclick="closeOverlay('wizardOverlay')" style="margin-top:10px;width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--white3);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;">Explore the site &#x2192;</button>
+  </div>
+
+</div>
+</div>
+<style>
+.wiz-opt{display:flex;align-items:center;gap:12px;width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s;}
+.wiz-opt:hover{background:rgba(200,241,53,0.06);border-color:rgba(200,241,53,0.3);}
+.wiz-opt-i{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
+.wiz-opt-t{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;}
+.wiz-opt-s{font-size:11px;color:var(--white3);}
+.wiz-g{padding:12px 6px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Fraunces',serif;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.wiz-g:hover{background:rgba(200,241,53,0.1);border-color:var(--lime);color:var(--lime);}
+.wiz-f{padding:11px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:10px;color:var(--white2);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.15s;}
+.wiz-f:hover{background:rgba(200,241,53,0.07);border-color:rgba(200,241,53,0.3);color:var(--white);}
+.wiz-act{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:12px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s;text-decoration:none;color:inherit;width:100%;}
+.wiz-act:hover{border-color:var(--lime);background:rgba(200,241,53,0.05);}
+.wiz-act-i{font-size:18px;flex-shrink:0;}
+.wiz-act-t{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;}
+.wiz-act-s{font-size:11px;color:var(--white3);}
+</style>
 
 </body>
 </html>
