@@ -1324,6 +1324,18 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         <div class="hc-sub">Save results &amp; track progress</div>
         <div class="hc-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </button>
+      <button class="home-card" style="background:linear-gradient(135deg,rgba(37,211,102,0.08),rgba(37,211,102,0.03));border-color:rgba(37,211,102,0.2);" onclick="openOverlay('trackerOverlay')">
+        <div class="hc-svg" style="background:rgba(37,211,102,0.12);color:#25d366;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="hc-label">KUCCPS Tracker</div>
+        <div class="hc-sub">Track your application status</div>
+        <div class="hc-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </button>
+      <button class="home-card" style="background:linear-gradient(135deg,rgba(200,241,53,0.06),rgba(0,229,204,0.04));border-color:rgba(200,241,53,0.15);" onclick="openOverlay('profileOverlay')">
+        <div class="hc-svg" style="background:rgba(200,241,53,0.1);color:var(--lime);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="hc-label">My Profile</div>
+        <div class="hc-sub">Save grades &amp; subject results</div>
+        <div class="hc-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </button>
     </div>
   </div>
 
@@ -1380,6 +1392,12 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         </button>
         <button class="home-card hc-lime" onclick="openOverlay('donateOverlay')">
           <div class="hc-icon"></div><div class="hc-label">Donate</div><div class="hc-sub">Support BTECHPLUS</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card" style="background:rgba(37,211,102,0.05);border-color:rgba(37,211,102,0.15);" onclick="openOverlay('trackerOverlay')">
+          <div class="hc-icon">📋</div><div class="hc-label">Tracker</div><div class="hc-sub">KUCCPS status</div><div class="hc-arrow">→</div>
+        </button>
+        <button class="home-card" style="background:rgba(200,241,53,0.04);border-color:rgba(200,241,53,0.12);" onclick="openOverlay('profileOverlay')">
+          <div class="hc-icon">👤</div><div class="hc-label">My Profile</div><div class="hc-sub">Saved grades</div><div class="hc-arrow">→</div>
         </button>
       </div>
     </div>
@@ -4998,6 +5016,210 @@ body.has-ticker { padding-bottom:44px; }
 </style>
 
 
+<!-- ══════════════════════════ KUCCPS TRACKER OVERLAY ══════════════════════════ -->
+<div id="trackerOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('trackerOverlay')">
+<div class="bp-sheet" style="max-width:540px;">
+  <div style="padding:24px 22px 20px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+      <div>
+        <div style="font-size:10px;color:#25d366;text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Application Tracker</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);">KUCCPS Status Tracker</div>
+      </div>
+      <button class="bp-close" onclick="closeOverlay('trackerOverlay')">&#x2715;</button>
+    </div>
+    <p style="font-size:13px;color:var(--white3);margin:0 0 20px;line-height:1.6;">Track every stage of your KUCCPS application — from submitting choices to placement confirmation.</p>
+
+    <!-- Application Steps -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:12px;">Your Application Journey</div>
+      <div id="trackerSteps" style="display:flex;flex-direction:column;gap:0;">
+        <!-- Steps rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Index Number Input -->
+    <div style="background:var(--ink3);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--white);margin-bottom:10px;">🔍 Check Application Status</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input id="trackerIndexNo" type="text" placeholder="KCSE Index No. (e.g. 12345678)" 
+          style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"
+          onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='var(--border2)'">
+        <button onclick="checkTrackerStatus()" style="padding:10px 16px;background:var(--lime);color:var(--ink);border:none;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;">Check</button>
+      </div>
+      <div id="trackerResult" style="font-size:12px;color:var(--white3);"></div>
+    </div>
+
+    <!-- Portal Links -->
+    <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px;">Quick Portal Links</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <a href="https://students.kuccps.net" target="_blank" rel="noopener" 
+         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
+         onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:12px;font-weight:700;color:var(--white);">KUCCPS Portal</span>
+        <span style="font-size:11px;color:var(--white3);">Submit choices &amp; check placement</span>
+      </a>
+      <a href="https://www.knec-portal.ac.ke" target="_blank" rel="noopener"
+         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
+         onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:12px;font-weight:700;color:var(--white);">KNEC Portal</span>
+        <span style="font-size:11px;color:var(--white3);">Verify KCSE results &amp; slips</span>
+      </a>
+      <a href="https://www.helb.co.ke" target="_blank" rel="noopener"
+         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
+         onmouseover="this.style.borderColor='var(--violet)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:12px;font-weight:700;color:var(--white);">HELB Portal</span>
+        <span style="font-size:11px;color:var(--white3);">Apply for student loan</span>
+      </a>
+      <a href="https://kmtc.ac.ke/admission" target="_blank" rel="noopener"
+         style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.2s;"
+         onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:12px;font-weight:700;color:var(--white);">KMTC Admissions</span>
+        <span style="font-size:11px;color:var(--white3);">Medical training colleges</span>
+      </a>
+    </div>
+
+    <!-- WhatsApp Notification Signup -->
+    <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:14px;padding:14px;">
+      <div style="font-size:12px;font-weight:700;color:#25d366;margin-bottom:6px;">📲 Get Deadline Alerts on WhatsApp</div>
+      <p style="font-size:12px;color:var(--white3);margin:0 0 10px;line-height:1.5;">Never miss a KUCCPS window. Join our group and channel for instant notifications.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          KUCCPS Group
+        </a>
+        <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);color:var(--lime);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">
+          BTECHPLUS Channel
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════ STUDENT PROFILE OVERLAY ══════════════════════════ -->
+<div id="profileOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('profileOverlay')">
+<div class="bp-sheet" style="max-width:520px;">
+  <div style="padding:24px 22px 20px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+      <div>
+        <div style="font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:5px;">Student Profile</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);">Save Your Results</div>
+      </div>
+      <button class="bp-close" onclick="closeOverlay('profileOverlay')">&#x2715;</button>
+    </div>
+    <p style="font-size:13px;color:var(--white3);margin:0 0 18px;line-height:1.6;">Save your KCSE grades locally. Your data stays on your device — never shared.</p>
+
+    <!-- Profile form -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <div>
+        <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Your Name</label>
+        <input id="profName" type="text" placeholder="e.g. John Kamau" 
+          style="width:100%;margin-top:6px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='var(--lime)'" onblur="this.style.borderColor='var(--border2)'">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Mean Grade</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;" id="profGradePicker">
+          <button class="prof-g" onclick="profPickGrade(this,'A')">A</button>
+          <button class="prof-g" onclick="profPickGrade(this,'A-')">A&minus;</button>
+          <button class="prof-g" onclick="profPickGrade(this,'B+')">B+</button>
+          <button class="prof-g" onclick="profPickGrade(this,'B')">B</button>
+          <button class="prof-g" onclick="profPickGrade(this,'B-')">B&minus;</button>
+          <button class="prof-g" onclick="profPickGrade(this,'C+')">C+</button>
+          <button class="prof-g" onclick="profPickGrade(this,'C')">C</button>
+          <button class="prof-g" onclick="profPickGrade(this,'C-')">C&minus;</button>
+          <button class="prof-g" onclick="profPickGrade(this,'D+')">D+</button>
+          <button class="prof-g" onclick="profPickGrade(this,'D')">D</button>
+          <button class="prof-g" onclick="profPickGrade(this,'D-')">D&minus;</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">English Grade</label>
+          <select id="profEng" style="width:100%;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;">
+            <option value="">Select</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option><option>D+</option><option>D</option><option>D-</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Maths Grade</label>
+          <select id="profMath" style="width:100%;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;">
+            <option value="">Select</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option><option>D+</option><option>D</option><option>D-</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Biology Grade</label>
+          <select id="profBio" style="width:100%;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;">
+            <option value="">Select</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option><option>D+</option><option>D</option><option>D-</option><option value="N/A">N/A</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Chemistry Grade</label>
+          <select id="profChem" style="width:100%;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;">
+            <option value="">Select</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option><option>D+</option><option>D</option><option>D-</option><option value="N/A">N/A</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">Physics Grade</label>
+          <select id="profPhy" style="width:100%;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;">
+            <option value="">Select</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option><option>D+</option><option>D</option><option>D-</option><option value="N/A">N/A</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--white3);font-weight:700;text-transform:uppercase;letter-spacing:1px;">KCSE Year</label>
+          <select id="profYear" style="width:100%;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:inherit;font-size:13px;outline:none;box-sizing:border-box;">
+            <option value="">Select</option>
+            <option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="saveProfile()" style="width:100%;padding:13px;background:var(--lime);color:var(--ink);border:none;border-radius:10px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#d9f54a'" onmouseout="this.style.background='var(--lime)'">
+      💾 Save My Profile
+    </button>
+    <div id="profMsg" style="font-size:13px;margin-top:10px;text-align:center;"></div>
+
+    <!-- Saved profile display -->
+    <div id="savedProfileDisplay" style="display:none;margin-top:16px;background:rgba(200,241,53,0.05);border:1px solid rgba(200,241,53,0.15);border-radius:12px;padding:14px;">
+      <div style="font-size:11px;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">✅ Saved Profile</div>
+      <div id="savedProfileContent" style="font-size:13px;color:var(--white2);line-height:1.7;"></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button onclick="heroAutoPath(getSavedGrade());closeOverlay('profileOverlay')" style="padding:8px 14px;background:var(--lime);color:var(--ink);border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;">
+          Find My Courses →
+        </button>
+        <button onclick="clearProfile()" style="padding:8px 14px;background:rgba(255,107,82,0.1);border:1px solid rgba(255,107,82,0.2);color:var(--coral);border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;">
+          Clear Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+.prof-g{padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:8px;color:var(--white2);font-family:'Fraunces',serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.prof-g:hover,.prof-g.active{background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime);}
+.tracker-step{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.tracker-step:last-child{border-bottom:none;}
+.tracker-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px;}
+.tdot-done{background:rgba(200,241,53,0.15);color:var(--lime);}
+.tdot-active{background:rgba(37,211,102,0.2);color:#25d366;animation:pulse 2s infinite;}
+.tdot-pending{background:rgba(255,255,255,0.05);color:var(--white3);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+</style>
+
 <!-- ══════════════════════════ WIZARD OVERLAY ══════════════════════════ -->
 <div id="wizardOverlay" class="bp-overlay" onclick="if(event.target===this)closeOverlay('wizardOverlay')">
 <div class="bp-sheet" style="max-width:500px;">
@@ -5018,9 +5240,9 @@ body.has-ticker { padding-bottom:44px; }
     </div>
     <p style="font-size:13px;color:var(--white3);margin:0 0 16px;line-height:1.6;">This helps us show you exactly what applies to your situation.</p>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <button class="wiz-opt" onclick="wizPick('status','results');wizGo(2)">
-        <div class="wiz-opt-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
-        <div><div class="wiz-opt-t">I have my KCSE results</div><div class="wiz-opt-s">Ready to apply for courses</div></div>
+      <button class="wiz-opt" onclick="wizPick('status','results');wizGo(2)" style="border-color:rgba(200,241,53,0.3);background:rgba(200,241,53,0.04);">
+        <div class="wiz-opt-ic" style="background:var(--lime-dim);color:var(--lime);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
+        <div><div class="wiz-opt-t">Form 4 Leaver — I have my results <span style="font-size:10px;background:var(--lime);color:var(--ink);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:800;">MOST COMMON</span></div><div class="wiz-opt-s">Ready to apply for campus / college</div></div>
         <span class="wiz-opt-arr">&#x2192;</span>
       </button>
       <button class="wiz-opt" onclick="wizPick('status','waiting');wizGo(2)">
@@ -5028,9 +5250,9 @@ body.has-ticker { padding-bottom:44px; }
         <div><div class="wiz-opt-t">Waiting for KCSE results</div><div class="wiz-opt-s">Still in school or just sat exams</div></div>
         <span class="wiz-opt-arr">&#x2192;</span>
       </button>
-      <button class="wiz-opt" onclick="wizPick('status','parent');wizGo(3)">
+      <button class="wiz-opt" onclick="wizPick('status','parent');wizGo(2)">
         <div class="wiz-opt-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <div><div class="wiz-opt-t">Parent / Guardian</div><div class="wiz-opt-s">Researching for my child</div></div>
+        <div><div class="wiz-opt-t">Parent / Guardian</div><div class="wiz-opt-s">Researching options for my child</div></div>
         <span class="wiz-opt-arr">&#x2192;</span>
       </button>
       <button class="wiz-opt" onclick="wizPick('status','college');wizGo(4)">
@@ -5165,6 +5387,167 @@ body.has-ticker { padding-bottom:44px; }
   .wiz-g{font-size:14px !important;padding:10px 4px !important;}
 }
 </style>
+
+<!-- ══════════════════════════ NEW FEATURES JS ══════════════════════════ -->
+<script>
+/* ─── KUCCPS TRACKER ─── */
+var trackerStepsData = [
+  { id:'results', label:'KCSE Results Released', sub:'Check your results on KNEC portal', status:'done', icon:'✅' },
+  { id:'kuccps_open', label:'KUCCPS Portal Opens', sub:'Portal opens for course selection', status:'done', icon:'✅' },
+  { id:'choices', label:'Submit Course Choices', sub:'Enter up to 6 programme choices (in order)', status:'active', icon:'📝' },
+  { id:'revision', label:'Revision Window', sub:'Change choices before deadline if needed', status:'pending', icon:'🔄' },
+  { id:'placement', label:'Placement Results', sub:'Check which programme you've been placed in', status:'pending', icon:'🏫' },
+  { id:'reporting', label:'Reporting & Registration', sub:'Report to your institution with documents', status:'pending', icon:'🎓' },
+  { id:'helb', label:'Apply for HELB Loan', sub:'Student loan application at helb.co.ke', status:'pending', icon:'💰' },
+];
+
+function renderTrackerSteps() {
+  var el = document.getElementById('trackerSteps');
+  if (!el) return;
+  var saved = JSON.parse(localStorage.getItem('bp_tracker_step') || '{}');
+  var html = trackerStepsData.map(function(s,i) {
+    var userStatus = saved[s.id] || s.status;
+    var dotClass = userStatus==='done' ? 'tdot-done' : userStatus==='active' ? 'tdot-active' : 'tdot-pending';
+    var icon = userStatus==='done' ? '✅' : userStatus==='active' ? '⏳' : '○';
+    var labelColor = userStatus==='done' ? 'var(--lime)' : userStatus==='active' ? 'var(--white)' : 'var(--white3)';
+    return '<div class="tracker-step">'
+      +'<div class="tracker-dot '+dotClass+'">'+icon+'</div>'
+      +'<div style="flex:1;">'
+        +'<div style="font-size:13px;font-weight:700;color:'+labelColor+';margin-bottom:2px;">'+s.label+'</div>'
+        +'<div style="font-size:11px;color:var(--white3);">'+s.sub+'</div>'
+      +'</div>'
+      +(userStatus!=='done'?'<button onclick="markTrackerDone(\''+s.id+'\')" style="padding:4px 10px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);color:var(--lime);border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;">Mark done</button>':'')
+    +'</div>';
+  }).join('');
+  el.innerHTML = html;
+}
+
+function markTrackerDone(id) {
+  var saved = JSON.parse(localStorage.getItem('bp_tracker_step') || '{}');
+  saved[id] = 'done';
+  localStorage.setItem('bp_tracker_step', JSON.stringify(saved));
+  renderTrackerSteps();
+  toast('✅ Step marked as done!');
+}
+
+function checkTrackerStatus() {
+  var idx = (document.getElementById('trackerIndexNo').value || '').trim();
+  var res = document.getElementById('trackerResult');
+  if (!idx) { res.innerHTML = '<span style="color:var(--coral);">Please enter your KCSE index number.</span>'; return; }
+  res.innerHTML = '<span style="color:var(--white3);">To check live status, visit <a href="https://students.kuccps.net" target="_blank" style="color:var(--lime);">students.kuccps.net</a> and enter index number: <strong style="color:var(--white);">'+idx+'</strong></span>';
+}
+
+/* Called when tracker overlay opens */
+var _trackerInit = false;
+var origOpenOverlay = window.openOverlay;
+window.openOverlay = function(id) {
+  if (origOpenOverlay) origOpenOverlay(id);
+  if (id === 'trackerOverlay') {
+    setTimeout(renderTrackerSteps, 100);
+  }
+  if (id === 'profileOverlay') {
+    setTimeout(loadSavedProfile, 100);
+  }
+};
+
+/* ─── STUDENT PROFILE ─── */
+var _selectedProfGrade = '';
+
+function profPickGrade(btn, g) {
+  document.querySelectorAll('.prof-g').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  _selectedProfGrade = g;
+}
+
+function saveProfile() {
+  var name  = (document.getElementById('profName').value || '').trim();
+  var grade = _selectedProfGrade;
+  var eng   = document.getElementById('profEng').value;
+  var math  = document.getElementById('profMath').value;
+  var bio   = document.getElementById('profBio').value;
+  var chem  = document.getElementById('profChem').value;
+  var phy   = document.getElementById('profPhy').value;
+  var year  = document.getElementById('profYear').value;
+  var msg   = document.getElementById('profMsg');
+  if (!name) { msg.innerHTML = '<span style="color:var(--coral);">Please enter your name.</span>'; return; }
+  if (!grade) { msg.innerHTML = '<span style="color:var(--coral);">Please select your mean grade.</span>'; return; }
+  var profile = { name:name, grade:grade, eng:eng, math:math, bio:bio, chem:chem, phy:phy, year:year, saved: new Date().toLocaleDateString('en-KE') };
+  localStorage.setItem('bp_student_profile', JSON.stringify(profile));
+  msg.innerHTML = '<span style="color:var(--lime);">✅ Profile saved successfully!</span>';
+  loadSavedProfile();
+  toast('💾 Profile saved, '+name+'!');
+}
+
+function loadSavedProfile() {
+  var raw = localStorage.getItem('bp_student_profile');
+  var display = document.getElementById('savedProfileDisplay');
+  var content = document.getElementById('savedProfileContent');
+  if (!raw || !display || !content) return;
+  var p = JSON.parse(raw);
+  display.style.display = 'block';
+  content.innerHTML = 
+    '<strong style="color:var(--white);">'+p.name+'</strong>'
+    + (p.year ? ' &bull; Class of '+p.year : '')
+    + '<br>Mean Grade: <strong style="color:var(--lime);">'+p.grade+'</strong>'
+    + (p.eng  ? ' &bull; Eng: '+p.eng : '')
+    + (p.math ? ' &bull; Maths: '+p.math : '')
+    + (p.bio && p.bio!=='N/A' ? ' &bull; Bio: '+p.bio : '')
+    + (p.chem && p.chem!=='N/A' ? ' &bull; Chem: '+p.chem : '')
+    + (p.phy && p.phy!=='N/A' ? ' &bull; Phy: '+p.phy : '')
+    + '<br><span style="font-size:11px;color:var(--white3);">Saved '+p.saved+'</span>';
+  // pre-fill form
+  if (document.getElementById('profName')) document.getElementById('profName').value = p.name || '';
+  if (p.grade) {
+    _selectedProfGrade = p.grade;
+    document.querySelectorAll('.prof-g').forEach(function(b){
+      if (b.textContent.replace('−','-').trim() === p.grade) b.classList.add('active');
+    });
+  }
+  if (p.eng  && document.getElementById('profEng'))  document.getElementById('profEng').value  = p.eng;
+  if (p.math && document.getElementById('profMath')) document.getElementById('profMath').value = p.math;
+  if (p.bio  && document.getElementById('profBio'))  document.getElementById('profBio').value  = p.bio;
+  if (p.chem && document.getElementById('profChem')) document.getElementById('profChem').value = p.chem;
+  if (p.phy  && document.getElementById('profPhy'))  document.getElementById('profPhy').value  = p.phy;
+  if (p.year && document.getElementById('profYear')) document.getElementById('profYear').value = p.year;
+}
+
+function getSavedGrade() {
+  var raw = localStorage.getItem('bp_student_profile');
+  if (!raw) return 'B';
+  return JSON.parse(raw).grade || 'B';
+}
+
+function clearProfile() {
+  if (!confirm('Clear your saved profile?')) return;
+  localStorage.removeItem('bp_student_profile');
+  var display = document.getElementById('savedProfileDisplay');
+  if (display) display.style.display = 'none';
+  var msg = document.getElementById('profMsg');
+  if (msg) msg.innerHTML = '<span style="color:var(--white3);">Profile cleared.</span>';
+  _selectedProfGrade = '';
+  document.querySelectorAll('.prof-g').forEach(function(b){ b.classList.remove('active'); });
+  toast('🗑 Profile cleared');
+}
+
+/* ─── HERO: show "load saved profile" hint if profile exists ─── */
+(function() {
+  var raw = localStorage.getItem('bp_student_profile');
+  if (!raw) return;
+  var p = JSON.parse(raw);
+  // Show a subtle hint button under the grade picker
+  setTimeout(function(){
+    var picker = document.getElementById('heroGradePicker');
+    if (!picker) return;
+    if (document.getElementById('heroProfileHint')) return;
+    var hint = document.createElement('div');
+    hint.id = 'heroProfileHint';
+    hint.style.cssText = 'margin-top:8px;font-size:12px;color:var(--white3);text-align:center;';
+    hint.innerHTML = '👤 Saved profile found for <strong style="color:var(--lime);">'+p.name+'</strong> — '
+      +'<button onclick="heroAutoPath(\''+p.grade+'\');this.parentElement.remove()" style="background:none;border:none;color:var(--lime);cursor:pointer;font-size:12px;font-family:inherit;font-weight:700;padding:0;">Use my grade ('+p.grade+') →</button>';
+    picker.parentElement.insertBefore(hint, picker.nextSibling);
+  }, 600);
+})();
+</script>
 
 </body>
 </html>
