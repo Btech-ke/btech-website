@@ -1287,6 +1287,140 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
 <div class="hr"></div>
 
+}
+</style>
+
+<!-- ══════════════════════════════════════════════════════════
+     VISIBLE ONBOARDING WIZARD — prominent section on the page
+══════════════════════════════════════════════════════════ -->
+<section id="wizardSection" style="padding:0 20px 48px;max-width:680px;margin:0 auto;">
+  <div style="background:linear-gradient(135deg,#14141f 0%,#0e1a12 100%);border:1px solid rgba(200,241,53,0.2);border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.5);">
+
+    <!-- Header -->
+    <div style="padding:28px 28px 0;text-align:center;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);padding:5px 16px;border-radius:100px;font-size:11px;font-weight:800;color:var(--lime);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">
+        <span style="width:6px;height:6px;background:var(--lime);border-radius:50%;animation:blink 2s infinite;"></span>
+        Step-by-Step Guide
+      </div>
+      <h2 style="font-family:'Fraunces',serif;font-size:clamp(22px,4vw,32px);font-weight:700;color:var(--white);letter-spacing:-0.8px;margin-bottom:8px;">Find Your Campus Path in <em style="color:var(--lime);">4 Steps</em></h2>
+      <p style="font-size:13px;color:var(--white3);line-height:1.6;max-width:420px;margin:0 auto 24px;">Answer 4 quick questions — we'll show you exactly which courses, colleges and portals match YOU.</p>
+    </div>
+
+    <!-- Step indicators -->
+    <div style="display:flex;justify-content:center;gap:0;padding:0 28px;margin-bottom:0;" id="wiz-indicators">
+      <div class="wiz-ind active" id="wiz-ind-1">
+        <div class="wiz-ind-circle">1</div>
+        <div class="wiz-ind-label">Who are you?</div>
+      </div>
+      <div class="wiz-ind-line" id="wiz-line-1"></div>
+      <div class="wiz-ind" id="wiz-ind-2">
+        <div class="wiz-ind-circle">2</div>
+        <div class="wiz-ind-label">Your grade</div>
+      </div>
+      <div class="wiz-ind-line" id="wiz-line-2"></div>
+      <div class="wiz-ind" id="wiz-ind-3">
+        <div class="wiz-ind-circle">3</div>
+        <div class="wiz-ind-label">Your interest</div>
+      </div>
+      <div class="wiz-ind-line" id="wiz-line-3"></div>
+      <div class="wiz-ind" id="wiz-ind-4">
+        <div class="wiz-ind-circle">4</div>
+        <div class="wiz-ind-label">Your path</div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="height:3px;background:rgba(255,255,255,0.06);margin:16px 0 0;">
+      <div id="wiz-progress" style="height:100%;background:linear-gradient(90deg,var(--lime),var(--teal));width:25%;transition:width 0.4s ease;border-radius:0 2px 2px 0;"></div>
+    </div>
+
+    <!-- ── STEP 1: Who are you ── -->
+    <div id="wizS1" style="padding:24px 28px 28px;">
+      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:16px;">Who are you right now?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="wiz-choice" onclick="wizStep(2,'form4leaver')">
+          <div class="wiz-choice-icon" style="background:rgba(200,241,53,0.12);color:var(--lime);">🎓</div>
+          <div><div class="wiz-choice-title">Form 4 Leaver — I have my KCSE results <span style="background:var(--lime);color:var(--ink);font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:0.5px;vertical-align:middle;margin-left:4px;">MOST COMMON</span></div><div class="wiz-choice-sub">Ready to apply for university, KMTC or TVET</div></div>
+        </button>
+        <button class="wiz-choice" onclick="wizStep(2,'waiting')">
+          <div class="wiz-choice-icon" style="background:rgba(0,229,204,0.1);color:var(--teal);">⏳</div>
+          <div><div class="wiz-choice-title">Still waiting for KCSE results</div><div class="wiz-choice-sub">Just sat exams or results not out yet</div></div>
+        </button>
+        <button class="wiz-choice" onclick="wizStep(2,'parent')">
+          <div class="wiz-choice-icon" style="background:rgba(167,139,250,0.1);color:var(--violet);">👨‍👩‍👧</div>
+          <div><div class="wiz-choice-title">Parent / Guardian</div><div class="wiz-choice-sub">Researching options for my child</div></div>
+        </button>
+        <button class="wiz-choice" onclick="wizStep(4,'incollege')">
+          <div class="wiz-choice-icon" style="background:rgba(255,107,82,0.1);color:var(--coral);">🏛️</div>
+          <div><div class="wiz-choice-title">Already in college / university</div><div class="wiz-choice-sub">Need HELB, transfer or upgrade info</div></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Grade ── -->
+    <div id="wizS2" style="display:none;padding:24px 28px 28px;">
+      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;">What is your mean grade?</div>
+      <p style="font-size:12px;color:var(--white3);margin-bottom:18px;">Every grade has great options — be honest for the best guidance.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;">
+        <button class="wiz-grade-btn" onclick="wizGrade('A')">A</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('A-')">A−</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('B+')">B+</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('B')">B</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('B-')">B−</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('C+')">C+</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('C')">C</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('C-')">C−</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('D+')">D+</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('D')">D</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('D-')">D−</button>
+        <button class="wiz-grade-btn" onclick="wizGrade('E')" style="color:var(--violet);border-color:rgba(167,139,250,0.3);">E</button>
+      </div>
+      <button onclick="wizStep(1,null)" class="wiz-back-btn">← Back</button>
+    </div>
+
+    <!-- ── STEP 3: Field ── -->
+    <div id="wizS3" style="display:none;padding:24px 28px 28px;">
+      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;">What field interests you?</div>
+      <p style="font-size:12px;color:var(--white3);margin-bottom:18px;">Pick the area you're most drawn to — you can always explore others later.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <button class="wiz-field-btn" onclick="wizField('health')">🏥 Health &amp; Medicine</button>
+        <button class="wiz-field-btn" onclick="wizField('engineering')">⚙️ Engineering &amp; Tech</button>
+        <button class="wiz-field-btn" onclick="wizField('business')">💼 Business &amp; Law</button>
+        <button class="wiz-field-btn" onclick="wizField('education')">📚 Education</button>
+        <button class="wiz-field-btn" onclick="wizField('computing')">💻 IT &amp; Computing</button>
+        <button class="wiz-field-btn" onclick="wizField('agriculture')">🌱 Agriculture</button>
+        <button class="wiz-field-btn" onclick="wizField('tvet')">🔧 TVET / Vocational</button>
+        <button class="wiz-field-btn" onclick="wizField('any')" style="border-style:dashed;">🤔 Not sure yet</button>
+      </div>
+      <button onclick="wizStep(2,null)" class="wiz-back-btn">← Back</button>
+    </div>
+
+    <!-- ── STEP 4: Result ── -->
+    <div id="wizS4" style="display:none;padding:24px 28px 28px;">
+      <div style="font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:2px;font-weight:800;margin-bottom:8px;">✅ Your Personalised Path</div>
+      <div id="wizResult" style="margin-bottom:16px;"></div>
+      <div id="wizActions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
+      <!-- WhatsApp always shown -->
+      <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:12px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:800;color:#25d366;margin-bottom:8px;">📲 Get live help &amp; deadline alerts</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            KUCCPS WhatsApp Group
+          </a>
+          <a href="https://whatsapp.com/channel/0029VatbxUcBqbr60SU2I000" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.3);color:var(--lime);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">
+            📢 BTECHPLUS Channel
+          </a>
+        </div>
+      </div>
+      <button onclick="wizReset()" class="wiz-back-btn">↺ Start Over</button>
+    </div>
+
+  </div>
+</section>
+
+
+
 <!-- ╔═ MAIN APP HOME ═╗ -->
 <section id="tools" class="section" style="padding-top:40px;padding-bottom:40px;">
 
@@ -1573,11 +1707,37 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
         </div>
         <div class="fld" style="grid-column:1/-1;">
           <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">3rd Best Subject</label>
-          <select id="m3s" onchange="syncHiddenGrades()" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"><option value="">-- Select subject &amp; grade --</option><option value="12">Biology &mdash; A</option><option value="11">Biology &mdash; A−</option><option value="10">Biology &mdash; B+</option><option value="9">Biology &mdash; B</option><option value="8">Biology &mdash; B−</option><option value="7">Biology &mdash; C+</option><option value="6">Biology &mdash; C</option><option value="5">Biology &mdash; C−</option><option value="4">Biology &mdash; D+</option><option value="3">Biology &mdash; D</option><option value="2">Biology &mdash; D−</option><option value="12">Chemistry &mdash; A</option><option value="11">Chemistry &mdash; A−</option><option value="10">Chemistry &mdash; B+</option><option value="9">Chemistry &mdash; B</option><option value="8">Chemistry &mdash; B−</option><option value="7">Chemistry &mdash; C+</option><option value="6">Chemistry &mdash; C</option><option value="5">Chemistry &mdash; C−</option><option value="4">Chemistry &mdash; D+</option><option value="3">Chemistry &mdash; D</option><option value="2">Chemistry &mdash; D−</option><option value="12">Physics &mdash; A</option><option value="11">Physics &mdash; A−</option><option value="10">Physics &mdash; B+</option><option value="9">Physics &mdash; B</option><option value="8">Physics &mdash; B−</option><option value="7">Physics &mdash; C+</option><option value="6">Physics &mdash; C</option><option value="5">Physics &mdash; C−</option><option value="4">Physics &mdash; D+</option><option value="3">Physics &mdash; D</option><option value="2">Physics &mdash; D−</option><option value="12">Geography &mdash; A</option><option value="11">Geography &mdash; A−</option><option value="10">Geography &mdash; B+</option><option value="9">Geography &mdash; B</option><option value="8">Geography &mdash; B−</option><option value="7">Geography &mdash; C+</option><option value="6">Geography &mdash; C</option><option value="5">Geography &mdash; C−</option><option value="4">Geography &mdash; D+</option><option value="3">Geography &mdash; D</option><option value="2">Geography &mdash; D−</option><option value="12">History & Govt &mdash; A</option><option value="11">History & Govt &mdash; A−</option><option value="10">History & Govt &mdash; B+</option><option value="9">History & Govt &mdash; B</option><option value="8">History & Govt &mdash; B−</option><option value="7">History & Govt &mdash; C+</option><option value="6">History & Govt &mdash; C</option><option value="5">History & Govt &mdash; C−</option><option value="4">History & Govt &mdash; D+</option><option value="3">History & Govt &mdash; D</option><option value="2">History & Govt &mdash; D−</option><option value="12">Business Studies &mdash; A</option><option value="11">Business Studies &mdash; A−</option><option value="10">Business Studies &mdash; B+</option><option value="9">Business Studies &mdash; B</option><option value="8">Business Studies &mdash; B−</option><option value="7">Business Studies &mdash; C+</option><option value="6">Business Studies &mdash; C</option><option value="5">Business Studies &mdash; C−</option><option value="4">Business Studies &mdash; D+</option><option value="3">Business Studies &mdash; D</option><option value="2">Business Studies &mdash; D−</option><option value="12">Agriculture &mdash; A</option><option value="11">Agriculture &mdash; A−</option><option value="10">Agriculture &mdash; B+</option><option value="9">Agriculture &mdash; B</option><option value="8">Agriculture &mdash; B−</option><option value="7">Agriculture &mdash; C+</option><option value="6">Agriculture &mdash; C</option><option value="5">Agriculture &mdash; C−</option><option value="4">Agriculture &mdash; D+</option><option value="3">Agriculture &mdash; D</option><option value="2">Agriculture &mdash; D−</option><option value="12">CRE / IRE / HRE &mdash; A</option><option value="11">CRE / IRE / HRE &mdash; A−</option><option value="10">CRE / IRE / HRE &mdash; B+</option><option value="9">CRE / IRE / HRE &mdash; B</option><option value="8">CRE / IRE / HRE &mdash; B−</option><option value="7">CRE / IRE / HRE &mdash; C+</option><option value="6">CRE / IRE / HRE &mdash; C</option><option value="5">CRE / IRE / HRE &mdash; C−</option><option value="4">CRE / IRE / HRE &mdash; D+</option><option value="3">CRE / IRE / HRE &mdash; D</option><option value="2">CRE / IRE / HRE &mdash; D−</option><option value="12">Home Science &mdash; A</option><option value="11">Home Science &mdash; A−</option><option value="10">Home Science &mdash; B+</option><option value="9">Home Science &mdash; B</option><option value="8">Home Science &mdash; B−</option><option value="7">Home Science &mdash; C+</option><option value="6">Home Science &mdash; C</option><option value="5">Home Science &mdash; C−</option><option value="4">Home Science &mdash; D+</option><option value="3">Home Science &mdash; D</option><option value="2">Home Science &mdash; D−</option><option value="12">Art & Design &mdash; A</option><option value="11">Art & Design &mdash; A−</option><option value="10">Art & Design &mdash; B+</option><option value="9">Art & Design &mdash; B</option><option value="8">Art & Design &mdash; B−</option><option value="7">Art & Design &mdash; C+</option><option value="6">Art & Design &mdash; C</option><option value="5">Art & Design &mdash; C−</option><option value="4">Art & Design &mdash; D+</option><option value="3">Art & Design &mdash; D</option><option value="2">Art & Design &mdash; D−</option><option value="12">Music &mdash; A</option><option value="11">Music &mdash; A−</option><option value="10">Music &mdash; B+</option><option value="9">Music &mdash; B</option><option value="8">Music &mdash; B−</option><option value="7">Music &mdash; C+</option><option value="6">Music &mdash; C</option><option value="5">Music &mdash; C−</option><option value="4">Music &mdash; D+</option><option value="3">Music &mdash; D</option><option value="2">Music &mdash; D−</option><option value="12">Computer Studies &mdash; A</option><option value="11">Computer Studies &mdash; A−</option><option value="10">Computer Studies &mdash; B+</option><option value="9">Computer Studies &mdash; B</option><option value="8">Computer Studies &mdash; B−</option><option value="7">Computer Studies &mdash; C+</option><option value="6">Computer Studies &mdash; C</option><option value="5">Computer Studies &mdash; C−</option><option value="4">Computer Studies &mdash; D+</option><option value="3">Computer Studies &mdash; D</option><option value="2">Computer Studies &mdash; D−</option><option value="12">French &mdash; A</option><option value="11">French &mdash; A−</option><option value="10">French &mdash; B+</option><option value="9">French &mdash; B</option><option value="8">French &mdash; B−</option><option value="7">French &mdash; C+</option><option value="6">French &mdash; C</option><option value="5">French &mdash; C−</option><option value="4">French &mdash; D+</option><option value="3">French &mdash; D</option><option value="2">French &mdash; D−</option><option value="12">German &mdash; A</option><option value="11">German &mdash; A−</option><option value="10">German &mdash; B+</option><option value="9">German &mdash; B</option><option value="8">German &mdash; B−</option><option value="7">German &mdash; C+</option><option value="6">German &mdash; C</option><option value="5">German &mdash; C−</option><option value="4">German &mdash; D+</option><option value="3">German &mdash; D</option><option value="2">German &mdash; D−</option><option value="12">Arabic &mdash; A</option><option value="11">Arabic &mdash; A−</option><option value="10">Arabic &mdash; B+</option><option value="9">Arabic &mdash; B</option><option value="8">Arabic &mdash; B−</option><option value="7">Arabic &mdash; C+</option><option value="6">Arabic &mdash; C</option><option value="5">Arabic &mdash; C−</option><option value="4">Arabic &mdash; D+</option><option value="3">Arabic &mdash; D</option><option value="2">Arabic &mdash; D−</option></select>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">
+            <select id="m3sub" onchange="syncHiddenGrades()" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <option value="">-- Select Subject --</option>
+              <option>Biology</option><option>Chemistry</option><option>Physics</option><option>Geography</option>
+              <option>History &amp; Govt</option><option>Business Studies</option><option>Agriculture</option>
+              <option>CRE / IRE / HRE</option><option>Home Science</option><option>Art &amp; Design</option>
+              <option>Music</option><option>Computer Studies</option><option>French</option><option>German</option><option>Arabic</option>
+            </select>
+            <select id="m3g" onchange="syncHiddenGrades()" style="width:90px;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option>
+              <option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option>
+              <option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+            </select>
+          </div>
         </div>
         <div class="fld" style="grid-column:1/-1;">
           <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">4th Best Subject</label>
-          <select id="m4s" onchange="syncHiddenGrades()" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;"><option value="">-- Select subject &amp; grade --</option><option value="12">Biology &mdash; A</option><option value="11">Biology &mdash; A−</option><option value="10">Biology &mdash; B+</option><option value="9">Biology &mdash; B</option><option value="8">Biology &mdash; B−</option><option value="7">Biology &mdash; C+</option><option value="6">Biology &mdash; C</option><option value="5">Biology &mdash; C−</option><option value="4">Biology &mdash; D+</option><option value="3">Biology &mdash; D</option><option value="2">Biology &mdash; D−</option><option value="12">Chemistry &mdash; A</option><option value="11">Chemistry &mdash; A−</option><option value="10">Chemistry &mdash; B+</option><option value="9">Chemistry &mdash; B</option><option value="8">Chemistry &mdash; B−</option><option value="7">Chemistry &mdash; C+</option><option value="6">Chemistry &mdash; C</option><option value="5">Chemistry &mdash; C−</option><option value="4">Chemistry &mdash; D+</option><option value="3">Chemistry &mdash; D</option><option value="2">Chemistry &mdash; D−</option><option value="12">Physics &mdash; A</option><option value="11">Physics &mdash; A−</option><option value="10">Physics &mdash; B+</option><option value="9">Physics &mdash; B</option><option value="8">Physics &mdash; B−</option><option value="7">Physics &mdash; C+</option><option value="6">Physics &mdash; C</option><option value="5">Physics &mdash; C−</option><option value="4">Physics &mdash; D+</option><option value="3">Physics &mdash; D</option><option value="2">Physics &mdash; D−</option><option value="12">Geography &mdash; A</option><option value="11">Geography &mdash; A−</option><option value="10">Geography &mdash; B+</option><option value="9">Geography &mdash; B</option><option value="8">Geography &mdash; B−</option><option value="7">Geography &mdash; C+</option><option value="6">Geography &mdash; C</option><option value="5">Geography &mdash; C−</option><option value="4">Geography &mdash; D+</option><option value="3">Geography &mdash; D</option><option value="2">Geography &mdash; D−</option><option value="12">History & Govt &mdash; A</option><option value="11">History & Govt &mdash; A−</option><option value="10">History & Govt &mdash; B+</option><option value="9">History & Govt &mdash; B</option><option value="8">History & Govt &mdash; B−</option><option value="7">History & Govt &mdash; C+</option><option value="6">History & Govt &mdash; C</option><option value="5">History & Govt &mdash; C−</option><option value="4">History & Govt &mdash; D+</option><option value="3">History & Govt &mdash; D</option><option value="2">History & Govt &mdash; D−</option><option value="12">Business Studies &mdash; A</option><option value="11">Business Studies &mdash; A−</option><option value="10">Business Studies &mdash; B+</option><option value="9">Business Studies &mdash; B</option><option value="8">Business Studies &mdash; B−</option><option value="7">Business Studies &mdash; C+</option><option value="6">Business Studies &mdash; C</option><option value="5">Business Studies &mdash; C−</option><option value="4">Business Studies &mdash; D+</option><option value="3">Business Studies &mdash; D</option><option value="2">Business Studies &mdash; D−</option><option value="12">Agriculture &mdash; A</option><option value="11">Agriculture &mdash; A−</option><option value="10">Agriculture &mdash; B+</option><option value="9">Agriculture &mdash; B</option><option value="8">Agriculture &mdash; B−</option><option value="7">Agriculture &mdash; C+</option><option value="6">Agriculture &mdash; C</option><option value="5">Agriculture &mdash; C−</option><option value="4">Agriculture &mdash; D+</option><option value="3">Agriculture &mdash; D</option><option value="2">Agriculture &mdash; D−</option><option value="12">CRE / IRE / HRE &mdash; A</option><option value="11">CRE / IRE / HRE &mdash; A−</option><option value="10">CRE / IRE / HRE &mdash; B+</option><option value="9">CRE / IRE / HRE &mdash; B</option><option value="8">CRE / IRE / HRE &mdash; B−</option><option value="7">CRE / IRE / HRE &mdash; C+</option><option value="6">CRE / IRE / HRE &mdash; C</option><option value="5">CRE / IRE / HRE &mdash; C−</option><option value="4">CRE / IRE / HRE &mdash; D+</option><option value="3">CRE / IRE / HRE &mdash; D</option><option value="2">CRE / IRE / HRE &mdash; D−</option><option value="12">Home Science &mdash; A</option><option value="11">Home Science &mdash; A−</option><option value="10">Home Science &mdash; B+</option><option value="9">Home Science &mdash; B</option><option value="8">Home Science &mdash; B−</option><option value="7">Home Science &mdash; C+</option><option value="6">Home Science &mdash; C</option><option value="5">Home Science &mdash; C−</option><option value="4">Home Science &mdash; D+</option><option value="3">Home Science &mdash; D</option><option value="2">Home Science &mdash; D−</option><option value="12">Art & Design &mdash; A</option><option value="11">Art & Design &mdash; A−</option><option value="10">Art & Design &mdash; B+</option><option value="9">Art & Design &mdash; B</option><option value="8">Art & Design &mdash; B−</option><option value="7">Art & Design &mdash; C+</option><option value="6">Art & Design &mdash; C</option><option value="5">Art & Design &mdash; C−</option><option value="4">Art & Design &mdash; D+</option><option value="3">Art & Design &mdash; D</option><option value="2">Art & Design &mdash; D−</option><option value="12">Music &mdash; A</option><option value="11">Music &mdash; A−</option><option value="10">Music &mdash; B+</option><option value="9">Music &mdash; B</option><option value="8">Music &mdash; B−</option><option value="7">Music &mdash; C+</option><option value="6">Music &mdash; C</option><option value="5">Music &mdash; C−</option><option value="4">Music &mdash; D+</option><option value="3">Music &mdash; D</option><option value="2">Music &mdash; D−</option><option value="12">Computer Studies &mdash; A</option><option value="11">Computer Studies &mdash; A−</option><option value="10">Computer Studies &mdash; B+</option><option value="9">Computer Studies &mdash; B</option><option value="8">Computer Studies &mdash; B−</option><option value="7">Computer Studies &mdash; C+</option><option value="6">Computer Studies &mdash; C</option><option value="5">Computer Studies &mdash; C−</option><option value="4">Computer Studies &mdash; D+</option><option value="3">Computer Studies &mdash; D</option><option value="2">Computer Studies &mdash; D−</option><option value="12">French &mdash; A</option><option value="11">French &mdash; A−</option><option value="10">French &mdash; B+</option><option value="9">French &mdash; B</option><option value="8">French &mdash; B−</option><option value="7">French &mdash; C+</option><option value="6">French &mdash; C</option><option value="5">French &mdash; C−</option><option value="4">French &mdash; D+</option><option value="3">French &mdash; D</option><option value="2">French &mdash; D−</option><option value="12">German &mdash; A</option><option value="11">German &mdash; A−</option><option value="10">German &mdash; B+</option><option value="9">German &mdash; B</option><option value="8">German &mdash; B−</option><option value="7">German &mdash; C+</option><option value="6">German &mdash; C</option><option value="5">German &mdash; C−</option><option value="4">German &mdash; D+</option><option value="3">German &mdash; D</option><option value="2">German &mdash; D−</option><option value="12">Arabic &mdash; A</option><option value="11">Arabic &mdash; A−</option><option value="10">Arabic &mdash; B+</option><option value="9">Arabic &mdash; B</option><option value="8">Arabic &mdash; B−</option><option value="7">Arabic &mdash; C+</option><option value="6">Arabic &mdash; C</option><option value="5">Arabic &mdash; C−</option><option value="4">Arabic &mdash; D+</option><option value="3">Arabic &mdash; D</option><option value="2">Arabic &mdash; D−</option></select>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">
+            <select id="m4sub" onchange="syncHiddenGrades()" style="width:100%;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <option value="">-- Select Subject --</option>
+              <option>Biology</option><option>Chemistry</option><option>Physics</option><option>Geography</option>
+              <option>History &amp; Govt</option><option>Business Studies</option><option>Agriculture</option>
+              <option>CRE / IRE / HRE</option><option>Home Science</option><option>Art &amp; Design</option>
+              <option>Music</option><option>Computer Studies</option><option>French</option><option>German</option><option>Arabic</option>
+            </select>
+            <select id="m4g" onchange="syncHiddenGrades()" style="width:90px;padding:10px 12px;background:var(--ink3);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;outline:none;">
+              <option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option>
+              <option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option>
+              <option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+            </select>
+          </div>
         </div>
       </div>
       <input type="hidden" id="m3" value="12">
@@ -4461,23 +4621,15 @@ function heroAutoPath(grade) {
 }
 
 
-function updateM34Label() {
-  var s3 = document.getElementById('m3s');
-  var s4 = document.getElementById('m4s');
-  var h3 = document.getElementById('m3');
-  var h4 = document.getElementById('m4');
-  if(s3 && h3 && s3.value) h3.value = s3.value.split('_')[0] || '12';
-  if(s4 && h4 && s4.value) h4.value = s4.value.split('_')[0] || '12';
-}
-
+function updateM34Label() { syncHiddenGrades(); }
 
 function syncHiddenGrades() {
-  var s3 = document.getElementById('m3s');
-  var s4 = document.getElementById('m4s');
-  var h3 = document.getElementById('m3');
-  var h4 = document.getElementById('m4');
-  if (s3 && h3 && s3.value) h3.value = s3.value.split('_')[0] || '12';
-  if (s4 && h4 && s4.value) h4.value = s4.value.split('_')[0] || '12';
+  var m3g = document.getElementById('m3g');
+  var m4g = document.getElementById('m4g');
+  var h3  = document.getElementById('m3');
+  var h4  = document.getElementById('m4');
+  if (m3g && h3) h3.value = m3g.value || '12';
+  if (m4g && h4) h4.value = m4g.value || '12';
 }
 window.addEventListener('DOMContentLoaded', function() {
   checkAuthState();
@@ -5471,139 +5623,363 @@ body.has-ticker { padding-bottom:44px; }
 @media(max-width:500px){
   #wiz1,#wiz2,#wiz3,#wiz4{padding:20px 14px 18px !important;}
   .wiz-g{font-size:14px !important;padding:10px 4px !important;}
+<style>
+/* ── Wizard Step Indicators ── */
+.wiz-ind { display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto; }
+.wiz-ind-circle { width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--white3);transition:all 0.3s; }
+.wiz-ind.active .wiz-ind-circle { background:var(--lime);color:var(--ink);border-color:var(--lime);box-shadow:0 0 12px rgba(200,241,53,0.3); }
+.wiz-ind.done .wiz-ind-circle { background:rgba(200,241,53,0.15);color:var(--lime);border-color:rgba(200,241,53,0.4); }
+.wiz-ind-label { font-size:10px;color:var(--white3);font-weight:600;text-align:center;white-space:nowrap; }
+.wiz-ind.active .wiz-ind-label { color:var(--lime); }
+.wiz-ind.done .wiz-ind-label { color:var(--white3); }
+.wiz-ind-line { flex:1;height:1.5px;background:rgba(255,255,255,0.08);align-self:center;margin:0 4px;margin-bottom:20px;transition:background 0.3s; }
+.wiz-ind-line.done { background:rgba(200,241,53,0.4); }
+
+/* ── Wizard Choice Cards ── */
+.wiz-choice { display:flex;align-items:center;gap:14px;width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.18s; }
+.wiz-choice:hover { background:rgba(200,241,53,0.05);border-color:rgba(200,241,53,0.3);transform:translateX(4px); }
+.wiz-choice-icon { width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0; }
+.wiz-choice-title { font-size:13.5px;font-weight:700;color:var(--white);margin-bottom:2px; }
+.wiz-choice-sub { font-size:11.5px;color:var(--white3); }
+
+/* ── Wizard Grade Buttons ── */
+.wiz-grade-btn { padding:14px 8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-family:'Fraunces',serif;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.15s; }
+.wiz-grade-btn:hover,.wiz-grade-btn.selected { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime);transform:scale(1.05); }
+
+/* ── Wizard Field Buttons ── */
+.wiz-field-btn { padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center; }
+.wiz-field-btn:hover { background:rgba(200,241,53,0.07);border-color:rgba(200,241,53,0.3);color:var(--white); }
+
+/* ── Wizard Action Buttons ── */
+.wiz-action-btn { display:flex;align-items:center;gap:12px;width:100%;background:var(--ink3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:13px 16px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.18s;text-decoration:none;color:inherit; }
+.wiz-action-btn:hover { border-color:var(--lime);background:rgba(200,241,53,0.05); }
+.wiz-action-btn.primary { background:var(--lime);color:var(--ink);border-color:var(--lime); }
+.wiz-action-btn.primary:hover { background:#d4f840; }
+
+/* ── Back button ── */
+.wiz-back-btn { background:none;border:none;color:var(--white3);cursor:pointer;font-size:13px;font-family:inherit;padding:4px 0;transition:color 0.15s; }
+.wiz-back-btn:hover { color:var(--white2); }
+
+@media(max-width:500px){
+  #wizardSection { padding:0 12px 36px; }
+  .wiz-ind-label { display:none; }
+  .wiz-grade-btn { font-size:15px;padding:12px 4px; }
+  .wiz-choice { padding:12px 14px;gap:12px; }
+  .wiz-choice-title { font-size:13px; }
 }
 </style>
 
 <!-- ══════════════════════════ NEW FEATURES JS ══════════════════════════ -->
 <script>
-/* ─── KUCCPS TRACKER ─── */
+/* ══════════════════════════════════════════════════════
+   VISIBLE WIZARD LOGIC
+══════════════════════════════════════════════════════ */
+var _wizData = { status:'', grade:'', field:'' };
+
+function wizStep(stepNum, status) {
+  // Hide all steps
+  [1,2,3,4].forEach(function(n){ document.getElementById('wizS'+n).style.display='none'; });
+  // Show target step
+  var el = document.getElementById('wizS'+stepNum);
+  if(el) { el.style.display='block'; el.style.animation='bpSlideUp 0.25s ease'; }
+  // Store status if given
+  if(status) _wizData.status = status;
+  // Update progress bar
+  var pct = {1:25,2:50,3:75,4:100}[stepNum]||25;
+  var pb = document.getElementById('wiz-progress');
+  if(pb) pb.style.width = pct+'%';
+  // Update step indicators
+  [1,2,3,4].forEach(function(n){
+    var ind = document.getElementById('wiz-ind-'+n);
+    var line = document.getElementById('wiz-line-'+n);
+    if(!ind) return;
+    ind.classList.remove('active','done');
+    if(n < stepNum) ind.classList.add('done');
+    else if(n === stepNum) ind.classList.add('active');
+    if(line) line.classList.toggle('done', n < stepNum);
+  });
+}
+
+function wizGrade(g) {
+  _wizData.grade = g;
+  // Highlight selected grade
+  document.querySelectorAll('.wiz-grade-btn').forEach(function(b){
+    b.classList.toggle('selected', b.textContent.replace('−','-').trim()===g);
+  });
+  setTimeout(function(){ wizStep(3,null); }, 200);
+}
+
+function wizField(field) {
+  _wizData.field = field;
+  wizStep(4, null);
+  buildWizResult();
+}
+
+function buildWizResult() {
+  var g = _wizData.grade;
+  var f = _wizData.field;
+  var s = _wizData.status;
+
+  var gradeColors = {A:'#00e5cc','A-':'#00e5cc','B+':'#c8f135',B:'#c8f135','B-':'#f59e0b','C+':'#f59e0b',C:'#f59e0b','C-':'#ff6b52','D+':'#ff6b52',D:'#ff6b52','D-':'#a78bfa',E:'#a78bfa'};
+  var col = gradeColors[g] || '#c8f135';
+
+  // Context-aware description
+  var desc = '';
+  if(s === 'waiting') desc = 'While you wait for results, explore what options will open up for you.';
+  else if(s === 'parent') desc = 'Here\'s what your child can pursue based on their grade.';
+  else if(s === 'incollege') desc = 'You can upgrade your qualification, apply for HELB, or transfer.';
+  else desc = 'Based on your grade and interest, here are your best next steps.';
+
+  var fieldLabels = {health:'Health & Medicine',engineering:'Engineering & Tech',business:'Business & Law',education:'Education',computing:'IT & Computing',agriculture:'Agriculture',tvet:'TVET / Vocational',any:'All Fields'};
+  var fLabel = fieldLabels[f] || 'All Fields';
+
+  // Result card
+  var resEl = document.getElementById('wizResult');
+  resEl.innerHTML = '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:0;">'
+    + '<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">'
+    + '<div style="font-size:40px;font-weight:800;color:'+col+';font-family:Fraunces,serif;line-height:1;flex-shrink:0;">'+g+'</div>'
+    + '<div>'
+    + '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;">'+fLabel+'</div>'
+    + '<div style="font-size:12px;color:var(--white3);">'+desc+'</div>'
+    + '</div></div></div>';
+
+  // Action buttons
+  var actions = [];
+
+  // Grade-specific portals
+  if(['A','A-','B+','B','B-','C+'].includes(g)) {
+    actions.push({icon:'🎓',title:'View My Courses',sub:'Browse all programmes for grade '+g,fn:"openOverlay('coursesOverlay')",primary:true});
+    actions.push({icon:'📊',title:'Calculate Cluster Points',sub:'Get your exact score out of 48',fn:"openOverlay('calcOverlay')",primary:false});
+  }
+  if(['B+','B','B-','C+','C','C-'].includes(g)) {
+    actions.push({icon:'🏥',title:'KMTC Admissions',sub:'Check KMTC programmes',url:'https://admissions.kmtc.ac.ke',primary:false});
+  }
+  if(['C-','D+','D','D-','E'].includes(g)) {
+    actions.push({icon:'🔧',title:'View TVET / Artisan Courses',sub:'Programmes available for grade '+g,fn:"openOverlay('coursesOverlay')",primary:true});
+  }
+  actions.push({icon:'📋',title:'KUCCPS Application Tracker',sub:'Track every step of your application',fn:"openOverlay('trackerOverlay')",primary:false});
+  actions.push({icon:'💰',title:'Apply for HELB Loan',sub:'Student loan for eligible students',url:'https://portal.hef.co.ke',primary:false});
+
+  // For parents
+  if(s==='parent') {
+    actions = [
+      {icon:'🎓',title:'See Courses for Grade '+g,sub:'All programmes available',fn:"openOverlay('coursesOverlay')",primary:true},
+      {icon:'📊',title:'Cluster Points Calculator',sub:'Work out exact scores',fn:"openOverlay('calcOverlay')",primary:false},
+      {icon:'💬',title:'Get Direct Help',sub:'Chat with BTECHPLUS team',fn:"openOverlay('supportOverlay')",primary:false}
+    ];
+  }
+  if(s==='incollege') {
+    actions = [
+      {icon:'💰',title:'Apply for HELB Loan',sub:'helb.co.ke — student loans',url:'https://portal.hef.co.ke',primary:true},
+      {icon:'💬',title:'Talk to Our Team',sub:'Transfer, upgrade or top-up help',fn:"openOverlay('supportOverlay')",primary:false}
+    ];
+  }
+
+  var actEl = document.getElementById('wizActions');
+  actEl.innerHTML = actions.map(function(a){
+    var base = 'class="wiz-action-btn'+(a.primary?' primary':'')+'"';
+    var click = a.fn ? 'onclick="'+a.fn+'"' : 'href="'+a.url+'" target="_blank" rel="noopener"';
+    var tag = a.fn ? 'button' : 'a';
+    return '<'+tag+' '+base+' '+click+'>'
+      +'<span style="font-size:20px;flex-shrink:0;">'+a.icon+'</span>'
+      +'<div><div style="font-size:13px;font-weight:700;'+(a.primary?'color:var(--ink)':'color:var(--white)')+';">'+a.title+'</div>'
+      +'<div style="font-size:11px;'+(a.primary?'color:rgba(10,10,15,0.65)':'color:var(--white3)')+';">'+a.sub+'</div></div>'
+      +'<span style="margin-left:auto;font-size:14px;opacity:0.5;">→</span>'
+      +'</'+tag+'>';
+  }).join('');
+}
+
+function wizReset() {
+  _wizData = {status:'',grade:'',field:''};
+  document.querySelectorAll('.wiz-grade-btn').forEach(function(b){ b.classList.remove('selected'); });
+  wizStep(1,null);
+}
+
+/* ══════════════════════════════════════════════════════
+   KUCCPS TRACKER
+══════════════════════════════════════════════════════ */
 var trackerStepsData = [
-  { id:'results', label:'KCSE Results Released', sub:'Check your results on KNEC portal', status:'done', icon:'✅' },
-  { id:'kuccps_open', label:'KUCCPS Portal Opens', sub:'Portal opens for course selection', status:'done', icon:'✅' },
-  { id:'choices', label:'Submit Course Choices', sub:'Enter up to 6 programme choices (in order)', status:'active', icon:'📝' },
-  { id:'revision', label:'Revision Window', sub:'Change choices before deadline if needed', status:'pending', icon:'🔄' },
-  { id:'placement', label:'Placement Results', sub:'Check which programme you've been placed in', status:'pending', icon:'🏫' },
-  { id:'reporting', label:'Reporting & Registration', sub:'Report to your institution with documents', status:'pending', icon:'🎓' },
-  { id:'helb', label:'Apply for HELB Loan', sub:'Student loan application at helb.co.ke', status:'pending', icon:'💰' },
+  {id:'results',    label:'KCSE Results Released',    sub:'Check results on the KNEC portal',            status:'done'},
+  {id:'kuccps_open',label:'KUCCPS Portal Opens',      sub:'Student portal opens for course selection',   status:'done'},
+  {id:'choices',    label:'Submit Course Choices',    sub:'Enter up to 6 programme choices in order',   status:'active'},
+  {id:'revision',   label:'Revision Window',          sub:'Edit your choices before the deadline',       status:'pending'},
+  {id:'placement',  label:'Placement Results',        sub:'See which programme you have been placed in', status:'pending'},
+  {id:'reporting',  label:'Report to Institution',    sub:'Bring documents and register in person',      status:'pending'},
+  {id:'helb',       label:'Apply for HELB Loan',      sub:'Visit portal.hef.co.ke to apply',             status:'pending'},
 ];
 
 function renderTrackerSteps() {
   var el = document.getElementById('trackerSteps');
   if (!el) return;
-  var saved = JSON.parse(localStorage.getItem('bp_tracker_step') || '{}');
-  var html = trackerStepsData.map(function(s,i) {
-    var userStatus = saved[s.id] || s.status;
-    var dotClass = userStatus==='done' ? 'tdot-done' : userStatus==='active' ? 'tdot-active' : 'tdot-pending';
-    var icon = userStatus==='done' ? '✅' : userStatus==='active' ? '⏳' : '○';
-    var labelColor = userStatus==='done' ? 'var(--lime)' : userStatus==='active' ? 'var(--white)' : 'var(--white3)';
+  try { var saved = JSON.parse(localStorage.getItem('bp_tracker_step') || '{}'); }
+  catch(e) { var saved = {}; }
+  var html = trackerStepsData.map(function(s) {
+    var st = saved[s.id] || s.status;
+    var dotCls = st==='done'?'tdot-done':st==='active'?'tdot-active':'tdot-pending';
+    var ico    = st==='done'?'✅':st==='active'?'⏳':'○';
+    var lCol   = st==='done'?'var(--lime)':st==='active'?'var(--white)':'var(--white3)';
+    var markBtn = st!=='done'
+      ? '<button onclick="markTrackerDone(\''+s.id+'\')" style="padding:4px 10px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);color:var(--lime);border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;">Mark done</button>'
+      : '<span style="font-size:11px;color:var(--lime);font-weight:700;flex-shrink:0;">✓ Done</span>';
     return '<div class="tracker-step">'
-      +'<div class="tracker-dot '+dotClass+'">'+icon+'</div>'
-      +'<div style="flex:1;">'
-        +'<div style="font-size:13px;font-weight:700;color:'+labelColor+';margin-bottom:2px;">'+s.label+'</div>'
-        +'<div style="font-size:11px;color:var(--white3);">'+s.sub+'</div>'
+      +'<div class="tracker-dot '+dotCls+'">'+ico+'</div>'
+      +'<div style="flex:1;min-width:0;">'
+        +'<div style="font-size:13px;font-weight:700;color:'+lCol+';margin-bottom:2px;">'+s.label+'</div>'
+        +'<div style="font-size:11px;color:var(--white3);line-height:1.4;">'+s.sub+'</div>'
       +'</div>'
-      +(userStatus!=='done'?'<button onclick="markTrackerDone(\''+s.id+'\')" style="padding:4px 10px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);color:var(--lime);border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;">Mark done</button>':'')
+      +markBtn
     +'</div>';
   }).join('');
   el.innerHTML = html;
 }
 
 function markTrackerDone(id) {
-  var saved = JSON.parse(localStorage.getItem('bp_tracker_step') || '{}');
-  saved[id] = 'done';
-  localStorage.setItem('bp_tracker_step', JSON.stringify(saved));
-  renderTrackerSteps();
-  toast('✅ Step marked as done!');
+  try {
+    var saved = JSON.parse(localStorage.getItem('bp_tracker_step') || '{}');
+    saved[id] = 'done';
+    localStorage.setItem('bp_tracker_step', JSON.stringify(saved));
+    renderTrackerSteps();
+    if(typeof toast==='function') toast('✅ Step marked as done!');
+  } catch(e) { console.error('Tracker error:', e); }
 }
 
 function checkTrackerStatus() {
-  var idx = (document.getElementById('trackerIndexNo').value || '').trim();
+  var inp = document.getElementById('trackerIndexNo');
   var res = document.getElementById('trackerResult');
-  if (!idx) { res.innerHTML = '<span style="color:var(--coral);">Please enter your KCSE index number.</span>'; return; }
-  res.innerHTML = '<span style="color:var(--white3);">To check live status, visit <a href="https://students.kuccps.net" target="_blank" style="color:var(--lime);">students.kuccps.net</a> and enter index number: <strong style="color:var(--white);">'+idx+'</strong></span>';
+  if (!inp || !res) return;
+  var idx = inp.value.trim();
+  if (!idx) {
+    res.innerHTML = '<span style="color:var(--coral);">⚠️ Please enter your KCSE Index Number first.</span>';
+    inp.focus();
+    return;
+  }
+  if (!/^\d{7,10}$/.test(idx)) {
+    res.innerHTML = '<span style="color:var(--coral);">⚠️ Index number should be 7–10 digits (numbers only).</span>';
+    inp.focus();
+    return;
+  }
+  res.innerHTML = '<div style="padding:10px 12px;background:rgba(0,229,204,0.07);border:1px solid rgba(0,229,204,0.2);border-radius:8px;">'
+    +'<div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:4px;">Index No: '+idx+' — How to check your status:</div>'
+    +'<div style="font-size:12px;color:var(--white3);line-height:1.6;">'
+    +'1. Visit <a href="https://students.kuccps.net" target="_blank" style="color:var(--lime);font-weight:700;">students.kuccps.net</a><br>'
+    +'2. Click <strong style="color:var(--white2);">"Check Placement Status"</strong><br>'
+    +'3. Enter your index number: <strong style="color:var(--white);font-family:monospace;font-size:13px;">'+idx+'</strong><br>'
+    +'4. Enter your KCSE year and date of birth'
+    +'</div>'
+    +'<a href="https://students.kuccps.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 14px;background:var(--lime);color:var(--ink);border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;">Open KUCCPS Portal →</a>'
+    +'</div>';
 }
 
-/* ─── STUDENT PROFILE ─── */
-var _selectedProfGrade = '';
+/* ══════════════════════════════════════════════════════
+   STUDENT PROFILE — fully bulletproof version
+══════════════════════════════════════════════════════ */
+var _profGrade = '';
 
 function profPickGrade(btn, g) {
   document.querySelectorAll('.prof-g').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  _selectedProfGrade = g;
+  _profGrade = g;
 }
 
 function saveProfile() {
-  var name  = (document.getElementById('profName').value || '').trim();
-  var grade = _selectedProfGrade;
-  var eng   = document.getElementById('profEng').value;
-  var math  = document.getElementById('profMath').value;
-  var bio   = document.getElementById('profBio').value;
-  var chem  = document.getElementById('profChem').value;
-  var phy   = document.getElementById('profPhy').value;
-  var year  = document.getElementById('profYear').value;
-  var msg   = document.getElementById('profMsg');
-  if (!name) { msg.innerHTML = '<span style="color:var(--coral);">Please enter your name.</span>'; return; }
-  if (!grade) { msg.innerHTML = '<span style="color:var(--coral);">Please select your mean grade.</span>'; return; }
-  var profile = { name:name, grade:grade, eng:eng, math:math, bio:bio, chem:chem, phy:phy, year:year, saved: new Date().toLocaleDateString('en-KE') };
-  localStorage.setItem('bp_student_profile', JSON.stringify(profile));
-  msg.innerHTML = '<span style="color:var(--lime);">✅ Profile saved successfully!</span>';
-  loadSavedProfile();
-  toast('💾 Profile saved, '+name+'!');
+  var nameEl = document.getElementById('profName');
+  var msgEl  = document.getElementById('profMsg');
+  if (!nameEl || !msgEl) { alert('Profile form not found. Please try again.'); return; }
+
+  var name = nameEl.value.trim();
+  var grade = _profGrade;
+
+  if (!name) {
+    msgEl.innerHTML = '<span style="color:var(--coral);">⚠️ Please enter your name.</span>';
+    nameEl.focus();
+    return;
+  }
+  if (!grade) {
+    msgEl.innerHTML = '<span style="color:var(--coral);">⚠️ Please select your mean grade.</span>';
+    return;
+  }
+
+  var profile = {
+    name  : name,
+    grade : grade,
+    eng   : (document.getElementById('profEng')  || {}).value || '',
+    math  : (document.getElementById('profMath') || {}).value || '',
+    bio   : (document.getElementById('profBio')  || {}).value || '',
+    chem  : (document.getElementById('profChem') || {}).value || '',
+    phy   : (document.getElementById('profPhy')  || {}).value || '',
+    year  : (document.getElementById('profYear') || {}).value || '',
+    saved : new Date().toLocaleDateString('en-KE')
+  };
+
+  try {
+    localStorage.setItem('bp_student_profile', JSON.stringify(profile));
+    msgEl.innerHTML = '<span style="color:var(--lime);">✅ Profile saved! Your grades are stored on this device.</span>';
+    renderSavedProfileCard(profile);
+    if(typeof toast==='function') toast('💾 Profile saved for '+name+'!');
+  } catch(e) {
+    msgEl.innerHTML = '<span style="color:var(--coral);">❌ Could not save — storage may be full or blocked.</span>';
+  }
+}
+
+function renderSavedProfileCard(p) {
+  var display = document.getElementById('savedProfileDisplay');
+  var content = document.getElementById('savedProfileContent');
+  if (!display || !content) return;
+  display.style.display = 'block';
+  var subs = [];
+  if(p.eng)  subs.push('Eng: <strong>'+p.eng+'</strong>');
+  if(p.math) subs.push('Maths: <strong>'+p.math+'</strong>');
+  if(p.bio  && p.bio !=='N/A') subs.push('Bio: <strong>'+p.bio+'</strong>');
+  if(p.chem && p.chem!=='N/A') subs.push('Chem: <strong>'+p.chem+'</strong>');
+  if(p.phy  && p.phy !=='N/A') subs.push('Phy: <strong>'+p.phy+'</strong>');
+  content.innerHTML =
+    '<div style="font-size:15px;font-weight:800;color:var(--white);margin-bottom:4px;">'+p.name+(p.year?' <span style="font-size:11px;color:var(--white3);font-weight:400;">Class of '+p.year+'</span>':'')+'</div>'
+    +'<div style="margin-bottom:6px;">Mean Grade: <span style="font-size:18px;font-weight:800;color:var(--lime);font-family:Fraunces,serif;">'+p.grade+'</span></div>'
+    +(subs.length ? '<div style="font-size:12px;color:var(--white3);line-height:1.8;">'+subs.join(' &nbsp;·&nbsp; ')+'</div>' : '')
+    +'<div style="font-size:10px;color:var(--white3);margin-top:6px;opacity:0.6;">Saved '+p.saved+'</div>';
 }
 
 function loadSavedProfile() {
-  var raw = localStorage.getItem('bp_student_profile');
-  var display = document.getElementById('savedProfileDisplay');
-  var content = document.getElementById('savedProfileContent');
-  if (!raw || !display || !content) return;
-  var p = JSON.parse(raw);
-  display.style.display = 'block';
-  content.innerHTML = 
-    '<strong style="color:var(--white);">'+p.name+'</strong>'
-    + (p.year ? ' &bull; Class of '+p.year : '')
-    + '<br>Mean Grade: <strong style="color:var(--lime);">'+p.grade+'</strong>'
-    + (p.eng  ? ' &bull; Eng: '+p.eng : '')
-    + (p.math ? ' &bull; Maths: '+p.math : '')
-    + (p.bio && p.bio!=='N/A' ? ' &bull; Bio: '+p.bio : '')
-    + (p.chem && p.chem!=='N/A' ? ' &bull; Chem: '+p.chem : '')
-    + (p.phy && p.phy!=='N/A' ? ' &bull; Phy: '+p.phy : '')
-    + '<br><span style="font-size:11px;color:var(--white3);">Saved '+p.saved+'</span>';
-  // pre-fill form
-  if (document.getElementById('profName')) document.getElementById('profName').value = p.name || '';
-  if (p.grade) {
-    _selectedProfGrade = p.grade;
-    document.querySelectorAll('.prof-g').forEach(function(b){
-      if (b.textContent.replace('−','-').trim() === p.grade) b.classList.add('active');
+  try {
+    var raw = localStorage.getItem('bp_student_profile');
+    if (!raw) return;
+    var p = JSON.parse(raw);
+    // Pre-fill form fields
+    var nameEl = document.getElementById('profName');
+    if(nameEl) nameEl.value = p.name || '';
+    if(p.grade) {
+      _profGrade = p.grade;
+      document.querySelectorAll('.prof-g').forEach(function(b){
+        b.classList.toggle('active', b.textContent.replace('−','-').trim() === p.grade);
+      });
+    }
+    var fields = {profEng:p.eng, profMath:p.math, profBio:p.bio, profChem:p.chem, profPhy:p.phy, profYear:p.year};
+    Object.keys(fields).forEach(function(id){
+      var el = document.getElementById(id);
+      if(el && fields[id]) el.value = fields[id];
     });
-  }
-  if (p.eng  && document.getElementById('profEng'))  document.getElementById('profEng').value  = p.eng;
-  if (p.math && document.getElementById('profMath')) document.getElementById('profMath').value = p.math;
-  if (p.bio  && document.getElementById('profBio'))  document.getElementById('profBio').value  = p.bio;
-  if (p.chem && document.getElementById('profChem')) document.getElementById('profChem').value = p.chem;
-  if (p.phy  && document.getElementById('profPhy'))  document.getElementById('profPhy').value  = p.phy;
-  if (p.year && document.getElementById('profYear')) document.getElementById('profYear').value = p.year;
+    renderSavedProfileCard(p);
+  } catch(e) { console.warn('Profile load error:', e); }
 }
 
 function getSavedGrade() {
-  var raw = localStorage.getItem('bp_student_profile');
-  if (!raw) return 'B';
-  return JSON.parse(raw).grade || 'B';
+  try { return JSON.parse(localStorage.getItem('bp_student_profile')||'{}').grade || 'B'; }
+  catch(e) { return 'B'; }
 }
 
 function clearProfile() {
-  if (!confirm('Clear your saved profile?')) return;
+  if(!confirm('Clear your saved profile?')) return;
   localStorage.removeItem('bp_student_profile');
   var display = document.getElementById('savedProfileDisplay');
-  if (display) display.style.display = 'none';
+  if(display) display.style.display = 'none';
   var msg = document.getElementById('profMsg');
-  if (msg) msg.innerHTML = '<span style="color:var(--white3);">Profile cleared.</span>';
-  _selectedProfGrade = '';
+  if(msg) msg.innerHTML = '';
+  var nameEl = document.getElementById('profName');
+  if(nameEl) nameEl.value = '';
+  _profGrade = '';
   document.querySelectorAll('.prof-g').forEach(function(b){ b.classList.remove('active'); });
-  toast('🗑 Profile cleared');
+  if(typeof toast==='function') toast('🗑 Profile cleared');
 }
-
-/* ─── HERO: show "load saved profile" hint if profile exists ─── */
-/* Now handled in the main DOMContentLoaded above */
 </script>
 
 </body>
