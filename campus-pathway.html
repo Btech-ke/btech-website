@@ -108,10 +108,6 @@ nav {
 .nav-links .nav-cta:hover { background: #d4f840; color: var(--ink); }
 
 
-
-  50% { box-shadow: 0 0 0 7px rgba(200,241,53,0); }
-}
-
 .hamburger { display: none; flex-direction: column; gap: 4.5px; cursor: pointer; padding: 4px; }
 .hamburger span { width: 20px; height: 1.5px; background: var(--white); border-radius: 2px; display: block; transition: 0.3s; }
 
@@ -1509,20 +1505,26 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding: 16px;
+}
+.bp-overlay.active {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   animation: bpFadeIn 0.2s ease;
 }
-.bp-overlay.active { display: block; }
 @keyframes bpFadeIn { from { opacity:0; } to { opacity:1; } }
 .bp-sheet {
   background: linear-gradient(160deg, #16162a 0%, #12121e 100%);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 24px;
   max-width: 760px;
-  margin: 0 auto;
+  width: 100%;
+  margin: auto;
   position: relative;
   overflow: hidden;
   animation: bpSlideUp 0.3s cubic-bezier(0.34,1.4,0.64,1);
   box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  flex-shrink: 0;
 }
 @keyframes bpSlideUp { from { transform: translateY(40px); opacity:0; } to { transform: translateY(0); opacity:1; } }
 .bp-sheet-wide { max-width: 1000px; }
@@ -1551,9 +1553,9 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 .bp-close:hover { background: rgba(255,107,82,0.18); border-color: rgba(255,107,82,0.3); color: var(--coral); transform: scale(1.05); }
 .bp-body { padding: 22px; }
 @media(max-width:600px) {
-  .bp-overlay { padding: 0; display: none; align-items: flex-end; }
-  .bp-overlay.active { display: flex; align-items: flex-end; }
-  .bp-sheet { border-radius: 24px 24px 0 0; margin: auto 0 0; max-width: 100%; width: 100%; }
+  .bp-overlay { padding: 0; }
+  .bp-overlay.active { align-items: flex-end; }
+  .bp-sheet { border-radius: 24px 24px 0 0; margin: 0; max-width: 100%; width: 100%; }
   .bp-body { padding: 18px; }
 }
 </style>
@@ -1972,14 +1974,15 @@ var _overlayMap = {
 };
 function openOverlay(id) {
   var el = document.getElementById(id);
-  if (!el) return;
+  if (!el) { console.warn('openOverlay: element not found —', id); return; }
   el.classList.add('active');
   document.body.style.overflow = 'hidden';
-  if (id === 'coursesOverlay')   { setTimeout(renderCourses, 50); }
-  if (id === 'deadlinesOverlay') { setTimeout(loadPublicDeadlines, 50); }
-  if (id === 'forumOverlay')     { setTimeout(initPublicForum, 50); }
-  if (id === 'trackerOverlay')   { setTimeout(function(){ if(typeof renderTrackerSteps==='function') renderTrackerSteps(); }, 80); }
-  if (id === 'profileOverlay')   { setTimeout(function(){ if(typeof loadSavedProfile==='function')   loadSavedProfile(); },   80); }
+  if (id === 'coursesOverlay')     { setTimeout(renderCourses, 50); }
+  if (id === 'deadlinesOverlay')   { setTimeout(loadPublicDeadlines, 50); }
+  if (id === 'forumOverlay')       { setTimeout(initPublicForum, 50); }
+  if (id === 'trackerOverlay')     { setTimeout(function(){ if(typeof renderTrackerSteps==='function') renderTrackerSteps(); }, 80); }
+  if (id === 'profileOverlay')     { setTimeout(function(){ if(typeof loadSavedProfile==='function')   loadSavedProfile(); },   80); }
+  if (id === 'wizardOverlayNew')   { setTimeout(function(){ wizStep(1, null); }, 60); }
 }
 function closeOverlay(id) {
   var el = document.getElementById(id);
@@ -5541,6 +5544,8 @@ body.has-ticker { padding-bottom:44px; }
 @media(max-width:500px){
   #wiz1,#wiz2,#wiz3,#wiz4{padding:20px 14px 18px !important;}
   .wiz-g{font-size:14px !important;padding:10px 4px !important;}
+}
+</style>
 <!-- ══════════════════════════ NEW FEATURES JS ══════════════════════════ -->
 <script>
 /* ══════════════════════════════════════════════════════
@@ -5549,27 +5554,44 @@ body.has-ticker { padding-bottom:44px; }
 var _wizData = { status:'', grade:'', field:'' };
 
 function wizStep(stepNum, status) {
-  // Hide all steps
-  [1,2,3,4].forEach(function(n){ document.getElementById('wizS'+n).style.display='none'; });
-  // Show target step
-  var el = document.getElementById('wizS'+stepNum);
-  if(el) { el.style.display='block'; el.style.animation='bpSlideUp 0.25s ease'; }
-  // Store status if given
-  if(status) _wizData.status = status;
+  // Store status if provided
+  if (status !== null && status !== undefined) _wizData.status = status;
+
+  // Hide all steps safely
+  for (var n = 1; n <= 4; n++) {
+    var s = document.getElementById('wizS'+n);
+    if (s) s.style.display = 'none';
+  }
+
+  // Show the target step
+  var target = document.getElementById('wizS'+stepNum);
+  if (target) {
+    target.style.display = 'block';
+    target.style.animation = 'none';
+    target.offsetHeight; // force reflow
+    target.style.animation = 'bpSlideUp 0.22s ease';
+  }
+
+  // Scroll overlay sheet to top
+  var sheet = document.querySelector('#wizardOverlayNew .bp-sheet');
+  if (sheet) sheet.scrollTop = 0;
+
   // Update progress bar
-  var pct = {1:25,2:50,3:75,4:100}[stepNum]||25;
+  var pct = {1:25, 2:50, 3:75, 4:100}[stepNum] || 25;
   var pb = document.getElementById('wiz-progress');
-  if(pb) pb.style.width = pct+'%';
+  if (pb) pb.style.width = pct + '%';
+
   // Update step indicators
-  [1,2,3,4].forEach(function(n){
-    var ind = document.getElementById('wiz-ind-'+n);
-    var line = document.getElementById('wiz-line-'+n);
-    if(!ind) return;
-    ind.classList.remove('active','done');
-    if(n < stepNum) ind.classList.add('done');
-    else if(n === stepNum) ind.classList.add('active');
-    if(line) line.classList.toggle('done', n < stepNum);
-  });
+  for (var i = 1; i <= 4; i++) {
+    var ind  = document.getElementById('wiz-ind-'+i);
+    var line = document.getElementById('wiz-line-'+i);
+    if (ind) {
+      ind.classList.remove('active', 'done');
+      if (i < stepNum)      ind.classList.add('done');
+      else if (i === stepNum) ind.classList.add('active');
+    }
+    if (line) line.classList.toggle('done', i < stepNum);
+  }
 }
 
 function wizGrade(g) {
