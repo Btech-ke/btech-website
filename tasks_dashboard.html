@@ -9,284 +9,663 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
+        :root {
+            --brand:       #5b5ef4;
+            --brand-light: #7c7ff7;
+            --brand-dark:  #3f42d0;
+            --accent:      #f97316;
+            --success:     #10b981;
+            --warning:     #f59e0b;
+            --danger:      #ef4444;
+            --bg-deep:     #07091a;
+            --bg-mid:      #0d1030;
+            --bg-card:     #111536;
+            --border:      rgba(255,255,255,0.07);
+            --text-1:      #f1f1fb;
+            --text-2:      #9ba3c8;
+            --text-3:      #5f6887;
+            --glass:       rgba(17, 21, 54, 0.85);
+        }
+
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
-        
+
+        h1, h2, h3, h4, .display {
+            font-family: 'Syne', sans-serif;
+        }
+
         body {
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-            position: relative;
+            background: var(--bg-deep);
+            min-height: 100vh;
             overflow-x: hidden;
-            padding-bottom: 70px; /* Space for mobile nav */
+            padding-bottom: 80px;
+            color: var(--text-1);
         }
-        
-        /* --- Background Effects --- */
-        .animated-bg {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
-            background: radial-gradient(ellipse at top, #1e3a8a 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom, #7c3aed 0%, transparent 50%);
-            opacity: 0.4;
+
+        /* ── Background ── */
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0;
+            background-image:
+                linear-gradient(rgba(91,94,244,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(91,94,244,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
         }
-        
+
+        .bg-glow-1 {
+            position: fixed; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(91,94,244,0.18) 0%, transparent 70%);
+            top: -150px; left: -100px; z-index: 0; pointer-events: none;
+            animation: driftA 18s ease-in-out infinite alternate;
+        }
+        .bg-glow-2 {
+            position: fixed; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(249,115,22,0.10) 0%, transparent 70%);
+            bottom: -100px; right: -80px; z-index: 0; pointer-events: none;
+            animation: driftB 22s ease-in-out infinite alternate;
+        }
+        @keyframes driftA { from { transform: translate(0,0); } to { transform: translate(60px, 40px); } }
+        @keyframes driftB { from { transform: translate(0,0); } to { transform: translate(-50px, -30px); } }
+
         .star {
-            position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%;
+            position: fixed; width: 2px; height: 2px;
+            background: white; border-radius: 50%;
             animation: twinkle 3s infinite;
+            pointer-events: none;
         }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-        
+        @keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.8; } }
+
         .content-wrapper { position: relative; z-index: 1; }
-        
-        /* --- Enhanced Card Styles --- */
-        .ultra-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .ultra-card:hover {
-            transform: translateY(-4px) scale(1.005);
-            box-shadow: 0 25px 70px -15px rgba(99, 102, 241, 0.3);
+
+        /* ── Header ── */
+        .site-header {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(7,9,26,0.85);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .task-card {
-            transition: all 0.3s ease;
+        .logo-ring {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--brand), var(--accent));
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 24px rgba(91,94,244,0.45);
         }
 
-        .task-card:hover {
-            transform: translateY(-5px);
+        /* ── Nav ── */
+        .desktop-nav a, .desktop-nav button.nav-link {
+            display: flex; align-items: center; gap: 6px;
+            color: var(--text-2);
+            font-size: 0.875rem; font-weight: 500;
+            padding: 6px 14px; border-radius: 10px;
+            transition: all 0.2s;
+            text-decoration: none;
+            background: transparent; border: none; cursor: pointer;
         }
-        
-        .glass-header {
-            background: rgba(10, 14, 39, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        .desktop-nav a:hover, .desktop-nav button.nav-link:hover {
+            color: var(--text-1);
+            background: rgba(255,255,255,0.06);
         }
-        
-        /* --- Gradient Effects --- */
-        .gradient-text {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease infinite;
-            background-size: 200% 200%;
-        }
-        
-        .btn-premium {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.6);
-            transition: all 0.3s ease;
+
+        .notif-btn {
             position: relative;
-            overflow: hidden;
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-2); cursor: pointer; transition: all 0.2s;
         }
-        
-        .btn-premium:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px -10px rgba(99, 102, 241, 0.8);
+        .notif-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-1); }
+        .notif-dot {
+            position: absolute; top: -4px; right: -4px;
+            width: 18px; height: 18px;
+            background: var(--danger);
+            border-radius: 50%; border: 2px solid var(--bg-deep);
+            font-size: 9px; font-weight: 700; color: white;
+            display: flex; align-items: center; justify-content: center;
         }
-        
-        .stats-card {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-            color: white !important;
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.6);
+
+        .btn-logout {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 10px;
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.25);
+            color: #fca5a5; font-size: 0.875rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
         }
-        
-        /* --- Mobile Navigation --- */
+        .btn-logout:hover { background: rgba(239,68,68,0.22); }
+
+        /* ── Mobile Nav ── */
         .mobile-nav {
-            background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 50; /* Ensure it's above other content */
-        }
-        
-        .nav-item {
-            color: #9ca3af; /* Gray-400 */
-            transition: color 0.2s, background-color 0.2s;
-            flex: 1 1 0%;
-            text-align: center;
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+            background: rgba(7,9,26,0.95);
+            backdrop-filter: blur(24px);
+            border-top: 1px solid var(--border);
+            padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
         }
 
-        .nav-item.active {
-            color: #6366f1; /* Indigo-500 */
-            background: rgba(99, 102, 241, 0.1);
+        .mob-nav-item {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; gap: 4px;
+            padding: 6px 4px; border-radius: 12px;
+            color: var(--text-3); font-size: 10px; font-weight: 600;
+            letter-spacing: 0.02em; text-transform: uppercase;
+            border: none; background: transparent; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mob-nav-item.active {
+            color: var(--brand-light);
+            background: rgba(91,94,244,0.12);
+        }
+        .mob-nav-item svg { transition: transform 0.2s; }
+        .mob-nav-item.active svg { transform: translateY(-2px); }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .card:hover { border-color: rgba(91,94,244,0.25); }
+
+        .card-glow:hover {
+            box-shadow: 0 8px 40px rgba(91,94,244,0.15);
+            transform: translateY(-3px);
         }
 
-        /* --- Scrollbar Styling (Optimized) --- */
-        ::-webkit-scrollbar {
-            width: 8px; height: 8px;
+        /* ── Stat Cards ── */
+        .stat-card {
+            background: linear-gradient(135deg, var(--brand-dark) 0%, #2d1f6e 100%);
+            border: 1px solid rgba(91,94,244,0.3);
+            border-radius: 20px;
+            position: relative; overflow: hidden;
         }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+        .stat-card::before {
+            content: '';
+            position: absolute; top: -30px; right: -30px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
         }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.5);
-            border-radius: 4px;
+        .stat-card.orange {
+            background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+            border-color: rgba(249,115,22,0.3);
+        }
+        .stat-card.green {
+            background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+            border-color: rgba(16,185,129,0.3);
+        }
+        .stat-card.purple {
+            background: linear-gradient(135deg, #4c1d95 0%, #3b0764 100%);
+            border-color: rgba(139,92,246,0.3);
         }
 
-        /* Difficulty Badges */
-        .difficulty-easy { background: linear-gradient(135deg, #10b981, #34d399); }
-        .difficulty-medium { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-        .difficulty-hard { background: linear-gradient(135deg, #ef4444, #f87171); }
-        
-        /* Status Badges */
-        .status-pending_verification { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-        .status-in_progress { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-        .status-completed { background: linear-gradient(135deg, #10b981, #34d399); }
-        .status-rejected { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 800; color: #fff; line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+        }
 
+        /* ── Task Cards ── */
+        .task-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            position: relative;
+        }
+        .task-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(91,94,244,0.04), transparent);
+            opacity: 0; transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .task-card:hover {
+            border-color: rgba(91,94,244,0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(91,94,244,0.15);
+        }
+        .task-card:hover::after { opacity: 1; }
+
+        .featured-ribbon {
+            position: absolute; top: 14px; left: 14px;
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            color: white; font-size: 10px; font-weight: 800;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 3px 10px; border-radius: 20px;
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 10px; font-weight: 700;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+        .badge-easy   { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-medium { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+        .badge-hard   { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+        .badge-featured { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
+
+        /* Status badges (for my-tasks) */
+        .status-pending_verification { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+        .status-in_progress { background: rgba(91,94,244,0.15); color: #818cf8; border: 1px solid rgba(91,94,244,0.25); }
+        .status-completed   { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+        .status-rejected    { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+
+        /* Difficulty badges (for task card header) */
+        .difficulty-easy   { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+        .difficulty-medium { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+        .difficulty-hard   { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+
+        /* ── Payout text ── */
+        .payout-text {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8, #c084fc, #fb923c);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Buttons ── */
+        .btn-primary {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-light));
+            color: white; font-weight: 700; border: none; cursor: pointer;
+            border-radius: 14px; padding: 12px 20px;
+            transition: all 0.25s;
+            box-shadow: 0 6px 24px rgba(91,94,244,0.35);
+            width: 100%;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(91,94,244,0.5); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .btn-secondary {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+            color: var(--text-1); font-weight: 600; cursor: pointer;
+            border-radius: 14px; padding: 12px 20px; transition: all 0.2s; width: 100%;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+
+        .btn-success {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white; font-weight: 700; border: none; cursor: pointer;
+            border-radius: 14px; padding: 12px 20px; transition: all 0.25s; width: 100%;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.3);
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(16,185,129,0.45); }
+
+        /* ── Inputs ── */
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 11px 16px;
+            color: var(--text-1); font-size: 0.9rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .form-input::placeholder { color: var(--text-3); }
+        .form-input:focus { border-color: var(--brand); background: rgba(91,94,244,0.06); box-shadow: 0 0 0 3px rgba(91,94,244,0.15); }
+        select.form-input option { background: var(--bg-mid); }
+
+        .search-wrap { position: relative; }
+        .search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
+        .search-wrap input { padding-left: 44px; }
+
+        /* ── Progress bar ── */
+        .progress-track {
+            height: 5px; background: rgba(255,255,255,0.08);
+            border-radius: 99px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light));
+            border-radius: 99px;
+            transition: width 0.6s ease;
+        }
+
+        /* ── Daily task highlight ── */
+        .daily-task-card {
+            background: linear-gradient(135deg, rgba(91,94,244,0.12), rgba(139,92,246,0.08));
+            border: 1px solid rgba(91,94,244,0.3);
+            border-radius: 20px;
+            position: relative; overflow: hidden;
+        }
+        .daily-task-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-light), var(--accent));
+        }
+        .pulse-dot {
+            display: inline-block; width: 8px; height: 8px;
+            background: var(--success); border-radius: 50%;
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+            100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+        }
+
+        /* ── Section headings ── */
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.4rem, 4vw, 1.9rem);
+            font-weight: 800; color: var(--text-1);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .section-sub { font-size: 0.85rem; color: var(--text-2); font-weight: 400; margin-top: 4px; }
+
+        /* ── Category icon container ── */
+        .cat-icon {
+            width: 44px; height: 44px; min-width: 44px;
+            background: rgba(91,94,244,0.12);
+            border: 1px solid rgba(91,94,244,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--brand-light);
+        }
+
+        /* ── Alert / Toast ── */
+        #status-alert {
+            position: fixed; top: 76px; right: 16px; left: auto;
+            z-index: 100; max-width: 360px; width: calc(100vw - 32px);
+        }
+        .toast-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+        }
+        .toast-icon { width: 36px; height: 36px; min-width: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .toast-success { background: rgba(16,185,129,0.15); color: #34d399; }
+        .toast-error   { background: rgba(239,68,68,0.15);  color: #f87171; }
+
+        /* ── Modal ── */
+        #action-modal { background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); }
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px 32px; text-align: center;
+            max-width: 420px; width: calc(100vw - 32px);
+        }
+        .modal-icon-wrap {
+            width: 72px; height: 72px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        /* ── Notifications dropdown ── */
+        #notifications-dropdown {
+            top: 72px; right: 16px;
+        }
+        .notif-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px; padding: 20px;
+            width: 320px; max-width: calc(100vw - 32px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+        }
+        .notif-item {
+            padding: 12px 14px; border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(91,94,244,0.35); border-radius: 3px; }
+
+        /* ── Animations ── */
+        .fade-in-up {
+            animation: fadeInUp 0.4s ease both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .stagger-1 { animation-delay: 0.05s; }
+        .stagger-2 { animation-delay: 0.10s; }
+        .stagger-3 { animation-delay: 0.15s; }
+        .stagger-4 { animation-delay: 0.20s; }
+
+        /* ── Sign-in screen ── */
+        .signin-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 48px 36px; text-align: center;
+            max-width: 500px; margin: 48px auto;
+        }
+        .signin-stat { text-align: center; }
+        .signin-stat .val {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem; font-weight: 800; color: var(--text-1);
+        }
+        .signin-stat .lbl { font-size: 0.75rem; color: var(--text-2); }
+
+        /* ── Earnings page ── */
+        .txn-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.02);
+            transition: all 0.2s;
+        }
+        .txn-row:hover { background: rgba(91,94,244,0.06); border-color: rgba(91,94,244,0.2); }
+        .txn-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+        /* ── Affiliate page ── */
+        .referral-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(91,94,244,0.4);
+            border-radius: 14px; padding: 16px;
+        }
+        .how-step { text-align: center; }
+        .how-step .circle {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-light));
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px;
+            box-shadow: 0 6px 20px rgba(91,94,244,0.35);
+        }
+
+        /* ── Achievements ── */
+        .ach-card.locked { opacity: 0.45; filter: grayscale(0.6); }
+        .ach-icon-wrap {
+            width: 56px; height: 56px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ach-icon-wrap.unlocked { background: linear-gradient(135deg, var(--brand), var(--brand-light)); box-shadow: 0 6px 20px rgba(91,94,244,0.35); }
+        .ach-icon-wrap.locked   { background: rgba(255,255,255,0.06); }
+
+        /* ── Responsive helpers ── */
+        @media (max-width: 640px) {
+            .card, .task-card { border-radius: 16px; }
+            .stat-card { border-radius: 16px; }
+            .modal-card { border-radius: 20px; padding: 32px 20px; }
+        }
     </style>
 </head>
 
-<body class="min-h-screen">
-    <div class="animated-bg"></div>
-    <div class="stars" id="stars-container"></div>
-    
-    <div class="content-wrapper">
-        <header class="glass-header sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 py-4">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
-                            <i data-lucide="zap" class="w-7 h-7 text-white"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-xl md:text-2xl font-black text-white">BTECH PRO</h1>
-                            <p class="text-xs text-gray-300 font-medium">Earning Network</p>
-                        </div>
-                    </div>
-                    
-                    <nav class="hidden md:flex items-center space-x-6">
-                        <a href="javascript:void(0)" onclick="setRoute('tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
-                            <i data-lucide="briefcase" class="w-4 h-4"></i><span>Tasks</span>
-                        </a>
-                        <a href="javascript:void(0)" onclick="setRoute('my-tasks')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
-                            <i data-lucide="list-checks" class="w-4 h-4"></i><span>My Tasks</span>
-                        </a>
-                        <a href="javascript:void(0)" onclick="setRoute('earnings')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2">
-                            <i data-lucide="wallet" class="w-4 h-4"></i><span>Earnings</span>
-                        </a>
-                        <a href="javascript:void(0)" onclick="setRoute('affiliate')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2 achievement-badge">
-                            <i data-lucide="users" class="w-4 h-4"></i><span>Affiliate</span>
-                        </a>
-                        <a href="javascript:void(0)" onclick="setRoute('achievements')" class="text-gray-300 hover:text-white font-medium text-sm transition flex items-center space-x-2 achievement-badge">
-                            <i data-lucide="trophy" class="w-4 h-4"></i><span>Achievements</span>
-                        </a>
-                        <button onclick="toggleNotifications()" class="relative p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition">
-                            <i data-lucide="bell" class="w-5 h-5"></i>
-                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center" id="notification-count">3</span>
-                        </button>
-                        <button onclick="simulateLogout()" class="px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold text-sm transition">Logout</button>
-                    </nav>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    <div id="stars-container" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></div>
 
-                    <button onclick="simulateLogout()" class="md:hidden p-2 rounded-xl bg-red-500 text-white">
-                        <i data-lucide="log-out" class="w-5 h-5"></i>
+    <div class="content-wrapper">
+
+        <!-- ══ HEADER ══ -->
+        <header class="site-header">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+
+                <!-- Logo -->
+                <div class="flex items-center gap-3 flex-shrink-0">
+                    <div class="logo-ring">
+                        <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white text-lg leading-none" style="font-family:Syne,sans-serif;">BTECH PRO</div>
+                        <div class="text-xs" style="color:var(--text-3);">Earning Network</div>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="desktop-nav hidden md:flex items-center gap-1 flex-1 justify-center">
+                    <a href="javascript:void(0)" onclick="setRoute('tasks')">
+                        <i data-lucide="briefcase" class="w-4 h-4"></i><span>Tasks</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="setRoute('my-tasks')">
+                        <i data-lucide="list-checks" class="w-4 h-4"></i><span>My Tasks</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="setRoute('earnings')">
+                        <i data-lucide="wallet" class="w-4 h-4"></i><span>Earnings</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="setRoute('affiliate')">
+                        <i data-lucide="users" class="w-4 h-4"></i><span>Affiliate</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="setRoute('achievements')">
+                        <i data-lucide="trophy" class="w-4 h-4"></i><span>Achievements</span>
+                    </a>
+                </nav>
+
+                <!-- Right controls -->
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <button onclick="toggleNotifications()" class="notif-btn" id="notif-trigger">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="notif-dot" id="notification-count">3</span>
+                    </button>
+                    <button onclick="simulateLogout()" class="btn-logout hidden md:flex">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>Logout</span>
+                    </button>
+                    <button onclick="simulateLogout()" class="md:hidden notif-btn" style="color:#fca5a5;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
                     </button>
                 </div>
             </div>
         </header>
 
-        <div id="notifications-dropdown" class="hidden fixed top-20 right-4 z-50 w-80 max-w-[calc(100vw-2rem)]">
-            <div class="ultra-card p-4">
-                <h3 class="font-bold text-gray-800 mb-3 flex items-center justify-between">
-                    <span>Notifications</span>
-                    <button onclick="toggleNotifications()" class="text-gray-400 hover:text-gray-600">
-                        <i data-lucide="x" class="w-5 h-5"></i>
+        <!-- ══ NOTIFICATIONS DROPDOWN ══ -->
+        <div id="notifications-dropdown" class="hidden fixed z-50">
+            <div class="notif-card">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="font-bold" style="font-family:Syne,sans-serif;">Notifications</span>
+                    <button onclick="toggleNotifications()" style="color:var(--text-3);background:none;border:none;cursor:pointer;">
+                        <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
-                </h3>
-                <div class="space-y-3">
-                    <div class="p-3 bg-blue-50 rounded-lg">
-                        <p class="text-sm font-semibold text-gray-800">New Task Available!</p>
-                        <p class="text-xs text-gray-600 mt-1">A high-paying task just opened up</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div class="notif-item">
+                        <p class="text-sm font-semibold" style="color:var(--text-1);">New Task Available!</p>
+                        <p class="text-xs mt-1" style="color:var(--text-2);">A high-paying task just opened up</p>
                     </div>
-                    <div class="p-3 bg-green-50 rounded-lg">
-                        <p class="text-sm font-semibold text-gray-800">Payment Processed</p>
-                        <p class="text-xs text-gray-600 mt-1">KES 500 added to your balance</p>
+                    <div class="notif-item">
+                        <p class="text-sm font-semibold" style="color:var(--text-1);">Payment Processed</p>
+                        <p class="text-xs mt-1" style="color:var(--text-2);">KES 500 added to your balance</p>
                     </div>
-                    <div class="p-3 bg-purple-50 rounded-lg">
-                        <p class="text-sm font-semibold text-gray-800">Achievement Unlocked!</p>
-                        <p class="text-xs text-gray-600 mt-1">You've completed 10 tasks</p>
+                    <div class="notif-item">
+                        <p class="text-sm font-semibold" style="color:var(--text-1);">Achievement Unlocked!</p>
+                        <p class="text-xs mt-1" style="color:var(--text-2);">You've completed 10 tasks</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="status-alert" class="hidden fixed top-20 right-4 left-4 md:left-auto md:right-4 z-50 max-w-md" role="alert">
-            <div class="ultra-card p-4">
-                <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" id="alert-icon-bg">
-                        <i data-lucide="check-circle" class="w-6 h-6" id="alert-icon"></i>
-                    </div>
-                    <p class="font-semibold text-gray-800 flex-1" id="alert-message"></p>
-                    <button onclick="closeAlert()" class="text-gray-400 hover:text-gray-600">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
+        <!-- ══ TOAST ALERT ══ -->
+        <div id="status-alert" class="hidden" role="alert">
+            <div class="toast-card">
+                <div class="toast-icon" id="alert-icon-bg">
+                    <i data-lucide="check-circle" class="w-5 h-5" id="alert-icon"></i>
                 </div>
+                <p class="text-sm font-semibold flex-1" id="alert-message" style="color:var(--text-1);"></p>
+                <button onclick="closeAlert()" style="color:var(--text-3);background:none;border:none;cursor:pointer;flex-shrink:0;">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
         </div>
 
+        <!-- ══ MAIN ══ -->
         <main class="max-w-7xl mx-auto px-4 py-6">
             <div id="app-container"></div>
         </main>
 
-        <nav class="mobile-nav fixed bottom-0 left-0 right-0 z-40 md:hidden">
-            <div class="flex justify-around items-center py-2 px-2 text-white">
-                <button onclick="setRoute('tasks')" class="nav-item flex flex-col items-center space-y-1 py-1 px-2 rounded-xl transition" id="nav-tasks">
-                    <i data-lucide="briefcase" class="w-6 h-6"></i>
-                    <span class="text-xs font-medium">Tasks</span>
+        <!-- ══ MOBILE NAV ══ -->
+        <nav class="mobile-nav md:hidden">
+            <div class="flex justify-around px-2">
+                <button onclick="setRoute('tasks')" class="mob-nav-item" id="nav-tasks">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    <span>Tasks</span>
                 </button>
-                <button onclick="setRoute('my-tasks')" class="nav-item flex flex-col items-center space-y-1 py-1 px-2 rounded-xl transition" id="nav-my-tasks">
-                    <i data-lucide="list-checks" class="w-6 h-6"></i>
-                    <span class="text-xs font-medium">My Tasks</span>
+                <button onclick="setRoute('my-tasks')" class="mob-nav-item" id="nav-my-tasks">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>My Tasks</span>
                 </button>
-                <button onclick="setRoute('earnings')" class="nav-item flex flex-col items-center space-y-1 py-1 px-2 rounded-xl transition" id="nav-earnings">
-                    <i data-lucide="wallet" class="w-6 h-6"></i>
-                    <span class="text-xs font-medium">Earnings</span>
+                <button onclick="setRoute('earnings')" class="mob-nav-item" id="nav-earnings">
+                    <i data-lucide="wallet" class="w-5 h-5"></i>
+                    <span>Earnings</span>
                 </button>
-                <button onclick="setRoute('affiliate')" class="nav-item flex flex-col items-center space-y-1 py-1 px-2 rounded-xl transition" id="nav-affiliate">
-                    <i data-lucide="users" class="w-6 h-6"></i>
-                    <span class="text-xs font-medium">Affiliate</span>
+                <button onclick="setRoute('affiliate')" class="mob-nav-item" id="nav-affiliate">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span>Affiliate</span>
                 </button>
-                <button onclick="setRoute('achievements')" class="nav-item flex flex-col items-center space-y-1 py-1 px-2 rounded-xl transition" id="nav-achievements">
-                    <i data-lucide="trophy" class="w-6 h-6"></i>
-                    <span class="text-xs font-medium">XP/Trophy</span>
+                <button onclick="setRoute('achievements')" class="mob-nav-item" id="nav-achievements">
+                    <i data-lucide="trophy" class="w-5 h-5"></i>
+                    <span>XP</span>
                 </button>
             </div>
         </nav>
     </div>
 
-    <div id="action-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div class="ultra-card p-8 max-w-md w-full text-center">
-            <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" id="modal-icon-bg">
-                <i id="modal-icon" data-lucide="check-circle" class="w-12 h-12"></i>
+    <!-- ══ MODAL ══ -->
+    <div id="action-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-card fade-in-up">
+            <div class="modal-icon-wrap" id="modal-icon-bg">
+                <i id="modal-icon" data-lucide="check-circle" class="w-10 h-10"></i>
             </div>
-            <h3 id="modal-title" class="text-2xl md:text-3xl font-black text-gray-800 mb-3">Success!</h3>
-            <p id="modal-message" class="text-gray-600 text-sm md:text-base mb-6 leading-relaxed">Your action was completed successfully!</p>
-            <button onclick="closeModal()" class="btn-premium text-white font-bold py-4 px-8 rounded-2xl w-full">
-                Continue
-            </button>
+            <h3 id="modal-title" class="text-2xl font-bold mb-3" style="font-family:Syne,sans-serif;color:var(--text-1);">Success!</h3>
+            <p id="modal-message" class="text-sm leading-relaxed mb-8" style="color:var(--text-2);"></p>
+            <button onclick="closeModal()" class="btn-primary">Continue</button>
         </div>
     </div>
 
 <script>
     // ============================================
-    // GLOBAL CONFIGURATION & STATE
+    // GLOBAL CONFIGURATION & STATE  ← UNCHANGED
     // ============================================
     const BACKEND_URL = "https://btech-earning-api.onrender.com/api";
     const FORMSPREE_SURVEY_URL = "https://formspree.io/f/mblolava";
@@ -313,31 +692,23 @@
         search: ''
     };
 
-    // Mock Task Definitions (Used as fallback/placeholders)
     const MOCK_TASK_DEFINITIONS = [
         { id: 1501, title: 'PRO Task: Executive Network Outreach (Liam Lee Profile)', description: 'Establish a professional connection with our Lead Strategist, Liam Lee, on LinkedIn to unlock future executive tasks. This requires genuine outreach and following specific profile guidelines.', category: 'Professional Networking & Outreach', payment: 250.00, estimatedTime: '10 minutes', difficulty: 'Easy', requiresVerification: true, deadline: '2025-12-31', tasksAvailable: 50, completionRate: 90, clientName: 'BTECH HR', featured: true, submission_type: 'IMAGE_URL', submission_guide: `1. Visit Liam Lee's LinkedIn: ${LINKEDIN_PROFILE_URL} | 2. Send Connection Request | 3. Upload screenshot of 'Request Pending' page.`, requires_admin_action: true },
         { id: 1502, title: 'WeChat Account Acquisition: KES 1,000 Payout', description: 'Sell us a valid, existing, or new WeChat account. Instant KES 1,000 credited upon successful validation by the admin.', category: 'Account Procurement', payment: 1000.00, estimatedTime: '5 minutes', difficulty: 'Easy', requiresVerification: true, deadline: '2025-12-31', tasksAvailable: 20, completionRate: 80, clientName: 'BTECH Acquisitions', submission_type: 'TEXT', submission_guide: 'Submit the account phone number and password separated by a newline.', requires_admin_action: true }
     ];
 
     // ============================================
-    // GOOGLE AUTH HANDLER (Must be in global scope)
+    // GOOGLE AUTH HANDLER ← UNCHANGED
     // ============================================
-    
     async function handleCredentialResponse(response) {
         if (response.credential) {
             showAlert('Google Sign-In successful. Syncing account...', true);
-            
             try {
                 const apiResponse = await fetch(`${BACKEND_URL}/auth/provision`, {
                     method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${response.credential}`
-                    }
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${response.credential}` }
                 });
-
                 const data = await apiResponse.json();
-
                 if (apiResponse.ok && data.success) {
                     showAlert(`Welcome, ${data.user.fullName || data.user.email}!`, true);
                     location.reload();
@@ -346,120 +717,90 @@
                 }
             } catch (error) {
                 showAlert('Network error during provisioning.', false);
-                console.error("Provisioning error:", error);
             }
         }
     }
 
-
     // ============================================
-    // CORE UTILITIES (Must be defined early)
+    // CORE UTILITIES ← UNCHANGED LOGIC, UPDATED UI
     // ============================================
-    
-    // Function required by initializeApp to run immediately
     function createStarField() {
         const container = document.getElementById('stars-container');
         if (!container) return;
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = `${Math.random() * 100}%`;
             star.style.top = `${Math.random() * 100}%`;
             star.style.animationDelay = `${Math.random() * 3}s`;
+            star.style.opacity = Math.random() * 0.6;
             container.appendChild(star);
         }
     }
 
-    // Function required by HTML onclicks
     function showAlert(message, isSuccess = true) {
         const statusAlert = document.getElementById('status-alert');
         const iconBg = document.getElementById('alert-icon-bg');
         const icon = document.getElementById('alert-icon');
         const msg = document.getElementById('alert-message');
-        
-        iconBg.className = isSuccess ? 
-            'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-green-100' : 
-            'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-red-100';
-        icon.className = isSuccess ? 'w-6 h-6 text-green-600' : 'w-6 h-6 text-red-600';
+        iconBg.className = isSuccess ? 'toast-icon toast-success' : 'toast-icon toast-error';
+        icon.className = 'w-5 h-5';
         icon.setAttribute('data-lucide', isSuccess ? 'check-circle' : 'alert-circle');
-        
         msg.textContent = message;
         statusAlert.classList.remove('hidden');
         lucide.createIcons();
-        
         setTimeout(() => {
             statusAlert.style.opacity = '0';
-            setTimeout(() => {
-                statusAlert.classList.add('hidden');
-                statusAlert.style.opacity = '1';
-            }, 300);
+            statusAlert.style.transition = 'opacity 0.3s';
+            setTimeout(() => { statusAlert.classList.add('hidden'); statusAlert.style.opacity = '1'; }, 300);
         }, 5000);
     }
-    
+
     function closeAlert() { document.getElementById('status-alert').classList.add('hidden'); }
-    
+
     function showModal(title, message, type = 'success') {
         const modal = document.getElementById('action-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        const modalIconBg = document.getElementById('modal-icon-bg');
-        const modalIcon = document.getElementById('modal-icon');
-        
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        
-        let iconName = 'check-circle';
-        let bgClass = 'bg-green-100';
-        let iconClass = 'text-green-600';
-
-        if (type === 'error') {
-            iconName = 'alert-circle';
-            bgClass = 'bg-red-100';
-            iconClass = 'text-red-600';
-        } else if (type === 'warning') {
-            iconName = 'alert-triangle';
-            bgClass = 'bg-yellow-100';
-            iconClass = 'text-yellow-600';
-        }
-        
-        modalIconBg.className = `w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center ${bgClass}`;
-        modalIcon.className = `w-12 h-12 ${iconClass}`;
-        modalIcon.setAttribute('data-lucide', iconName);
-        
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-message').textContent = message;
+        const iconBg = document.getElementById('modal-icon-bg');
+        const icon = document.getElementById('modal-icon');
+        const configs = {
+            success: { icon:'check-circle', bg:'rgba(16,185,129,0.15)', color:'#34d399' },
+            error:   { icon:'alert-circle', bg:'rgba(239,68,68,0.15)',  color:'#f87171' },
+            warning: { icon:'alert-triangle', bg:'rgba(245,158,11,0.15)', color:'#fbbf24' }
+        };
+        const cfg = configs[type] || configs.success;
+        iconBg.style.background = cfg.bg;
+        icon.style.color = cfg.color;
+        icon.className = 'w-10 h-10';
+        icon.setAttribute('data-lucide', cfg.icon);
         modal.classList.remove('hidden');
         lucide.createIcons();
     }
-    
+
     function closeModal() { document.getElementById('action-modal').classList.add('hidden'); }
 
     function simulateLogout(force = false) {
         localStorage.removeItem('btech_auth_token');
-        if (force) {
-            showAlert("Session expired. Please re-login.", false);
-        } else {
-            showAlert("Logged out successfully!", true);
-        }
+        showAlert(force ? "Session expired. Please re-login." : "Logged out successfully!", !force);
         setTimeout(() => window.location.reload(), 1500);
     }
-    
+
     function updateMobileNav(route) {
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.classList.remove('active');
-            item.querySelector('span').classList.remove('text-indigo-500');
-        });
-        
+        document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('active'));
         const baseRoute = route.split('/')[0];
         const activeNav = document.getElementById(`nav-${baseRoute}`);
-        if (activeNav) {
-            activeNav.classList.add('active');
-            activeNav.querySelector('span').classList.add('text-indigo-500');
-        }
+        if (activeNav) activeNav.classList.add('active');
     }
-    
-    // --- Data Rendering Helpers ---
+
     function getCategoryIcon(category) {
-        const icons = { 'Survey': 'clipboard-list', 'Professional Networking & Outreach': 'linkedin', 'Account Procurement': 'message-circle-code', 'Data Entry': 'database', 'Account Connection': 'link' };
+        const icons = {
+            'Survey': 'clipboard-list',
+            'Professional Networking & Outreach': 'linkedin',
+            'Account Procurement': 'message-circle-code',
+            'Data Entry': 'database',
+            'Account Connection': 'link'
+        };
         return icons[category] || 'briefcase';
     }
 
@@ -476,32 +817,21 @@
         showModal('Withdrawal Request', 'Contact admin to process your withdrawal. Min amount: KES 500', 'warning');
     }
 
-
     // ============================================
-    // API HELPERS & DATA FETCHING
+    // API HELPERS ← UNCHANGED
     // ============================================
-    
     async function fetchData(endpoint, options = {}) {
         if (!AUTH_TOKEN) throw new Error('Authentication token missing.');
-
         const config = {
             method: options.method || 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${AUTH_TOKEN}`,
-                ...options.headers
-            },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`, ...options.headers },
             ...(options.body && { body: JSON.stringify(options.body) }),
         };
-
         try {
             const response = await fetch(`${BACKEND_URL}${endpoint}`, config);
             const data = await response.json().catch(() => ({ error: 'Could not parse response.' }));
-            
             if (!response.ok || !data.success) {
-                if (response.status === 401 || response.status === 403) {
-                    simulateLogout(true); 
-                }
+                if (response.status === 401 || response.status === 403) simulateLogout(true);
                 throw new Error(data.error || `API Error: ${response.status}`);
             }
             return data;
@@ -515,29 +845,20 @@
         if (cache.profileLoaded) return;
         try {
             const result = await fetchData('/user/profile', { method: 'GET' });
-            if (result.success && result.user) {
-                userProfile = result.user;
-                cache.profileLoaded = true;
-            }
-        } catch (error) {
-            console.warn("Profile fetch failed:", error.message);
-        }
+            if (result.success && result.user) { userProfile = result.user; cache.profileLoaded = true; }
+        } catch (error) { console.warn("Profile fetch failed:", error.message); }
     }
-    
+
     async function fetchUserStats() {
         if (cache.statsLoaded) return;
         try {
             const earningsData = await fetchData('/earnings/summary');
             const myTasksData = await fetchData('/tasks/my-tasks');
-
             userStats.totalEarned = parseFloat(earningsData.earnings.totalEarnings || 0);
             userStats.availableBalance = parseFloat(earningsData.earnings.availableBalance || 0);
             userStats.pendingEarnings = parseFloat(earningsData.earnings.pendingEarnings || 0);
             userStats.tasksCompleted = parseInt(earningsData.earnings.completedTasks || 0);
-            userStats.activeTasks = myTasksData.tasks.filter(t => 
-                t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION' || t.status === 'REJECTED' // Include Rejected for visibility
-            ).length;
-            
+            userStats.activeTasks = myTasksData.tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION' || t.status === 'REJECTED').length;
             cache.statsLoaded = true;
         } catch (e) {
             console.warn("Stats fetch failed, using defaults:", e.message);
@@ -556,133 +877,70 @@
     }
 
     // ============================================
-    // TASK ACTION HANDLERS
+    // TASK ACTION HANDLERS ← UNCHANGED
     // ============================================
-
-    // Located in DASHBOARD.HTML
-async function acceptTask(taskId) {
-    try {
-        showAlert('Accepting task...', true);
-        const response = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
-        
-        // --- CRITICAL REDIRECTION LOGIC START ---
-        
-        if (response.message.includes('already in your active list')) {
-            showModal('Task Already Active!', 'This task is already in your "My Tasks" list. We are refreshing to the detail screen.', 'warning');
-        } else {
-            showModal('Task Accepted!', 'You can now start working on this task. Loading details...', 'success');
+    async function acceptTask(taskId) {
+        try {
+            showAlert('Accepting task...', true);
+            const response = await fetchData(`/tasks/${taskId}/accept`, { method: 'POST' });
+            if (response.message.includes('already in your active list')) {
+                showModal('Task Already Active!', 'This task is already in your "My Tasks" list. We are refreshing to the detail screen.', 'warning');
+            } else {
+                showModal('Task Accepted!', 'You can now start working on this task. Loading details...', 'success');
+            }
+            window.location.search = `?taskid=${taskId}`;
+            window.location.hash = '';
+            setTimeout(() => { closeModal(); window.location.reload(); }, 2000);
+        } catch (error) {
+            showAlert(error.message, false);
         }
-        
-        // 1. Force the URL into the clean 'detail' state:
-        // Clear both search and hash, then set the query parameter for the detail page.
-        // This forces a complete re-initialization on reload.
-        window.location.search = `?taskid=${taskId}`;
-        window.location.hash = ''; 
-        
-        // 2. Schedule the reload after the modal closes.
-        setTimeout(() => {
-            closeModal();
-            // Reloads the page, which triggers initializeApp() and hits the ?taskid= logic.
-            window.location.reload(); 
-        }, 2000);
-        
-        // --- CRITICAL REDIRECTION LOGIC END ---
-
-    } catch (error) {
-        // If the server returns a 402/error (e.g., Registration Fee Required)
-        showAlert(error.message, false);
     }
-}
 
-    function acceptAndNavigateToSurvey(taskId) {
-        acceptTask(taskId);
-    }
-    
-    // Generic handler for TEXT, IMAGE_URL, and BOTH submissions
+    function acceptAndNavigateToSurvey(taskId) { acceptTask(taskId); }
+
     async function submitGenericFileTask(taskId, type) {
         const textInput = document.getElementById(`submission-text-field-${taskId}`);
         const fileInput = document.getElementById(`submission-file-input-${taskId}`);
         const submitBtn = document.getElementById(`submit-btn-generic-${taskId}`);
-        
         let accountsList = [];
         let commonPassword = '';
-        
-        // 1. Handle Text Input
         if (type === 'TEXT' || type === 'BOTH') {
             const textValue = textInput?.value?.trim();
-            if (!textValue) {
-                showAlert('Text submission field is required.', false);
-                return;
-            }
-            // accountsList stores the visible submission (links, accounts)
+            if (!textValue) { showAlert('Text submission field is required.', false); return; }
             accountsList.push(textValue);
-            if (type === 'TEXT') commonPassword = textValue; // Use text as payload ref for text-only
+            if (type === 'TEXT') commonPassword = textValue;
         }
-        
-        // 2. Handle File Input (Base64 conversion)
         if (type === 'IMAGE_URL' || (type === 'BOTH' && fileInput?.files.length > 0)) {
-            if (!fileInput || !fileInput.files.length) {
-                showAlert('Image/Screenshot proof is required.', false);
-                return;
-            }
+            if (!fileInput || !fileInput.files.length) { showAlert('Image/Screenshot proof is required.', false); return; }
             const file = fileInput.files[0];
-            if (file.size > 5 * 1024 * 1024) {
-                showAlert('File size must be less than 5MB.', false);
-                return;
-            }
-            
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading...</span>';
-                lucide.createIcons();
-            }
-
+            if (file.size > 5 * 1024 * 1024) { showAlert('File size must be less than 5MB.', false); return; }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading...</span>'; lucide.createIcons(); }
             const reader = new FileReader();
             reader.onload = async function(e) {
-                commonPassword = e.target.result.split(',')[1]; // Base64 data (payload)
+                commonPassword = e.target.result.split(',')[1];
                 if (type === 'IMAGE_URL') accountsList.push(`File Name: ${file.name}`);
                 await sendSubmissionToBackend(taskId, accountsList, commonPassword, submitBtn);
             };
-            reader.onerror = (e) => {
+            reader.onerror = () => {
                 showAlert('Failed to read file.', false);
                 if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task for Review</span>'; lucide.createIcons(); }
             };
             reader.readAsDataURL(file);
             return;
         }
-
-        // 3. Send Submission for Text-Only (or if BOTH with no file - though file check should prevent this)
         await sendSubmissionToBackend(taskId, accountsList, commonPassword, submitBtn);
     }
 
     async function sendSubmissionToBackend(taskId, accountsList, commonPassword, submitBtn) {
         try {
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>';
-                lucide.createIcons();
-            }
-
-            await fetchData(`/tasks/submit-gmail-accounts`, {
-                method: 'POST',
-                body: { taskId, accountsList, commonPassword }
-            });
-
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Submitting...</span>'; lucide.createIcons(); }
+            await fetchData(`/tasks/submit-gmail-accounts`, { method: 'POST', body: { taskId, accountsList, commonPassword } });
             showModal('Submission Sent!', 'Your task submission has been received and is under admin review.', 'success');
-            
-            setTimeout(() => {
-                closeModal();
-                setRoute('my-tasks');
-            }, 2500);
-
+            setTimeout(() => { closeModal(); setRoute('my-tasks'); }, 2500);
         } catch (error) {
             showAlert(error.message, false);
         } finally {
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task for Review</span>';
-                lucide.createIcons();
-            }
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Submit Task for Review</span>'; lucide.createIcons(); }
         }
     }
 
@@ -690,47 +948,25 @@ async function acceptTask(taskId) {
         const form = document.getElementById(`survey-form-${taskId}`);
         const formData = new FormData(form);
         const surveyData = Object.fromEntries(formData);
-        
-        if (!surveyData.satisfaction || !surveyData.ease_of_finding || !surveyData.suggestions) {
-            showAlert('Please answer all questions.', false);
-            return;
-        }
-        
+        if (!surveyData.satisfaction || !surveyData.ease_of_finding || !surveyData.suggestions) { showAlert('Please answer all questions.', false); return; }
         try {
             showAlert('Submitting survey...', true);
-            
-            // Send to Formspree for visibility (optional, data is also processed below)
-            await fetch(FORMSPREE_SURVEY_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(surveyData)
-            });
-            
-            // Send to backend for credit
-            const response = await fetchData(`/tasks/submit-daily-task`, {
-                method: 'POST',
-                body: { taskId: taskId }
-            });
-            
+            await fetch(FORMSPREE_SURVEY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(surveyData) });
+            const response = await fetchData(`/tasks/submit-daily-task`, { method: 'POST', body: { taskId: taskId } });
             showModal('Survey Submitted!', response.message, 'success');
-            
-            setTimeout(() => {
-                closeModal();
-                setRoute('tasks');
-            }, 2500);
+            setTimeout(() => { closeModal(); setRoute('tasks'); }, 2500);
         } catch (error) {
             showAlert(error.message, false);
         }
     }
-    
+
     function handleFileSelectForGeneric(taskId) {
         const fileInput = document.getElementById(`submission-file-input-${taskId}`);
         const filePreview = document.getElementById(`file-preview-generic-${taskId}`);
         const fileName = document.getElementById(`file-name-generic-${taskId}`);
-        
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            fileName.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            fileName.textContent = `✓ ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
             filePreview.classList.remove('hidden');
         } else {
             filePreview.classList.add('hidden');
@@ -738,516 +974,365 @@ async function acceptTask(taskId) {
     }
 
     // ============================================
-    // RENDERING FUNCTIONS
+    // RENDERING ← UPGRADED UI ONLY
     // ============================================
-    
     function renderTaskCard(task, index) {
         const dailyTask = JSON.parse(localStorage.getItem('dailyTask') || 'null');
         if (dailyTask && task.id === dailyTask.id) return '';
-        
         const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
-        
+        const diff = getTaskDifficulty(task);
+
         return `
-            <div class="ultra-card p-5 md:p-6 fade-in-up task-card" style="animation-delay: ${index * 0.1}s">
-                ${task.featured ? '<div class="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1"><i data-lucide="star" class="w-3 h-3"></i><span>FEATURED</span></div>' : ''}
-                
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 rounded-xl bg-indigo-50">
-                        <i data-lucide="${getCategoryIcon(task.category)}" class="w-6 h-6 text-indigo-600"></i>
-                    </div>
-                    <span class="difficulty-${getTaskDifficulty(task)} text-white text-xs font-bold px-3 py-1 rounded-full">
-                        ${task.difficulty || 'N/A'}
-                    </span>
-                </div>
-                
-                <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2 leading-tight line-clamp-2">${task.title || 'N/A'}</h3>
-                
-                <div class="mb-4">
-                    <p class="text-3xl md:text-4xl font-black gradient-text mb-2">${payoutText}</p>
-                    <p class="text-xs md:text-sm text-gray-600 line-clamp-2">${task.description || 'No description.'}</p>
-                </div>
-                
-                <div class="space-y-2 mb-4 text-xs md:text-sm text-gray-600">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
-                            <span>${task.estimatedTime || 'Varies'}</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i data-lucide="users" class="w-4 h-4 text-gray-400"></i>
-                            <span>${task.tasksAvailable || 0} left</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="progress-bar mb-4">
-                    <div class="progress-fill" style="width: ${task.completionRate || 0}%"></div>
-                </div>
-
-                <button onclick="acceptTask(${task.id})" class="btn-premium w-full text-white font-bold py-3 md:py-4 rounded-xl flex items-center justify-center space-x-2">
-                    <i data-lucide="play-circle" class="w-5 h-5"></i>
-                    <span>Accept Task</span>
-                </button>
+        <div class="task-card p-5 fade-in-up" style="animation-delay:${index * 0.08}s;">
+            ${task.featured ? `<div class="featured-ribbon"><i data-lucide="star" class="w-3 h-3"></i> Featured</div>` : ''}
+            <div class="flex items-start justify-between mb-4 ${task.featured ? 'mt-6' : ''}">
+                <div class="cat-icon"><i data-lucide="${getCategoryIcon(task.category)}" class="w-5 h-5"></i></div>
+                <span class="badge badge-${diff}">${task.difficulty || 'Easy'}</span>
             </div>
-        `;
+            <h3 class="font-bold mb-1 line-clamp-2" style="font-family:Syne,sans-serif;font-size:1rem;color:var(--text-1);">${task.title || 'N/A'}</h3>
+            <p class="text-xs mb-4 line-clamp-2" style="color:var(--text-2);">${task.description || 'No description.'}</p>
+            <div class="payout-text mb-4">${payoutText}</div>
+            <div class="flex items-center justify-between text-xs mb-3" style="color:var(--text-3);">
+                <div class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i><span>${task.estimatedTime || 'Varies'}</span></div>
+                <div class="flex items-center gap-1"><i data-lucide="users" class="w-3 h-3"></i><span>${task.tasksAvailable || 0} slots</span></div>
+            </div>
+            <div class="progress-track mb-4"><div class="progress-fill" style="width:${task.completionRate || 0}%;"></div></div>
+            <button onclick="acceptTask(${task.id})" class="btn-primary text-sm py-3">
+                <i data-lucide="play-circle" class="w-4 h-4"></i><span>Accept Task</span>
+            </button>
+        </div>`;
     }
 
     function renderTasksList(tasks, dailyTask) {
         const appContainer = document.getElementById('app-container');
         const availableTasks = tasks || MOCK_TASK_DEFINITIONS;
         cachedTasks = availableTasks;
-        
+
         const dailyTaskHtml = dailyTask ? `
-            <div class="ultra-card p-4 md:p-6 mb-6 border-2 border-indigo-400 bg-gradient-to-br from-indigo-50 to-purple-50">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-lg md:text-xl font-black text-indigo-700 flex items-center space-x-2">
-                        <i data-lucide="zap" class="w-5 h-5"></i>
-                        <span>Daily Micro Task</span>
-                    </h3>
-                    <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full pulse">NEW</span>
+        <div class="daily-task-card p-5 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="pulse-dot"></span>
+                    <h3 style="font-family:Syne,sans-serif;font-weight:700;color:var(--text-1);">Daily Micro Task</h3>
                 </div>
-                <h4 class="font-bold text-gray-800 mb-2">${dailyTask.title || 'N/A'}</h4>
-                <p class="text-sm text-gray-700 mb-3">
-                    <span class="font-semibold">Category:</span> ${dailyTask.category || 'N/A'} | 
-                    <span class="font-semibold">Payout:</span> KES ${getTaskPayout(dailyTask)}
-                </p>
-                
-                ${dailyTask.isCompleted ? `
-                    <button class="w-full bg-green-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 opacity-70" disabled>
-                        <i data-lucide="check" class="w-5 h-5"></i>
-                        <span>COMPLETED TODAY</span>
-                    </button>
-                ` : `
-                    <button onclick="acceptAndNavigateToSurvey(${dailyTask.id})" class="btn-premium w-full text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
-                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
-                        <span>Start Survey (${dailyTask.estimatedTime})</span>
-                    </button>
-                `}
+                <span class="badge" style="background:rgba(91,94,244,0.15);color:#818cf8;border:1px solid rgba(91,94,244,0.25);">NEW</span>
             </div>
-        ` : `
-            <div class="ultra-card p-4 md:p-6 mb-6 text-center text-gray-500">
-                <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
-                <p class="text-sm">No new microtasks available today. Check back tomorrow!</p>
-            </div>
-        `;
+            <h4 class="font-semibold mb-1" style="color:var(--text-1);">${dailyTask.title || 'N/A'}</h4>
+            <p class="text-xs mb-4" style="color:var(--text-2);">
+                <span class="font-semibold">Category:</span> ${dailyTask.category || 'N/A'} &nbsp;·&nbsp;
+                <span class="font-semibold">Payout:</span> KES ${getTaskPayout(dailyTask)}
+            </p>
+            ${dailyTask.isCompleted
+                ? `<button class="btn-secondary py-3 text-sm opacity-60" disabled><i data-lucide="check" class="w-4 h-4"></i><span>Completed Today</span></button>`
+                : `<button onclick="acceptAndNavigateToSurvey(${dailyTask.id})" class="btn-primary py-3 text-sm"><i data-lucide="clipboard-list" class="w-4 h-4"></i><span>Start Survey (${dailyTask.estimatedTime})</span></button>`
+            }
+        </div>` : `
+        <div class="card p-6 mb-6 text-center fade-in-up">
+            <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2" style="color:var(--text-3);"></i>
+            <p class="text-sm" style="color:var(--text-2);">No new microtasks today. Check back tomorrow!</p>
+        </div>`;
 
         appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
-                    <div class="ultra-card p-4 md:p-6 stats-card">
-                        <i data-lucide="dollar-sign" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
-                        <p class="text-xs md:text-sm font-medium opacity-90">Total Earned</p>
-                        <p class="text-xl md:text-3xl font-black mt-1">KES ${userStats.totalEarned.toFixed(2)}</p>
-                    </div>
-                    <div class="ultra-card p-4 md:p-6 stats-card">
-                        <i data-lucide="wallet" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
-                        <p class="text-xs md:text-sm font-medium opacity-90">Available</p>
-                        <p class="text-xl md:text-3xl font-black mt-1">KES ${userStats.availableBalance.toFixed(2)}</p>
-                    </div>
-                    <div class="ultra-card p-4 md:p-6 stats-card">
-                        <i data-lucide="check-circle-2" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
-                        <p class="text-xs md:text-sm font-medium opacity-90">Completed</p>
-                        <p class="text-xl md:text-3xl font-black mt-1">${userStats.tasksCompleted}</p>
-                    </div>
-                    <div class="ultra-card p-4 md:p-6 stats-card">
-                        <i data-lucide="activity" class="w-8 h-8 md:w-10 md:h-10 mb-2 opacity-90"></i>
-                        <p class="text-xs md:text-sm font-medium opacity-90">Active</p>
-                        <p class="text-xl md:text-3xl font-black mt-1">${userStats.activeTasks}</p>
-                    </div>
+        <div class="fade-in-up">
+            <!-- Stats Row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+                <div class="stat-card p-4 md:p-5 stagger-1 fade-in-up">
+                    <div class="mb-3"><i data-lucide="trending-up" class="w-5 h-5" style="color:rgba(255,255,255,0.6);"></i></div>
+                    <div class="stat-label">Total Earned</div>
+                    <div class="stat-value mt-1">KES ${userStats.totalEarned.toFixed(0)}</div>
                 </div>
-
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-2 flex items-center">
-                    <i data-lucide="zap" class="w-8 h-8 mr-3"></i>
-                    Today's Quick Win
-                </h2>
-                <p class="text-gray-300 text-sm md:text-base mb-4">Complete daily tasks for instant rewards</p>
-                ${dailyTaskHtml}
-                
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-2 mt-8 flex items-center">
-                    <i data-lucide="briefcase" class="w-8 h-8 mr-3"></i>
-                    Available Tasks
-                </h2>
-                <p class="text-gray-300 text-sm md:text-base mb-6">High-value opportunities to maximize your earnings</p>
-
-                <div class="ultra-card p-4 md:p-6 mb-6">
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0 md:space-x-4">
-                        <div class="search-container flex-1">
-                            <div class="relative">
-                                <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                                <input 
-                                    type="text" 
-                                    id="search-input" 
-                                    placeholder="Search tasks..." 
-                                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition"
-                                    oninput="applyFilters()"
-                                >
-                            </div>
-                        </div>
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <select id="category-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
-                                <option value="all">All Categories</option>
-                                <option value="Survey">Survey</option>
-                                <option value="Professional Networking & Outreach">Professional Networking & Outreach</option>
-                                <option value="Account Procurement">Account Procurement</option>
-                            </select>
-                            <select id="difficulty-filter" onchange="applyFilters()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl font-medium text-sm focus:border-indigo-500 transition">
-                                <option value="all">All Difficulties</option>
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="stat-card orange p-4 md:p-5 stagger-2 fade-in-up">
+                    <div class="mb-3"><i data-lucide="wallet" class="w-5 h-5" style="color:rgba(255,255,255,0.6);"></i></div>
+                    <div class="stat-label">Available</div>
+                    <div class="stat-value mt-1">KES ${userStats.availableBalance.toFixed(0)}</div>
                 </div>
-
-                <div id="tasks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    ${availableTasks.map((task, i) => renderTaskCard(task, i)).join('')}
+                <div class="stat-card green p-4 md:p-5 stagger-3 fade-in-up">
+                    <div class="mb-3"><i data-lucide="check-circle-2" class="w-5 h-5" style="color:rgba(255,255,255,0.6);"></i></div>
+                    <div class="stat-label">Completed</div>
+                    <div class="stat-value mt-1">${userStats.tasksCompleted}</div>
+                </div>
+                <div class="stat-card purple p-4 md:p-5 stagger-4 fade-in-up">
+                    <div class="mb-3"><i data-lucide="activity" class="w-5 h-5" style="color:rgba(255,255,255,0.6);"></i></div>
+                    <div class="stat-label">Active</div>
+                    <div class="stat-value mt-1">${userStats.activeTasks}</div>
                 </div>
             </div>
-        `;
+
+            <!-- Daily Task -->
+            <div class="mb-2">
+                <div class="section-label mb-1"><i data-lucide="zap" class="w-6 h-6" style="color:var(--brand-light);"></i> Today's Quick Win</div>
+                <p class="section-sub mb-4">Complete daily tasks for instant rewards</p>
+            </div>
+            ${dailyTaskHtml}
+
+            <!-- Available Tasks -->
+            <div class="section-label mb-1 mt-8"><i data-lucide="briefcase" class="w-6 h-6" style="color:var(--brand-light);"></i> Available Tasks</div>
+            <p class="section-sub mb-5">High-value opportunities to maximize your earnings</p>
+
+            <!-- Filters -->
+            <div class="card p-4 mb-6 fade-in-up">
+                <div class="flex flex-col md:flex-row gap-3">
+                    <div class="search-wrap flex-1">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        <input type="text" id="search-input" placeholder="Search tasks..." class="form-input" oninput="applyFilters()">
+                    </div>
+                    <div class="flex gap-3">
+                        <select id="category-filter" onchange="applyFilters()" class="form-input" style="flex:1;min-width:0;">
+                            <option value="all">All Categories</option>
+                            <option value="Survey">Survey</option>
+                            <option value="Professional Networking & Outreach">Networking</option>
+                            <option value="Account Procurement">Account Tasks</option>
+                        </select>
+                        <select id="difficulty-filter" onchange="applyFilters()" class="form-input" style="flex:1;min-width:0;">
+                            <option value="all">All Levels</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Grid -->
+            <div id="tasks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${availableTasks.map((task, i) => renderTaskCard(task, i)).join('')}
+            </div>
+        </div>`;
         lucide.createIcons();
     }
 
     function renderMyTasks(tasks) {
-    const appContainer = document.getElementById('app-container');
-    const activeTasks = tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION' || t.status === 'REJECTED');
-    const completedTasks = tasks.filter(t => t.status === 'COMPLETED');
-    
-    appContainer.innerHTML = `
-        <div class="fade-in-up">
-            <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
-                <i data-lucide="list-checks" class="w-8 h-8 mr-3"></i>
-                My Tasks
-            </h2>
-            
-            <div class="mb-8">
-                <h3 class="text-2xl font-bold text-white mb-4">Active & Pending Review (${activeTasks.length})</h3>
-                ${activeTasks.length > 0 ? `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                        ${activeTasks.map((task, i) => {
-                            let statusClass, statusText;
-                            if (task.status === 'PENDING_VERIFICATION') {
-                                statusClass = 'status-pending_verification';
-                                statusText = 'PENDING ADMIN REVIEW';
-                            } else if (task.status === 'REJECTED') {
-                                statusClass = 'status-rejected';
-                                statusText = 'REJECTED - RETRY';
-                            } else {
-                                statusClass = 'status-in_progress';
-                                statusText = 'IN PROGRESS';
-                            }
+        const appContainer = document.getElementById('app-container');
+        const activeTasks = tasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING_VERIFICATION' || t.status === 'REJECTED');
+        const completedTasks = tasks.filter(t => t.status === 'COMPLETED');
 
-                            return `
-                                <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <span class="${statusClass} text-white text-xs font-bold px-3 py-1 rounded-full">
-                                            ${statusText}
-                                        </span>
-                                        <span class="text-xs text-gray-500">${new Date(task.startedDate).toLocaleDateString()}</span>
-                                    </div>
-                                    <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
-                                    <p class="text-2xl font-black gradient-text mb-3">KES ${getTaskPayout(task)}</p>
-                                    
-                                    <button onclick="navigateToTaskDetail(${task.taskId})" class="btn-premium w-full text-white font-bold py-3 rounded-xl">
-                                        ${task.status === 'IN_PROGRESS' || task.status === 'REJECTED' ? 'Continue/Re-Submit' : 'View Status'}
-                                    </button>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                ` : `
-                    <div class="ultra-card p-8 text-center">
-                        <i data-lucide="inbox" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                        <p class="text-gray-600">No active tasks. Browse available tasks to get started!</p>
-                        <button onclick="setRoute('tasks')" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
-                            Browse Tasks
-                        </button>
-                    </div>
-                `}
+        const renderActiveCard = (task, i) => {
+            let statusClass, statusText;
+            if (task.status === 'PENDING_VERIFICATION') { statusClass = 'status-pending_verification'; statusText = 'Pending Review'; }
+            else if (task.status === 'REJECTED') { statusClass = 'status-rejected'; statusText = 'Rejected – Retry'; }
+            else { statusClass = 'status-in_progress'; statusText = 'In Progress'; }
+            return `
+            <div class="task-card p-5 fade-in-up" style="animation-delay:${i*0.08}s;">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="badge ${statusClass}">${statusText}</span>
+                    <span class="text-xs" style="color:var(--text-3);">${new Date(task.startedDate).toLocaleDateString()}</span>
+                </div>
+                <h4 class="font-bold mb-1" style="font-family:Syne,sans-serif;color:var(--text-1);">${task.title}</h4>
+                <div class="payout-text text-2xl mb-4">KES ${getTaskPayout(task)}</div>
+                <button onclick="navigateToTaskDetail(${task.taskId})" class="btn-primary text-sm py-3">
+                    ${task.status === 'IN_PROGRESS' || task.status === 'REJECTED' ? 'Continue / Re-Submit' : 'View Status'}
+                </button>
+            </div>`;
+        };
+
+        const renderCompletedCard = (task, i) => `
+        <div class="task-card p-5 fade-in-up" style="animation-delay:${i*0.08}s;">
+            <div class="flex items-center justify-between mb-3">
+                <span class="badge status-completed"><i data-lucide="check" class="w-3 h-3 mr-1"></i> Completed</span>
+                <span class="text-xs" style="color:var(--text-3);">${new Date(task.completedAt).toLocaleDateString()}</span>
             </div>
-            
+            <h4 class="font-bold mb-1" style="font-family:Syne,sans-serif;color:var(--text-1);">${task.title}</h4>
+            <div class="text-2xl font-bold mt-2" style="color:#34d399;font-family:Syne,sans-serif;">+KES ${getTaskPayout(task)}</div>
+        </div>`;
+
+        appContainer.innerHTML = `
+        <div class="fade-in-up">
+            <div class="section-label mb-1"><i data-lucide="list-checks" class="w-6 h-6" style="color:var(--brand-light);"></i> My Tasks</div>
+            <p class="section-sub mb-6">Track all your active and completed work</p>
+
+            <div class="mb-8">
+                <h3 class="font-bold mb-4" style="font-family:Syne,sans-serif;color:var(--text-1);font-size:1.1rem;">Active & Pending <span style="color:var(--text-3);font-weight:400;font-size:0.85rem;">(${activeTasks.length})</span></h3>
+                ${activeTasks.length > 0
+                    ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${activeTasks.map(renderActiveCard).join('')}</div>`
+                    : `<div class="card p-10 text-center">
+                        <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3" style="color:var(--text-3);"></i>
+                        <p class="mb-4" style="color:var(--text-2);">No active tasks yet. Browse available tasks to get started!</p>
+                        <button onclick="setRoute('tasks')" class="btn-primary" style="max-width:200px;margin:0 auto;">Browse Tasks</button>
+                      </div>`
+                }
+            </div>
+
             <div>
-                <h3 class="text-2xl font-bold text-white mb-4">Completed Tasks (${completedTasks.length})</h3>
-                ${completedTasks.length > 0 ? `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                        ${completedTasks.map((task, i) => `
-                            <div class="ultra-card p-5 md:p-6 fade-in-up" style="animation-delay: ${i * 0.1}s">
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="status-completed text-white text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
-                                        <i data-lucide="check" class="w-3 h-3"></i>
-                                        <span>COMPLETED</span>
-                                    </span>
-                                    <span class="text-xs text-gray-500">${new Date(task.completedAt).toLocaleDateString()}</span>
-                                </div>
-                                <h4 class="text-lg font-black text-gray-800 mb-2">${task.title}</h4>
-                                <p class="text-2xl font-black text-green-600 mb-3">+KES ${getTaskPayout(task)}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                ` : `
-                    <div class="ultra-card p-8 text-center">
-                        <i data-lucide="clock" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                        <p class="text-gray-600">No completed tasks yet. Keep going!</p>
-                    </div>
-                `}
+                <h3 class="font-bold mb-4" style="font-family:Syne,sans-serif;color:var(--text-1);font-size:1.1rem;">Completed <span style="color:var(--text-3);font-weight:400;font-size:0.85rem;">(${completedTasks.length})</span></h3>
+                ${completedTasks.length > 0
+                    ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${completedTasks.map(renderCompletedCard).join('')}</div>`
+                    : `<div class="card p-10 text-center">
+                        <i data-lucide="clock" class="w-12 h-12 mx-auto mb-3" style="color:var(--text-3);"></i>
+                        <p style="color:var(--text-2);">No completed tasks yet. Keep going!</p>
+                      </div>`
+                }
             </div>
-        </div>
-    `;
-    lucide.createIcons();
-}
+        </div>`;
+        lucide.createIcons();
+    }
 
     function renderEarnings() {
         const appContainer = document.getElementById('app-container');
-        
-        appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
-                    <i data-lucide="wallet" class="w-8 h-8 mr-3"></i>
-                    Earnings Dashboard
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 rounded-xl bg-green-50">
-                                <i data-lucide="trending-up" class="w-8 h-8 text-green-600"></i>
-                            </div>
-                            <span class="text-xs font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full">+12%</span>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2">Total Earned</p>
-                        <p class="text-3xl md:text-4xl font-black gradient-text">KES ${userStats.totalEarned.toFixed(2)}</p>
-                    </div>
-                    
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 rounded-xl bg-blue-50">
-                                <i data-lucide="wallet" class="w-8 h-8 text-blue-600"></i>
-                            </div>
-                            <button onclick="showWithdrawalModal()" class="text-xs font-bold text-blue-600 hover:text-blue-700">Withdraw</button>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2">Available Balance</p>
-                        <p class="text-3xl md:text-4xl font-black text-blue-600">KES ${userStats.availableBalance.toFixed(2)}</p>
-                    </div>
-                    
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 rounded-xl bg-yellow-50">
-                                <i data-lucide="clock" class="w-8 h-8 text-yellow-600"></i>
-                            </div>
-                            <span class="text-xs font-bold text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full pulse">Pending</span>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2">Pending Earnings</p>
-                        <p class="text-3xl md:text-4xl font-black text-yellow-600">KES ${userStats.pendingEarnings.toFixed(2)}</p>
-                    </div>
-                </div>
-                
-                <div class="ultra-card p-6 md:p-8 mb-6">
-                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
-                        <i data-lucide="bar-chart-3" class="w-6 h-6 mr-2 text-indigo-600"></i>
-                        Earnings Overview (Last 7 Days)
-                    </h3>
-                    <canvas id="earningsChart" height="100"></canvas>
-                </div>
-                
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6">
-                    <div class="ultra-card p-4 text-center"><i data-lucide="check-circle-2" class="w-8 h-8 text-green-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${userStats.tasksCompleted}</p><p class="text-xs text-gray-600">Tasks Completed</p></div>
-                    <div class="ultra-card p-4 text-center"><i data-lucide="activity" class="w-8 h-8 text-blue-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${userStats.activeTasks}</p><p class="text-xs text-gray-600">Active</p></div>
-                    <div class="ultra-card p-4 text-center"><i data-lucide="target" class="w-8 h-8 text-purple-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${(userStats.tasksCompleted > 0 ? ((userStats.tasksCompleted / (userStats.tasksCompleted + userStats.activeTasks)) * 100) : 0).toFixed(0)}%</p><p class="text-xs text-gray-600">Success Rate</p></div>
-                    <div class="ultra-card p-4 text-center"><i data-lucide="zap" class="w-8 h-8 text-yellow-600 mx-auto mb-2"></i><p class="text-2xl font-black text-gray-800">${userStats.tasksCompleted > 0 ? Math.floor(userStats.totalEarned / userStats.tasksCompleted) : 0}</p><p class="text-xs text-gray-600">Avg Per Task</p></div>
-                </div>
+        const successRate = userStats.tasksCompleted > 0 ? ((userStats.tasksCompleted / (userStats.tasksCompleted + userStats.activeTasks)) * 100).toFixed(0) : 0;
+        const avgPerTask = userStats.tasksCompleted > 0 ? Math.floor(userStats.totalEarned / userStats.tasksCompleted) : 0;
 
-                <div class="ultra-card p-6 md:p-8">
-                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
-                        <i data-lucide="receipt" class="w-6 h-6 mr-2 text-indigo-600"></i>
-                        Recent Transactions
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-lg bg-green-50">
-                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
-                                </div>
-                                <div><p class="font-bold text-gray-800 text-sm">Task Completed: Daily Survey</p><p class="text-xs text-gray-500">2025-11-01</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-black text-green-600">+KES 50.00</p>
-                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
-                            </div>
+        appContainer.innerHTML = `
+        <div class="fade-in-up">
+            <div class="section-label mb-1"><i data-lucide="wallet" class="w-6 h-6" style="color:var(--brand-light);"></i> Earnings Dashboard</div>
+            <p class="section-sub mb-6">Your financial overview at a glance</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="card p-6 card-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div style="width:44px;height:44px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                            <i data-lucide="trending-up" class="w-5 h-5" style="color:#34d399;"></i>
                         </div>
-                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-lg bg-green-50">
-                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
-                                </div>
-                                <div><p class="font-bold text-gray-800 text-sm">Task Completed: Data Entry</p><p class="text-xs text-gray-500">2025-10-31</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-black text-green-600">+KES 300.00</p>
-                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
-                            </div>
-                        </div>
-                            <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-lg bg-red-50">
-                                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-red-600"></i>
-                                </div>
-                                <div><p class="font-bold text-gray-800 text-sm">Withdrawal to M-Pesa</p><p class="text-xs text-gray-500">2025-10-30</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-black text-red-600">-KES 500.00</p>
-                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-lg bg-green-50">
-                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
-                                </div>
-                                <div><p class="font-bold text-gray-800 text-sm">Referral Bonus</p><p class="text-xs text-gray-500">2025-10-29</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-black text-green-600">+KES 200.00</p>
-                                <span class="text-xs text-green-600 font-semibold">COMPLETED</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-indigo-200 transition">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-lg bg-green-50">
-                                    <i data-lucide="arrow-down-left" class="w-5 h-5 text-green-600"></i>
-                                </div>
-                                <div><p class="font-bold text-gray-800 text-sm">Task Completed: Transcription</p><p class="text-xs text-gray-500">2025-10-28</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-black text-green-600">+KES 450.00</p>
-                                <span class="text-xs text-yellow-600 font-semibold">PENDING</span>
-                            </div>
-                        </div>
+                        <span class="badge" style="background:rgba(16,185,129,0.12);color:#34d399;border-color:rgba(16,185,129,0.2);">+12%</span>
                     </div>
+                    <p class="text-xs font-semibold mb-2" style="color:var(--text-3);letter-spacing:0.05em;text-transform:uppercase;">Total Earned</p>
+                    <p class="payout-text">KES ${userStats.totalEarned.toFixed(2)}</p>
+                </div>
+                <div class="card p-6 card-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div style="width:44px;height:44px;background:rgba(91,94,244,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                            <i data-lucide="wallet" class="w-5 h-5" style="color:#818cf8;"></i>
+                        </div>
+                        <button onclick="showWithdrawalModal()" class="text-xs font-bold" style="color:var(--brand-light);background:none;border:none;cursor:pointer;">Withdraw →</button>
+                    </div>
+                    <p class="text-xs font-semibold mb-2" style="color:var(--text-3);letter-spacing:0.05em;text-transform:uppercase;">Available</p>
+                    <p class="text-3xl font-black" style="font-family:Syne,sans-serif;color:#818cf8;">KES ${userStats.availableBalance.toFixed(2)}</p>
+                </div>
+                <div class="card p-6 card-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div style="width:44px;height:44px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                            <i data-lucide="clock" class="w-5 h-5" style="color:#fbbf24;"></i>
+                        </div>
+                        <span class="badge" style="background:rgba(245,158,11,0.12);color:#fbbf24;border-color:rgba(245,158,11,0.2);">Pending</span>
+                    </div>
+                    <p class="text-xs font-semibold mb-2" style="color:var(--text-3);letter-spacing:0.05em;text-transform:uppercase;">Pending</p>
+                    <p class="text-3xl font-black" style="font-family:Syne,sans-serif;color:#fbbf24;">KES ${userStats.pendingEarnings.toFixed(2)}</p>
                 </div>
             </div>
-        `;
-        
+
+            <div class="card p-6 mb-6">
+                <h3 class="font-bold mb-4" style="font-family:Syne,sans-serif;color:var(--text-1);"><i data-lucide="bar-chart-3" class="w-5 h-5 inline mr-2" style="color:var(--brand-light);"></i>Earnings Overview (Last 7 Days)</h3>
+                <canvas id="earningsChart" height="100"></canvas>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                ${[
+                    { icon:'check-circle-2', val:userStats.tasksCompleted, lbl:'Completed', color:'#34d399' },
+                    { icon:'activity', val:userStats.activeTasks, lbl:'Active', color:'#818cf8' },
+                    { icon:'target', val:`${successRate}%`, lbl:'Success Rate', color:'#c084fc' },
+                    { icon:'zap', val:`${avgPerTask}`, lbl:'Avg / Task', color:'#fb923c' }
+                ].map(s => `
+                <div class="card p-4 text-center card-glow">
+                    <i data-lucide="${s.icon}" class="w-7 h-7 mx-auto mb-2" style="color:${s.color};"></i>
+                    <p class="text-xl font-black" style="font-family:Syne,sans-serif;color:var(--text-1);">${s.val}</p>
+                    <p class="text-xs" style="color:var(--text-3);">${s.lbl}</p>
+                </div>`).join('')}
+            </div>
+
+            <div class="card p-6">
+                <h3 class="font-bold mb-4" style="font-family:Syne,sans-serif;color:var(--text-1);"><i data-lucide="receipt" class="w-5 h-5 inline mr-2" style="color:var(--brand-light);"></i>Recent Transactions</h3>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    ${[
+                        { icon:'arrow-down-left', col:'#34d399', bg:'rgba(16,185,129,0.12)', label:'Task Completed: Daily Survey', date:'2025-11-01', amount:'+KES 50.00', status:'COMPLETED', sts:'#34d399' },
+                        { icon:'arrow-down-left', col:'#34d399', bg:'rgba(16,185,129,0.12)', label:'Task Completed: Data Entry', date:'2025-10-31', amount:'+KES 300.00', status:'COMPLETED', sts:'#34d399' },
+                        { icon:'arrow-up-right', col:'#f87171', bg:'rgba(239,68,68,0.12)', label:'Withdrawal to M-Pesa', date:'2025-10-30', amount:'-KES 500.00', status:'COMPLETED', sts:'#34d399' },
+                        { icon:'arrow-down-left', col:'#34d399', bg:'rgba(16,185,129,0.12)', label:'Referral Bonus', date:'2025-10-29', amount:'+KES 200.00', status:'COMPLETED', sts:'#34d399' },
+                        { icon:'arrow-down-left', col:'#34d399', bg:'rgba(16,185,129,0.12)', label:'Task Completed: Transcription', date:'2025-10-28', amount:'+KES 450.00', status:'PENDING', sts:'#fbbf24' }
+                    ].map(t => `
+                    <div class="txn-row">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="txn-icon" style="background:${t.bg};"><i data-lucide="${t.icon}" class="w-4 h-4" style="color:${t.col};"></i></div>
+                            <div>
+                                <p class="text-sm font-semibold" style="color:var(--text-1);">${t.label}</p>
+                                <p class="text-xs" style="color:var(--text-3);">${t.date}</p>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <p class="font-bold text-sm" style="color:${t.col};">${t.amount}</p>
+                            <span class="text-xs font-bold" style="color:${t.sts};">${t.status}</span>
+                        </div>
+                    </div>`).join('')}
+                </div>
+            </div>
+        </div>`;
         lucide.createIcons();
-        // Placeholder for chart rendering (requires actual data points)
-        // renderEarningsChart(); 
     }
 
     function renderAffiliateProfile() {
         const appContainer = document.getElementById('app-container');
         const referralCode = userProfile.referralCode || 'BTECH' + Math.random().toString(36).substring(2, 8).toUpperCase();
-        const referralLink = `https://www.btechplus.com/download?ref=${referralCode}`; 
-        
+        const referralLink = `https://www.btechplus.com/download?ref=${referralCode}`;
+
         appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
-                    <i data-lucide="users" class="w-8 h-8 mr-3"></i>
-                    Affiliate Program
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="p-3 rounded-xl bg-purple-50 w-fit mb-4">
-                            <i data-lucide="users" class="w-8 h-8 text-purple-600"></i>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2">Total Referrals</p>
-                        <p class="text-4xl font-black gradient-text">12</p>
+        <div class="fade-in-up">
+            <div class="section-label mb-1"><i data-lucide="users" class="w-6 h-6" style="color:var(--brand-light);"></i> Affiliate Program</div>
+            <p class="section-sub mb-6">Earn KES ${REFERRAL_BONUS.toFixed(0)} for every friend you refer</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                ${[
+                    { icon:'users', bg:'rgba(139,92,246,0.12)', col:'#c084fc', label:'Total Referrals', val:'12' },
+                    { icon:'dollar-sign', bg:'rgba(16,185,129,0.12)', col:'#34d399', label:'Referral Earnings', val:'KES 2,400' },
+                    { icon:'gift', bg:'rgba(91,94,244,0.12)', col:'#818cf8', label:'Bonus Per Referral', val:`KES ${REFERRAL_BONUS.toFixed(0)}` }
+                ].map(s => `
+                <div class="card p-6 card-glow">
+                    <div style="width:44px;height:44px;background:${s.bg};border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                        <i data-lucide="${s.icon}" class="w-5 h-5" style="color:${s.col};"></i>
                     </div>
-                    
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="p-3 rounded-xl bg-green-50 w-fit mb-4">
-                            <i data-lucide="dollar-sign" class="w-8 h-8 text-green-600"></i>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2">Referral Earnings</p>
-                        <p class="text-4xl font-black text-green-600">KES 2,400</p>
-                    </div>
-                    
-                    <div class="ultra-card p-6 md:p-8">
-                        <div class="p-3 rounded-xl bg-blue-50 w-fit mb-4">
-                            <i data-lucide="percent" class="w-8 h-8 text-blue-600"></i>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2">Bonus per Referral</p>
-                        <p class="text-4xl font-black text-blue-600">KES ${REFERRAL_BONUS.toFixed(2)}</p>
-                    </div>
+                    <p class="text-xs font-semibold mb-1" style="color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;">${s.label}</p>
+                    <p class="text-2xl font-black" style="font-family:Syne,sans-serif;color:var(--text-1);">${s.val}</p>
+                </div>`).join('')}
+            </div>
+
+            <div class="card p-6 mb-6">
+                <h3 class="font-bold mb-4" style="font-family:Syne,sans-serif;color:var(--text-1);"><i data-lucide="link" class="w-5 h-5 inline mr-2" style="color:var(--brand-light);"></i>Your Referral Link</h3>
+                <div class="referral-box mb-4">
+                    <p class="text-sm font-mono" style="color:var(--text-1);word-break:break-all;">${referralLink}</p>
                 </div>
-                
-                <div class="ultra-card p-6 md:p-8 mb-6">
-                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
-                        <i data-lucide="link" class="w-6 h-6 mr-2 text-indigo-600"></i>
-                        Your Referral Link
-                    </h3>
-                    <div class="bg-gray-50 p-4 rounded-xl mb-4">
-                        <p class="text-sm text-gray-800 font-mono break-all">${referralLink}</p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button onclick="copyToClipboard('${referralLink}')" class="btn-premium text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
-                            <i data-lucide="copy" class="w-5 h-5"></i>
-                            <span>Copy Link</span>
-                        </button>
-                        <button onclick="shareReferral('${referralLink}')" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2">
-                            <i data-lucide="share-2" class="w-5 h-5"></i>
-                            <span>Share via WhatsApp</span>
-                        </button>
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onclick="copyToClipboard('${referralLink}')" class="btn-primary text-sm py-3">
+                        <i data-lucide="copy" class="w-4 h-4"></i><span>Copy Link</span>
+                    </button>
+                    <button onclick="shareReferral('${referralLink}')" class="btn-success text-sm py-3">
+                        <i data-lucide="share-2" class="w-4 h-4"></i><span>Share via WhatsApp</span>
+                    </button>
                 </div>
-                
-                <div class="ultra-card p-6 md:p-8">
-                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
-                        <i data-lucide="lightbulb" class="w-6 h-6 mr-2 text-indigo-600"></i>
-                        How It Works
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="text-center">
-                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                <i data-lucide="send" class="w-8 h-8 text-white"></i>
-                            </div>
-                            <h4 class="font-bold text-gray-800 mb-2">1. Share Your Link</h4>
-                            <p class="text-sm text-gray-600">Send your unique referral link to friends and family</p>
-                        </div>
-                        <div class="text-center">
-                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                <i data-lucide="user-plus" class="w-8 h-8 text-white"></i>
-                            </div>
-                            <h4 class="font-bold text-gray-800 mb-2">2. They Sign Up</h4>
-                            <p class="text-sm text-gray-600">Your referrals create an account and complete their first task</p>
-                        </div>
-                        <div class="text-center">
-                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                <i data-lucide="gift" class="w-8 h-8 text-white"></i>
-                            </div>
-                            <h4 class="font-bold text-gray-800 mb-2">3. Earn Bonus</h4>
-                            <p class="text-sm text-gray-600">Get KES ${REFERRAL_BONUS.toFixed(2)} bonus instantly credited to your account</p>
+            </div>
+
+            <div class="card p-6 mb-6">
+                <h3 class="font-bold mb-6" style="font-family:Syne,sans-serif;color:var(--text-1);">How It Works</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${[
+                        { icon:'send', step:'1', title:'Share Your Link', desc:'Send your unique referral link to friends and family' },
+                        { icon:'user-plus', step:'2', title:'They Sign Up', desc:'Your referrals create an account and complete their first task' },
+                        { icon:'gift', step:'3', title:'Earn Bonus', desc:`Get KES ${REFERRAL_BONUS.toFixed(0)} bonus instantly credited to your account` }
+                    ].map(s => `
+                    <div class="how-step">
+                        <div class="circle"><i data-lucide="${s.icon}" class="w-6 h-6 text-white"></i></div>
+                        <h4 class="font-bold mb-1" style="font-family:Syne,sans-serif;color:var(--text-1);">${s.step}. ${s.title}</h4>
+                        <p class="text-sm" style="color:var(--text-2);">${s.desc}</p>
+                    </div>`).join('')}
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="font-bold mb-4" style="font-family:Syne,sans-serif;color:var(--text-1);"><i data-lucide="users-2" class="w-5 h-5 inline mr-2" style="color:var(--brand-light);"></i>Recent Referrals</h3>
+                <div class="txn-row">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,var(--brand),var(--brand-light));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:0.9rem;">J</div>
+                        <div>
+                            <p class="text-sm font-semibold" style="color:var(--text-1);">John K.</p>
+                            <p class="text-xs" style="color:var(--text-3);">john***@gmail.com</p>
                         </div>
                     </div>
-                </div>
-                
-                <div class="ultra-card p-6 md:p-8">
-                    <h3 class="text-xl font-black text-gray-800 mb-4 flex items-center">
-                        <i data-lucide="users-2" class="w-6 h-6 mr-2 text-indigo-600"></i>
-                        Recent Referrals
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                    <span class="text-white font-bold text-sm">J</span>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-gray-800 text-sm">John K.</p>
-                                    <p class="text-xs text-gray-500">john***@gmail.com</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-black text-green-600">+KES 200.00</p>
-                                <span class="text-xs text-green-600 font-semibold">ACTIVE</span>
-                            </div>
-                        </div>
+                    <div style="text-align:right;">
+                        <p class="font-bold text-sm" style="color:#34d399;">+KES 200.00</p>
+                        <span class="text-xs font-bold" style="color:#34d399;">ACTIVE</span>
                     </div>
                 </div>
             </div>
-        `;
+        </div>`;
         lucide.createIcons();
     }
-    
+
     function renderAchievements() {
         const appContainer = document.getElementById('app-container');
         const achievements = [
@@ -1256,371 +1341,275 @@ async function acceptTask(taskId) {
             { id: 3, title: 'Speed Demon', desc: 'Complete 5 tasks in one day', icon: 'zap', unlocked: false, xp: 150 },
             { id: 4, title: 'Quality Pro', desc: '100% approval rate on 20 tasks', icon: 'star', unlocked: false, xp: 200 },
         ];
-        
-        const totalXP = achievements.filter(a => a.unlocked).reduce((sum, a) => sum + a.xp, 0);
+        const totalXP = achievements.filter(a => a.unlocked).reduce((s, a) => s + a.xp, 0);
         const unlockedCount = achievements.filter(a => a.unlocked).length;
-        
+        const progress = ((unlockedCount / achievements.length) * 100).toFixed(0);
+
         appContainer.innerHTML = `
-            <div class="fade-in-up">
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 flex items-center">
-                    <i data-lucide="trophy" class="w-8 h-8 mr-3"></i>
-                    Achievements
-                </h2>
-                
-                <div class="ultra-card p-6 md:p-8 mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <p class="text-sm text-gray-600">Achievement Progress</p>
-                            <p class="text-2xl font-black gradient-text">${unlockedCount} / ${achievements.length} Unlocked</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-600">Total XP</p>
-                            <p class="text-2xl font-black text-indigo-600">${totalXP} XP</p>
-                        </div>
+        <div class="fade-in-up">
+            <div class="section-label mb-1"><i data-lucide="trophy" class="w-6 h-6" style="color:var(--brand-light);"></i> Achievements</div>
+            <p class="section-sub mb-6">Unlock badges and earn XP as you grow</p>
+
+            <div class="card p-6 mb-6">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                    <div>
+                        <p class="text-xs font-semibold mb-1" style="color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;">Progress</p>
+                        <p class="text-xl font-black" style="font-family:Syne,sans-serif;color:var(--text-1);">${unlockedCount} / ${achievements.length} Unlocked</p>
                     </div>
-                    <div class="progress-bar h-4">
-                        <div class="progress-fill" style="width: ${(unlockedCount / achievements.length) * 100}%"></div>
+                    <div style="text-align:right;">
+                        <p class="text-xs font-semibold mb-1" style="color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;">Total XP</p>
+                        <p class="text-xl font-black" style="font-family:Syne,sans-serif;color:var(--brand-light);">${totalXP} XP</p>
                     </div>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    ${achievements.map((ach, i) => `
-                        <div class="ultra-card p-6 fade-in-up ${!ach.unlocked ? 'opacity-60' : ''}" style="animation-delay: ${i * 0.1}s">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="p-4 rounded-xl ${ach.unlocked ? 'bg-gradient-to-br from-indigo-500 to-purple-600' : 'bg-gray-200'}">
-                                    <i data-lucide="${ach.icon}" class="w-8 h-8 ${ach.unlocked ? 'text-white' : 'text-gray-400'}"></i>
-                                </div>
-                                ${ach.unlocked ? '<i data-lucide="check-circle" class="w-6 h-6 text-green-500"></i>' : '<i data-lucide="lock" class="w-6 h-6 text-gray-400"></i>'}
-                            </div>
-                            <h4 class="text-lg font-black text-gray-800 mb-2">${ach.title}</h4>
-                            <p class="text-sm text-gray-600 mb-3">${ach.desc}</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold ${ach.unlocked ? 'text-indigo-600' : 'text-gray-400'}">+${ach.xp} XP</span>
-                                ${ach.unlocked ? '<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">UNLOCKED</span>' : '<span class="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded">LOCKED</span>'}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
+                <div class="progress-track h-3"><div class="progress-fill" style="width:${progress}%;"></div></div>
+                <p class="text-xs mt-2" style="color:var(--text-3);">${progress}% complete</p>
             </div>
-        `;
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                ${achievements.map((ach, i) => `
+                <div class="task-card p-5 fade-in-up ach-card ${!ach.unlocked ? 'locked' : ''}" style="animation-delay:${i*0.08}s;">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
+                        <div class="ach-icon-wrap ${ach.unlocked ? 'unlocked' : 'locked'}">
+                            <i data-lucide="${ach.icon}" class="w-6 h-6 ${ach.unlocked ? 'text-white' : ''}" style="color:${!ach.unlocked?'var(--text-3)':''}"></i>
+                        </div>
+                        <i data-lucide="${ach.unlocked ? 'check-circle' : 'lock'}" class="w-5 h-5" style="color:${ach.unlocked?'#34d399':'var(--text-3)'};"></i>
+                    </div>
+                    <h4 class="font-bold mb-1" style="font-family:Syne,sans-serif;color:var(--text-1);">${ach.title}</h4>
+                    <p class="text-xs mb-3" style="color:var(--text-2);">${ach.desc}</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <span class="text-xs font-bold" style="color:${ach.unlocked?'var(--brand-light)':'var(--text-3)'};">+${ach.xp} XP</span>
+                        <span class="badge" style="${ach.unlocked ? 'background:rgba(16,185,129,0.12);color:#34d399;border-color:rgba(16,185,129,0.2);' : 'background:rgba(255,255,255,0.04);color:var(--text-3);border-color:var(--border);'}">${ach.unlocked ? 'Unlocked' : 'Locked'}</span>
+                    </div>
+                </div>`).join('')}
+            </div>
+        </div>`;
         lucide.createIcons();
     }
-    
-// Located in task_dashboard.html
 
-async function renderTaskDetail(taskId) {
-    const numericTaskId = parseInt(taskId);
-    let task = null;
-    let userTaskStatus = null;
+    async function renderTaskDetail(taskId) {
+        const numericTaskId = parseInt(taskId);
+        let task = null;
+        let userTaskStatus = null;
 
-    // 1. Fetch "My Tasks" (Your accepted list)
-    // We check here FIRST because if you are clicking "Continue", it's likely here.
-    try {
-        const myTasksData = await fetchData('/tasks/my-tasks');
-        const myTaskEntry = myTasksData.tasks.find(t => t.taskId === numericTaskId);
-        
-        if (myTaskEntry) {
-            // FOUND IN MY TASKS!
-            // Map the API fields to the Dashboard fields
-            task = {
-                id: myTaskEntry.taskId,
-                title: myTaskEntry.title,
-                description: myTaskEntry.description, // Now available thanks to Step 1
-                category: myTaskEntry.category,
-                payment: myTaskEntry.payment,
-                estimatedTime: myTaskEntry.estimatedTime,
-                difficulty: myTaskEntry.difficulty,
-                deadline: myTaskEntry.deadline,
-                submission_type: myTaskEntry.submission_type,
-                submission_guide: myTaskEntry.submission_guide,
-                
-                // Status info
-                status: myTaskEntry.status,
-                startedDate: myTaskEntry.startedDate
-            };
-            userTaskStatus = myTaskEntry.status;
-            console.log("Found task in My Tasks history.");
-        }
-    } catch (e) {
-        console.warn("Could not fetch user history:", e);
-    }
+        try {
+            const myTasksData = await fetchData('/tasks/my-tasks');
+            const myTaskEntry = myTasksData.tasks.find(t => t.taskId === numericTaskId);
+            if (myTaskEntry) {
+                task = {
+                    id: myTaskEntry.taskId, title: myTaskEntry.title, description: myTaskEntry.description,
+                    category: myTaskEntry.category, payment: myTaskEntry.payment, estimatedTime: myTaskEntry.estimatedTime,
+                    difficulty: myTaskEntry.difficulty, deadline: myTaskEntry.deadline,
+                    submission_type: myTaskEntry.submission_type, submission_guide: myTaskEntry.submission_guide,
+                    status: myTaskEntry.status, startedDate: myTaskEntry.startedDate
+                };
+                userTaskStatus = myTaskEntry.status;
+            }
+        } catch (e) { console.warn("Could not fetch user history:", e); }
 
-    // 2. If NOT found in My Tasks, check "Available/Cached"
-    if (!task) {
-        task = cachedTasks.find(t => t.id === numericTaskId) || MOCK_TASK_DEFINITIONS.find(t => t.id === numericTaskId);
-        
         if (!task) {
-            // Try fetching available one last time
-            try {
-                const tasksData = await fetchData('/tasks/available');
-                cachedTasks = tasksData.tasks;
-                task = cachedTasks.find(t => t.id === numericTaskId);
-            } catch (e) {}
+            task = cachedTasks.find(t => t.id === numericTaskId) || MOCK_TASK_DEFINITIONS.find(t => t.id === numericTaskId);
+            if (!task) {
+                try {
+                    const tasksData = await fetchData('/tasks/available');
+                    cachedTasks = tasksData.tasks;
+                    task = cachedTasks.find(t => t.id === numericTaskId);
+                } catch (e) {}
+            }
         }
-    }
-    
-    // 3. FINAL CHECK: If still missing, we really can't show it.
-    if (!task || !task.title) {
-        showAlert('Task details unavailable. It may have expired.', false);
-        setRoute('tasks');
-        return;
-    }
-    
-    // 4. Render Logic (Same as before)
-    const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
-    const statusClass = userTaskStatus ? `status-${userTaskStatus.toLowerCase()}` : 'bg-gray-400';
-    const statusText = userTaskStatus ? userTaskStatus.replace('_', ' ') : 'NOT ACCEPTED';
-    
-    let submissionSection;
-    if (userTaskStatus === 'COMPLETED') {
-        submissionSection = `
-            <div class="text-center py-8 text-gray-600 bg-green-50 rounded-xl border-2 border-green-200">
-                <i data-lucide="check-circle" class="w-16 h-16 mx-auto mb-4 text-green-500"></i>
-                <p class="font-bold text-green-800">Task Completed!</p>
-                <p>You have successfully finished this task.</p>
-            </div>`;
-    } else if (userTaskStatus === 'PENDING_VERIFICATION') {
-        submissionSection = `
-            <div class="text-center py-8 text-gray-600 bg-yellow-50 rounded-xl border-2 border-yellow-200">
-                <i data-lucide="clock" class="w-16 h-16 mx-auto mb-4 text-yellow-500"></i>
-                <p class="font-bold text-yellow-800">Awaiting Review</p>
-                <p>Your submission is being reviewed by the admin.</p>
-            </div>`;
-    } else if (userTaskStatus === 'REJECTED') {
-        submissionSection = `
-            <div class="text-center py-8 text-gray-600 bg-red-50 rounded-xl border-2 border-red-200 mb-6">
-                <i data-lucide="x-circle" class="w-16 h-16 mx-auto mb-4 text-red-500"></i>
-                <p class="font-bold text-red-800">Submission Rejected</p>
-                <p class="text-sm">Please review the requirements and try again.</p>
-            </div>
-            ${renderSubmissionForm(task)}`;
-    } else {
-        // IN_PROGRESS or NEW
-        submissionSection = renderSubmissionForm(task);
-    }
 
-    const appContainer = document.getElementById('app-container');
-    appContainer.innerHTML = `
+        if (!task || !task.title) { showAlert('Task details unavailable. It may have expired.', false); setRoute('tasks'); return; }
+
+        const payoutText = typeof task.payment === 'string' ? task.payment : `KES ${getTaskPayout(task)}`;
+        const statusClass = userTaskStatus ? `status-${userTaskStatus.toLowerCase()}` : '';
+        const statusText = userTaskStatus ? userTaskStatus.replace('_', ' ') : 'Not Accepted';
+
+        let submissionSection;
+        if (userTaskStatus === 'COMPLETED') {
+            submissionSection = `<div style="text-align:center;padding:40px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:16px;">
+                <i data-lucide="check-circle" class="w-14 h-14 mx-auto mb-3" style="color:#34d399;"></i>
+                <p class="font-bold" style="color:#34d399;font-size:1.1rem;">Task Completed!</p>
+                <p class="text-sm mt-1" style="color:var(--text-2);">You have successfully finished this task.</p></div>`;
+        } else if (userTaskStatus === 'PENDING_VERIFICATION') {
+            submissionSection = `<div style="text-align:center;padding:40px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:16px;">
+                <i data-lucide="clock" class="w-14 h-14 mx-auto mb-3" style="color:#fbbf24;"></i>
+                <p class="font-bold" style="color:#fbbf24;font-size:1.1rem;">Awaiting Review</p>
+                <p class="text-sm mt-1" style="color:var(--text-2);">Your submission is being reviewed by the admin.</p></div>`;
+        } else if (userTaskStatus === 'REJECTED') {
+            submissionSection = `<div style="text-align:center;padding:32px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:16px;margin-bottom:24px;">
+                <i data-lucide="x-circle" class="w-12 h-12 mx-auto mb-3" style="color:#f87171;"></i>
+                <p class="font-bold" style="color:#f87171;">Submission Rejected</p>
+                <p class="text-sm mt-1" style="color:var(--text-2);">Please review the requirements and try again.</p></div>${renderSubmissionForm(task)}`;
+        } else {
+            submissionSection = renderSubmissionForm(task);
+        }
+
+        const appContainer = document.getElementById('app-container');
+        appContainer.innerHTML = `
         <div class="fade-in-up">
-            <button onclick="setRoute('tasks')" class="text-white hover:text-gray-300 font-semibold mb-6 flex items-center space-x-2">
-                <i data-lucide="arrow-left" class="w-5 h-5"></i><span>Back</span>
+            <button onclick="setRoute('tasks')" class="flex items-center gap-2 mb-6 text-sm font-semibold" style="color:var(--text-2);background:none;border:none;cursor:pointer;padding:0;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i><span>Back to Tasks</span>
             </button>
-            
-            <div class="ultra-card p-6 md:p-8 mb-6">
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <span class="text-sm font-semibold text-gray-600">${task.category || 'General'}</span>
-                        <h1 class="text-2xl md:text-3xl font-black text-gray-800">${task.title}</h1>
+
+            <div class="card p-6 mb-4">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:0;">
+                        <p class="text-xs font-semibold mb-1" style="color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;">${task.category || 'General'}</p>
+                        <h1 style="font-family:Syne,sans-serif;font-size:clamp(1.2rem,3vw,1.6rem);font-weight:800;color:var(--text-1);line-height:1.2;">${task.title}</h1>
                     </div>
-                    <div class="text-right">
-                        <p class="text-3xl font-black gradient-text">${payoutText}</p>
-                        <span class="${statusClass} text-white text-xs font-bold px-3 py-1 rounded-full">${statusText}</span>
+                    <div style="text-align:right;flex-shrink:0;">
+                        <div class="payout-text">${payoutText}</div>
+                        <span class="badge ${statusClass} mt-1">${statusText}</span>
                     </div>
                 </div>
-                <div class="p-4 bg-gray-50 rounded-xl mb-6">
-                    <p class="text-gray-700 whitespace-pre-wrap">${task.description || 'No description available.'}</p>
+                <div style="margin-top:16px;padding:16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;">
+                    <p style="color:var(--text-2);font-size:0.9rem;white-space:pre-wrap;line-height:1.6;">${task.description || 'No description available.'}</p>
                 </div>
             </div>
-            
-            <div class="ultra-card p-6 md:p-8">
-                ${submissionSection}
-            </div>
-        </div>
-    `;
-    lucide.createIcons();
-}
-// Located in DASHBOARD.HTML
 
-function renderSubmissionForm(task) {
-    // 1. CHECK IF TASK HAS BEEN ACCEPTED BY THE USER
-    // If status is NOT IN_PROGRESS or REJECTED or PENDING_VERIFICATION, the user hasn't started yet.
-    if (task.status !== 'IN_PROGRESS' && task.status !== 'REJECTED' && task.status !== 'PENDING_VERIFICATION') {
-        return `
-            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                <i data-lucide="play-circle" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                Start Task
-            </h3>
-            <div class="text-center py-8 text-gray-600">
-                <p class="mb-4">Click below to reserve the slot and proceed to the submission form.</p>
-                <button onclick="acceptTask(${task.id})" class="btn-premium text-white font-bold py-4 px-8 rounded-2xl">
-                    Accept Task Now
-                </button>
-            </div>
-        `;
+            <div class="card p-6">${submissionSection}</div>
+        </div>`;
+        lucide.createIcons();
     }
 
-    // 2. DEFINE CORE PARAMETERS (ROBUST CHECK)
-    // FIX: Check both snake_case (DB) and camelCase (API wrapper) to ensure we capture the type.
-    let rawType = task.submission_type || task.submissionType || 'NONE';
-    const type = (rawType !== 'NONE') ? rawType : 'NONE';
-    
-    const guide = task.submission_guide || task.submissionGuide || 'Please follow the instructions in the task description.';
-    const taskId = task.id || task.taskId; // Handle ID variations too
-    
-    // 3. HANDLE SPECIAL CASE: SURVEYS/DAILY TASKS
-    if (taskId == 1 || task.category === 'Survey') {
-        return renderDailySurveyForm(taskId);
-    }
-    
-    // 4. HANDLE EXPLICIT NON-SUBMISSION TASKS (type === 'NONE')
-    if (type === 'NONE') {
-        return `
-            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                <i data-lucide="check-circle" class="w-6 h-6 mr-3 text-green-600"></i>
-                Task Completion Status
-            </h3>
-            <div class="text-center py-8 text-gray-600">
-                <p class="font-bold text-gray-800">No Submission Required</p>
-                <p>This task is completed by tracking in the background. Your status will update soon.</p>
-                <button onclick="setRoute('my-tasks')" class="btn-premium text-white font-bold py-3 px-6 rounded-xl mt-4">
-                    View My Tasks Status
-                </button>
-            </div>
-        `;
-    }
+    function renderSubmissionForm(task) {
+        if (task.status !== 'IN_PROGRESS' && task.status !== 'REJECTED' && task.status !== 'PENDING_VERIFICATION') {
+            return `
+            <div style="text-align:center;padding:32px;">
+                <i data-lucide="play-circle" class="w-12 h-12 mx-auto mb-3" style="color:var(--brand-light);"></i>
+                <p class="mb-2 font-semibold" style="color:var(--text-1);">Ready to start?</p>
+                <p class="text-sm mb-6" style="color:var(--text-2);">Click below to reserve the slot and open the submission form.</p>
+                <button onclick="acceptTask(${task.id})" class="btn-primary" style="max-width:240px;margin:0 auto;">Accept Task Now</button>
+            </div>`;
+        }
 
-    // 5. RENDER GENERIC SUBMISSION FORM (TEXT, IMAGE_URL, or BOTH)
-    let submissionHtml = '';
-    // We pass the 'type' explicitly to the submit handler
-    let formAction = `submitGenericFileTask(${taskId}, '${type}')`;
-    
-    // --- Render Text/Link Field ---
-    if (type === 'TEXT' || type === 'BOTH') {
-        const textLabel = (type === 'TEXT') ? '1.' : 'A.';
-        submissionHtml += `
-            <div class="mb-5 md:mb-6">
-                <label class="block text-sm font-bold text-gray-700 mb-2">${textLabel} Text/Link/Credential Submission:</label>
-                <textarea id="submission-text-field-${taskId}" rows="4" class="w-full p-3 md:p-4 border-2 border-gray-200 rounded-xl transition text-sm md:text-base focus:border-indigo-500" placeholder="Enter proof, links, or credentials here..." ${type === 'TEXT' ? 'required' : ''}></textarea>
-            </div>
-        `;
-    }
+        let rawType = task.submission_type || task.submissionType || 'NONE';
+        const type = rawType !== 'NONE' ? rawType : 'NONE';
+        const guide = task.submission_guide || task.submissionGuide || 'Please follow the instructions in the task description.';
+        const taskId = task.id || task.taskId;
 
-    // --- Render File/Image Upload Field ---
-    if (type === 'IMAGE_URL' || type === 'BOTH') {
-        const fileLabel = (type === 'IMAGE_URL') ? '1.' : 'B.';
-        const fileUploadBlock = `
-            <div class="mb-5 md:mb-6 ${type === 'BOTH' ? 'mt-6 border-t pt-4' : ''}">
-                <label class="block text-sm font-bold text-gray-700 mb-2">${fileLabel} Image/Screenshot Proof (Max 5MB, JPEG/PNG):</label>
-                <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-indigo-400 transition">
-                    <input type="file" id="submission-file-input-${taskId}" name="document" class="hidden" ${type === 'IMAGE_URL' ? 'required' : ''} accept="image/jpeg,image/png" onchange="handleFileSelectForGeneric(${taskId})">
-                    <label for="submission-file-input-${taskId}" class="cursor-pointer">
-                        <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-2"></i>
-                        <p class="text-sm text-gray-600">Click to upload your screenshot proof</p>
-                        <p class="text-xs text-gray-500 mt-1">JPEG, PNG only (max 5MB)</p>
+        if (taskId == 1 || task.category === 'Survey') return renderDailySurveyForm(taskId);
+
+        if (type === 'NONE') {
+            return `<div style="text-align:center;padding:32px;">
+                <p class="font-bold mb-2" style="color:var(--text-1);">No Submission Required</p>
+                <p class="text-sm mb-4" style="color:var(--text-2);">This task is tracked automatically. Your status will update soon.</p>
+                <button onclick="setRoute('my-tasks')" class="btn-primary" style="max-width:220px;margin:0 auto;">View My Tasks</button>
+            </div>`;
+        }
+
+        let submissionHtml = '';
+        let formAction = `submitGenericFileTask(${taskId}, '${type}')`;
+
+        if (type === 'TEXT' || type === 'BOTH') {
+            submissionHtml += `
+            <div style="margin-bottom:20px;">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text-2);margin-bottom:8px;">${type==='TEXT'?'1.':'A.'} Text / Link / Credential Submission</label>
+                <textarea id="submission-text-field-${taskId}" rows="4" class="form-input" placeholder="Enter proof, links, or credentials here..." ${type==='TEXT'?'required':''}></textarea>
+            </div>`;
+        }
+
+        if (type === 'IMAGE_URL' || type === 'BOTH') {
+            submissionHtml += `
+            <div style="margin-bottom:20px;${type==='BOTH'?'border-top:1px solid var(--border);padding-top:20px;':''}">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text-2);margin-bottom:8px;">${type==='IMAGE_URL'?'1.':'B.'} Screenshot Proof (Max 5MB, JPEG/PNG)</label>
+                <div style="border:2px dashed rgba(91,94,244,0.3);border-radius:14px;padding:32px;text-align:center;transition:border-color 0.2s;" 
+                     onmouseover="this.style.borderColor='rgba(91,94,244,0.6)'" onmouseout="this.style.borderColor='rgba(91,94,244,0.3)'">
+                    <input type="file" id="submission-file-input-${taskId}" class="hidden" ${type==='IMAGE_URL'?'required':''} accept="image/jpeg,image/png" onchange="handleFileSelectForGeneric(${taskId})">
+                    <label for="submission-file-input-${taskId}" style="cursor:pointer;">
+                        <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto mb-2" style="color:var(--brand-light);"></i>
+                        <p class="text-sm font-semibold" style="color:var(--text-1);">Click to upload screenshot</p>
+                        <p class="text-xs mt-1" style="color:var(--text-3);">JPEG or PNG, max 5MB</p>
                     </label>
-                    <div id="file-preview-generic-${taskId}" class="mt-4 hidden">
-                        <p class="text-sm font-semibold text-gray-800" id="file-name-generic-${taskId}"></p>
+                    <div id="file-preview-generic-${taskId}" class="hidden mt-3">
+                        <p class="text-sm font-semibold" id="file-name-generic-${taskId}" style="color:#34d399;"></p>
                     </div>
                 </div>
-            </div>
-        `;
-        submissionHtml += fileUploadBlock;
-    }
+            </div>`;
+        }
 
-    // --- Final Form Wrapper ---
-    return `
-        <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-            <i data-lucide="upload" class="w-6 h-6 mr-3 text-indigo-600"></i>
-            Task Submission Portal
-        </h3>
-        <p class="text-gray-600 text-sm mb-4 font-semibold">Submission Guide: ${guide}</p>
-        <form onsubmit="event.preventDefault(); ${formAction};">
-            ${submissionHtml}
-            <button type="submit" id="submit-btn-generic-${taskId}" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2">
-                <i data-lucide="send" class="w-5 h-5"></i>
-                <span>Submit Task for Review</span>
-            </button>
-        </form>
-    `;
-}
-
-    function renderDailySurveyForm(taskId) {
         return `
-            <h3 class="text-xl md:text-2xl font-black text-gray-800 mb-6 flex items-center">
-                <i data-lucide="clipboard-list" class="w-6 h-6 mr-3 text-indigo-600"></i>
-                Daily Survey Questions
-            </h3>
-            <form id="survey-form-${taskId}" onsubmit="event.preventDefault(); submitDailySurvey(${taskId});">
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">1. How satisfied are you with the platform?</label>
-                        <select name="satisfaction" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 transition" required>
-                            <option value="">Select an option</option>
-                            <option value="very_satisfied">Very Satisfied</option>
-                            <option value="satisfied">Satisfied</option>
-                            <option value="neutral">Neutral</option>
-                            <option value="dissatisfied">Dissatisfied</option>
-                            <option value="very_dissatisfied">Very Dissatisfied</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">2. How easy is it to find tasks?</label>
-                        <select name="ease_of_finding" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 transition" required>
-                            <option value="">Select an option</option>
-                            <option value="very_easy">Very Easy</option>
-                            <option value="easy">Easy</option>
-                            <option value="moderate">Moderate</option>
-                            <option value="difficult">Difficult</option>
-                            <option value="very_difficult">Very Difficult</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">3. What improvements would you suggest?</label>
-                        <textarea name="suggestions" rows="4" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 transition" placeholder="Share your thoughts..." required></textarea>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn-premium w-full text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 mt-6">
-                    <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>Submit Survey</span>
+        <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+                <i data-lucide="upload" class="w-5 h-5" style="color:var(--brand-light);"></i>
+                <h3 style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-1);">Task Submission Portal</h3>
+            </div>
+            <div style="padding:12px 16px;background:rgba(91,94,244,0.08);border:1px solid rgba(91,94,244,0.2);border-radius:12px;margin-bottom:20px;">
+                <p style="font-size:0.85rem;color:var(--text-2);"><span style="font-weight:600;color:var(--brand-light);">Guide:</span> ${guide}</p>
+            </div>
+            <form onsubmit="event.preventDefault(); ${formAction};">
+                ${submissionHtml}
+                <button type="submit" id="submit-btn-generic-${taskId}" class="btn-primary py-4">
+                    <i data-lucide="send" class="w-5 h-5"></i><span>Submit Task for Review</span>
                 </button>
             </form>
-        `;
+        </div>`;
+    }
+
+    function renderDailySurveyForm(taskId) {
+        const selClass = 'form-input';
+        const questions = [
+            { name:'satisfaction', label:'1. How satisfied are you with the platform?', opts:['very_satisfied:Very Satisfied','satisfied:Satisfied','neutral:Neutral','dissatisfied:Dissatisfied','very_dissatisfied:Very Dissatisfied'] },
+            { name:'ease_of_finding', label:'2. How easy is it to find tasks?', opts:['very_easy:Very Easy','easy:Easy','moderate:Moderate','difficult:Difficult','very_difficult:Very Difficult'] }
+        ];
+        return `
+        <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+                <i data-lucide="clipboard-list" class="w-5 h-5" style="color:var(--brand-light);"></i>
+                <h3 style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-1);">Daily Survey Questions</h3>
+            </div>
+            <form id="survey-form-${taskId}" onsubmit="event.preventDefault(); submitDailySurvey(${taskId});">
+                <div style="display:flex;flex-direction:column;gap:20px;">
+                    ${questions.map(q => `
+                    <div>
+                        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text-2);margin-bottom:8px;">${q.label}</label>
+                        <select name="${q.name}" class="${selClass}" required>
+                            <option value="">Select an option</option>
+                            ${q.opts.map(o => `<option value="${o.split(':')[0]}">${o.split(':')[1]}</option>`).join('')}
+                        </select>
+                    </div>`).join('')}
+                    <div>
+                        <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text-2);margin-bottom:8px;">3. What improvements would you suggest?</label>
+                        <textarea name="suggestions" rows="4" class="form-input" placeholder="Share your thoughts..." required></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary py-4 mt-6">
+                    <i data-lucide="send" class="w-5 h-5"></i><span>Submit Survey</span>
+                </button>
+            </form>
+        </div>`;
     }
 
     // ============================================
-    // FILTERING & SEARCH LOGIC
+    // FILTERING ← UNCHANGED LOGIC
     // ============================================
-    
     function applyFilters() {
         const categoryFilter = document.getElementById('category-filter')?.value || 'all';
         const difficultyFilter = document.getElementById('difficulty-filter')?.value || 'all';
         const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
-        
         currentFilters = { category: categoryFilter, difficulty: difficultyFilter, search: searchTerm };
-        
         const filteredTasks = cachedTasks.filter(task => {
             const matchesCategory = categoryFilter === 'all' || task.category === categoryFilter;
             const matchesDifficulty = difficultyFilter === 'all' || getTaskDifficulty(task) === difficultyFilter.toLowerCase();
-            const matchesSearch = searchTerm === '' || task.title.toLowerCase().includes(searchTerm) || task.description.toLowerCase().includes(searchTerm);
-            
+            const matchesSearch = searchTerm === '' || task.title.toLowerCase().includes(searchTerm) || (task.description || '').toLowerCase().includes(searchTerm);
             return matchesCategory && matchesDifficulty && matchesSearch;
         });
-        
         renderFilteredTasks(filteredTasks);
     }
 
     function renderFilteredTasks(tasks) {
         const container = document.getElementById('tasks-grid');
         if (!container) return;
-        
         if (tasks.length === 0) {
             container.innerHTML = `
-                <div class="ultra-card p-8 md:p-12 text-center lg:col-span-3">
-                    <i data-lucide="search-x" class="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4"></i>
-                    <h3 class="text-xl font-black text-gray-800">No Tasks Found</h3>
-                    <p class="text-gray-600 text-sm mt-2">Try adjusting your filters or search terms.</p>
-                    <button onclick="resetFilters()" class="btn-premium text-white font-semibold py-3 px-6 rounded-xl mt-4">
-                        Reset Filters
-                    </button>
-                </div>
-            `;
+            <div class="card p-12 text-center" style="grid-column:1/-1;">
+                <i data-lucide="search-x" class="w-14 h-14 mx-auto mb-4" style="color:var(--text-3);"></i>
+                <h3 class="font-bold mb-2" style="font-family:Syne,sans-serif;color:var(--text-1);">No Tasks Found</h3>
+                <p class="text-sm mb-6" style="color:var(--text-2);">Try adjusting your filters or search terms.</p>
+                <button onclick="resetFilters()" class="btn-primary" style="max-width:180px;margin:0 auto;">Reset Filters</button>
+            </div>`;
             lucide.createIcons();
             return;
         }
-        
         container.innerHTML = tasks.map((task, i) => renderTaskCard(task, i)).join('');
         lucide.createIcons();
     }
@@ -1632,201 +1621,142 @@ function renderSubmissionForm(task) {
         applyFilters();
     }
 
-
     // ============================================
-    // MAIN CONTENT LOADER & INITIALIZATION
+    // ROUTING & INIT ← UNCHANGED LOGIC
     // ============================================
-    
     function setRoute(path) {
         window.location.hash = `#${path}`;
         updateMobileNav(path);
         loadContent();
     }
-    
-    // Located in DASHBOARD.HTML
 
-async function loadContent() {
-    const appContainer = document.getElementById('app-container');
-    appContainer.innerHTML = `
-        <div class="flex items-center justify-center py-20">
-            <div class="text-center">
-                <i data-lucide="loader-2" class="w-12 h-12 md:w-16 md:h-16 text-white animate-spin mx-auto mb-4"></i>
-                <p class="text-white font-bold text-sm md:text-base">Loading your dashboard...</p>
-            </div>
-        </div>
-    `;
-    lucide.createIcons();
-
-    try {
-        // A. ESSENTIAL PREREQUISITES: Fetch user profile, stats, and ALL available tasks first.
-        const [profileData, statsData, tasksData, dailyTaskData] = await Promise.all([
-            fetchUserProfile().catch(e => { console.warn("Profile load failed:", e); return null; }),
-            fetchUserStats().catch(e => { console.warn("Stats load failed:", e); return null; }),
-            fetchData('/tasks/available').catch(e => { // CRITICAL FETCH
-                console.warn("Tasks fetch failed, using mock:", e.message);
-                return { tasks: MOCK_TASK_DEFINITIONS, success: true };
-            }),
-            fetchDailyTask(),
-        ]);
-
-        // B. Populate Global Cache
-        cachedTasks = tasksData.tasks;
-        
-        if (dailyTaskData && dailyTaskData.id) {
-            localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
-        } else {
-            localStorage.removeItem('dailyTask');
-        }
-
-        // C. ROUTE HANDLING: Now that cachedTasks is GUARANTEED to be populated, we route.
-        const hash = window.location.hash.slice(1);
-        const route = hash || 'tasks';
-
-        if (route === 'tasks') {
-            renderTasksList(cachedTasks, dailyTaskData);
-        } else if (route === 'my-tasks') {
-            const myTasksData = await fetchData('/tasks/my-tasks');
-            renderMyTasks(myTasksData.tasks);
-        } else if (route === 'earnings') {
-            renderEarnings();
-        } else if (route === 'affiliate') {
-            renderAffiliateProfile();
-        } else if (route === 'achievements') {
-            renderAchievements();
-        } else if (route.startsWith('tasks/')) {
-            const taskId = route.split('/')[1];
-            // Since cachedTasks is populated, this should successfully find the task details.
-            await renderTaskDetail(taskId); 
-        }
-    } catch (error) {
-        console.error("Critical Load Error:", error);
-        if (!AUTH_TOKEN) return;
-        
-        // Fallback error UI
+    async function loadContent() {
+        const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
-            <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                <i data-lucide="wifi-off" class="w-20 h-20 text-red-500 mx-auto mb-4"></i>
-                <h3 class="text-2xl font-black text-red-600 mb-3">Connection Error</h3>
-                <p class="text-gray-600 mb-6">Unable to load dashboard data. Please check your connection and try again.</p>
-                <button onclick="location.reload()" class="btn-premium text-white font-bold py-4 px-8 rounded-xl">
-                    <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>
-                    Retry
-                </button>
+        <div style="display:flex;align-items:center;justify-content:center;padding:80px 0;">
+            <div style="text-align:center;">
+                <i data-lucide="loader-2" class="w-12 h-12 animate-spin mx-auto mb-4" style="color:var(--brand-light);"></i>
+                <p style="color:var(--text-2);font-weight:500;">Loading your dashboard...</p>
             </div>
-        `;
+        </div>`;
         lucide.createIcons();
-    }
-}
 
+        try {
+            const [profileData, statsData, tasksData, dailyTaskData] = await Promise.all([
+                fetchUserProfile().catch(e => { console.warn("Profile load failed:", e); return null; }),
+                fetchUserStats().catch(e => { console.warn("Stats load failed:", e); return null; }),
+                fetchData('/tasks/available').catch(e => {
+                    console.warn("Tasks fetch failed, using mock:", e.message);
+                    return { tasks: MOCK_TASK_DEFINITIONS, success: true };
+                }),
+                fetchDailyTask(),
+            ]);
 
-    // Located in DASHBOARD.HTML
-async function initializeApp() {
-    createStarField();
-    
-    const params = new URLSearchParams(window.location.search);
-    const urlToken = params.get('token');
-    
-    // --- Authentication Logic ---
-    if (urlToken) {
-        AUTH_TOKEN = urlToken;
-        localStorage.setItem('btech_auth_token', AUTH_TOKEN);
-    } else if (localStorage.getItem('btech_auth_token')) {
-        AUTH_TOKEN = localStorage.getItem('btech_auth_token');
-    }
-    
-    if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
-        renderSignInScreen();
-        return;
-    }
-    
-    // --- Query Parameter Handling for Direct Task Detail ---
-    const taskIdFromUrl = params.get('taskid');
+            cachedTasks = tasksData.tasks;
+            if (dailyTaskData && dailyTaskData.id) {
+                localStorage.setItem('dailyTask', JSON.stringify(dailyTaskData));
+            } else {
+                localStorage.removeItem('dailyTask');
+            }
 
-    if (taskIdFromUrl) {
-        // 1. Force navigation state update (removes the ?taskid= part)
-        // We replace the state and ensure the page is clean before rendering.
-        window.history.replaceState(null, null, window.location.pathname + window.location.hash);
-        
-        // 2. Set the navigation bar to 'tasks' for visual consistency
-        updateMobileNav('tasks'); 
-        
-        // 3. Immediately render the specific task detail using the ID
-        // The renderTaskDetail function is responsible for the necessary data fetches.
-        await renderTaskDetail(taskIdFromUrl); 
-        
-        return; // STOP execution of the rest of the router
-    }
-    
-    // --- Standard Hash Routing ---
-    
-    // Clean up old token parameters if present in search but no taskid was found
-    if (window.location.search) {
-        window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+            const hash = window.location.hash.slice(1);
+            const route = hash || 'tasks';
+
+            if (route === 'tasks') {
+                renderTasksList(cachedTasks, dailyTaskData);
+            } else if (route === 'my-tasks') {
+                const myTasksData = await fetchData('/tasks/my-tasks');
+                renderMyTasks(myTasksData.tasks);
+            } else if (route === 'earnings') {
+                renderEarnings();
+            } else if (route === 'affiliate') {
+                renderAffiliateProfile();
+            } else if (route === 'achievements') {
+                renderAchievements();
+            } else if (route.startsWith('tasks/')) {
+                const taskId = route.split('/')[1];
+                await renderTaskDetail(taskId);
+            }
+        } catch (error) {
+            console.error("Critical Load Error:", error);
+            if (!AUTH_TOKEN) return;
+            appContainer.innerHTML = `
+            <div class="card p-12 text-center mt-8">
+                <i data-lucide="wifi-off" class="w-16 h-16 mx-auto mb-4" style="color:#f87171;"></i>
+                <h3 style="font-family:Syne,sans-serif;font-size:1.4rem;font-weight:800;color:#f87171;margin-bottom:8px;">Connection Error</h3>
+                <p class="mb-6" style="color:var(--text-2);">Unable to load dashboard data. Please check your connection.</p>
+                <button onclick="location.reload()" class="btn-primary" style="max-width:180px;margin:0 auto;">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Retry</span>
+                </button>
+            </div>`;
+            lucide.createIcons();
+        }
     }
 
-    const hash = window.location.hash.slice(1);
-    updateMobileNav(hash || 'tasks');
-    
-    // Load content based on hash if no query parameter was present
-    await loadContent();
-}
+    async function initializeApp() {
+        createStarField();
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get('token');
+        if (urlToken) {
+            AUTH_TOKEN = urlToken;
+            localStorage.setItem('btech_auth_token', AUTH_TOKEN);
+        } else if (localStorage.getItem('btech_auth_token')) {
+            AUTH_TOKEN = localStorage.getItem('btech_auth_token');
+        }
+
+        if (!AUTH_TOKEN || AUTH_TOKEN.length < 100) {
+            renderSignInScreen();
+            return;
+        }
+
+        const taskIdFromUrl = params.get('taskid');
+        if (taskIdFromUrl) {
+            window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+            updateMobileNav('tasks');
+            await renderTaskDetail(taskIdFromUrl);
+            return;
+        }
+
+        if (window.location.search) {
+            window.history.replaceState(null, null, window.location.pathname + window.location.hash);
+        }
+
+        const hash = window.location.hash.slice(1);
+        updateMobileNav(hash || 'tasks');
+        await loadContent();
+    }
 
     function renderSignInScreen() {
         const appContainer = document.getElementById('app-container');
         appContainer.innerHTML = `
-             <div class="ultra-card p-8 md:p-12 text-center mt-12">
-                 <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                     <i data-lucide="shield-check" class="w-12 h-12 text-white"></i>
-                 </div>
-                 <h3 class="text-3xl md:text-4xl font-black gradient-text mb-4">Welcome to BTECH PRO</h3>
-                 <p class="text-gray-600 text-base md:text-lg mb-8 max-w-md mx-auto">
-                     Sign in to access your personalized dashboard and start earning today.
-                 </p>
-                 
-                 <div class="flex flex-col space-y-4 max-w-sm mx-auto">
-                     <div id="g_id_onload"
-                          data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                          data-callback="handleCredentialResponse"
-                          data-auto_prompt="false">
-                     </div>
-                     <div class="g_id_signin"
-                          data-type="standard"
-                          data-size="large"
-                          data-theme="outline"
-                          data-text="signin_with"
-                          data-shape="rectangular"
-                          data-logo_alignment="left">
-                     </div>
-                     <button onclick="location.reload()" class="btn-premium text-white font-bold py-4 px-8 rounded-xl">
-                          <i data-lucide="refresh-cw" class="w-5 h-5 inline mr-2"></i>
-                          Retry Mobile Session
-                     </button>
-                 </div>
-                 
-                 <div class="mt-8 grid grid-cols-3 gap-4 max-w-md mx-auto">
-                     <div class="text-center">
-                         <div class="text-2xl font-black gradient-text">500+</div>
-                         <div class="text-xs text-gray-600">Active Users</div>
-                     </div>
-                     <div class="text-center">
-                         <div class="text-2xl font-black gradient-text">KES 2M+</div>
-                         <div class="text-xs text-gray-600">Paid Out</div>
-                     </div>
-                     <div class="text-center">
-                         <div class="text-2xl font-black gradient-text">1000+</div>
-                         <div class="text-xs text-gray-600">Tasks Done</div>
-                     </div>
-                 </div>
-             </div>
-        `;
+        <div class="signin-card fade-in-up">
+            <div class="logo-ring mx-auto mb-6" style="width:72px;height:72px;border-radius:20px;">
+                <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+            </div>
+            <h3 style="font-family:Syne,sans-serif;font-size:clamp(1.5rem,5vw,2rem);font-weight:800;color:var(--text-1);margin-bottom:8px;">Welcome to BTECH PRO</h3>
+            <p class="mb-8" style="color:var(--text-2);max-width:340px;margin-left:auto;margin-right:auto;line-height:1.6;">Sign in to access your personalized dashboard and start earning today.</p>
+
+            <div style="max-width:300px;margin:0 auto;display:flex;flex-direction:column;gap:12px;">
+                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
+                <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+                <button onclick="location.reload()" class="btn-secondary py-3 text-sm">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Retry Mobile Session</span>
+                </button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:320px;margin:32px auto 0;">
+                <div class="signin-stat"><div class="val">500+</div><div class="lbl">Active Users</div></div>
+                <div class="signin-stat"><div class="val">KES 2M+</div><div class="lbl">Paid Out</div></div>
+                <div class="signin-stat"><div class="val">1000+</div><div class="lbl">Tasks Done</div></div>
+            </div>
+        </div>`;
         lucide.createIcons();
     }
 
-
     window.addEventListener('hashchange', loadContent);
     window.onload = initializeApp;
-    
-    // Global function exposure (for HTML onclicks)
+
+    // Global exposures ← UNCHANGED
     window.handleCredentialResponse = handleCredentialResponse;
     window.setRoute = setRoute;
     window.simulateLogout = simulateLogout;
@@ -1843,15 +1773,15 @@ async function initializeApp() {
     window.submitDailySurvey = submitDailySurvey;
     window.applyFilters = applyFilters;
     window.resetFilters = resetFilters;
+    window.navigateToTaskDetail = function(taskId) { setRoute(`tasks/${taskId}`); };
     window.copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text).then(() => { showAlert('Copied to clipboard!', true); }).catch(() => { showAlert('Failed to copy', false); });
+        navigator.clipboard.writeText(text).then(() => showAlert('Copied to clipboard!', true)).catch(() => showAlert('Failed to copy', false));
     };
     window.shareReferral = (link) => {
         const message = `Join BTECH Earning Network and start earning today! Use my referral link: ${link}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
     };
     window.showWithdrawalModal = showWithdrawalModal;
-
 </script>
 </body>
 </html>
