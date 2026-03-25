@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Forum — BTECHPLUS</title>
+<meta name="description" content="Ask questions, share experiences and get answers from the BTECHPLUS student community.">
+<meta name="theme-color" content="#08080f">
+<link rel="stylesheet" href="shared.css">
+<style>
+
+.page-inner { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ── PAGE HEADER ── */
+.page-header { margin-bottom: 36px; }
+.page-header h1 { font-family: 'Fraunces', serif; font-size: clamp(28px,5vw,42px); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 10px; }
+.page-header h1 em { font-style: italic; color: var(--violet); }
+.page-header p { font-size: 15px; color: var(--white2); max-width: 500px; line-height: 1.7; }
+
+/* ── FORUM LAYOUT ── */
+.forum-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+
+/* ── NEW POST ── */
+.new-post-card {
+  background: var(--ink2); border: 1px solid rgba(167,139,250,0.2);
+  border-radius: 20px; padding: 24px; margin-bottom: 24px;
+}
+.new-post-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+.new-post-fields { display: flex; flex-direction: column; gap: 12px; }
+.new-post-fields input, .new-post-fields textarea {
+  width: 100%; padding: 12px 14px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
+  border-radius: 10px; color: var(--white);
+  font-family: 'Outfit', sans-serif; font-size: 14px; outline: none;
+  transition: border-color 0.15s; resize: vertical;
+}
+.new-post-fields input:focus, .new-post-fields textarea:focus { border-color: var(--violet); }
+.new-post-fields input::placeholder, .new-post-fields textarea::placeholder { color: var(--white3); }
+.new-post-fields textarea { min-height: 100px; }
+
+.post-submit-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.post-note { font-size: 12px; color: var(--white3); }
+
+/* ── TABS ── */
+.forum-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--ink2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; }
+.forum-tab {
+  flex: 1; padding: 9px 12px; text-align: center;
+  border: none; background: none; color: var(--white3);
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; border-radius: 9px; transition: 0.15s;
+}
+.forum-tab.active { background: var(--ink3); color: var(--white); }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.filter-bar input {
+  flex: 1; min-width: 160px; padding: 9px 14px;
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 9px; color: var(--white);
+  font-family: 'Outfit', sans-serif; font-size: 13px; outline: none; transition: border-color 0.15s;
+}
+.filter-bar input:focus { border-color: var(--violet); }
+.filter-bar input::placeholder { color: var(--white3); }
+.category-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.cat-pill {
+  padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  background: var(--ink2); border: 1px solid var(--border); color: var(--white3);
+  cursor: pointer; transition: 0.15s;
+}
+.cat-pill.active { background: var(--lime-dim); border-color: var(--lime-mid); color: var(--lime); }
+
+/* ── THREAD CARD ── */
+.thread-card {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px;
+  margin-bottom: 12px; cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s;
+}
+.thread-card:hover { border-color: var(--border2); background: var(--ink3); transform: translateX(2px); }
+.thread-card.has-reply { border-color: rgba(200,241,53,0.15); }
+
+.thread-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.thread-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: var(--ink);
+}
+.thread-meta strong { font-size: 14px; font-weight: 700; color: var(--white); display: block; }
+.thread-meta span { font-size: 11px; color: var(--white3); }
+.thread-body { font-size: 14px; color: var(--white2); line-height: 1.65; margin-bottom: 12px; }
+.thread-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.thread-footer-left { display: flex; align-items: center; gap: 10px; }
+.thread-cat { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.reply-count { font-size: 12px; color: var(--white3); font-weight: 600; }
+.reply-btn {
+  font-size: 12px; color: var(--violet); font-weight: 700;
+  background: none; border: none; cursor: pointer; font-family: inherit;
+  transition: color 0.15s;
+}
+.reply-btn:hover { color: var(--white); }
+
+/* ── ADMIN REPLY BLOCK ── */
+.admin-reply {
+  margin-top: 12px; padding: 12px 14px;
+  background: rgba(200,241,53,0.05); border-left: 3px solid var(--lime);
+  border-radius: 0 10px 10px 0; font-size: 13px; color: var(--white2); line-height: 1.6;
+}
+.admin-reply-label {
+  font-size: 10px; font-weight: 800; color: var(--lime);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;
+}
+
+/* ── THREAD REPLIES (expanded) ── */
+.thread-replies { display: none; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 14px; }
+.thread-replies.open { display: block; }
+.reply-item {
+  display: flex; gap: 10px; margin-bottom: 12px;
+}
+.reply-avatar {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: var(--ink);
+  background: var(--violet);
+}
+.reply-item.is-admin .reply-avatar { background: var(--lime); }
+.reply-content { flex: 1; }
+.reply-content strong { font-size: 12px; font-weight: 800; color: var(--white); }
+.reply-content .when { font-size: 11px; color: var(--white3); margin-left: 8px; }
+.reply-content p { font-size: 13px; color: var(--white2); margin-top: 4px; line-height: 1.6; }
+
+.reply-form { display: flex; gap: 10px; margin-top: 12px; }
+.reply-form input {
+  flex: 1; padding: 10px 14px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
+  border-radius: 9px; color: var(--white);
+  font-family: 'Outfit', sans-serif; font-size: 13px; outline: none;
+}
+.reply-form input:focus { border-color: var(--violet); }
+.reply-form-btn {
+  padding: 10px 16px; background: var(--violet); color: var(--ink);
+  border: none; border-radius: 9px; font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.15s; white-space: nowrap;
+}
+.reply-form-btn:hover { background: #b59dfc; }
+
+/* ── SIDEBAR ── */
+.sidebar-card {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 18px; padding: 20px; margin-bottom: 16px;
+}
+.sidebar-card h4 { font-size: 13px; font-weight: 800; margin-bottom: 14px; }
+
+.tip-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+.tip-icon { font-size: 16px; flex-shrink: 0; }
+.tip-item p { font-size: 12.5px; color: var(--white2); line-height: 1.55; }
+
+.contact-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: var(--ink3); border-radius: 9px;
+  margin-bottom: 8px; text-decoration: none; color: var(--white); transition: 0.15s;
+}
+.contact-item:hover { background: var(--surface); }
+.contact-item span { font-size: 12.5px; }
+
+.forum-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fstat {
+  text-align: center; padding: 12px; background: var(--ink3); border-radius: 10px;
+}
+.fstat-num { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--lime); }
+.fstat-label { font-size: 10px; color: var(--white3); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; font-weight: 600; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--white3); }
+.empty-state div { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .forum-layout { grid-template-columns: 1fr; }
+  .sidebar-col { order: -1; }
+  .forum-stats { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 640px) {
+  .page-inner { padding: 24px 16px 60px; }
+  .new-post-card { padding: 18px 14px; }
+  .thread-card { padding: 16px 14px; }
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-bar input { width: 100%; }
+  .post-submit-row { flex-direction: column-reverse; }
+  .post-submit-row .btn-lime { width: 100%; justify-content: center; }
+  .forum-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="bp-nav">
+  <a href="index.html" class="bp-logo">
+    BTECHPLUS <span class="bp-logo-tag">KE</span>
+  </a>
+  <ul class="bp-nav-links">
+    <li><a href="index.html">Dashboard</a></li>
+    <li><a href="calculator.html">Calculator</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="forum.html" class="active">Forum</a></li>
+    <li><a href="admin.html" class="bp-nav-cta">Admin</a></li>
+  </ul>
+  <button class="bp-hamburger" id="ham" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<nav class="bp-mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Dashboard</a>
+  <a href="calculator.html">🧮 Cluster Calculator</a>
+  <a href="courses.html">📚 Course Finder</a>
+  <a href="forum.html" class="active">💬 Student Forum</a>
+  <a href="admin.html">⚙️ Admin Panel</a>
+</nav>
+
+<main class="bp-page">
+<div class="page-inner">
+
+  <div class="page-header">
+    <div class="bp-eyebrow">💬 Student Forum</div>
+    <h1>Ask. <em>Learn.</em> Connect.</h1>
+    <p>Post your questions, start discussions, and get real answers from fellow students and the BTECHPLUS team.</p>
+  </div>
+
+  <div class="forum-layout">
+
+    <!-- MAIN FEED -->
+    <div>
+
+      <!-- New Post -->
+      <div class="new-post-card">
+        <h3>💬 Start a Discussion</h3>
+        <div class="new-post-fields">
+          <input type="text" id="postName" placeholder="Your name (e.g. John Kamau)" maxlength="40">
+          <input type="text" id="postTitle" placeholder="Subject / question title…" maxlength="120">
+          <textarea id="postBody" placeholder="Share your question or experience in detail…" rows="4"></textarea>
+          <div class="post-submit-row">
+            <p class="post-note">Your post will be visible to all students and reviewed by the BTECHPLUS team.</p>
+            <button class="btn-lime" onclick="submitPost()" style="flex-shrink:0;">Post Question →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="forum-tabs">
+        <button class="forum-tab active" onclick="switchTab('all',this)">All Posts</button>
+        <button class="forum-tab" onclick="switchTab('answered',this)">✅ Answered</button>
+        <button class="forum-tab" onclick="switchTab('unanswered',this)">⏳ Unanswered</button>
+      </div>
+
+      <!-- Filter / Search -->
+      <div class="filter-bar">
+        <input type="text" id="searchInput" placeholder="Search posts…" oninput="filterPosts()">
+        <div class="category-pills">
+          <button class="cat-pill active" onclick="setCategory('all',this)">All</button>
+          <button class="cat-pill" onclick="setCategory('KUCCPS',this)">KUCCPS</button>
+          <button class="cat-pill" onclick="setCategory('KMTC',this)">KMTC</button>
+          <button class="cat-pill" onclick="setCategory('TVET',this)">TVET</button>
+          <button class="cat-pill" onclick="setCategory('University',this)">University</button>
+          <button class="cat-pill" onclick="setCategory('HELB',this)">HELB</button>
+        </div>
+      </div>
+
+      <!-- Feed -->
+      <div id="forumFeed">
+        <div class="empty-state"><div>💬</div><p>Loading posts…</p></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-col">
+
+      <!-- Stats -->
+      <div class="sidebar-card">
+        <h4>📊 Forum Activity</h4>
+        <div class="forum-stats">
+          <div class="fstat"><div class="fstat-num" id="statPosts">—</div><div class="fstat-label">Posts</div></div>
+          <div class="fstat"><div class="fstat-num" id="statAnswered">—</div><div class="fstat-label">Answered</div></div>
+          <div class="fstat"><div class="fstat-num" id="statStudents">—</div><div class="fstat-label">Students</div></div>
+          <div class="fstat"><div class="fstat-num">24h</div><div class="fstat-label">Response</div></div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="sidebar-card">
+        <h4>💡 Tips for a Great Post</h4>
+        <div class="tip-item"><div class="tip-icon">📝</div><p>State your KCSE grade so others can give accurate advice</p></div>
+        <div class="tip-item"><div class="tip-icon">🎯</div><p>Be specific — "What are the KMTC requirements for Nursing?" is better than "KMTC help"</p></div>
+        <div class="tip-item"><div class="tip-icon">🙏</div><p>Help others by replying to questions you already know the answers to</p></div>
+      </div>
+
+      <!-- Contact -->
+      <div class="sidebar-card">
+        <h4>📞 Direct Support</h4>
+        <a href="https://wa.me/254113996609" target="_blank" rel="noopener" class="contact-item">
+          <span>📲</span><span>WhatsApp: 0113996609</span>
+        </a>
+        <a href="mailto:btechkenya@gmail.com" class="contact-item">
+          <span>📧</span><span>btechkenya@gmail.com</span>
+        </a>
+        <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener" class="contact-item" style="background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);">
+          <span>👥</span><span style="color:#25d366;font-weight:700;">Join KUCCPS Group</span>
+        </a>
+      </div>
+
+      <!-- Popular questions -->
+      <div class="sidebar-card">
+        <h4>🔥 Popular Topics</h4>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <button class="cat-pill" style="text-align:left;width:100%;border-radius:9px;" onclick="setSearch('cluster points')">Cluster point calculation</button>
+          <button class="cat-pill" style="text-align:left;width:100%;border-radius:9px;" onclick="setSearch('KMTC Nursing')">KMTC Nursing requirements</button>
+          <button class="cat-pill" style="text-align:left;width:100%;border-radius:9px;" onclick="setSearch('KUCCPS portal')">KUCCPS portal help</button>
+          <button class="cat-pill" style="text-align:left;width:100%;border-radius:9px;" onclick="setSearch('HELB loan')">HELB loan application</button>
+          <button class="cat-pill" style="text-align:left;width:100%;border-radius:9px;" onclick="setSearch('C plain')">What can I do with C plain?</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</main>
+
+<div class="bp-toast" id="toast"></div>
+
+<script>
+const API_BASE = 'https://btechplus.com/api';
+var allPosts = [];
+var currentTab = 'all';
+var currentCategory = 'all';
+var postBusy = false;
+
+var avatarColors = ['#c8f135','#00e5cc','#a78bfa','#ff6b52','#f59e0b','#60a5fa'];
+function getColor(name) {
+  var i = (name || 'S').charCodeAt(0) % avatarColors.length;
+  return avatarColors[i];
+}
+
+var seedPosts = [
+  { id: 's1', username: 'Brian M.', title: 'Computer Science at UoN — what cluster do I need?', message: 'I got B in Maths and B+ in Physics. My cluster came to around 36. Is that enough for Computer Science at UoN or should I look at private universities?', category: 'University', created_at: new Date(Date.now()-7200000).toISOString(), admin_reply: 'Hi Brian! With 36 cluster points you qualify for Computer Science at most public universities. UoN cut-off for BSc CS was around 36.4 in 2024, so you are very close. We recommend applying to UoN as your 1st choice and JKUAT / KU as backups. Also consider USIU which accepts slightly lower points. Use the Cluster Calculator above to confirm your exact score. All the best!', replies: [] },
+  { id: 's2', username: 'Winnie A.', title: 'Is C plain enough for KMTC Nursing?', message: 'I got a mean grade of C plain in my KCSE. My best subjects were Biology and Chemistry. Can I apply for Nursing at KMTC?', category: 'KMTC', created_at: new Date(Date.now()-18000000).toISOString(), admin_reply: 'Yes Winnie! KMTC Diploma in Kenya Registered Community Health Nursing (K04) requires a mean grade of C plain. Your Biology and Chemistry grades are very helpful. You can apply at any of the 30 KMTC campuses. Apply via the KUCCPS portal when it opens. Don't miss the deadline!', replies: [] },
+  { id: 's3', username: 'Kevin O.', title: 'When does KUCCPS portal open for 2026?', message: 'I am ready to submit my course choices but I cannot find the exact date the KUCCPS portal opens this year. Can anyone help?', category: 'KUCCPS', created_at: new Date(Date.now()-86400000).toISOString(), admin_reply: null, replies: [{ username: 'Amina H.', message: 'From past years it usually opens in May or June after KNEC releases results. Keep watching the KUCCPS website — students.kuccps.net. Also join the WhatsApp group for live alerts!', created_at: new Date(Date.now()-72000000).toISOString() }] },
+  { id: 's4', username: 'Amina H.', title: 'Best private universities for Education degree?', message: 'I am interested in teaching at secondary school level and got a B− mean grade. Which private universities offer the best Education degrees in Kenya?', category: 'University', created_at: new Date(Date.now()-172800000).toISOString(), admin_reply: 'Great question Amina! For B.Ed (Secondary Education) with B−, you qualify at: 1) Mt Kenya University (MKU) — affordable and widely available, 2) KCA University, 3) Daystar University — strong Education faculty, 4) Catholic University of Eastern Africa (CUEA). For public universities, B.Ed requires B− at Moi, JKUAT and Egerton. Choose based on location and fees.', replies: [] },
+  { id: 's5', username: 'Peter N.', title: 'D grade — what options do I have?', message: 'I got a D plain in KCSE. My family keeps saying I have no future. Is there really nothing available for me? I feel so lost.', category: 'TVET', created_at: new Date(Date.now()-259200000).toISOString(), admin_reply: 'Peter, D plain opens many TVET Certificate programmes — Business, Computing, Tourism, Agriculture, Hospitality, Clothing & Textile. These are 2-year programmes at government-funded TVETs across Kenya. Many Kenyans have gone through TVET and built great careers. A grade does not define your potential. Visit your nearest TVET institution or check the KUCCPS portal for the full list. We are here to help you.', replies: [{ username: 'Faith W.', message: 'Peter pole sana. I know someone with a D who studied Electrical Installation at TVET and is now very successful. Please do not give up — TVET is a real path!', created_at: new Date(Date.now()-240000000).toISOString() }] },
+];
+
+function toggleNav() {
+  document.getElementById('ham').classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+function toast(msg, dur) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, dur || 3500);
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.forum-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderFeed();
+}
+
+function setCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-pill').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderFeed();
+}
+
+function setSearch(q) {
+  document.getElementById('searchInput').value = q;
+  filterPosts();
+}
+
+function filterPosts() { renderFeed(); }
+
+function renderFeed() {
+  var q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  var posts = allPosts.filter(function(p) {
+    if (currentTab === 'answered' && !p.admin_reply) return false;
+    if (currentTab === 'unanswered' && p.admin_reply) return false;
+    if (currentCategory !== 'all' && p.category !== currentCategory) return false;
+    if (q) {
+      var text = ((p.title || '') + ' ' + (p.message || '') + ' ' + (p.username || '')).toLowerCase();
+      if (!text.includes(q)) return false;
+    }
+    return true;
+  });
+
+  var feed = document.getElementById('forumFeed');
+  if (!posts.length) {
+    feed.innerHTML = '<div class="empty-state"><div>🔍</div><p>No posts match your search. Try a different filter or be the first to ask!</p></div>';
+    return;
+  }
+
+  feed.innerHTML = posts.map(function(p, idx) {
+    var initials = (p.username || 'S').slice(0,2).toUpperCase();
+    var color = getColor(p.username);
+    var when = p.created_at ? new Date(p.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',year:'numeric'}) : 'Recently';
+    var catColor = p.category === 'KUCCPS' ? 'badge-lime' : p.category === 'KMTC' ? 'badge-teal' : p.category === 'University' ? 'badge-violet' : p.category === 'TVET' ? 'badge-amber' : 'badge-teal';
+    var replyCount = (p.replies||[]).length + (p.admin_reply ? 1 : 0);
+
+    var repliesHtml = (p.replies||[]).map(function(r) {
+      var ri = (r.username||'S').slice(0,2).toUpperCase();
+      var rcolor = getColor(r.username);
+      var rwhen = r.created_at ? new Date(r.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : '';
+      return '<div class="reply-item"><div class="reply-avatar" style="background:' + rcolor + ';color:#000;">' + ri + '</div>'
+        + '<div class="reply-content"><strong>' + (r.username||'Student') + '</strong><span class="when">' + rwhen + '</span>'
+        + '<p>' + r.message + '</p></div></div>';
+    }).join('');
+
+    var adminHtml = p.admin_reply
+      ? '<div class="reply-item is-admin"><div class="reply-avatar">BT</div>'
+        + '<div class="reply-content"><strong style="color:var(--lime);">BTECHPLUS Team</strong>'
+        + '<p>' + p.admin_reply + '</p></div></div>'
+      : '';
+
+    return '<div class="thread-card ' + (p.admin_reply ? 'has-reply' : '') + '" id="thread-' + idx + '">'
+      + '<div class="thread-top">'
+      + '<div class="thread-avatar" style="background:' + color + ';color:#000;">' + initials + '</div>'
+      + '<div class="thread-meta"><strong>' + (p.username||'Student') + '</strong><span>' + when + '</span></div>'
+      + (p.admin_reply ? '<span class="bp-badge badge-lime" style="margin-left:auto;">✅ Answered</span>' : '')
+      + '</div>'
+      + (p.title ? '<div style="font-size:15px;font-weight:800;color:var(--white);margin-bottom:8px;">' + p.title + '</div>' : '')
+      + '<div class="thread-body">' + p.message + '</div>'
+      + '<div class="thread-footer">'
+      + '<div class="thread-footer-left">'
+      + (p.category ? '<span class="bp-badge ' + catColor + '">' + p.category + '</span>' : '')
+      + '<span class="reply-count">💬 ' + replyCount + ' ' + (replyCount === 1 ? 'reply' : 'replies') + '</span>'
+      + '</div>'
+      + '<button class="reply-btn" onclick="toggleReplies(' + idx + ',event)">View & Reply ↓</button>'
+      + '</div>'
+      + '<div class="thread-replies" id="replies-' + idx + '">'
+      + (repliesHtml || adminHtml ? repliesHtml + adminHtml : '<p style="font-size:12.5px;color:var(--white3);padding:8px 0;">No replies yet. Be the first!</p>')
+      + '<div class="reply-form">'
+      + '<input type="text" placeholder="Write a reply…" id="reply-input-' + idx + '" onkeydown="if(event.key===\'Enter\')submitReply(' + idx + ',\'' + p.id + '\')">'
+      + '<button class="reply-form-btn" onclick="submitReply(' + idx + ',\'' + p.id + '\')">Reply</button>'
+      + '</div></div>'
+      + '</div>';
+  }).join('');
+}
+
+function toggleReplies(idx, e) {
+  e.stopPropagation();
+  var el = document.getElementById('replies-' + idx);
+  if (!el) return;
+  el.classList.toggle('open');
+  var btn = el.previousElementSibling.querySelector('.reply-btn');
+  if (btn) btn.textContent = el.classList.contains('open') ? 'Hide ↑' : 'View & Reply ↓';
+}
+
+async function submitReply(idx, postId) {
+  var inp = document.getElementById('reply-input-' + idx);
+  var msg = inp ? inp.value.trim() : '';
+  if (!msg) return;
+  var user = JSON.parse(localStorage.getItem('bpUser')||'null');
+  var name = user ? user.username : 'Student';
+
+  // Optimistic UI
+  var post = allPosts.find(function(p){ return p.id === postId; });
+  if (!post) return;
+  if (!post.replies) post.replies = [];
+  post.replies.push({ username: name, message: msg, created_at: new Date().toISOString() });
+  renderFeed();
+  inp.value = '';
+
+  try {
+    await fetch(API_BASE + '/forum/posts/' + postId + '/replies', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username: name, message: msg })
+    });
+  } catch(e) {}
+  toast('✅ Reply posted!');
+}
+
+async function submitPost() {
+  if (postBusy) return;
+  var name  = document.getElementById('postName').value.trim();
+  var title = document.getElementById('postTitle').value.trim();
+  var body  = document.getElementById('postBody').value.trim();
+  if (!body) { toast('⚠️ Please write your question first.'); return; }
+  if (!name) name = 'Student';
+
+  // Detect category
+  var cat = 'General';
+  var text = (title + ' ' + body).toLowerCase();
+  if (/kuccps|portal|placement|selection/.test(text)) cat = 'KUCCPS';
+  else if (/kmtc|clinical|nursing|pharmacy|lab/.test(text)) cat = 'KMTC';
+  else if (/tvet|vocational|artisan|certificate/.test(text)) cat = 'TVET';
+  else if (/university|degree|campus|college/.test(text)) cat = 'University';
+  else if (/helb|loan|bursary|fees/.test(text)) cat = 'HELB';
+
+  postBusy = true;
+  var newPost = { id: 'local-' + Date.now(), username: name, title: title, message: body, category: cat, created_at: new Date().toISOString(), admin_reply: null, replies: [] };
+  allPosts.unshift(newPost);
+  updateStats();
+  renderFeed();
+  document.getElementById('postName').value = '';
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postBody').value = '';
+  toast('✅ Your question has been posted!');
+
+  try {
+    await fetch(API_BASE + '/forum/posts', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username: name, title: title, message: body, category: cat })
+    });
+  } catch(e) {}
+  setTimeout(function(){ postBusy = false; }, 2000);
+}
+
+function updateStats() {
+  var answered = allPosts.filter(function(p){ return p.admin_reply; }).length;
+  var students = new Set(allPosts.map(function(p){ return p.username; })).size;
+  document.getElementById('statPosts').textContent = allPosts.length;
+  document.getElementById('statAnswered').textContent = answered;
+  document.getElementById('statStudents').textContent = students;
+}
+
+async function loadPosts() {
+  try {
+    var r = await fetch(API_BASE + '/forum/posts');
+    if (r.ok) {
+      var data = await r.json();
+      if (Array.isArray(data) && data.length) {
+        allPosts = data;
+        updateStats(); renderFeed(); return;
+      }
+    }
+  } catch(e) {}
+  // Fallback to seed posts
+  allPosts = seedPosts;
+  updateStats(); renderFeed();
+}
+
+loadPosts();
+</script>
+</body>
+</html>

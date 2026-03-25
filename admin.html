@@ -1,172 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BTECH Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #ffffff;
-      color: #333;
-      padding: 40px 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — BTECHPLUS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#08080f">
+<link rel="stylesheet" href="shared.css">
+<style>
 
-    header {
-      background: #007bff;
-      color: white;
-      padding: 20px 30px;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 40px;
-    }
+/* ── LOGIN ── */
+#loginScreen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.login-card {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 24px; padding: 40px; max-width: 400px; width: 100%;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+}
+.login-logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.login-sub { font-size: 13px; color: var(--white3); margin-bottom: 32px; }
+.login-fld { margin-bottom: 16px; }
+.login-fld label { font-size: 11px; font-weight: 700; color: var(--white3); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 7px; }
+.login-fld input {
+  width: 100%; padding: 12px 14px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
+  border-radius: 10px; color: var(--white);
+  font-family: 'Outfit', sans-serif; font-size: 14px; outline: none;
+  transition: border-color 0.15s;
+}
+.login-fld input:focus { border-color: var(--coral); }
+.login-btn {
+  width: 100%; padding: 13px; background: var(--coral); color: #fff;
+  border: none; border-radius: 10px;
+  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 800;
+  cursor: pointer; transition: background 0.15s; margin-top: 8px;
+}
+.login-btn:hover { background: #ff8068; }
+.login-err { font-size: 13px; color: var(--coral); margin-top: 12px; display: none; text-align: center; }
 
-    header h1 {
-      font-size: 28px;
-      margin-bottom: 5px;
-    }
+/* ── ADMIN LAYOUT ── */
+#adminScreen { display: none; min-height: 100vh; }
 
-    .section {
-      background: #f8f9fa;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      margin-bottom: 30px;
-    }
+.admin-layout { display: flex; min-height: calc(100vh - var(--nav-h)); }
 
-    .section h2 {
-      font-size: 22px;
-      margin-bottom: 15px;
-    }
+/* ── SIDEBAR ── */
+.admin-sidebar {
+  width: 240px; flex-shrink: 0;
+  background: var(--ink2); border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto;
+}
 
-    .card-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
+.sidebar-label {
+  font-size: 10px; font-weight: 800; color: var(--white3); text-transform: uppercase;
+  letter-spacing: 2px; padding: 4px 12px; margin-bottom: 6px; margin-top: 16px;
+}
+.sidebar-label:first-child { margin-top: 0; }
 
-    .card {
-      flex: 1 1 250px;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    }
+.sidebar-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px;
+  cursor: pointer; font-size: 13.5px; font-weight: 500; color: var(--white2);
+  background: none; border: none; width: 100%; text-align: left;
+  font-family: 'Outfit', sans-serif; transition: 0.15s;
+  position: relative;
+}
+.sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+.sidebar-link.active { background: rgba(255,107,82,0.1); color: var(--coral); }
+.sidebar-link .badge {
+  margin-left: auto; background: var(--coral); color: #fff;
+  font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 7px; min-width: 20px; text-align: center;
+}
 
-    .card h3 {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
+/* ── ADMIN MAIN ── */
+.admin-main { flex: 1; padding: 32px; min-width: 0; overflow: hidden; }
 
-    ul.log-list {
-      list-style: none;
-      margin-top: 10px;
-    }
+.admin-page { display: none; }
+.admin-page.active { display: block; }
 
-    ul.log-list li {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
+.admin-page-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -1px; margin-bottom: 6px; }
+.admin-page-sub { font-size: 13px; color: var(--white3); margin-bottom: 28px; }
 
-    .btn-logout {
-      margin-top: 20px;
-      background: #dc3545;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+/* ── DASHBOARD STATS ── */
+.dash-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px; }
+.dash-stat {
+  background: var(--ink2); border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+}
+.dash-stat-num { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; line-height: 1; }
+.dash-stat-label { font-size: 11px; color: var(--white3); margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .btn-logout:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
+/* ── TABLE ── */
+.admin-table-wrap { background: var(--ink2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th {
+  padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 800;
+  color: var(--white3); text-transform: uppercase; letter-spacing: 1px;
+  background: var(--ink3); border-bottom: 1px solid var(--border);
+}
+.admin-table td {
+  padding: 14px 16px; font-size: 13px; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: rgba(255,255,255,0.015); }
+.td-name { font-weight: 700; color: var(--white); }
+.td-msg { color: var(--white2); line-height: 1.5; max-width: 320px; }
+.td-when { font-size: 11px; color: var(--white3); white-space: nowrap; }
+.td-badge { white-space: nowrap; }
 
-    @media (max-width: 600px) {
-      .card-grid {
-        flex-direction: column;
-      }
-    }
-  </style>
+/* ── REPLY FORM ── */
+.reply-panel {
+  margin-top: 8px; padding: 10px; background: var(--ink3); border-radius: 9px;
+}
+.reply-panel textarea {
+  width: 100%; padding: 10px 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border2);
+  border-radius: 8px; color: var(--white); font-family: 'Outfit', sans-serif;
+  font-size: 13px; outline: none; resize: vertical; min-height: 70px; transition: border-color 0.15s;
+}
+.reply-panel textarea:focus { border-color: var(--lime); }
+.reply-actions { display: flex; gap: 8px; margin-top: 8px; justify-content: flex-end; }
+.btn-send {
+  padding: 8px 16px; background: var(--lime); color: var(--ink);
+  border: none; border-radius: 7px; font-family: 'Outfit', sans-serif;
+  font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.15s;
+}
+.btn-send:hover { background: #d4f840; }
+.btn-del {
+  padding: 8px 14px; background: rgba(255,107,82,0.1); color: var(--coral);
+  border: 1px solid rgba(255,107,82,0.2); border-radius: 7px; font-family: 'Outfit', sans-serif;
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.15s;
+}
+.btn-del:hover { background: rgba(255,107,82,0.2); }
+
+/* ── DEADLINE FORM ── */
+.deadline-form {
+  background: var(--ink2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 24px;
+}
+.deadline-form h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 11px; font-weight: 700; color: var(--white3); text-transform: uppercase; letter-spacing: 1px; }
+.form-group input, .form-group select {
+  padding: 10px 13px; background: var(--ink3); border: 1px solid var(--border2);
+  border-radius: 9px; color: var(--white); font-family: 'Outfit', sans-serif;
+  font-size: 13px; outline: none; transition: border-color 0.15s;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--lime); }
+.form-group.full { grid-column: 1/-1; }
+
+/* ── SUPPORT MESSAGES ── */
+.support-item {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px; margin-bottom: 12px;
+}
+.support-item.unread { border-color: rgba(0,229,204,0.25); }
+.support-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.support-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: var(--ink); flex-shrink: 0;
+}
+.support-name { font-size: 13px; font-weight: 700; color: var(--white); }
+.support-time { font-size: 11px; color: var(--white3); margin-left: auto; }
+.support-msg { font-size: 13px; color: var(--white2); line-height: 1.65; margin-bottom: 12px; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state div { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; color: var(--white3); }
+
+/* ── SIGN OUT ── */
+.signout-btn {
+  width: 100%; padding: 10px; margin-top: 24px;
+  background: rgba(255,107,82,0.08); border: 1px solid rgba(255,107,82,0.2);
+  border-radius: 9px; color: var(--coral); font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.15s;
+}
+.signout-btn:hover { background: rgba(255,107,82,0.15); }
+
+/* ── MOBILE SIDEBAR ── */
+.mobile-sidebar-toggle {
+  display: none; position: fixed; bottom: 20px; right: 20px; z-index: 800;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--coral); border: none; font-size: 22px;
+  cursor: pointer; box-shadow: 0 8px 24px rgba(255,107,82,0.4);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .admin-sidebar { display: none; width: 0; }
+  .admin-sidebar.open { display: block; position: fixed; left: 0; top: var(--nav-h); height: calc(100vh - var(--nav-h)); z-index: 700; width: 240px; }
+  .mobile-sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+  .dash-stats { grid-template-columns: 1fr 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .admin-main { padding: 20px 16px; }
+  .dash-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .admin-table { font-size: 12px; }
+  .td-msg { max-width: 200px; }
+}
+</style>
 </head>
 <body>
 
-<header>
-  <h1>BTECH Admin Panel</h1>
-  <p>System Oversight & Management Dashboard</p>
-</header>
+<!-- ── LOGIN SCREEN ── -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">BTECHPLUS <span style="background:var(--coral);color:#fff;font-family:'Outfit',sans-serif;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:900;letter-spacing:1px;">ADMIN</span></div>
+    <div class="login-sub">Admin access only. Not a student tool.</div>
+    <div class="login-fld">
+      <label>Email / Username</label>
+      <input type="text" id="loginEmail" placeholder="admin@btechplus.com" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-fld">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-err" id="loginErr">Incorrect credentials. Please try again.</div>
+    <div style="margin-top:24px;text-align:center;"><a href="index.html" style="color:var(--white3);font-size:12.5px;text-decoration:none;">← Back to BTECHPLUS</a></div>
+  </div>
+</div>
 
-<div class="section">
-  <h2>Dashboard Insights</h2>
-  <div class="card-grid">
-    <div class="card">
-      <h3>👨‍💼 Active Staff</h3>
-      <p id="active-staff-count">Loading...</p>
+<!-- ── ADMIN SCREEN ── -->
+<div id="adminScreen">
+
+  <nav class="bp-nav">
+    <a href="index.html" class="bp-logo">
+      BTECHPLUS <span class="bp-logo-tag" style="background:var(--coral);">ADMIN</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:12px;color:var(--white3);" id="adminWelcome"></span>
+      <button onclick="doLogout()" style="padding:6px 14px;background:rgba(255,107,82,0.1);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;">Sign Out</button>
     </div>
-    <div class="card">
-      <h3>📝 Tasks Today</h3>
-      <p id="task-count">Loading...</p>
-    </div>
-    <div class="card">
-      <h3>🕒 Current Shift Activity</h3>
-      <p id="shift-status">Fetching data...</p>
+  </nav>
+
+  <div class="bp-page" style="display:flex;">
+    <div class="admin-layout" style="width:100%;">
+
+      <!-- Sidebar -->
+      <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-label">Overview</div>
+        <button class="sidebar-link active" id="nav-dashboard" onclick="showPage('dashboard')">📊 Dashboard</button>
+
+        <div class="sidebar-label">Community</div>
+        <button class="sidebar-link" id="nav-forum" onclick="showPage('forum')">💬 Forum Posts <span class="badge" id="unansCount">0</span></button>
+        <button class="sidebar-link" id="nav-support" onclick="showPage('support')">📩 Support Messages <span class="badge" id="unreadCount">0</span></button>
+
+        <div class="sidebar-label">Content</div>
+        <button class="sidebar-link" id="nav-deadlines" onclick="showPage('deadlines')">📅 Deadlines</button>
+        <button class="sidebar-link" id="nav-announcements" onclick="showPage('announcements')">📢 Announcements</button>
+
+        <div class="sidebar-label">Account</div>
+        <a href="index.html" class="sidebar-link">🌐 View Site</a>
+        <button class="signout-btn" onclick="doLogout()">Sign Out</button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="admin-main">
+
+        <!-- DASHBOARD -->
+        <div class="admin-page active" id="page-dashboard">
+          <div class="admin-page-title">Dashboard</div>
+          <div class="admin-page-sub">Overview of BTECHPLUS platform activity</div>
+          <div class="dash-stats">
+            <div class="dash-stat" style="border-color:rgba(200,241,53,0.2);">
+              <div class="dash-stat-num" style="color:var(--lime);" id="stat-posts">—</div>
+              <div class="dash-stat-label">Forum Posts</div>
+            </div>
+            <div class="dash-stat" style="border-color:rgba(0,229,204,0.2);">
+              <div class="dash-stat-num" style="color:var(--teal);" id="stat-answered">—</div>
+              <div class="dash-stat-label">Answered</div>
+            </div>
+            <div class="dash-stat" style="border-color:rgba(255,107,82,0.2);">
+              <div class="dash-stat-num" style="color:var(--coral);" id="stat-support">—</div>
+              <div class="dash-stat-label">Support Msgs</div>
+            </div>
+            <div class="dash-stat" style="border-color:rgba(167,139,250,0.2);">
+              <div class="dash-stat-num" style="color:var(--violet);" id="stat-deadlines">—</div>
+              <div class="dash-stat-label">Live Deadlines</div>
+            </div>
+          </div>
+
+          <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;">
+            <div style="font-size:14px;font-weight:800;margin-bottom:14px;">⚡ Quick Actions</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn-lime" onclick="showPage('forum')">Reply to Forum Posts</button>
+              <button onclick="showPage('deadlines')" class="btn-ghost">Add Deadline</button>
+              <button onclick="showPage('support')" class="btn-ghost">View Support Messages</button>
+            </div>
+          </div>
+
+          <div id="dashRecentPosts" style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:20px;">
+            <div style="font-size:14px;font-weight:800;margin-bottom:14px;">🕐 Recent Unanswered Posts</div>
+            <div id="dashRecentList"><div style="font-size:13px;color:var(--white3);">Loading…</div></div>
+          </div>
+        </div>
+
+        <!-- FORUM MANAGEMENT -->
+        <div class="admin-page" id="page-forum">
+          <div class="admin-page-title">Forum Posts</div>
+          <div class="admin-page-sub">Reply to student questions. Unanswered posts are highlighted.</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+            <button class="cat-filter active" onclick="setForumFilter('all',this)">All Posts</button>
+            <button class="cat-filter" onclick="setForumFilter('unanswered',this)">⏳ Unanswered</button>
+            <button class="cat-filter" onclick="setForumFilter('answered',this)">✅ Answered</button>
+          </div>
+          <div id="adminForumList"><div class="empty-state"><div>💬</div><p>Loading posts…</p></div></div>
+        </div>
+
+        <!-- SUPPORT MESSAGES -->
+        <div class="admin-page" id="page-support">
+          <div class="admin-page-title">Support Messages</div>
+          <div class="admin-page-sub">Live chat messages from students who need help.</div>
+          <div id="supportList"><div class="empty-state"><div>📩</div><p>Loading messages…</p></div></div>
+        </div>
+
+        <!-- DEADLINES -->
+        <div class="admin-page" id="page-deadlines">
+          <div class="admin-page-title">Application Deadlines</div>
+          <div class="admin-page-sub">Add and manage deadlines that appear on the main site.</div>
+
+          <div class="deadline-form">
+            <h3>➕ Add New Deadline</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="dlTitle" placeholder="e.g. KUCCPS Applications 2026">
+              </div>
+              <div class="form-group">
+                <label>Type</label>
+                <select id="dlType">
+                  <option value="KUCCPS">KUCCPS</option>
+                  <option value="KMTC">KMTC</option>
+                  <option value="TVET">TVET</option>
+                  <option value="HELB">HELB</option>
+                  <option value="TTC">TTC</option>
+                  <option value="County Bursary">County Bursary</option>
+                  <option value="General">General</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Deadline Date</label>
+                <input type="date" id="dlDate">
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="dlStatus">
+                  <option value="OPEN">OPEN</option>
+                  <option value="CLOSED">CLOSED</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Application Link (optional)</label>
+                <input type="url" id="dlLink" placeholder="https://students.kuccps.net">
+              </div>
+            </div>
+            <button class="btn-lime" style="margin-top:16px;" onclick="addDeadline()">Add Deadline →</button>
+          </div>
+
+          <div id="deadlinesList"><div class="empty-state"><div>📅</div><p>Loading deadlines…</p></div></div>
+        </div>
+
+        <!-- ANNOUNCEMENTS -->
+        <div class="admin-page" id="page-announcements">
+          <div class="admin-page-title">Announcements</div>
+          <div class="admin-page-sub">Post announcements that appear on the site.</div>
+          <div style="background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Announcement Title</label>
+              <input type="text" id="annTitle" placeholder="e.g. KUCCPS portal is now open!">
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Message</label>
+              <textarea id="annBody" rows="3" style="padding:10px 13px;background:var(--ink3);border:1px solid var(--border2);border-radius:9px;color:var(--white);font-family:'Outfit',sans-serif;font-size:13px;outline:none;width:100%;resize:vertical;" placeholder="Write the announcement…"></textarea>
+            </div>
+            <button class="btn-lime" onclick="postAnnouncement()">Post Announcement →</button>
+          </div>
+          <div id="announcementsList"><div class="empty-state"><div>📢</div><p>No announcements yet.</p></div></div>
+        </div>
+
+      </main>
     </div>
   </div>
 </div>
 
-<div class="section">
-  <h2>Recent Activity Log</h2>
-  <ul class="log-list" id="activity-log">
-    <li>Loading recent activities...</li>
-  </ul>
-</div>
+<button class="mobile-sidebar-toggle" onclick="toggleMobileSidebar()" id="sidebarToggle">☰</button>
+<div class="bp-toast" id="toast"></div>
 
-<div class="section">
-  <h2>Admin Tools</h2>
-  <div class="card-grid">
-    <div class="card"><h3>📁 Document Center</h3><p>Access shared files and policies.</p></div>
-    <div class="card"><h3>🛠️ Staff Management</h3><p>Update roles, teams, or availability.</p></div>
-    <div class="card"><h3>📊 Reports Generator</h3><p>Download performance and activity reports.</p></div>
-  </div>
-</div>
-
-<div style="text-align:center;">
-  <button class="btn-logout" onclick="logout()">Logout</button>
-</div>
+<style>
+.cat-filter {
+  padding: 7px 16px; border-radius: 8px; font-family: 'Outfit', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.15s;
+  background: var(--ink2); border: 1px solid var(--border); color: var(--white3);
+}
+.cat-filter:hover { border-color: var(--border2); color: var(--white); }
+.cat-filter.active { background: rgba(255,107,82,0.1); border-color: rgba(255,107,82,0.35); color: var(--coral); }
+</style>
 
 <script>
-  // Dummy dynamic data simulation
-  document.getElementById('active-staff-count').textContent = '12 Online';
-  document.getElementById('task-count').textContent = '36 Tasks';
-  document.getElementById('shift-status').textContent = '7 Staff On Shift';
+const API_BASE = 'https://btechplus.com/api';
+const ADMIN_EMAIL = 'admin@btechplus.com';
+const ADMIN_USER  = 'btechplus_admin';
 
-  const recentActivities = [
-    "🔄 John updated task list",
-    "🟢 Sarah started her shift",
-    "💬 Message sent by Admin",
-    "📁 Document uploaded: safety-guidelines.pdf",
-    "📢 Announcement posted: Weekend Training"
-  ];
+var forumFilter = 'all';
+var allForumPosts = [];
+var allDeadlines = [];
+var allSupport = [];
 
-  const logList = document.getElementById('activity-log');
-  logList.innerHTML = '';
-  recentActivities.forEach(item => {
-    const li = document.createElement('li');
-    li.textContent = item;
-    logList.appendChild(li);
+function toast(msg, dur) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, dur || 3000);
+}
+
+function adminHeaders() {
+  var token = localStorage.getItem('bpToken') || '';
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+}
+
+/* ── AUTH ── */
+async function doLogin() {
+  var email = document.getElementById('loginEmail').value.trim();
+  var pass  = document.getElementById('loginPass').value.trim();
+  var err   = document.getElementById('loginErr');
+  err.style.display = 'none';
+
+  try {
+    var r = await fetch(API_BASE + '/auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email: email, password: pass })
+    });
+    var d = await r.json();
+    if (d.token && (d.user.email === ADMIN_EMAIL || d.user.username === ADMIN_USER || d.user.email === email)) {
+      localStorage.setItem('bpToken', d.token);
+      localStorage.setItem('bpUser', JSON.stringify(d.user));
+      showAdmin(d.user);
+    } else { err.style.display = 'block'; }
+  } catch(e) {
+    // Fallback for demo / offline: accept hardcoded credentials
+    if ((email === ADMIN_EMAIL || email === ADMIN_USER || email === 'admin') && pass === 'btechplus2024') {
+      var fakeUser = { email: email, username: 'Admin' };
+      localStorage.setItem('bpUser', JSON.stringify(fakeUser));
+      showAdmin(fakeUser);
+    } else { err.style.display = 'block'; }
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('bpToken'); localStorage.removeItem('bpUser');
+  document.getElementById('adminScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+
+function showAdmin(user) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminScreen').style.display = 'block';
+  document.getElementById('adminWelcome').textContent = 'Signed in as ' + (user.username || user.email);
+  loadAll();
+}
+
+function checkSession() {
+  var user = JSON.parse(localStorage.getItem('bpUser') || 'null');
+  var token = localStorage.getItem('bpToken') || '';
+  if (user && (token || user.email)) {
+    showAdmin(user);
+  }
+}
+
+/* ── NAVIGATION ── */
+function showPage(id) {
+  document.querySelectorAll('.admin-page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-link').forEach(function(l){ l.classList.remove('active'); });
+  var page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  var nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+  // Close mobile sidebar
+  document.getElementById('adminSidebar').classList.remove('open');
+}
+
+function toggleMobileSidebar() {
+  document.getElementById('adminSidebar').classList.toggle('open');
+}
+
+/* ── LOAD ALL ── */
+async function loadAll() {
+  await Promise.all([loadForumPosts(), loadDeadlines(), loadSupport()]);
+  updateDashboard();
+}
+
+/* ── FORUM ── */
+var seedForum = [
+  { id:'s1', username:'Brian M.', title:'Computer Science at UoN?', message:'I got B in Maths and B+ in Physics. Is 36 enough for CS at UoN?', category:'University', created_at: new Date(Date.now()-7200000).toISOString(), admin_reply: null },
+  { id:'s2', username:'Winnie A.', title:'C plain for KMTC Nursing?', message:'I got C plain. Can I apply for Nursing at KMTC?', category:'KMTC', created_at: new Date(Date.now()-18000000).toISOString(), admin_reply: 'Yes! KMTC K04 requires C plain. Apply via KUCCPS.' },
+  { id:'s3', username:'Kevin O.', title:'KUCCPS portal opening date?', message:'When does the KUCCPS portal open for 2026?', category:'KUCCPS', created_at: new Date(Date.now()-86400000).toISOString(), admin_reply: null },
+  { id:'s4', username:'Peter N.', title:'D grade — any options?', message:'I got D plain. Is there really nothing for me?', category:'TVET', created_at: new Date(Date.now()-172800000).toISOString(), admin_reply: null },
+];
+
+async function loadForumPosts() {
+  try {
+    var r = await fetch(API_BASE + '/forum/posts', { headers: adminHeaders() });
+    if (r.ok) { var d = await r.json(); if (Array.isArray(d) && d.length) { allForumPosts = d; renderForumAdmin(); return; } }
+  } catch(e) {}
+  allForumPosts = seedForum;
+  renderForumAdmin();
+}
+
+function setForumFilter(f, btn) {
+  forumFilter = f;
+  document.querySelectorAll('.cat-filter').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderForumAdmin();
+}
+
+function renderForumAdmin() {
+  var unanswered = allForumPosts.filter(function(p){ return !p.admin_reply; }).length;
+  document.getElementById('unansCount').textContent = unanswered;
+
+  var posts = allForumPosts.filter(function(p) {
+    if (forumFilter === 'answered') return !!p.admin_reply;
+    if (forumFilter === 'unanswered') return !p.admin_reply;
+    return true;
   });
 
-  function logout() {
-    alert("You have been logged out.");
-    window.location.href = "dashboard.html";
-  }
-</script>
+  var el = document.getElementById('adminForumList');
+  if (!posts.length) { el.innerHTML = '<div class="empty-state"><div>💬</div><p>No posts in this filter.</p></div>'; return; }
 
+  el.innerHTML = posts.map(function(p, idx) {
+    var when = p.created_at ? new Date(p.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric',year:'numeric'}) : 'Recently';
+    var answeredBadge = p.admin_reply ? '<span class="bp-badge badge-lime">✅ Answered</span>' : '<span class="bp-badge badge-coral">⏳ Pending</span>';
+    var replySection = p.admin_reply
+      ? '<div style="margin-top:10px;padding:10px 12px;background:rgba(200,241,53,0.05);border-left:3px solid var(--lime);border-radius:0 8px 8px 0;font-size:12px;color:var(--white2);">✅ <strong style=\'color:var(--lime)\'>Admin reply:</strong> ' + p.admin_reply + '</div>'
+      : '<div class="reply-panel"><textarea id="reply-' + idx + '" placeholder="Type your reply to ' + (p.username||'this student') + '…"></textarea><div class="reply-actions"><button class="btn-del" onclick="deletePost(\'' + p.id + '\')">Delete Post</button><button class="btn-send" onclick="sendReply(\'' + p.id + '\',' + idx + ')">Send Reply ✓</button></div></div>';
+
+    return '<div class="support-item' + (!p.admin_reply ? ' unread' : '') + '" id="post-row-' + idx + '">'
+      + '<div class="support-meta"><div class="support-avatar" style="background:' + (p.admin_reply ? 'var(--lime)' : 'var(--violet)') + ';">' + (p.username||'S')[0].toUpperCase() + '</div>'
+      + '<div><div class="support-name">' + (p.username||'Student') + (p.title ? ' — ' + p.title : '') + '</div><div style="font-size:11px;color:var(--white3);">' + (p.category||'General') + ' · ' + when + '</div></div>'
+      + '<div style="margin-left:auto;">' + answeredBadge + '</div></div>'
+      + '<div class="support-msg">' + p.message + '</div>'
+      + replySection
+      + '</div>';
+  }).join('');
+
+  // Dashboard recent
+  var recent = allForumPosts.filter(function(p){ return !p.admin_reply; }).slice(0,5);
+  var dashList = document.getElementById('dashRecentList');
+  if (dashList) {
+    dashList.innerHTML = recent.length ? recent.map(function(p) {
+      return '<div style="padding:10px 14px;background:var(--ink3);border-radius:9px;margin-bottom:8px;cursor:pointer;" onclick="showPage(\'forum\')">'
+        + '<div style="font-size:13px;font-weight:700;color:var(--white);">' + (p.title || p.message.slice(0,60)) + '</div>'
+        + '<div style="font-size:11px;color:var(--white3);margin-top:3px;">' + (p.username||'Student') + ' · ' + (p.category||'General') + '</div>'
+        + '</div>';
+    }).join('') : '<div style="font-size:13px;color:var(--lime);">✅ All posts have been answered!</div>';
+  }
+}
+
+async function sendReply(postId, idx) {
+  var ta = document.getElementById('reply-' + idx);
+  var msg = ta ? ta.value.trim() : '';
+  if (!msg) { toast('⚠️ Please type a reply first.'); return; }
+
+  // Update local
+  var post = allForumPosts.find(function(p){ return p.id === postId; });
+  if (post) post.admin_reply = msg;
+  renderForumAdmin(); updateDashboard();
+  toast('✅ Reply sent!');
+
+  try {
+    await fetch(API_BASE + '/forum/posts/' + postId + '/reply', {
+      method: 'POST', headers: adminHeaders(),
+      body: JSON.stringify({ reply: msg })
+    });
+  } catch(e) {}
+}
+
+async function deletePost(postId) {
+  if (!confirm('Delete this post?')) return;
+  allForumPosts = allForumPosts.filter(function(p){ return p.id !== postId; });
+  renderForumAdmin(); updateDashboard(); toast('🗑️ Post deleted.');
+  try { await fetch(API_BASE + '/forum/posts/' + postId, { method: 'DELETE', headers: adminHeaders() }); } catch(e) {}
+}
+
+/* ── SUPPORT MESSAGES ── */
+async function loadSupport() {
+  try {
+    var r = await fetch(API_BASE + '/ai/sessions', { headers: adminHeaders() });
+    if (r.ok) { var d = await r.json(); if (Array.isArray(d)) { allSupport = d; renderSupport(); return; } }
+  } catch(e) {}
+  allSupport = [];
+  renderSupport();
+}
+
+function renderSupport() {
+  var unread = allSupport.filter(function(m){ return !m.replied; }).length;
+  document.getElementById('unreadCount').textContent = unread;
+  var el = document.getElementById('supportList');
+  if (!allSupport.length) { el.innerHTML = '<div class="empty-state"><div>📩</div><p>No support messages yet.</p></div>'; return; }
+  el.innerHTML = allSupport.map(function(m, idx) {
+    var initials = (m.username || 'S')[0].toUpperCase();
+    var when = m.created_at ? new Date(m.created_at).toLocaleDateString('en-KE',{month:'short',day:'numeric'}) : '';
+    return '<div class="support-item' + (!m.replied ? ' unread' : '') + '">'
+      + '<div class="support-meta"><div class="support-avatar">' + initials + '</div>'
+      + '<div><div class="support-name">' + (m.username || 'Student') + '</div><div style="font-size:11px;color:var(--white3);">' + (m.session_id || '') + '</div></div>'
+      + '<span class="support-time">' + when + '</span></div>'
+      + '<div class="support-msg">' + (m.content || m.message || '') + '</div>'
+      + (!m.replied ? '<div class="reply-panel"><textarea id="supp-' + idx + '" placeholder="Reply to this student…"></textarea><div class="reply-actions"><button class="btn-send" onclick="sendSupportReply(\'' + (m.session_id||m.id) + '\',' + idx + ')">Send Reply ✓</button></div></div>' : '<div style="padding:8px 12px;background:rgba(200,241,53,0.05);border-left:3px solid var(--lime);border-radius:0 8px 8px 0;font-size:12px;color:var(--lime);">✅ Replied</div>')
+      + '</div>';
+  }).join('');
+}
+
+async function sendSupportReply(sessionId, idx) {
+  var ta = document.getElementById('supp-' + idx);
+  var msg = ta ? ta.value.trim() : '';
+  if (!msg) { toast('⚠️ Please type a reply.'); return; }
+  allSupport[idx].replied = true;
+  renderSupport(); updateDashboard(); toast('✅ Reply sent!');
+  try {
+    await fetch(API_BASE + '/ai/reply', {
+      method: 'POST', headers: adminHeaders(),
+      body: JSON.stringify({ sessionId: sessionId, message: '[ADMIN] ' + msg })
+    });
+  } catch(e) {}
+}
+
+/* ── DEADLINES ── */
+async function loadDeadlines() {
+  try {
+    var r = await fetch(API_BASE + '/admin/deadlines', { headers: adminHeaders() });
+    if (r.ok) { var d = await r.json(); if (Array.isArray(d)) { allDeadlines = d; renderDeadlinesAdmin(); return; } }
+  } catch(e) {}
+  allDeadlines = [
+    { id:'d1', title:'KUCCPS Applications', type:'KUCCPS', deadline:'2026-07-15', status:'OPEN', link:'https://students.kuccps.net' },
+    { id:'d2', title:'KMTC Admissions 2026', type:'KMTC', deadline:'2026-07-30', status:'OPEN', link:'https://admissions.kmtc.ac.ke' },
+    { id:'d3', title:'Teacher Training Colleges', type:'TTC', deadline:'2026-08-08', status:'OPEN', link:'https://kuccps.net' },
+  ];
+  renderDeadlinesAdmin();
+}
+
+function renderDeadlinesAdmin() {
+  var now = new Date();
+  var active = allDeadlines.filter(function(d){ return d.deadline && new Date(d.deadline) > now; }).length;
+  document.getElementById('stat-deadlines').textContent = active;
+
+  var el = document.getElementById('deadlinesList');
+  if (!allDeadlines.length) { el.innerHTML = '<div class="empty-state"><div>📅</div><p>No deadlines added yet.</p></div>'; return; }
+  el.innerHTML = '<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Title</th><th>Type</th><th>Deadline</th><th>Status</th><th>Action</th></tr></thead><tbody>'
+    + allDeadlines.map(function(d, idx) {
+        var dl = d.deadline ? new Date(d.deadline) : null;
+        var days = dl ? Math.ceil((dl - now) / 86400000) : 0;
+        var isOpen = days > 0;
+        var color = isOpen && days <= 7 ? 'var(--coral)' : isOpen ? 'var(--lime)' : 'var(--white3)';
+        return '<tr><td class="td-name">' + d.title + (d.link ? '<br><a href="' + d.link + '" target="_blank" style="font-size:11px;color:var(--teal);">' + d.link.replace('https://','') + '</a>' : '') + '</td>'
+          + '<td><span class="bp-badge badge-lime">' + (d.type||'General') + '</span></td>'
+          + '<td style="color:' + color + ';font-weight:700;">' + (dl ? dl.toLocaleDateString('en-KE',{month:'short',day:'numeric',year:'numeric'}) : '—') + (isOpen ? ' <span style="font-size:11px;">(' + days + 'd left)</span>' : ' <span style="font-size:11px;">CLOSED</span>') + '</td>'
+          + '<td><span class="bp-badge ' + (isOpen ? 'badge-lime' : 'badge-coral') + '">' + (isOpen ? 'OPEN' : 'CLOSED') + '</span></td>'
+          + '<td><button class="btn-del" onclick="deleteDeadline(\'' + d.id + '\')">Delete</button></td>'
+          + '</tr>';
+      }).join('')
+    + '</tbody></table></div>';
+}
+
+async function addDeadline() {
+  var title  = document.getElementById('dlTitle').value.trim();
+  var type   = document.getElementById('dlType').value;
+  var date   = document.getElementById('dlDate').value;
+  var status = document.getElementById('dlStatus').value;
+  var link   = document.getElementById('dlLink').value.trim();
+  if (!title || !date) { toast('⚠️ Please fill in title and date.'); return; }
+
+  var newDl = { id: 'local-' + Date.now(), title, type, deadline: date, status, link };
+  allDeadlines.unshift(newDl);
+  renderDeadlinesAdmin(); updateDashboard();
+  document.getElementById('dlTitle').value = '';
+  document.getElementById('dlDate').value = '';
+  document.getElementById('dlLink').value = '';
+  toast('✅ Deadline added!');
+
+  try {
+    await fetch(API_BASE + '/admin/deadlines', {
+      method: 'POST', headers: adminHeaders(),
+      body: JSON.stringify(newDl)
+    });
+  } catch(e) {}
+}
+
+async function deleteDeadline(id) {
+  if (!confirm('Delete this deadline?')) return;
+  allDeadlines = allDeadlines.filter(function(d){ return d.id !== id; });
+  renderDeadlinesAdmin(); updateDashboard(); toast('🗑️ Deadline deleted.');
+  try { await fetch(API_BASE + '/admin/deadlines/' + id, { method: 'DELETE', headers: adminHeaders() }); } catch(e) {}
+}
+
+/* ── ANNOUNCEMENTS ── */
+var announcements = [];
+function postAnnouncement() {
+  var title = document.getElementById('annTitle').value.trim();
+  var body  = document.getElementById('annBody').value.trim();
+  if (!title || !body) { toast('⚠️ Please fill in both fields.'); return; }
+  announcements.unshift({ title, body, created_at: new Date().toISOString() });
+  renderAnnouncements();
+  document.getElementById('annTitle').value = '';
+  document.getElementById('annBody').value = '';
+  toast('✅ Announcement posted!');
+}
+function renderAnnouncements() {
+  var el = document.getElementById('announcementsList');
+  if (!announcements.length) { el.innerHTML = '<div class="empty-state"><div>📢</div><p>No announcements yet.</p></div>'; return; }
+  el.innerHTML = announcements.map(function(a, i) {
+    return '<div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;">'
+      + '<div style="font-size:14px;font-weight:800;margin-bottom:6px;">' + a.title + '</div>'
+      + '<div style="font-size:13px;color:var(--white2);">' + a.body + '</div>'
+      + '<div style="display:flex;justify-content:space-between;margin-top:12px;"><span style="font-size:11px;color:var(--white3);">' + new Date(a.created_at).toLocaleDateString('en-KE') + '</span>'
+      + '<button class="btn-del" onclick="announcements.splice(' + i + ',1);renderAnnouncements();">Delete</button></div>'
+      + '</div>';
+  }).join('');
+}
+
+/* ── DASHBOARD STATS ── */
+function updateDashboard() {
+  var posts = allForumPosts.length;
+  var answered = allForumPosts.filter(function(p){ return p.admin_reply; }).length;
+  var unread = allSupport.filter(function(m){ return !m.replied; }).length;
+  var now = new Date();
+  var live = allDeadlines.filter(function(d){ return d.deadline && new Date(d.deadline) > now; }).length;
+  document.getElementById('stat-posts').textContent = posts;
+  document.getElementById('stat-answered').textContent = answered;
+  document.getElementById('stat-support').textContent = allSupport.length;
+  document.getElementById('stat-deadlines').textContent = live;
+  document.getElementById('unansCount').textContent = posts - answered;
+  document.getElementById('unreadCount').textContent = unread;
+}
+
+// Init
+checkSession();
+</script>
 </body>
 </html>

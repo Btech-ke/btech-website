@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Finder — BTECHPLUS</title>
+<meta name="description" content="Find KCSE courses, universities, KMTC and TVET programmes for every grade in Kenya.">
+<meta name="theme-color" content="#08080f">
+<link rel="stylesheet" href="shared.css">
+<style>
+
+.page-inner { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ── PAGE HEADER ── */
+.page-header { margin-bottom: 40px; }
+.page-header h1 { font-family: 'Fraunces', serif; font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 10px; }
+.page-header h1 em { font-style: italic; color: var(--teal); }
+
+/* ── FINDER CONTROLS ── */
+.finder-controls {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 24px; margin-bottom: 32px;
+}
+.finder-controls h2 { font-size: 15px; font-weight: 800; margin-bottom: 18px; }
+
+.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.ctrl-group label { font-size: 11px; font-weight: 700; color: var(--white3); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+
+.grade-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.grade-pill {
+  padding: 8px 14px; border-radius: 9px; font-family: 'Fraunces', serif;
+  font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.15s;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2); color: var(--white2);
+}
+.grade-pill:hover { background: rgba(255,255,255,0.07); }
+.grade-pill.active { background: rgba(200,241,53,0.12); border-color: var(--lime); color: var(--lime); }
+
+.field-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.field-pill {
+  padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: 0.15s; border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03); color: var(--white2);
+}
+.field-pill:hover { background: rgba(255,255,255,0.05); }
+.field-pill.active { background: rgba(0,229,204,0.08); border-color: rgba(0,229,204,0.35); color: var(--teal); }
+
+/* ── RESULTS ── */
+.results-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+}
+.results-header h3 { font-size: 16px; font-weight: 800; }
+.results-count { font-size: 13px; color: var(--white3); }
+
+/* ── CATEGORY SECTIONS ── */
+.cat-section { margin-bottom: 32px; }
+.cat-section-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: 12px 12px 0 0;
+  background: var(--ink3); border: 1px solid var(--border); border-bottom: none;
+}
+.cat-section-icon { font-size: 20px; }
+.cat-section-title { font-size: 14px; font-weight: 800; }
+.cat-section-sub { font-size: 12px; color: var(--white3); margin-left: auto; }
+
+.courses-list {
+  background: var(--ink2); border: 1px solid var(--border); border-radius: 0 0 14px 14px;
+  overflow: hidden;
+}
+.course-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border); gap: 12px;
+  transition: background 0.15s;
+}
+.course-item:last-child { border-bottom: none; }
+.course-item:hover { background: rgba(255,255,255,0.02); }
+.course-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.course-details { font-size: 12px; color: var(--white3); line-height: 1.5; }
+.course-req { font-size: 12px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+
+/* ── DEADLINES SECTION ── */
+.deadlines-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 32px;
+}
+.deadline-card {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px; transition: 0.18s;
+}
+.deadline-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.dl-icon { font-size: 28px; margin-bottom: 12px; }
+.dl-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+.dl-type { font-size: 12px; color: var(--white3); margin-bottom: 12px; }
+.dl-date { font-size: 13px; color: var(--white2); margin-bottom: 6px; }
+.dl-days { font-size: 14px; font-weight: 800; }
+.dl-btn {
+  display: block; width: 100%; margin-top: 14px;
+  padding: 10px; text-align: center; border-radius: 9px;
+  font-size: 13px; font-weight: 700; text-decoration: none;
+  background: var(--lime); color: var(--ink); transition: background 0.15s;
+}
+.dl-btn:hover { background: #d4f840; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state div { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; color: var(--white3); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .controls-grid { grid-template-columns: 1fr; }
+  .deadlines-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .page-inner { padding: 24px 16px 60px; }
+  .finder-controls { padding: 18px 14px; }
+  .deadlines-grid { grid-template-columns: 1fr; }
+  .course-item { flex-direction: column; gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="bp-nav">
+  <a href="index.html" class="bp-logo">
+    BTECHPLUS <span class="bp-logo-tag">KE</span>
+  </a>
+  <ul class="bp-nav-links">
+    <li><a href="index.html">Dashboard</a></li>
+    <li><a href="calculator.html">Calculator</a></li>
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="forum.html">Forum</a></li>
+    <li><a href="admin.html" class="bp-nav-cta">Admin</a></li>
+  </ul>
+  <button class="bp-hamburger" id="ham" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<nav class="bp-mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Dashboard</a>
+  <a href="calculator.html">🧮 Cluster Calculator</a>
+  <a href="courses.html" class="active">📚 Course Finder</a>
+  <a href="forum.html">💬 Student Forum</a>
+  <a href="admin.html">⚙️ Admin Panel</a>
+</nav>
+
+<main class="bp-page">
+<div class="page-inner">
+
+  <div class="page-header">
+    <div class="bp-eyebrow">📚 Course Finder</div>
+    <h1>Every path starts with<br>your <em>grade</em></h1>
+    <p style="font-size:15px;color:var(--white2);max-width:480px;line-height:1.7;margin-top:10px;">Select your KCSE mean grade and field of interest. See every course, university, KMTC, and TVET option open to you.</p>
+  </div>
+
+  <!-- FINDER CONTROLS -->
+  <div class="finder-controls">
+    <h2>🎯 Find Your Courses</h2>
+    <div class="controls-grid">
+      <div class="ctrl-group">
+        <label>Your Mean Grade</label>
+        <div class="grade-pills" id="gradePills">
+          <button class="grade-pill" onclick="setGrade('A',this)">A</button>
+          <button class="grade-pill" onclick="setGrade('A-',this)">A−</button>
+          <button class="grade-pill" onclick="setGrade('B+',this)">B+</button>
+          <button class="grade-pill active" onclick="setGrade('B',this)">B</button>
+          <button class="grade-pill" onclick="setGrade('B-',this)">B−</button>
+          <button class="grade-pill" onclick="setGrade('C+',this)">C+</button>
+          <button class="grade-pill" onclick="setGrade('C',this)">C</button>
+          <button class="grade-pill" onclick="setGrade('C-',this)">C−</button>
+          <button class="grade-pill" onclick="setGrade('D+',this)">D+</button>
+          <button class="grade-pill" onclick="setGrade('D',this)">D</button>
+          <button class="grade-pill" onclick="setGrade('D-',this)">D−</button>
+          <button class="grade-pill" onclick="setGrade('E',this)">E</button>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <label>Field of Interest</label>
+        <div class="field-pills" id="fieldPills">
+          <button class="field-pill active" onclick="setField('all',this)">🌐 All Fields</button>
+          <button class="field-pill" onclick="setField('health',this)">🏥 Health</button>
+          <button class="field-pill" onclick="setField('engineering',this)">⚙️ Engineering</button>
+          <button class="field-pill" onclick="setField('business',this)">💼 Business</button>
+          <button class="field-pill" onclick="setField('computing',this)">💻 IT &amp; Computing</button>
+          <button class="field-pill" onclick="setField('education',this)">📚 Education</button>
+          <button class="field-pill" onclick="setField('agriculture',this)">🌱 Agriculture</button>
+          <button class="field-pill" onclick="setField('law',this)">⚖️ Law</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsArea"></div>
+
+  <!-- DEADLINES -->
+  <div id="deadlines" style="margin-top:48px;">
+    <div class="bp-eyebrow" style="margin-bottom:16px;">📅 Application Deadlines</div>
+    <div class="deadlines-grid" id="deadlinesGrid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+</div>
+</main>
+
+<div class="bp-toast" id="toast"></div>
+
+<script>
+const API_BASE = 'https://btechplus.com/api';
+var selectedGrade = 'B';
+var selectedField = 'all';
+
+var gradeOrder = ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E'];
+function gradeRank(g) { return gradeOrder.indexOf(g); }
+
+var courseData = {
+  university: {
+    icon: '🏛️', title: 'University Degree Programmes', color: 'var(--lime)',
+    courses: [
+      { name: 'Medicine (MBChB)', req: 'A−', subjects: 'Bio B, Chem B, Phy/Mat B, Eng B', fields: ['health'], universities: 'UoN, Moi, JKUAT, Egerton, Kabarak' },
+      { name: 'Pharmacy (BPharm)', req: 'A−', subjects: 'Bio B, Chem B, Phy B, Eng B', fields: ['health'], universities: 'UoN, Moi, JKUAT' },
+      { name: 'Nursing (BScN)', req: 'B+', subjects: 'Bio B, Chem B−, Eng B−', fields: ['health'], universities: 'UoN, Moi, KU, MKU' },
+      { name: 'Law (LLB)', req: 'B+', subjects: 'English B, History C+', fields: ['law','business'], universities: 'UoN, Moi, KU, Kabarak, USIU' },
+      { name: 'Computer Science (BSc)', req: 'B', subjects: 'Mat A C+, Phy C+, Eng C', fields: ['computing','engineering'], universities: 'UoN, JKUAT, Strathmore, Moi, KU, USIU' },
+      { name: 'Electrical Engineering', req: 'B', subjects: 'Mat A B−, Phy B−, Chem B−', fields: ['engineering'], universities: 'UoN, JKUAT, Moi, TUK, Dedan Kimathi' },
+      { name: 'Civil Engineering', req: 'B', subjects: 'Mat A B−, Phy B−, Eng C+', fields: ['engineering'], universities: 'UoN, JKUAT, Moi, TUK' },
+      { name: 'Information Technology (IT)', req: 'B−', subjects: 'Mat A C, Eng C', fields: ['computing'], universities: 'UoN, JKUAT, KU, MKU, USIU' },
+      { name: 'Business Administration (BBA)', req: 'C+', subjects: 'Eng C, Math C−', fields: ['business'], universities: 'KU, Strathmore, USIU, MKU, Daystar' },
+      { name: 'Economics', req: 'B−', subjects: 'Mat A B−, Eng C+', fields: ['business'], universities: 'UoN, Moi, KU, JKUAT' },
+      { name: 'Education (B.Ed)', req: 'B−', subjects: 'Subject grade C+ min', fields: ['education'], universities: 'UoN, Moi, Egerton, KU, MKU' },
+      { name: 'Agriculture (BSc)', req: 'B−', subjects: 'Bio C+, Chem C+, Mat B−', fields: ['agriculture'], universities: 'Egerton, UoN, JKUAT, Moi' },
+      { name: 'Environmental Science', req: 'C+', subjects: 'Bio C, Chem C, Mat C', fields: ['agriculture','engineering'], universities: 'JKUAT, UoN, Egerton, MKU' },
+      { name: 'Journalism & Mass Comm.', req: 'C+', subjects: 'Eng B−', fields: ['business'], universities: 'UoN, Daystar, MKU, USIU' },
+      { name: 'Psychology (BSc)', req: 'C+', subjects: 'Eng C, Bio C', fields: ['health','education'], universities: 'UoN, USIU, Daystar, KCA' },
+    ]
+  },
+  kmtc: {
+    icon: '🏥', title: 'KMTC Diploma & Certificate Programmes', color: 'var(--teal)',
+    courses: [
+      { name: 'Clinical Medicine & Surgery (K32)', req: 'C', subjects: 'Eng/Kis C, Bio C, Che/PSC C−, Phy/Mat C−', fields: ['health'], note: '44 campuses nationwide' },
+      { name: 'Kenya Registered Nursing (K04)', req: 'C', subjects: 'Eng/Kis C, Bio C, Phy/PSC/Che/Mat C−', fields: ['health'], note: '30 campuses' },
+      { name: 'Pharmacy (K12)', req: 'C', subjects: 'Eng/Kis C, Che/PSC C, Bio C, Phy/Mat C', fields: ['health'], note: '7 campuses' },
+      { name: 'Medical Laboratory Sciences (K08)', req: 'C', subjects: 'Eng/Kis C, Bio C, Che/PSC C, Phy/Mat C', fields: ['health'], note: '12 campuses' },
+      { name: 'Physiotherapy (K13)', req: 'C', subjects: 'Eng/Kis C, Bio C−, Che/Mat/Phy C', fields: ['health'], note: '5 campuses' },
+      { name: 'Medical Engineering (K14)', req: 'C', subjects: 'Eng/Kis C, Mat A C−, Phy/PSC C−', fields: ['health','engineering'], note: '3 campuses' },
+      { name: 'Public Health (K15)', req: 'C', subjects: 'Eng/Kis C, Bio C, Mat C−', fields: ['health'], note: '10 campuses' },
+      { name: 'Radiography & Imaging (K07)', req: 'C', subjects: 'Eng/Kis C, Bio C, Phy C, Che/Mat C−', fields: ['health'], note: '9 campuses' },
+      { name: 'Health Records & IT (K03)', req: 'C', subjects: 'Eng/Kis C, Mat C−, Bio D+', fields: ['health','computing'], note: '32 campuses' },
+      { name: 'Nutrition & Dietetics (K02)', req: 'C−', subjects: 'Eng/Kis D+, Bio D+, Che D+', fields: ['health'], note: '7 campuses' },
+      { name: 'Orthopedic & Trauma (K17)', req: 'C', subjects: 'Eng/Kis C, Bio C, Phy/Che C−', fields: ['health'], note: '4 campuses' },
+      { name: 'Community Health Nursing (K28)', req: 'C−', subjects: 'Eng/Kis D+, Bio D, Mat D', fields: ['health'], note: '46 campuses — widest coverage' },
+      { name: 'Enrolled Nursing (K23)', req: 'C−', subjects: 'Eng/Kis D+, Bio D+', fields: ['health'], note: '30 campuses' },
+    ]
+  },
+  tvet: {
+    icon: '🔧', title: 'TVET / Vocational Programmes', color: 'var(--coral)',
+    courses: [
+      { name: 'Diploma — ICT', req: 'C−', subjects: 'No subject requirement', fields: ['computing','engineering'], note: '2 years' },
+      { name: 'Diploma — Business Management', req: 'C−', subjects: 'No subject requirement', fields: ['business'], note: '2 years' },
+      { name: 'Diploma — Engineering (Electrical)', req: 'C−', subjects: 'No subject requirement', fields: ['engineering'], note: '2 years' },
+      { name: 'Diploma — Hospitality & Tourism', req: 'C−', subjects: 'No subject requirement', fields: ['business'], note: '2 years' },
+      { name: 'Diploma — Agriculture', req: 'C−', subjects: 'No subject requirement', fields: ['agriculture'], note: '2 years' },
+      { name: 'Certificate — ICT', req: 'D', subjects: 'No subject requirement', fields: ['computing'], note: '1 year' },
+      { name: 'Certificate — Business', req: 'D', subjects: 'No subject requirement', fields: ['business'], note: '1 year' },
+      { name: 'Certificate — Engineering', req: 'D', subjects: 'No subject requirement', fields: ['engineering'], note: '1 year' },
+      { name: 'Certificate — Catering & Food Service', req: 'D', subjects: 'No subject requirement', fields: ['business'], note: '1 year' },
+      { name: 'Certificate — Agriculture', req: 'D', subjects: 'No subject requirement', fields: ['agriculture'], note: '1 year' },
+      { name: 'Artisan — Electrical Installation', req: 'E', subjects: 'No subject requirement', fields: ['engineering'], note: '6–12 months' },
+      { name: 'Artisan — Motor Vehicle Mechanic', req: 'E', subjects: 'No subject requirement', fields: ['engineering'], note: '6–12 months' },
+      { name: 'Artisan — Plumbing', req: 'E', subjects: 'No subject requirement', fields: ['engineering'], note: '6–12 months' },
+    ]
+  },
+  ttc: {
+    icon: '📚', title: 'Teacher Training (TTC / P1)', color: 'var(--violet)',
+    courses: [
+      { name: 'P1 Certificate (Primary Teacher)', req: 'C', subjects: 'English C, Kiswahili C', fields: ['education'], note: '21 public PTTCs — 2 years' },
+      { name: 'Diploma in Education (Secondary)', req: 'C+', subjects: 'Subject specialization C+', fields: ['education'], note: '2 years, various TTCs' },
+      { name: 'Diploma in Education (TVET)', req: 'C+', subjects: 'Technical subject C+', fields: ['education','engineering'], note: 'Builds on TVET qualifications' },
+    ]
+  }
+};
+
+function toggleNav() {
+  document.getElementById('ham').classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+function setGrade(g, btn) {
+  selectedGrade = g;
+  document.querySelectorAll('.grade-pill').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderResults();
+}
+
+function setField(f, btn) {
+  selectedField = f;
+  document.querySelectorAll('.field-pill').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderResults();
+}
+
+function meetsReq(courseReq, grade) {
+  return gradeRank(grade) <= gradeRank(courseReq);
+}
+
+function renderResults() {
+  var area = document.getElementById('resultsArea');
+  var total = 0;
+  var html = '';
+
+  Object.keys(courseData).forEach(function(key) {
+    var cat = courseData[key];
+    var filtered = cat.courses.filter(function(c) {
+      var fieldOk = selectedField === 'all' || c.fields.indexOf(selectedField) !== -1;
+      var gradeOk = meetsReq(c.req, selectedGrade);
+      return fieldOk && gradeOk;
+    });
+    if (!filtered.length) return;
+    total += filtered.length;
+
+    html += '<div class="cat-section">'
+      + '<div class="cat-section-head">'
+      + '<span class="cat-section-icon">' + cat.icon + '</span>'
+      + '<span class="cat-section-title">' + cat.title + '</span>'
+      + '<span class="cat-section-sub">' + filtered.length + ' options</span>'
+      + '</div>'
+      + '<div class="courses-list">'
+      + filtered.map(function(c) {
+          return '<div class="course-item">'
+            + '<div>'
+            + '<div class="course-name">' + c.name + '</div>'
+            + '<div class="course-details">'
+            + (c.subjects ? c.subjects : '')
+            + (c.universities ? ' · ' + c.universities : '')
+            + (c.note ? ' · <em style="color:var(--lime);">' + c.note + '</em>' : '')
+            + '</div>'
+            + '</div>'
+            + '<div class="course-req" style="color:' + cat.color + ';">Min: ' + c.req + '</div>'
+            + '</div>';
+        }).join('')
+      + '</div>'
+      + '</div>';
+  });
+
+  if (!total) {
+    html = '<div class="empty-state"><div>🔍</div><p>No courses match your selection. Try a different grade or field.<br>Remember — with any grade there is always a path forward!</p></div>';
+  } else {
+    html = '<div class="results-header"><h3>Courses Available for Grade ' + selectedGrade + (selectedField !== 'all' ? ' — ' + selectedField.charAt(0).toUpperCase() + selectedField.slice(1) : '') + '</h3><span class="results-count">' + total + ' programmes found</span></div>' + html;
+  }
+
+  area.innerHTML = html;
+}
+
+// Deadlines
+function renderDeadlines(items) {
+  var now = new Date();
+  var grid = document.getElementById('deadlinesGrid');
+  var active = items.filter(function(d){ return d.deadline && new Date(d.deadline) > now; })
+                    .sort(function(a,b){ return new Date(a.deadline)-new Date(b.deadline) }).slice(0,6);
+  if (!active.length) {
+    var staticDeadlines = [
+      { title:'KUCCPS Applications', type:'KUCCPS', deadline:'2026-07-15', link:'https://students.kuccps.net', icon:'🎓' },
+      { title:'KMTC Admissions', type:'KMTC', deadline:'2026-07-30', link:'https://admissions.kmtc.ac.ke', icon:'🏥' },
+      { title:'Teacher Training (TTC)', type:'TTC', deadline:'2026-08-08', link:'https://kuccps.net', icon:'📚' },
+      { title:'TVET Applications', type:'TVET', deadline:'2026-07-15', link:'https://students.kuccps.net', icon:'🔧' },
+      { title:'HELB Loan Application', type:'HELB', deadline:'2026-09-01', link:'https://portal.hef.co.ke', icon:'💰' },
+      { title:'KNEC Results Verification', type:'KNEC', deadline:'2026-06-30', link:'https://knec-portal.ac.ke', icon:'📋' },
+    ];
+    active = staticDeadlines;
+    active.forEach(function(d){ d.created_from_static = true; });
+  }
+  grid.innerHTML = active.map(function(d) {
+    var dl = new Date(d.deadline);
+    var days = Math.ceil((dl - now) / 86400000);
+    var isOpen = days > 0;
+    var color = !isOpen ? 'var(--white3)' : days <= 7 ? 'var(--coral)' : days <= 30 ? 'var(--amber)' : 'var(--lime)';
+    var badge = !isOpen ? '⚫ CLOSED' : days <= 7 ? '🔴 ' + days + 'd left' : '🟢 ' + days + 'd left';
+    var icon = d.icon || (d.type === 'KUCCPS' ? '🎓' : d.type === 'KMTC' ? '🏥' : d.type === 'HELB' ? '💰' : d.type === 'TVET' ? '🔧' : '📋');
+    return '<div class="deadline-card" style="border-color:' + (isOpen ? color + '44' : 'var(--border)') + (isOpen ? '' : ';opacity:0.6') + '">'
+      + '<div class="dl-icon">' + icon + '</div>'
+      + '<div class="dl-title">' + d.title + '</div>'
+      + '<div class="dl-type">' + (d.type||'Deadline') + '</div>'
+      + '<div class="dl-date">📆 ' + dl.toLocaleDateString('en-KE',{weekday:'short',month:'short',day:'numeric',year:'numeric'}) + '</div>'
+      + '<div class="dl-days" style="color:' + color + ';">' + badge + '</div>'
+      + (d.link ? '<a href="' + d.link + '" target="_blank" rel="noopener" class="dl-btn"' + (!isOpen ? ' style="opacity:0.5;pointer-events:none;"' : '') + '>Apply Now →</a>' : '')
+      + '</div>';
+  }).join('');
+}
+
+// Init
+renderResults();
+(async function(){
+  try {
+    var r = await fetch(API_BASE + '/deadlines');
+    if (r.ok) { var d = await r.json(); if (Array.isArray(d)) { renderDeadlines(d); return; } }
+  } catch(e) {}
+  renderDeadlines([]);
+})();
+</script>
+</body>
+</html>

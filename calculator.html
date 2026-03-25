@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cluster Calculator — BTECHPLUS</title>
+<meta name="description" content="Calculate your KCSE cluster points instantly. See what courses you qualify for.">
+<meta name="theme-color" content="#08080f">
+<link rel="stylesheet" href="shared.css">
+<style>
+
+.page-inner { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ── PAGE HEADER ── */
+.page-header { margin-bottom: 40px; }
+.page-header h1 { font-family: 'Fraunces', serif; font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 10px; }
+.page-header h1 em { font-style: italic; color: var(--lime); }
+.page-header p { font-size: 15px; color: var(--white2); max-width: 480px; line-height: 1.7; }
+
+/* ── HOW IT WORKS BANNER ── */
+.info-banner {
+  background: rgba(200,241,53,0.05);
+  border-left: 3px solid var(--lime);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px; margin-bottom: 32px;
+  font-size: 13px; color: var(--white2); line-height: 1.7;
+}
+.info-banner strong { color: var(--lime); display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+/* ── CALC LAYOUT ── */
+.calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+/* ── GRADES CARD ── */
+.grades-card { background: var(--ink2); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
+.grades-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
+
+.fld { margin-bottom: 16px; }
+.fld label { font-size: 11px; font-weight: 700; color: var(--white3); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 7px; }
+.fld select {
+  width: 100%; padding: 11px 14px;
+  background: var(--ink3); border: 1px solid var(--border2);
+  border-radius: 10px; color: var(--white);
+  font-family: 'Outfit', sans-serif; font-size: 14px; outline: none;
+  cursor: pointer; transition: border-color 0.15s;
+  -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.fld select:focus { border-color: var(--lime); }
+
+.fld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.calc-btn {
+  width: 100%; padding: 14px;
+  background: var(--lime); color: var(--ink);
+  border: none; border-radius: 10px;
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 800;
+  cursor: pointer; transition: background 0.18s, transform 0.18s;
+  margin-top: 20px; letter-spacing: 0.2px;
+}
+.calc-btn:hover { background: #d4f840; transform: translateY(-1px); }
+
+.reset-btn {
+  width: 100%; padding: 11px;
+  background: transparent; color: var(--white3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: 0.15s; margin-top: 8px;
+}
+.reset-btn:hover { border-color: var(--border2); color: var(--white2); }
+
+/* ── RESULT CARD ── */
+.result-card {
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  position: sticky; top: calc(var(--nav-h) + 16px);
+}
+
+.result-top {
+  padding: 32px 28px 24px; text-align: center;
+  background: linear-gradient(160deg, var(--ink3), var(--ink2));
+  border-bottom: 1px solid var(--border);
+}
+.score-display {
+  font-family: 'Fraunces', serif;
+  font-size: 80px; font-weight: 700; line-height: 1;
+  color: var(--lime);
+  text-shadow: 0 0 60px rgba(200,241,53,0.3);
+  transition: all 0.4s cubic-bezier(0.34,1.4,0.64,1);
+}
+.score-denom { font-size: 22px; color: var(--white3); font-weight: 400; }
+.score-label { font-size: 12px; color: var(--white3); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+.score-bar-wrap { margin: 16px 0 0; background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; }
+.score-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--lime), var(--teal)); width: 0; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+
+.result-body { padding: 20px; }
+.result-status { text-align: center; padding: 12px; background: var(--ink3); border-radius: 10px; margin-bottom: 16px; font-size: 13.5px; font-weight: 600; line-height: 1.5; }
+
+/* ── QUALIFICATIONS ── */
+.qual-section { margin-bottom: 16px; }
+.qual-heading {
+  font-size: 10px; font-weight: 800; color: var(--white3); text-transform: uppercase;
+  letter-spacing: 1.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+}
+.qual-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.qual-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; background: var(--ink3); border-radius: 9px;
+  margin-bottom: 6px; font-size: 13px;
+}
+.qual-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.qual-name { font-weight: 700; color: var(--white); }
+.qual-req { font-size: 11px; color: var(--white3); margin-top: 2px; }
+
+/* ── COURSE ELIGIBILITY TABLE ── */
+.cutoffs-section {
+  margin-top: 32px; background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 24px;
+}
+.cutoffs-section h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+.cutoffs-section p { font-size: 13px; color: var(--white3); margin-bottom: 20px; }
+
+.cutoff-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-radius: 10px; margin-bottom: 8px;
+  background: var(--ink3); border: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.cutoff-item.qualifies { border-color: rgba(200,241,53,0.2); }
+.cutoff-item.not-yet { opacity: 0.55; }
+.cutoff-left { display: flex; align-items: center; gap: 10px; }
+.cutoff-emoji { font-size: 18px; }
+.cutoff-name { font-size: 13.5px; font-weight: 700; color: var(--white); }
+.cutoff-school { font-size: 11px; color: var(--white3); }
+.cutoff-pts { font-size: 13px; font-weight: 800; white-space: nowrap; }
+
+/* ── GRADE KEY ── */
+.grade-key {
+  background: var(--ink3); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px; margin-top: 24px;
+}
+.grade-key h4 { font-size: 13px; font-weight: 800; margin-bottom: 12px; }
+.grade-key-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.gk-item { text-align: center; padding: 8px 4px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+.gk-grade { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700; color: var(--white2); }
+.gk-pts { font-size: 10px; color: var(--lime); font-weight: 700; margin-top: 2px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .calc-layout { grid-template-columns: 1fr; }
+  .result-card { position: static; }
+  .score-display { font-size: 64px; }
+}
+@media (max-width: 640px) {
+  .page-inner { padding: 28px 16px 60px; }
+  .page-header { margin-bottom: 24px; }
+  .grades-card { padding: 20px 16px; }
+  .grade-key-grid { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="bp-nav">
+  <a href="index.html" class="bp-logo">
+    BTECHPLUS <span class="bp-logo-tag">KE</span>
+  </a>
+  <ul class="bp-nav-links">
+    <li><a href="index.html">Dashboard</a></li>
+    <li><a href="calculator.html" class="active">Calculator</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="forum.html">Forum</a></li>
+    <li><a href="admin.html" class="bp-nav-cta">Admin</a></li>
+  </ul>
+  <button class="bp-hamburger" id="ham" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<nav class="bp-mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Dashboard</a>
+  <a href="calculator.html" class="active">🧮 Cluster Calculator</a>
+  <a href="courses.html">📚 Course Finder</a>
+  <a href="forum.html">💬 Student Forum</a>
+  <a href="admin.html">⚙️ Admin Panel</a>
+</nav>
+
+<main class="bp-page">
+<div class="page-inner">
+
+  <div class="page-header">
+    <div class="bp-eyebrow">🧮 Cluster Points Calculator</div>
+    <h1>Know your <em>exact</em> score</h1>
+    <p>Enter your KCSE grades and see your cluster score out of 48, what you qualify for, and which universities and programmes are open to you.</p>
+  </div>
+
+  <div class="info-banner">
+    <strong>How cluster points work</strong>
+    Your cluster score = Maths + (English <em>or</em> Kiswahili, whichever is higher) + your 2 best other subjects.
+    Each subject is scored out of 12 (A = 12, A− = 11 ... down to E = 1). Maximum possible = <strong style="color:var(--white);">48 points</strong>.
+  </div>
+
+  <div class="calc-layout">
+
+    <!-- LEFT: Grade Inputs -->
+    <div class="grades-card">
+      <h2>Enter Your Grades</h2>
+
+      <div class="fld-row">
+        <div class="fld">
+          <label>Mathematics</label>
+          <select id="g-math" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9" selected>B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6">C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>English</label>
+          <select id="g-eng" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fld-row">
+        <div class="fld">
+          <label>Kiswahili</label>
+          <select id="g-kis" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Biology</label>
+          <select id="g-bio" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fld-row">
+        <div class="fld">
+          <label>Chemistry</label>
+          <select id="g-chem" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Physics</label>
+          <select id="g-phy" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fld-row">
+        <div class="fld">
+          <label>Geography</label>
+          <select id="g-geo" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>History / CRE</label>
+          <select id="g-hist" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fld-row">
+        <div class="fld">
+          <label>Agriculture / Tech</label>
+          <select id="g-agri" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Art / Music / Other</label>
+          <select id="g-art" onchange="recalc()">
+            <option value="12">A</option><option value="11">A−</option><option value="10">B+</option>
+            <option value="9">B</option><option value="8">B−</option><option value="7">C+</option>
+            <option value="6" selected>C</option><option value="5">C−</option><option value="4">D+</option>
+            <option value="3">D</option><option value="2">D−</option><option value="1">E</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="recalc()">Calculate My Cluster Points →</button>
+      <button class="reset-btn" onclick="resetCalc()">Reset all grades</button>
+
+      <!-- Grade Key -->
+      <div class="grade-key">
+        <h4>Grade → Points Reference</h4>
+        <div class="grade-key-grid">
+          <div class="gk-item"><div class="gk-grade">A</div><div class="gk-pts">12 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">A−</div><div class="gk-pts">11 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">B+</div><div class="gk-pts">10 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">B</div><div class="gk-pts">9 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">B−</div><div class="gk-pts">8 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">C+</div><div class="gk-pts">7 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">C</div><div class="gk-pts">6 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">C−</div><div class="gk-pts">5 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">D+</div><div class="gk-pts">4 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">D</div><div class="gk-pts">3 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">D−</div><div class="gk-pts">2 pts</div></div>
+          <div class="gk-item"><div class="gk-grade">E</div><div class="gk-pts">1 pt</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Result -->
+    <div>
+      <div class="result-card">
+        <div class="result-top">
+          <div class="score-display" id="scoreDisplay">
+            <span id="scoreNum">24</span><span class="score-denom">/48</span>
+          </div>
+          <div class="score-label">Your Cluster Score</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="scoreBar"></div>
+          </div>
+        </div>
+        <div class="result-body">
+          <div class="result-status" id="resultStatus">—</div>
+
+          <div class="qual-section">
+            <div class="qual-heading">University Programmes</div>
+            <div id="uniQuals"></div>
+          </div>
+
+          <div class="qual-section">
+            <div class="qual-heading">KMTC / Medical</div>
+            <div id="kmtcQuals"></div>
+          </div>
+
+          <div class="qual-section">
+            <div class="qual-heading">TVET / Vocational</div>
+            <div id="tvetQuals"></div>
+          </div>
+
+          <a href="courses.html" class="btn-lime" style="width:100%;justify-content:center;margin-top:4px;">
+            Browse All Courses →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cut-off Comparison -->
+  <div class="cutoffs-section">
+    <h3>Popular Course Cut-offs (2024)</h3>
+    <p>Your score is compared against 2024 UoN cut-off points. These change each year.</p>
+    <div id="cutoffsList"></div>
+  </div>
+
+</div>
+</main>
+
+<div class="bp-toast" id="toast"></div>
+
+<script>
+function toggleNav() {
+  document.getElementById('ham').classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+var cutoffs = [
+  { name:'Medicine (MBChB)',    school:'UoN', pts:42.8, emoji:'🏥', cluster:'13A' },
+  { name:'Law (LLB)',           school:'UoN', pts:43.6, emoji:'⚖️', cluster:'1' },
+  { name:'Computer Science',   school:'UoN', pts:36.4, emoji:'💻', cluster:'7A' },
+  { name:'Engineering (Civil)',school:'UoN', pts:39.2, emoji:'⚙️', cluster:'5A' },
+  { name:'Nursing (BScN)',     school:'UoN', pts:34.2, emoji:'💊', cluster:'13' },
+  { name:'Pharmacy (BPharm)',  school:'UoN', pts:38.4, emoji:'🔬', cluster:'12A' },
+  { name:'Economics',          school:'UoN', pts:36.2, emoji:'📊', cluster:'2' },
+  { name:'Education (Arts)',   school:'UoN', pts:32.0, emoji:'📚', cluster:'3' },
+];
+
+var uniPaths = [
+  { min:40, name:'Top university programmes (Medicine, Law, Engineering)', emoji:'🎓' },
+  { min:32, name:'Most degree programmes at public universities', emoji:'🏛️' },
+  { min:24, name:'Private university degree programmes', emoji:'🎒' },
+];
+var kmtcPaths = [
+  { min:24, name:'Clinical Medicine (K32) — 44 campuses', emoji:'🩺' },
+  { min:24, name:'Nursing (K04) — 30 campuses', emoji:'💊' },
+  { min:20, name:'Laboratory Sciences (K08)', emoji:'🔬' },
+  { min:16, name:'Community Health Assistant (K28) — 46 campuses', emoji:'🏥' },
+];
+var tvetPaths = [
+  { min:20, name:'TVET Diploma (most fields)', emoji:'📜' },
+  { min:12, name:'TVET Certificate', emoji:'📋' },
+  { min:4,  name:'Artisan Certificate', emoji:'🔧' },
+];
+
+function g(id){ return parseInt(document.getElementById(id).value) || 0; }
+
+function recalc() {
+  var math = g('g-math');
+  var eng  = g('g-eng');
+  var kis  = g('g-kis');
+  var lang = Math.max(eng, kis);
+  var others = [g('g-bio'), g('g-chem'), g('g-phy'), g('g-geo'), g('g-hist'), g('g-agri'), g('g-art')]
+                .sort(function(a,b){ return b-a; }).slice(0,2);
+  var score = math + lang + others[0] + others[1];
+
+  // Update score display
+  document.getElementById('scoreNum').textContent = score;
+  var pct = (score / 48) * 100;
+  document.getElementById('scoreBar').style.width = pct + '%';
+
+  // Color
+  var col = score >= 40 ? 'var(--lime)' : score >= 32 ? 'var(--teal)' : score >= 24 ? 'var(--violet)' : 'var(--coral)';
+  document.getElementById('scoreDisplay').style.color = col;
+
+  // Status message
+  var msg;
+  if (score >= 44) msg = '🏆 Exceptional! You qualify for the most competitive programmes in Kenya.';
+  else if (score >= 40) msg = '🎯 Excellent! Top university programmes are open to you.';
+  else if (score >= 34) msg = '✅ Strong score — wide range of university programmes available.';
+  else if (score >= 28) msg = '👍 Good score — many university and KMTC options available.';
+  else if (score >= 20) msg = '📋 Solid score — KMTC and TVET diploma programmes are available.';
+  else if (score >= 12) msg = '📝 TVET certificate programmes are a great path forward.';
+  else msg = '🔧 Artisan programmes available. You can always upgrade your qualifications.';
+  document.getElementById('resultStatus').innerHTML = msg;
+
+  // Render qualifying categories
+  renderQuals('uniQuals', uniPaths, score);
+  renderQuals('kmtcQuals', kmtcPaths, score);
+  renderQuals('tvetQuals', tvetPaths, score);
+
+  // Render cut-offs
+  renderCutoffs(score);
+}
+
+function renderQuals(id, paths, score) {
+  var el = document.getElementById(id);
+  el.innerHTML = paths.map(function(p) {
+    var ok = score >= p.min;
+    return '<div class="qual-item" style="' + (ok ? '' : 'opacity:0.45;') + '">'
+      + '<div class="qual-icon">' + (ok ? p.emoji : '🔒') + '</div>'
+      + '<div><div class="qual-name">' + p.name + '</div>'
+      + '<div class="qual-req">' + (ok ? '✅ You qualify' : '⚠️ Need ' + p.min + ' pts (you have ' + score + ')') + '</div></div>'
+      + '</div>';
+  }).join('');
+}
+
+function renderCutoffs(score) {
+  var el = document.getElementById('cutoffsList');
+  el.innerHTML = cutoffs.map(function(c) {
+    var ok = score >= c.pts;
+    return '<div class="cutoff-item ' + (ok ? 'qualifies' : 'not-yet') + '">'
+      + '<div class="cutoff-left">'
+      + '<span class="cutoff-emoji">' + c.emoji + '</span>'
+      + '<div><div class="cutoff-name">' + c.name + '</div><div class="cutoff-school">' + c.school + ' · Cluster ' + c.cluster + '</div></div>'
+      + '</div>'
+      + '<div class="cutoff-pts" style="color:' + (ok ? 'var(--lime)' : 'var(--white3)') + ';">'
+      + c.pts + ' pts' + (ok ? ' ✓' : '') + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function resetCalc() {
+  ['g-math','g-eng','g-kis','g-bio','g-chem','g-phy','g-geo','g-hist','g-agri','g-art'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.value = '6';
+  });
+  recalc();
+}
+
+// Init
+recalc();
+</script>
+</body>
+</html>
