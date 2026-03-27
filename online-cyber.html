@@ -98,6 +98,7 @@
             padding: 40px 30px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative; overflow: hidden; display: flex; flex-direction: column;
             z-index: 1; animation: fadeUp 0.6s ease-out backwards;
+            background-color: #111; /* Fallback color */
         }
 
         /* Background Image Setup */
@@ -107,25 +108,25 @@
             z-index: -2; transition: transform 0.6s ease;
         }
 
-        /* Dark Gradient Overlay */
+        /* Dark Gradient Overlay (Made lighter so images are clearly visible) */
         .service-card::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.85), rgba(0,0,0,0.98));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.95));
             z-index: -1; transition: all 0.4s ease;
         }
 
-        /* Real-World Context Images */
-        /* KUCCPS: University Students / Graduation */
-        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'); }
+        /* Real-World Context Images (Distinctly African/Kenyan) */
+        /* KUCCPS: African University Students */
+        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1571260899304-42507611ef42?auto=format&fit=crop&w=800&q=80'); }
         
-        /* HELB: African student on a laptop doing applications/finances */
-        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=800&q=80'); }
+        /* HELB: Focused African student on a laptop */
+        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1627556592933-ffe99c1c9dd8?auto=format&fit=crop&w=800&q=80'); }
         
-        /* KRA: Tax computation, paperwork, calculator */
-        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80'); }
+        /* KRA: African professional reviewing documents/taxes */
+        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80'); }
         
-        /* OTHER: Huduma Center / Government service desk vibe */
-        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=800&q=80'); }
+        /* OTHER: African customer service / Huduma Center vibe */
+        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=800&q=80'); }
 
         /* Card Hover Effects */
         .service-card:nth-child(1) { animation-delay: 0.1s; }
@@ -133,40 +134,41 @@
         .service-card:nth-child(3) { animation-delay: 0.3s; }
         .service-card:nth-child(4) { animation-delay: 0.4s; }
 
-        .service-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.3); }
+        .service-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.4); }
         .service-card:hover::before { transform: scale(1.1); } /* Smooth Image Zoom */
 
-        /* Specific Hover Tints */
-        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.15), rgba(0,0,0,0.95)); }
+        /* Specific Hover Tints (More vibrant now) */
+        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.3), rgba(0,0,0,0.9)); }
         .card-kuccps:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2); }
 
-        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.15), rgba(0,0,0,0.95)); }
+        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(0,0,0,0.9)); }
         .card-helb:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2); }
 
-        .card-kra:hover::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.15), rgba(0,0,0,0.95)); }
+        .card-kra:hover::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.3), rgba(0,0,0,0.9)); }
         .card-kra:hover { border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2); }
 
-        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.15), rgba(0,0,0,0.95)); }
+        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.3), rgba(0,0,0,0.9)); }
         .card-other:hover { border-color: var(--neon-red); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.2); }
 
         /* Internal Card Elements */
         .service-item {
-            width: 90px; height: 90px; background: rgba(0,0,0,0.6); border-radius: 18px;
-            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
-            margin-bottom: 25px; padding: 12px; border: 1px solid rgba(255,255,255,0.1);
+            width: 80px; height: 80px; background: rgba(0,0,0,0.7); border-radius: 18px;
+            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
+            margin-bottom: 25px; padding: 12px; border: 1px solid rgba(255,255,255,0.15);
             transition: all 0.3s ease;
         }
         .service-card:hover .service-item { background: rgba(0,0,0,0.9); transform: scale(1.05); }
         .service-item img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
 
-        .service-card h3 { font-size: 1.6rem; color: white; margin-bottom: 15px; font-weight: 700; }
-        .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.7; transition: color 0.3s; }
+        .service-card h3 { font-size: 1.6rem; color: white; margin-bottom: 15px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.7; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
         .service-card:hover p { color: #fff; }
 
         .service-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
         .service-features li {
             color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;
             display: flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
         .service-features li i { color: var(--neon-green); font-size: 1rem; }
 
@@ -190,8 +192,8 @@
         .link-secondary { background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold); backdrop-filter: blur(5px); }
         .link-secondary:hover { background: var(--neon-gold); color: black; box-shadow: 0 0 15px var(--neon-gold); transform: translateY(-2px); }
         
-        .link-outline { border: 1px solid var(--text-muted); color: var(--text-muted); background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); }
-        .link-outline:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .link-outline { border: 1px solid var(--text-muted); color: var(--text-main); background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .link-outline:hover { border-color: white; color: black; background: rgba(255,255,255,0.9); transform: translateY(-2px); }
 
         /* --- FOOTER --- */
         footer {
@@ -352,7 +354,7 @@
                 </ul>
                 <div class="service-actions">
                     <a href="kuccps-details.html" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
-                    <button onclick="prefillService('KUCCPS')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Now</button>
+                    <button onclick="prefillService('KUCCPS')" class="service-link link-secondary" style="border-color: var(--neon-blue); color: var(--neon-blue);"><i class="fas fa-paper-plane"></i> Request Now</button>
                     <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
                 </div>
             </div>
@@ -370,7 +372,7 @@
                     <li><i class="fas fa-check-circle" style="color: var(--neon-gold);"></i> Status monitoring</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="helb-details.html" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <a href="helb-details.html" class="service-link link-primary" style="background: var(--neon-gold);"><i class="fas fa-info-circle"></i> View Details</a>
                     <button onclick="prefillService('HELB')" class="service-link link-secondary" style="border-color: var(--neon-gold); color: var(--neon-gold);"><i class="fas fa-paper-plane"></i> Apply Now</button>
                     <a href="HELB APPLICATION REQUIREMENTS (1).pdf" target="_blank" class="service-link link-outline"><i class="fas fa-file-pdf"></i> Requirements</a>
                 </div>
@@ -389,7 +391,7 @@
                     <li><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Tax consultancy</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="kra-details.html" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <a href="kra-details.html" class="service-link link-primary" style="background: var(--neon-green);"><i class="fas fa-info-circle"></i> View Details</a>
                     <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary" style="border-color: var(--neon-green); color: var(--neon-green);"><i class="fas fa-calculator"></i> File Returns</button>
                     <button onclick="prefillService('KRA_PIN')" class="service-link link-outline"><i class="fas fa-id-card"></i> Get PIN</button>
                 </div>
@@ -408,7 +410,7 @@
                     <li><i class="fas fa-check-circle" style="color: var(--neon-red);"></i> Business permits</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="other-services-details.html" class="service-link link-primary"><i class="fas fa-list"></i> View All</a>
+                    <a href="other-services-details.html" class="service-link link-primary" style="background: var(--neon-red); color: white;"><i class="fas fa-list"></i> View All</a>
                     <button onclick="prefillService('OTHER')" class="service-link link-secondary" style="border-color: var(--neon-red); color: var(--neon-red);"><i class="fas fa-paper-plane"></i> Request Service</button>
                     <a href="https://wa.me/254113996609" target="_blank" class="service-link link-outline"><i class="fab fa-whatsapp"></i> Consult</a>
                 </div>
