@@ -134,36 +134,72 @@
         .featured-card:hover { border-color: rgba(0, 245, 255, 0.4); box-shadow: 0 15px 50px rgba(0, 245, 255, 0.1); transform: translateY(-5px); }
         .eta-highlight { border-color: rgba(0, 255, 136, 0.3); background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0,0,0,0.5)); }
 
-        /* --- GRID & SERVICE CARDS --- */
+        /* --- GRID & IMAGE OVERLAY SERVICE CARDS --- */
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 50px; align-items: center; }
 
         .glass-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border: 1px solid var(--glass-border); text-decoration: none; /* Makes the whole card clickable */
             padding: 40px 30px; transition: all 0.4s ease; position: relative; overflow: hidden; border-radius: 20px;
-            backdrop-filter: blur(10px); display: flex; flex-direction: column;
+            display: flex; flex-direction: column; z-index: 1;
         }
-        .glass-card:hover { transform: translateY(-10px); border-color: rgba(0, 245, 255, 0.4); background: var(--glass-hover); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.15); }
 
-        /* --- ENLARGED IMAGE CONTAINERS --- */
+        /* The Image Background */
+        .glass-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            z-index: -2; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* The Dark Overlay for readability */
+        .glass-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.85), rgba(0,0,0,0.98));
+            z-index: -1; transition: all 0.4s ease;
+        }
+
+        /* Individual Images for Cards (Unsplash - African Professionals) */
+        .card-cyber::before { background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80'); } /* Cyber/Office */
+        .card-learning::before { background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80'); } /* Learning/Student */
+        .card-business::before { background-image: url('https://images.unsplash.com/photo-1573164574572-cb89e39749b4?auto=format&fit=crop&w=800&q=80'); } /* Business/Meeting */
+        .card-repair::before { background-image: url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80'); } /* Tech/Hardware */
+
+        /* Hover Effects - Zoom image, tint overlay, and border glow */
+        .glass-card:hover { transform: translateY(-10px); }
+        .glass-card:hover::before { transform: scale(1.1); } /* Smooth zoom */
+
+        .card-cyber:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.15), rgba(0,0,0,0.95)); }
+        .card-cyber:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2); }
+
+        .card-learning:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.15), rgba(0,0,0,0.95)); }
+        .card-learning:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2); }
+
+        .card-business:hover::after { background: linear-gradient(to bottom, rgba(188, 19, 254, 0.15), rgba(0,0,0,0.95)); }
+        .card-business:hover { border-color: var(--neon-purple); box-shadow: 0 10px 40px rgba(188, 19, 254, 0.2); }
+
+        .card-repair:hover::after { background: linear-gradient(to bottom, rgba(255, 69, 0, 0.15), rgba(0,0,0,0.95)); }
+        .card-repair:hover { border-color: #ff4500; box-shadow: 0 10px 40px rgba(255, 69, 0, 0.2); }
+
+        /* Card Content Styles */
         .card-img-container {
-            width: 110px; height: 110px; background: rgba(255,255,255,0.05);
+            width: 110px; height: 110px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
             border-radius: 20px; display: flex; align-items: center; justify-content: center;
             margin-bottom: 25px; padding: 15px; border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.3s ease;
         }
-        .glass-card:hover .card-img-container { transform: scale(1.05); border-color: rgba(255,255,255,0.2); }
+        .glass-card:hover .card-img-container { transform: scale(1.05); background: rgba(0,0,0,0.8); }
         .card-img-container img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); }
 
         .glass-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: #fff; font-weight: 700; }
-        .glass-card p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.6; flex-grow: 1; }
+        .glass-card p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.6; flex-grow: 1; transition: color 0.3s; }
+        .glass-card:hover p { color: #fff; } /* Brightens text on hover */
 
+        /* Using a span instead of an 'a' tag here so we don't nest links */
         .card-link {
-            color: var(--neon-blue); text-decoration: none; font-weight: 700;
-            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
+            font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
             display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;
         }
-        .card-link:hover { gap: 12px; filter: brightness(1.2); }
+        .glass-card:hover .card-link { gap: 12px; filter: brightness(1.2); }
 
         /* --- ABOUT (ENLARGED CEO IMAGE) --- */
         .ceo-wrapper { display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
@@ -206,7 +242,7 @@
         }
         .login-input:focus { outline: none; border-color: var(--neon-blue); background: rgba(0, 245, 255, 0.05); box-shadow: 0 0 15px rgba(0, 245, 255, 0.1); }
 
-        /* --- MOBILE RESPONSIVENESS (The Magic Happens Here) --- */
+        /* --- MOBILE RESPONSIVENESS --- */
         .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; transition: 0.3s; }
         .mobile-menu-btn:hover { color: var(--neon-blue); }
         
@@ -226,40 +262,17 @@
             .nav-menu { display: none; }
             .mobile-menu-btn { display: block; }
             
-            /* PULLING EVERYTHING UP */
-            .hero-section { 
-                padding: 40px 15px 30px; /* Reduced vertical padding drastically */
-            }
-            .hero-title {
-                font-size: 2.8rem; 
-                margin-bottom: 5px;
-            }
-            .typing-container {
-                margin-bottom: 15px;
-                font-size: 1.1rem;
-            }
-            #home p {
-                font-size: 0.95rem !important;
-                margin-bottom: 25px !important;
-            }
+            .hero-section { padding: 40px 15px 30px; }
+            .hero-title { font-size: 2.8rem; margin-bottom: 5px; }
+            .typing-container { margin-bottom: 15px; font-size: 1.1rem; }
+            #home p { font-size: 0.95rem !important; margin-bottom: 25px !important; }
             
-            /* GRID FOR BUTTONS TO SAVE VERTICAL SPACE */
-            .hero-btns { 
-                display: grid;
-                grid-template-columns: 1fr 1fr; /* Two buttons side-by-side */
-                gap: 12px; 
-                padding: 0; 
-            }
+            .hero-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0; }
             .btn-primary, .btn-secondary {
-                padding: 12px 10px; /* Smaller button padding */
-                font-size: 0.75rem; /* Smaller text */
-                width: 100%;
-                clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%); /* Adjusted slant so it looks good small */
-                white-space: nowrap; /* Keeps text on one line */
+                padding: 12px 10px; font-size: 0.75rem; width: 100%;
+                clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%); white-space: nowrap;
             }
-            .btn-primary i, .btn-secondary i {
-                font-size: 0.9rem; /* Slightly smaller icons */
-            }
+            .btn-primary i, .btn-secondary i { font-size: 0.9rem; }
 
             .eta-banner { flex-direction: column; text-align: center; font-size: 0.85rem; padding: 15px; }
             .close-banner { position: absolute; top: 10px; right: 10px; margin: 0; font-size: 1.2rem; }
@@ -270,7 +283,7 @@
             .featured-card { padding: 30px 20px; }
             .grid-2 { grid-template-columns: 1fr; gap: 30px; text-align: center; }
 
-            #services { padding-top: 50px !important; } /* Brings Ecosystem title closer */
+            #services { padding-top: 50px !important; } 
             #services h2 { font-size: 2.2rem !important; }
         }
     </style>
@@ -342,41 +355,41 @@
             </div>
             
             <div class="grid-3">
-                <div class="glass-card">
-                    <div class="card-img-container">
+                <a href="online-cyber.html" class="glass-card card-cyber">
+                    <div class="card-img-container" style="border-color: rgba(0, 245, 255, 0.2);">
                         <img src="cyber.png" alt="Cyber Services" onerror="this.style.display='none'">
                     </div>
                     <h3>Online Cyber Services</h3>
                     <p>Secure access to KUCCPS, KRA, HELB and other essential government services with our trusted cyber platform.</p>
-                    <a href="online-cyber.html" class="card-link">Learn More <i class="fas fa-arrow-right"></i></a>
-                </div>
+                    <span class="card-link" style="color: var(--neon-blue);">Learn More <i class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="glass-card">
+                <a href="computer-learning-hub.html" class="glass-card card-learning">
                     <div class="card-img-container" style="border-color: rgba(255, 215, 0, 0.2);">
                         <img src="learning.png" alt="Learning Hub" onerror="this.style.display='none'">
                     </div>
                     <h3 style="color: var(--neon-gold);">Learning Hub</h3>
                     <p>Master industry-relevant skills with our comprehensive computer courses designed by expert instructors.</p>
-                    <a href="computer-learning-hub.html" class="card-link" style="color: var(--neon-gold);">View Courses <i class="fas fa-arrow-right"></i></a>
-                </div>
+                    <span class="card-link" style="color: var(--neon-gold);">View Courses <i class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="glass-card">
+                <a href="digital-business-solutions.html" class="glass-card card-business">
                     <div class="card-img-container" style="border-color: rgba(188, 19, 254, 0.2);">
                         <img src="business.png" alt="Business Solutions" onerror="this.style.display='none'">
                     </div>
                     <h3 style="color: var(--neon-purple);">Business Solutions</h3>
                     <p>Transform your business with modern tools, innovative design frameworks, and strategic digital solutions.</p>
-                    <a href="digital-business-solutions.html" class="card-link" style="color: var(--neon-purple);">Discover <i class="fas fa-arrow-right"></i></a>
-                </div>
+                    <span class="card-link" style="color: var(--neon-purple);">Discover <i class="fas fa-arrow-right"></i></span>
+                </a>
 
-                <div class="glass-card">
+                <a href="tech-repair.html" class="glass-card card-repair">
                     <div class="card-img-container" style="border-color: rgba(255, 69, 0, 0.2);">
                         <img src="repair.png" alt="Tech Repair" onerror="this.style.display='none'">
                     </div>
                     <h3 style="color: #ff4500;">Tech Repair</h3>
                     <p>Professional repair and maintenance services for all your technology devices with guaranteed quality.</p>
-                    <a href="tech-repair.html" class="card-link" style="color: #ff4500;">Get Support <i class="fas fa-arrow-right"></i></a>
-                </div>
+                    <span class="card-link" style="color: #ff4500;">Get Support <i class="fas fa-arrow-right"></i></span>
+                </a>
             </div>
         </section>
 
