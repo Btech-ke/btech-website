@@ -46,10 +46,11 @@
         /* --- HEADER --- */
         header {
             position: sticky; top: 0; z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             padding: 15px 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
         .nav-container { display: flex; justify-content: space-between; align-items: center; }
@@ -63,7 +64,7 @@
 
         .nav-menu { display: flex; gap: 30px; list-style: none; }
         .nav-menu a {
-            color: var(--text-muted); text-decoration: none;
+            color: var(--text-muted); text-decoration: none; font-weight: 600;
             font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
             transition: 0.3s;
         }
@@ -71,92 +72,136 @@
 
         .book-btn {
             background: var(--neon-blue); color: #000; border: none;
-            padding: 8px 20px; font-weight: 700; cursor: pointer;
+            padding: 10px 24px; font-weight: 700; cursor: pointer;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
             transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif;
         }
-        .book-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-blue); }
+        .book-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 245, 255, 0.4); }
 
         /* --- SERVICES --- */
         .section-header { text-align: center; margin-bottom: 60px; }
-        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; color: white; }
+        .section-header h2 { font-size: 2.8rem; margin-bottom: 15px; color: white; font-weight: 800; letter-spacing: -0.5px; }
         
         .services-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
         }
 
-        /* Added smooth entrance animation */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- PREMIUM IMAGE OVERLAY CARDS --- */
         .service-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 15px; padding: 30px; transition: 0.3s;
-            position: relative; overflow: hidden;
-            animation: fadeUp 0.6s ease-out backwards;
+            border: 1px solid var(--glass-border); border-radius: 20px; 
+            padding: 40px 30px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            z-index: 1; animation: fadeUp 0.6s ease-out backwards;
         }
-        
-        /* Staggered animation delay for cards */
+
+        /* Background Image Setup */
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            z-index: -2; transition: transform 0.6s ease;
+        }
+
+        /* Dark Gradient Overlay */
+        .service-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.85), rgba(0,0,0,0.98));
+            z-index: -1; transition: all 0.4s ease;
+        }
+
+        /* Unsplash African Context Images */
+        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80'); }
+        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80'); }
+        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80'); }
+        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=800&q=80'); }
+
+        /* Card Hover Effects */
         .service-card:nth-child(1) { animation-delay: 0.1s; }
         .service-card:nth-child(2) { animation-delay: 0.2s; }
         .service-card:nth-child(3) { animation-delay: 0.3s; }
         .service-card:nth-child(4) { animation-delay: 0.4s; }
 
-        .service-card:hover {
-            transform: translateY(-10px); border-color: var(--neon-blue);
-            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.15);
-        }
+        .service-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.3); }
+        .service-card:hover::before { transform: scale(1.1); } /* Smooth Image Zoom */
 
+        /* Specific Hover Tints */
+        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.15), rgba(0,0,0,0.95)); }
+        .card-kuccps:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2); }
+
+        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.15), rgba(0,0,0,0.95)); }
+        .card-helb:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2); }
+
+        .card-kra:hover::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.15), rgba(0,0,0,0.95)); }
+        .card-kra:hover { border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2); }
+
+        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.15), rgba(0,0,0,0.95)); }
+        .card-other:hover { border-color: var(--neon-red); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.2); }
+
+        /* Internal Card Elements */
         .service-item {
-            width: 80px; height: 80px; background: white; border-radius: 15px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px; padding: 10px;
+            width: 90px; height: 90px; background: rgba(0,0,0,0.6); border-radius: 18px;
+            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+            margin-bottom: 25px; padding: 12px; border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
         }
-        .service-item img { width: 100%; height: 100%; object-fit: contain; }
+        .service-card:hover .service-item { background: rgba(0,0,0,0.9); transform: scale(1.05); }
+        .service-item img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
 
-        .service-card h3 { font-size: 1.5rem; color: white; margin-bottom: 15px; }
-        .service-card p { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+        .service-card h3 { font-size: 1.6rem; color: white; margin-bottom: 15px; font-weight: 700; }
+        .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.7; transition: color 0.3s; }
+        .service-card:hover p { color: #fff; }
 
-        .service-features { list-style: none; margin-bottom: 25px; }
+        .service-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
         .service-features li {
-            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 10px;
+            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif;
         }
-        .service-features li i { color: var(--neon-green); }
+        .service-features li i { color: var(--neon-green); font-size: 1rem; }
 
-        .service-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        /* --- MOBILE FRIENDLY BUTTONS GRID --- */
+        .service-actions { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            gap: 12px; 
+            margin-top: auto; 
+        }
+        
         .service-link {
-            padding: 8px 15px; border-radius: 5px; text-decoration: none;
-            font-size: 0.85rem; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
+            padding: 10px 12px; border-radius: 8px; text-decoration: none;
+            font-size: 0.8rem; font-weight: 700; transition: 0.3s; 
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
+            cursor: pointer; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase;
         }
         .link-primary { background: var(--neon-blue); color: black; border: none; }
-        .link-primary:hover { background: #fff; }
+        .link-primary:hover { background: #fff; box-shadow: 0 0 15px var(--neon-blue); transform: translateY(-2px); }
         
-        .link-secondary { background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold); }
-        .link-secondary:hover { background: var(--neon-gold); color: black; }
+        .link-secondary { background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold); backdrop-filter: blur(5px); }
+        .link-secondary:hover { background: var(--neon-gold); color: black; box-shadow: 0 0 15px var(--neon-gold); transform: translateY(-2px); }
         
-        .link-outline { border: 1px solid var(--text-muted); color: var(--text-muted); background: transparent; }
-        .link-outline:hover { border-color: white; color: white; }
+        .link-outline { border: 1px solid var(--text-muted); color: var(--text-muted); background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); }
+        .link-outline:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
 
         /* --- FOOTER --- */
         footer {
-            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            background: rgba(5,5,5,0.95); border-top: 1px solid var(--glass-border);
             padding: 60px 0 20px; margin-top: auto;
         }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
-        .footer-section h4 { color: var(--neon-blue); margin-bottom: 20px; font-size: 1.1rem; }
-        .footer-section p, .footer-section a { color: var(--text-muted); display: block; margin-bottom: 10px; text-decoration: none; transition: 0.3s; }
-        .footer-section a:hover { color: white; padding-left: 5px; }
+        .footer-section h4 { color: var(--neon-blue); margin-bottom: 25px; font-size: 1.1rem; letter-spacing: 1px; }
+        .footer-section p, .footer-section a { color: var(--text-muted); display: block; margin-bottom: 12px; text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
+        .footer-section a:hover { color: white; transform: translateX(5px); }
         .social-links { display: flex; gap: 15px; margin-top: 20px; }
         .social-links a {
-            width: 40px; height: 40px; border: 1px solid var(--glass-border);
+            width: 40px; height: 40px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.02);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             color: white; transition: 0.3s;
         }
-        .social-links a:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); }
+        .social-links a:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); transform: translateY(-3px); }
 
         /* --- MODAL --- */
         .modal-overlay {
@@ -168,57 +213,78 @@
 
         .modal {
             background: #050505; border: 1px solid var(--neon-blue);
-            border-radius: 20px; width: 95%; max-width: 500px; padding: 30px;
+            border-radius: 20px; width: 95%; max-width: 500px; padding: 35px;
             box-shadow: 0 0 60px rgba(0, 245, 255, 0.15);
             max-height: 90vh; overflow-y: auto;
         }
 
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .modal-header h3 { color: white; font-size: 1.5rem; }
-        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
-        .close-modal:hover { color: white; }
+        .close-modal { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); width: 36px; height: 36px; border-radius: 50%; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .close-modal:hover { color: var(--neon-red); border-color: rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.1); transform: rotate(90deg); }
 
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; }
+        .form-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 500; }
         
         .dark-input {
-            width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border); border-radius: 8px;
-            color: white; font-family: inherit; font-size: 1rem;
+            width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border); border-radius: 10px;
+            color: white; font-family: inherit; font-size: 1rem; transition: 0.3s;
         }
-        .dark-input:focus { outline: none; border-color: var(--neon-green); }
+        .dark-input:focus { outline: none; border-color: var(--neon-green); box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.1); }
         select.dark-input option { background: #000; color: white; }
 
         .modal-btn {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            width: 100%; padding: 14px; border-radius: 10px; border: none;
             font-weight: 700; cursor: pointer; margin-top: 10px;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
+            display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s; font-size: 1rem;
         }
         .btn-submit { background: var(--neon-blue); color: black; }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 245, 255, 0.3); }
         .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
         
         /* Payment Box */
         .payment-info {
             background: rgba(0, 255, 136, 0.05); border: 1px solid var(--neon-green);
-            border-radius: 10px; padding: 20px; margin-top: 20px; display: none;
+            border-radius: 10px; padding: 25px; margin-top: 20px; display: none;
         }
-        .payment-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .payment-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; }
+        .payment-row:last-child { border-bottom: none; }
         
         /* Alerts */
-        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
+        .alert { padding: 15px; border-radius: 10px; margin-bottom: 25px; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
         .alert-success { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
         .alert-error { background: rgba(255, 0, 85, 0.1); border: 1px solid var(--neon-red); color: var(--neon-red); }
         .alert-info { background: rgba(0, 245, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
 
-        /* Mobile Menu */
+        /* --- MOBILE MENU & RESPONSIVENESS --- */
         .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        .mobile-nav { position: fixed; top: 70px; left: 0; width: 100%; background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; }
-        .mobile-nav.active { display: flex; }
+        .mobile-nav { position: fixed; top: 70px; left: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--neon-blue); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; }
+        .mobile-nav.active { display: flex; animation: slideDown 0.3s ease forwards; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         @media (max-width: 768px) {
             .nav-menu { display: none; }
             .mobile-menu-btn { display: block; }
-            .services-grid { grid-template-columns: 1fr; }
+            
+            .section-header h2 { font-size: 2.2rem; }
+            .service-card { padding: 30px 20px; }
+            
+            /* Ensures buttons shrink nicely on small screens without breaking layout */
+            .service-actions { 
+                grid-template-columns: 1fr 1fr; /* Two compact buttons per row */
+                gap: 8px; 
+            }
+            .service-link { 
+                padding: 10px 5px; /* Reduced padding */
+                font-size: 0.75rem; /* Smaller text */
+                white-space: nowrap; /* Prevents awkward text wrapping */
+            }
         }
     </style>
 </head>
@@ -250,95 +316,97 @@
             </div>
         </div>
         <div class="mobile-nav" id="mobileNav">
-            <a href="../index.html" style="color:white;">Home</a>
-            <a href="#services" style="color:white;">Services</a>
-            <a href="#contact" style="color:white;">Contact</a>
-            <a href="#help" style="color:white;">Help</a>
+            <a href="../index.html" style="color:white; text-decoration:none; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);">Home</a>
+            <a href="#services" style="color:white; text-decoration:none; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);">Services</a>
+            <a href="#contact" style="color:white; text-decoration:none; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);">Contact</a>
+            <a href="#help" style="color:white; text-decoration:none; padding:10px 0;">Help</a>
         </div>
     </header>
 
-    <section id="services" class="container" style="padding-top: 120px; padding-bottom: 80px; flex: 1;">
+    <section id="services" class="container" style="padding-top: 100px; padding-bottom: 80px; flex: 1;">
         <div class="section-header">
             <h2>Our Premium Cyber Services</h2>
-            <p style="color: var(--text-muted);">Professional assistance for all your government service needs with guaranteed results and expert support.</p>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Professional assistance for all your government service needs with guaranteed results and expert support.</p>
         </div>
         
         <div class="services-grid">
-            <div class="service-card">
-                <div class="service-item">
+            
+            <div class="service-card card-kuccps">
+                <div class="service-item" style="border-color: rgba(0, 245, 255, 0.3);">
                     <img src="kuccps.png" alt="KUCCPS Applications" loading="lazy" onerror="this.style.display='none'" />
                 </div>
                 <h3>KUCCPS Applications</h3>
                 <p>Complete university and college placement applications through KUCCPS with expert guidance and guaranteed submission.</p>
                 <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> Course selection guidance</li>
-                    <li><i class="fas fa-check-circle"></i> Document verification</li>
-                    <li><i class="fas fa-check-circle"></i> Application tracking</li>
-                    <li><i class="fas fa-check-circle"></i> Result notifications</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-blue);"></i> Course selection guidance</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-blue);"></i> Document verification</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-blue);"></i> Application tracking</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-blue);"></i> Result notifications</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <a href="kuccps-details.html" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
                     <button onclick="prefillService('KUCCPS')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Now</button>
                     <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
                 </div>
             </div>
 
-            <div class="service-card">
-                <div class="service-item">
+            <div class="service-card card-helb">
+                <div class="service-item" style="border-color: rgba(255, 215, 0, 0.3);">
                     <img src="helb.png" alt="HELB Loan" loading="lazy" onerror="this.style.display='none'" />
                 </div>
-                <h3>HELB Loan Applications</h3>
+                <h3 style="color: var(--neon-gold);">HELB Loan Applications</h3>
                 <p>Secure your education funding with professional HELB loan application assistance and follow-up services.</p>
                 <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> Loan calculation</li>
-                    <li><i class="fas fa-check-circle"></i> Document preparation</li>
-                    <li><i class="fas fa-check-circle"></i> Application submission</li>
-                    <li><i class="fas fa-check-circle"></i> Status monitoring</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-gold);"></i> Loan calculation</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-gold);"></i> Document preparation</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-gold);"></i> Application submission</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-gold);"></i> Status monitoring</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
-                    <button onclick="prefillService('HELB')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Apply Now</button>
-                    <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
+                    <a href="helb-details.html" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <button onclick="prefillService('HELB')" class="service-link link-secondary" style="border-color: var(--neon-gold); color: var(--neon-gold);"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                    <a href="HELB APPLICATION REQUIREMENTS (1).pdf" target="_blank" class="service-link link-outline"><i class="fas fa-file-pdf"></i> Requirements</a>
                 </div>
             </div>
 
-            <div class="service-card">
-                <div class="service-item">
+            <div class="service-card card-kra">
+                <div class="service-item" style="border-color: rgba(0, 255, 136, 0.3);">
                     <img src="kra.png" alt="KRA Services" loading="lazy" onerror="this.style.display='none'" />
                 </div>
-                <h3>KRA Tax Services</h3>
+                <h3 style="color: var(--neon-green);">KRA Tax Services</h3>
                 <p>Complete tax services including PIN registration, returns filing, and tax compliance assistance.</p>
                 <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> PIN registration</li>
-                    <li><i class="fas fa-check-circle"></i> Tax returns filing</li>
-                    <li><i class="fas fa-check-circle"></i> Compliance certificates</li>
-                    <li><i class="fas fa-check-circle"></i> Tax consultancy</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> PIN registration</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Tax returns filing</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Compliance certificates</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Tax consultancy</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
-                    <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary"><i class="fas fa-calculator"></i> File Returns</button>
+                    <a href="kra-details.html" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
+                    <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary" style="border-color: var(--neon-green); color: var(--neon-green);"><i class="fas fa-calculator"></i> File Returns</button>
                     <button onclick="prefillService('KRA_PIN')" class="service-link link-outline"><i class="fas fa-id-card"></i> Get PIN</button>
                 </div>
             </div>
 
-            <div class="service-card">
-                <div class="service-item">
+            <div class="service-card card-other">
+                <div class="service-item" style="border-color: rgba(255, 0, 85, 0.3);">
                     <img src="other-services.png" alt="Other Services" loading="lazy" onerror="this.style.display='none'" />
                 </div>
-                <h3>Other Government Services</h3>
+                <h3 style="color: var(--neon-red);">Other Government Services</h3>
                 <p>Additional government services including NHIF, NSSF, passport applications, and more digital services.</p>
                 <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> NHIF registrations</li>
-                    <li><i class="fas fa-check-circle"></i> NSSF applications</li>
-                    <li><i class="fas fa-check-circle"></i> Passport services</li>
-                    <li><i class="fas fa-check-circle"></i> Business permits</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-red);"></i> NHIF registrations</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-red);"></i> NSSF applications</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-red);"></i> Passport services</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--neon-red);"></i> Business permits</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View All</a>
-                    <button onclick="prefillService('OTHER')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Service</button>
-                    <a href="#contact" class="service-link link-outline"><i class="fas fa-phone"></i> Consult</a>
+                    <a href="other-services-details.html" class="service-link link-primary"><i class="fas fa-list"></i> View All</a>
+                    <button onclick="prefillService('OTHER')" class="service-link link-secondary" style="border-color: var(--neon-red); color: var(--neon-red);"><i class="fas fa-paper-plane"></i> Request Service</button>
+                    <a href="https://wa.me/254113996609" target="_blank" class="service-link link-outline"><i class="fab fa-whatsapp"></i> Consult</a>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -358,17 +426,17 @@
                 </div>
                 <div class="footer-section">
                     <h4>Services</h4>
-                    <a href="#">KUCCPS Applications</a>
-                    <a href="#">HELB Loans</a>
-                    <a href="#">KRA Services</a>
-                    <a href="#">Other Services</a>
+                    <a href="kuccps-details.html">KUCCPS Applications</a>
+                    <a href="helb-details.html">HELB Loans</a>
+                    <a href="kra-details.html">KRA Services</a>
+                    <a href="other-services-details.html">Other Services</a>
                 </div>
                 <div class="footer-section">
                     <h4>Contact Info</h4>
-                    <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
-                    <a href="tel:+254113996609">+254 113 996 609</a>
-                    <a href="tel:+254734644917">+254 734 644 917</a>
-                    <p style="color: var(--neon-green);">Available 24/7 for support</p>
+                    <a href="mailto:btechkenya@gmail.com"><i class="fas fa-envelope"></i> btechkenya@gmail.com</a>
+                    <a href="tel:+254113996609"><i class="fas fa-phone"></i> +254 113 996 609</a>
+                    <a href="tel:+254734644917"><i class="fas fa-phone"></i> +254 734 644 917</a>
+                    <p style="color: var(--neon-green); margin-top: 10px; font-weight: 500;"><i class="fas fa-circle" style="font-size: 8px;"></i> Available 24/7 for support</p>
                 </div>
             </div>
             <div class="social-links">
@@ -376,9 +444,9 @@
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://wa.me/254113996609" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div>
-            <div style="text-align: center; margin-top: 30px; color: var(--text-muted); font-size: 0.85rem;">
+            <div style="text-align: center; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem;">
                 &copy; 2025 BTECH Cyber Services. All rights reserved. Trusted government services partner.
             </div>
         </div>
@@ -437,21 +505,21 @@
                     <input type="text" id="additionalNotes" name="additionalNotes" class="dark-input" placeholder="Any special requirements">
                 </div>
 
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
                     <button type="button" class="modal-btn btn-cancel" id="cancelBooking">Cancel</button>
-                    <button type="submit" class="modal-btn btn-submit"><i class="fas fa-check"></i> Confirm Booking</button>
+                    <button type="submit" class="modal-btn btn-submit"><i class="fas fa-check-circle"></i> Confirm Booking</button>
                 </div>
             </form>
 
             <div class="payment-info" id="paymentInfo">
-                <h4 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> Payment Instructions</h4>
-                <div id="paymentDetails"></div>
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <h4 style="color: var(--neon-blue); margin-bottom: 20px;"><i class="fas fa-shield-check"></i> Secure Checkout</h4>
+                <div id="paymentDetails" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;"></div>
+                <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
                     <button type="button" class="modal-btn btn-submit" id="paystackBtn">
-                        <i class="fas fa-credit-card"></i> Pay Online Now
+                        <i class="fas fa-credit-card"></i> Pay Online Now (Card/M-Pesa)
                     </button>
                     <button type="button" class="modal-btn btn-cancel" id="payLaterBtn" style="border: 1px solid white; color: white;">
-                        <i class="fas fa-clock"></i> Pay via M-Pesa
+                        <i class="fas fa-mobile-alt"></i> Manual M-Pesa Payment
                     </button>
                 </div>
             </div>
@@ -470,15 +538,15 @@
         class Particle {
             constructor() {
                 this.x = Math.random() * width; this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 0.3; this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 2 + 0.5;
             }
             update() {
                 this.x += this.vx; this.y += this.vy;
                 if(this.x < 0 || this.x > width) this.vx *= -1;
                 if(this.y < 0 || this.y > height) this.vy *= -1;
             }
-            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.3)'; ctx.fill(); }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.4)'; ctx.fill(); }
         }
         function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
         function animate() {
@@ -489,7 +557,7 @@
                     let d = Math.hypot(a.x-b.x, a.y-b.y);
                     if(d<150) {
                         ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-                        ctx.strokeStyle = `rgba(0, 245, 255, ${1 - d/150})`; ctx.stroke();
+                        ctx.strokeStyle = `rgba(0, 245, 255, ${0.8 - d/150})`; ctx.stroke();
                     }
                 });
             });
@@ -518,10 +586,13 @@
         function openModal() { modal.classList.add('active'); }
         function closeModal() { 
             modal.classList.remove('active'); 
-            bookingForm.style.display = 'block';
-            paymentInfo.style.display = 'none';
-            bookingForm.reset();
-            alertContainer.innerHTML = '';
+            setTimeout(() => {
+                bookingForm.style.display = 'block';
+                paymentInfo.style.display = 'none';
+                bookingForm.reset();
+                otherServiceGroup.style.display = 'none';
+                alertContainer.innerHTML = '';
+            }, 300);
         }
 
         document.getElementById('openModal').addEventListener('click', openModal);
@@ -532,6 +603,7 @@
         function prefillService(svc) {
             openModal();
             serviceTypeSelect.value = svc;
+            otherServiceGroup.style.display = svc === 'OTHER' ? 'block' : 'none';
         }
 
         // Service Pricing Logic
@@ -543,7 +615,8 @@
         });
 
         function showAlert(message, type) {
-            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+            alertContainer.innerHTML = `<div class="alert alert-${type}"><i class="fas ${icon}"></i> ${message}</div>`;
             setTimeout(() => alertContainer.innerHTML = '', 5000);
         }
 
@@ -567,21 +640,21 @@
                 serviceType: serviceType,
                 otherService: fd.get('otherService'),
                 urgency: urgency,
-                bookingId: 'BTECH-' + Date.now()
+                bookingId: 'BTECH-' + Date.now().toString().slice(-6)
             };
 
             // Show Payment Info
             bookingForm.style.display = 'none';
             paymentInfo.style.display = 'block';
             
-            const svcName = serviceType === 'OTHER' ? fd.get('otherService') : serviceType;
+            const svcName = serviceType === 'OTHER' ? (fd.get('otherService') || 'Custom Service') : serviceType.replace('_', ' ');
             document.getElementById('paymentDetails').innerHTML = `
-                <div class="payment-row"><span class="payment-label">Client:</span><span class="payment-value">${currentBookingData.clientName}</span></div>
-                <div class="payment-row"><span class="payment-label">Service:</span><span class="payment-value">${svcName}</span></div>
-                <div class="payment-row"><span class="payment-label">Booking ID:</span><span class="payment-value">${currentBookingData.bookingId}</span></div>
-                <div class="payment-row"><span class="payment-label">Total:</span><span class="payment-value" style="color:var(--neon-green); font-weight:bold">KES ${currentAmount}</span></div>
+                <div class="payment-row"><span class="payment-label">Client Name:</span><span class="payment-value" style="color:white;">${currentBookingData.clientName}</span></div>
+                <div class="payment-row"><span class="payment-label">Service Type:</span><span class="payment-value" style="color:white;">${svcName}</span></div>
+                <div class="payment-row"><span class="payment-label">Booking Ref:</span><span class="payment-value" style="font-family: monospace; color:var(--neon-blue);">${currentBookingData.bookingId}</span></div>
+                <div class="payment-row" style="margin-top: 10px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1);"><span class="payment-label" style="font-weight:bold;">Total Amount:</span><span class="payment-value" style="color:var(--neon-green); font-weight:800; font-size:1.1rem;">KES ${currentAmount}</span></div>
             `;
-            showAlert('Booking confirmed! Proceed to payment.', 'success');
+            showAlert('Booking initialized! Please proceed to secure payment.', 'success');
         });
 
         // Paystack
@@ -593,17 +666,17 @@
                 currency: 'KES',
                 ref: currentBookingData.bookingId,
                 callback: function(response) {
-                    alert(`Payment successful! Ref: ${response.reference}. We will contact you shortly.`);
+                    alert(`Payment successful! Reference: ${response.reference}. Our agents will contact you shortly to begin processing.`);
                     closeModal();
                 },
-                onClose: function() { showAlert('Payment cancelled.', 'info'); }
+                onClose: function() { showAlert('Payment window closed. You can try again or use manual payment.', 'info'); }
             });
             handler.openIframe();
         });
 
         // M-Pesa
         document.getElementById('payLaterBtn').addEventListener('click', () => {
-            const instructions = `M-PESA Payment Instructions:\n\n1. Buy Goods: 4499436\n2. Amount: ${currentAmount}\n3. Send Ref to +254 734 644 917\n\nBooking Ref: ${currentBookingData.bookingId}`;
+            const instructions = `PREMIUM MANUAL M-PESA PAYMENT\n\n1. Go to M-PESA > Lipa na M-PESA\n2. Select Buy Goods and Services\n3. Enter Till Number: 4499436\n4. Enter Amount: KES ${currentAmount}\n5. Enter your PIN\n\nOnce done, forward the M-PESA confirmation message via WhatsApp to +254 734 644 917 along with your Booking Ref: ${currentBookingData.bookingId}`;
             alert(instructions);
         });
     </script>
