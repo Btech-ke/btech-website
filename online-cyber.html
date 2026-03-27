@@ -19,7 +19,7 @@
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.85); /* Lightened text muted for better contrast */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -98,7 +98,7 @@
             padding: 40px 30px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative; overflow: hidden; display: flex; flex-direction: column;
             z-index: 1; animation: fadeUp 0.6s ease-out backwards;
-            background-color: #111; /* Fallback color */
+            background-color: #111; 
         }
 
         /* Background Image Setup */
@@ -108,25 +108,19 @@
             z-index: -2; transition: transform 0.6s ease;
         }
 
-        /* Dark Gradient Overlay (Made lighter so images are clearly visible) */
+        /* Dark Gradient Overlay (Lightened so images are clearly visible!) */
         .service-card::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.95));
+            /* Starts 40% dark at top, fades to 90% dark at bottom to keep text readable */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.95));
             z-index: -1; transition: all 0.4s ease;
         }
 
-        /* Real-World Context Images (Distinctly African/Kenyan) */
-        /* KUCCPS: African University Students */
-        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1571260899304-42507611ef42?auto=format&fit=crop&w=800&q=80'); }
-        
-        /* HELB: Focused African student on a laptop */
-        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1627556592933-ffe99c1c9dd8?auto=format&fit=crop&w=800&q=80'); }
-        
-        /* KRA: African professional reviewing documents/taxes */
-        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80'); }
-        
-        /* OTHER: African customer service / Huduma Center vibe */
-        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=800&q=80'); }
+        /* Real-World African / Context Images */
+        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'); } /* Graduation */
+        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80'); } /* African Student/Laptop */
+        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80'); } /* Tax Calculator/Documents */
+        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=800&q=80'); } /* African Customer Service/Huduma */
 
         /* Card Hover Effects */
         .service-card:nth-child(1) { animation-delay: 0.1s; }
@@ -134,41 +128,41 @@
         .service-card:nth-child(3) { animation-delay: 0.3s; }
         .service-card:nth-child(4) { animation-delay: 0.4s; }
 
-        .service-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.4); }
+        .service-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.5); }
         .service-card:hover::before { transform: scale(1.1); } /* Smooth Image Zoom */
 
-        /* Specific Hover Tints (More vibrant now) */
-        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.3), rgba(0,0,0,0.9)); }
-        .card-kuccps:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2); }
+        /* Specific Hover Tints */
+        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.4), rgba(0,0,0,0.95)); }
+        .card-kuccps:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.25); }
 
-        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(0,0,0,0.9)); }
-        .card-helb:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2); }
+        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.4), rgba(0,0,0,0.95)); }
+        .card-helb:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.25); }
 
-        .card-kra:hover::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.3), rgba(0,0,0,0.9)); }
-        .card-kra:hover { border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2); }
+        .card-kra:hover::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.4), rgba(0,0,0,0.95)); }
+        .card-kra:hover { border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.25); }
 
-        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.3), rgba(0,0,0,0.9)); }
-        .card-other:hover { border-color: var(--neon-red); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.2); }
+        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.4), rgba(0,0,0,0.95)); }
+        .card-other:hover { border-color: var(--neon-red); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.25); }
 
         /* Internal Card Elements */
         .service-item {
-            width: 80px; height: 80px; background: rgba(0,0,0,0.7); border-radius: 18px;
+            width: 80px; height: 80px; background: rgba(0,0,0,0.75); border-radius: 18px;
             display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
-            margin-bottom: 25px; padding: 12px; border: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 25px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);
             transition: all 0.3s ease;
         }
-        .service-card:hover .service-item { background: rgba(0,0,0,0.9); transform: scale(1.05); }
-        .service-item img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+        .service-card:hover .service-item { background: rgba(0,0,0,0.95); transform: scale(1.05); }
+        .service-item img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
 
-        .service-card h3 { font-size: 1.6rem; color: white; margin-bottom: 15px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-        .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.7; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .service-card h3 { font-size: 1.6rem; color: white; margin-bottom: 15px; font-weight: 700; text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
+        .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.7; transition: color 0.3s; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
         .service-card:hover p { color: #fff; }
 
         .service-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
         .service-features li {
             color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;
             display: flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9); font-weight: 500;
         }
         .service-features li i { color: var(--neon-green); font-size: 1rem; }
 
@@ -189,10 +183,10 @@
         .link-primary { background: var(--neon-blue); color: black; border: none; }
         .link-primary:hover { background: #fff; box-shadow: 0 0 15px var(--neon-blue); transform: translateY(-2px); }
         
-        .link-secondary { background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold); backdrop-filter: blur(5px); }
+        .link-secondary { background: rgba(0,0,0,0.5); border: 1px solid var(--neon-gold); color: var(--neon-gold); backdrop-filter: blur(5px); }
         .link-secondary:hover { background: var(--neon-gold); color: black; box-shadow: 0 0 15px var(--neon-gold); transform: translateY(-2px); }
         
-        .link-outline { border: 1px solid var(--text-muted); color: var(--text-main); background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .link-outline { border: 1px solid var(--text-main); color: var(--text-main); background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
         .link-outline:hover { border-color: white; color: black; background: rgba(255,255,255,0.9); transform: translateY(-2px); }
 
         /* --- FOOTER --- */
@@ -287,10 +281,10 @@
             /* Ensures buttons shrink nicely on small screens without breaking layout */
             .service-actions { 
                 grid-template-columns: 1fr 1fr; /* Two compact buttons per row */
-                gap: 8px; 
+                gap: 10px; 
             }
             .service-link { 
-                padding: 10px 5px; /* Reduced padding */
+                padding: 12px 6px; /* Optimized padding for touch */
                 font-size: 0.75rem; /* Smaller text */
                 white-space: nowrap; /* Prevents awkward text wrapping */
             }
@@ -332,7 +326,7 @@
         </div>
     </header>
 
-    <section id="services" class="container" style="padding-top: 100px; padding-bottom: 80px; flex: 1;">
+    <section id="services" class="container" style="padding-top: 80px; padding-bottom: 80px; flex: 1;">
         <div class="section-header">
             <h2>Our Premium Cyber Services</h2>
             <p style="color: var(--text-muted); font-size: 1.1rem;">Professional assistance for all your government service needs with guaranteed results and expert support.</p>
