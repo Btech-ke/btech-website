@@ -5,28 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Cyber Services - BTECH</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
-        /* --- CORE FUTURISTIC THEME --- */
+        /* --- CORE PREMIUM THEME --- */
         :root {
-            --neon-blue: #00F5FF;
-            --neon-green: #00FF88;
-            --neon-gold: #FFD700;
-            --neon-red: #FF0055;
+            --neon-blue: #00e5ff;
+            --neon-green: #00ffaa;
+            --neon-gold: #ffd700;
+            --neon-red: #ff3366;
             --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.7);
+            --text-muted: #a0aec0;
+            --bg-color: #050b14; /* Deep premium blue-black */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: #000;
+            background: var(--bg-color);
+            background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(0, 255, 170, 0.05), transparent 40%);
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
@@ -42,11 +46,13 @@
 
         /* --- HEADER --- */
         header {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: rgba(5, 11, 20, 0.85);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             padding: 15px 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
         .nav-container { display: flex; justify-content: space-between; align-items: center; }
@@ -61,206 +67,222 @@
         .nav-menu { display: flex; gap: 30px; list-style: none; }
         .nav-menu a {
             color: var(--text-muted); text-decoration: none;
-            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
-            transition: 0.3s;
+            font-size: 0.95rem; font-weight: 500; letter-spacing: 0.5px;
+            transition: 0.3s ease;
         }
-        .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
 
         .book-btn {
-            background: var(--neon-blue); color: #000; border: none;
-            padding: 8px 20px; font-weight: 700; cursor: pointer;
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-            transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            color: #000; border: none; border-radius: 8px;
+            padding: 10px 24px; font-weight: 700; cursor: pointer;
+            transition: all 0.3s ease; text-transform: uppercase; font-size: 0.85rem;
             display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2);
         }
-        .book-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-blue); }
+        .book-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4); }
 
-        /* --- HERO --- */
-        .hero { padding: 100px 20px 60px; text-align: center; position: relative; }
+        /* --- SERVICES SECTION (Main Landing) --- */
+        main {
+            padding-top: 130px; /* Space for fixed header */
+            padding-bottom: 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .section-header { text-align: center; margin-bottom: 50px; }
         
         .hero-badge {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 5px 15px; border: 1px solid var(--neon-green); 
-            color: var(--neon-green); border-radius: 50px; font-size: 0.9rem;
-            background: rgba(0, 255, 136, 0.05); margin-bottom: 20px;
+            padding: 6px 18px; border: 1px solid rgba(0, 255, 170, 0.3); 
+            color: var(--neon-green); border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+            background: rgba(0, 255, 170, 0.05); margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.1);
+            letter-spacing: 1px; text-transform: uppercase;
         }
 
-        .typing-text {
-            font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
-            color: var(--neon-gold); min-height: 1.5em; margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800;
-            line-height: 1.1; margin-bottom: 20px; color: white;
-        }
-
-        .hero p {
-            font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px;
-        }
-
-        .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
-            color: #000; padding: 15px 35px; font-weight: 700; border: none;
-            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); cursor: pointer;
-            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
-        }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 245, 255, 0.4); }
-
-        .btn-secondary {
-            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
-            padding: 15px 35px; font-weight: 700; text-decoration: none;
-            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); transition: 0.3s;
-            display: inline-flex; align-items: center; gap: 10px;
-        }
-        .btn-secondary:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
-
-        /* --- STATS --- */
-        .stats-section {
-            border-top: 1px solid var(--glass-border);
-            border-bottom: 1px solid var(--glass-border);
-            background: rgba(255,255,255,0.02);
-            padding: 50px 0; margin: 60px 0;
-        }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
-        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--neon-blue); display: block; }
-        .stat-label { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* --- SERVICES --- */
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; color: white; }
+        .section-header h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 15px; color: white; letter-spacing: -0.5px; }
+        .section-header p { color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
         
         .services-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
         }
 
-        .service-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 15px; padding: 30px; transition: 0.3s;
-            position: relative; overflow: hidden;
-        }
-        .service-card:hover {
-            transform: translateY(-10px); border-color: var(--neon-blue);
-            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.15);
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
+        .service-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 35px 30px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            animation: fadeInUp 0.7s ease-out backwards;
+            display: flex; flex-direction: column;
+        }
+        
+        /* Staggered entrance */
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            opacity: 0; transition: 0.4s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px); border-color: rgba(0, 229, 255, 0.3);
+            background: var(--glass-hover);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 229, 255, 0.05);
+        }
+        .service-card:hover::before { opacity: 1; }
+
         .service-item {
-            width: 80px; height: 80px; background: white; border-radius: 15px;
+            width: 70px; height: 70px; background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--glass-border); border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px; padding: 10px;
+            margin-bottom: 25px; padding: 12px;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
+            font-size: 2rem; color: var(--neon-blue); /* Fallback icon color */
         }
         .service-item img { width: 100%; height: 100%; object-fit: contain; }
 
-        .service-card h3 { font-size: 1.5rem; color: white; margin-bottom: 15px; }
-        .service-card p { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+        .service-card h3 { font-size: 1.4rem; color: white; margin-bottom: 12px; font-weight: 700; }
+        .service-card p { color: var(--text-muted); font-family: 'Inter', sans-serif; margin-bottom: 25px; font-size: 0.95rem; line-height: 1.6; flex-grow: 1; }
 
-        .service-features { list-style: none; margin-bottom: 25px; }
+        .service-features { list-style: none; margin-bottom: 30px; }
         .service-features li {
-            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 10px;
+            color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-bottom: 12px;
+            display: flex; align-items: flex-start; gap: 12px;
         }
-        .service-features li i { color: var(--neon-green); }
+        .service-features li i { color: var(--neon-green); font-size: 1rem; margin-top: 2px; }
 
-        .service-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        .service-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; }
+        
         .service-link {
-            padding: 8px 15px; border-radius: 5px; text-decoration: none;
-            font-size: 0.85rem; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px;
+            padding: 10px 18px; border-radius: 8px; text-decoration: none; cursor: pointer; border: none;
+            font-size: 0.85rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; 
+            transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; flex: 1; justify-content: center;
         }
-        .link-primary { background: var(--neon-blue); color: black; }
-        .link-primary:hover { background: #fff; }
+        .link-primary { background: rgba(0, 229, 255, 0.1); color: var(--neon-blue); border: 1px solid rgba(0, 229, 255, 0.2); }
+        .link-primary:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); }
         
-        .link-secondary { background: transparent; border: 1px solid var(--neon-gold); color: var(--neon-gold); }
-        .link-secondary:hover { background: var(--neon-gold); color: black; }
+        .link-secondary { background: rgba(0, 255, 170, 0.1); color: var(--neon-green); border: 1px solid rgba(0, 255, 170, 0.2); }
+        .link-secondary:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px rgba(0, 255, 170, 0.3); }
         
-        .link-outline { border: 1px solid var(--text-muted); color: var(--text-muted); }
-        .link-outline:hover { border-color: white; color: white; }
+        .link-outline { background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted); }
+        .link-outline:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); }
 
         /* --- FOOTER --- */
         footer {
-            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
-            padding: 60px 0 20px; margin-top: 80px;
+            background: rgba(2, 5, 10, 0.9); border-top: 1px solid var(--glass-border);
+            padding: 60px 0 30px; margin-top: auto; position: relative; z-index: 10;
         }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
-        .footer-section h4 { color: var(--neon-blue); margin-bottom: 20px; font-size: 1.1rem; }
-        .footer-section p, .footer-section a { color: var(--text-muted); display: block; margin-bottom: 10px; text-decoration: none; transition: 0.3s; }
-        .footer-section a:hover { color: white; padding-left: 5px; }
+        .footer-section h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; }
+        .footer-section p { color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.95rem; margin-bottom: 10px; }
+        .footer-section a { 
+            color: var(--text-muted); font-family: 'Inter', sans-serif; display: block; 
+            margin-bottom: 12px; text-decoration: none; transition: 0.3s ease; font-size: 0.95rem;
+        }
+        .footer-section a:hover { color: var(--neon-blue); transform: translateX(5px); }
+        
         .social-links { display: flex; gap: 15px; margin-top: 20px; }
         .social-links a {
-            width: 40px; height: 40px; border: 1px solid var(--glass-border);
+            width: 40px; height: 40px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.02);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: white; transition: 0.3s;
+            color: white; transition: all 0.3s ease;
         }
-        .social-links a:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); }
+        .social-links a:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 229, 255, 0.3); }
 
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
+            background: rgba(2, 5, 10, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: none; align-items: center; justify-content: center; z-index: 2000;
+            opacity: 0; transition: opacity 0.3s ease;
         }
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active { display: flex; opacity: 1; }
 
         .modal {
-            background: #050505; border: 1px solid var(--neon-blue);
-            border-radius: 20px; width: 95%; max-width: 500px; padding: 30px;
-            box-shadow: 0 0 60px rgba(0, 245, 255, 0.15);
-            max-height: 90vh; overflow-y: auto;
+            background: #08101a; border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 20px; width: 95%; max-width: 500px; padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 229, 255, 0.1);
+            max-height: 90vh; overflow-y: auto; position: relative;
+            transform: translateY(20px); transition: transform 0.3s ease;
         }
+        .modal-overlay.active .modal { transform: translateY(0); }
 
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .modal-header h3 { color: white; font-size: 1.5rem; }
-        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
-        .close-modal:hover { color: white; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .modal-header h3 { color: white; font-size: 1.5rem; font-weight: 700; }
+        .close-modal { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); width: 36px; height: 36px; border-radius: 50%; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .close-modal:hover { background: rgba(255, 51, 102, 0.1); color: var(--neon-red); border-color: rgba(255, 51, 102, 0.3); transform: rotate(90deg); }
 
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; }
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 500; }
         
         .dark-input {
-            width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border); border-radius: 8px;
-            color: white; font-family: inherit; font-size: 1rem;
+            width: 100%; padding: 14px; background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border); border-radius: 10px;
+            color: white; font-family: 'Inter', sans-serif; font-size: 1rem;
+            transition: all 0.3s ease;
         }
-        .dark-input:focus { outline: none; border-color: var(--neon-green); }
-        select.dark-input option { background: #000; color: white; }
+        .dark-input:focus { outline: none; border-color: var(--neon-blue); box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1); }
+        select.dark-input option { background: #08101a; color: white; padding: 10px; }
 
         .modal-btn {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
-            font-weight: 700; cursor: pointer; margin-top: 10px;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; padding: 14px; border-radius: 10px; border: none; font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.3s ease;
         }
-        .btn-submit { background: var(--neon-blue); color: black; }
-        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+        .btn-submit { background: linear-gradient(135deg, var(--neon-blue), var(--neon-green)); color: black; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4); }
+        .btn-cancel { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
+        .btn-cancel:hover { background: rgba(255,255,255,0.1); border-color: white; }
         
         /* Payment Box */
         .payment-info {
-            background: rgba(0, 255, 136, 0.05); border: 1px solid var(--neon-green);
-            border-radius: 10px; padding: 20px; margin-top: 20px; display: none;
+            background: rgba(0, 255, 170, 0.03); border: 1px solid rgba(0, 255, 170, 0.2);
+            border-radius: 12px; padding: 25px; margin-top: 20px; display: none;
         }
-        .payment-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .payment-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+        .payment-row:last-child { border-bottom: none; padding-bottom: 0; margin-top: 5px; }
         
         /* Alerts */
-        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
-        .alert-success { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
-        .alert-error { background: rgba(255, 0, 85, 0.1); border: 1px solid var(--neon-red); color: var(--neon-red); }
-        .alert-info { background: rgba(0, 245, 255, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+        .alert { padding: 15px 20px; border-radius: 10px; margin-bottom: 25px; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; font-weight: 500; }
+        .alert-success { background: rgba(0, 255, 170, 0.1); border: 1px solid rgba(0, 255, 170, 0.3); color: var(--neon-green); }
+        .alert-error { background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.3); color: var(--neon-red); }
+        .alert-info { background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.3); color: var(--neon-blue); }
 
         /* Mobile Menu */
-        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; }
-        .mobile-nav { position: fixed; top: 70px; left: 0; width: 100%; background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; }
-        .mobile-nav.active { display: flex; }
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .mobile-nav { position: fixed; top: 72px; left: 0; width: 100%; background: rgba(5, 11, 20, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 229, 255, 0.2); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .mobile-nav.active { display: flex; animation: slideDown 0.3s ease forwards; }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         @media (max-width: 768px) {
             .nav-menu { display: none; }
             .mobile-menu-btn { display: block; }
-            .services-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 3rem; }
+            .section-header h2 { font-size: 2.2rem; }
+            .modal { padding: 25px; }
         }
     </style>
 </head>
 
 <body>
+    <canvas id="canvas"></canvas>
+
     <header>
         <div class="container nav-container">
             <a href="../index.html" class="logo">
@@ -277,7 +299,7 @@
             </nav>
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <button class="book-btn" id="openModal">
-                    <i class="fas fa-calendar-plus"></i> Book Application
+                    <i class="fas fa-calendar-plus"></i> Book Now
                 </button>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
@@ -285,179 +307,132 @@
             </div>
         </div>
         <div class="mobile-nav" id="mobileNav">
-            <a href="../index.html" style="color:white;">Home</a>
-            <a href="#services" style="color:white;">Services</a>
-            <a href="#contact" style="color:white;">Contact</a>
-            <a href="#help" style="color:white;">Help</a>
+            <a href="../index.html" style="color:white; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">Home</a>
+            <a href="#services" style="color:white; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">Services</a>
+            <a href="#contact" style="color:white; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">Contact</a>
+            <a href="#help" style="color:white; text-decoration: none; padding: 10px 0;">Help</a>
         </div>
     </header>
 
-    <section class="hero">
-        <canvas id="canvas"></canvas>
+    <main id="services">
         <div class="container">
-            <div class="hero-badge">
-                <i class="fas fa-shield-check"></i> Trusted Government Services Partner
+            <div class="section-header">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-check"></i> Trusted Government Services Partner
+                </div>
+                <h2>Premium Digital Cyber Services</h2>
+                <p>Select a service below to get started. We offer professional, secure, and fast assistance for all your essential online application needs.</p>
             </div>
-            <div class="typing-text" id="typingText"></div>
-            <h1>Your Gateway to Digital Government Services</h1>
-            <p>Fast, secure, and reliable access to KUCCPS, KRA, HELB, and other essential government services. Professional assistance guaranteed.</p>
-            <div class="hero-buttons">
-                <button class="btn-primary" id="heroBookBtn">
-                    <i class="fas fa-rocket"></i> Start Application
-                </button>
-                <a href="#services" class="btn-secondary">
-                    <i class="fas fa-info-circle"></i> View Services
-                </a>
-            </div>
-        </div>
-    </section>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-item">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>KUCCPS Applications</h3>
+                    <p>Complete university and college placement applications through KUCCPS with expert guidance and guaranteed submission.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check-circle"></i> Course selection guidance</li>
+                        <li><i class="fas fa-check-circle"></i> Document verification</li>
+                        <li><i class="fas fa-check-circle"></i> Application tracking</li>
+                    </ul>
+                    <div class="service-actions">
+                        <button onclick="prefillService('KUCCPS')" class="service-link link-primary"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                        <a href="#" class="service-link link-outline"><i class="fas fa-info-circle"></i> Details</a>
+                    </div>
+                </div>
 
-    <section class="stats-section">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number">5000+</span>
-                    <span class="stat-label">Applications Processed</span>
+                <div class="service-card">
+                    <div class="service-item">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3>HELB Loan Applications</h3>
+                    <p>Secure your education funding with professional HELB loan application assistance and follow-up services.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check-circle"></i> Loan calculation</li>
+                        <li><i class="fas fa-check-circle"></i> Document preparation</li>
+                        <li><i class="fas fa-check-circle"></i> Status monitoring</li>
+                    </ul>
+                    <div class="service-actions">
+                        <button onclick="prefillService('HELB')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                        <a href="#" class="service-link link-outline"><i class="fas fa-info-circle"></i> Details</a>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-number">24/7</span>
-                    <span class="stat-label">Support Available</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">99.9%</span>
-                    <span class="stat-label">Success Rate</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">Same Day</span>
-                    <span class="stat-label">Processing</span>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="services" class="container" style="padding-bottom: 80px;">
-        <div class="section-header">
-            <h2>Our Premium Cyber Services</h2>
-            <p style="color: var(--text-muted);">Professional assistance for all your government service needs with guaranteed results and expert support.</p>
-        </div>
-        
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-item">
-                    <img src="kuccps.png" alt="KUCCPS Applications" loading="lazy" />
+                <div class="service-card">
+                    <div class="service-item">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3>KRA Tax Services</h3>
+                    <p>Complete tax services including new PIN registration, annual returns filing, and tax compliance assistance.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check-circle"></i> PIN registration</li>
+                        <li><i class="fas fa-check-circle"></i> Tax returns filing</li>
+                        <li><i class="fas fa-check-circle"></i> Compliance certificates</li>
+                    </ul>
+                    <div class="service-actions">
+                        <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary"><i class="fas fa-calculator"></i> File Returns</button>
+                        <button onclick="prefillService('KRA_PIN')" class="service-link link-outline"><i class="fas fa-id-card"></i> Get PIN</button>
+                    </div>
                 </div>
-                <h3>KUCCPS Applications</h3>
-                <p>Complete university and college placement applications through KUCCPS with expert guidance and guaranteed submission.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> Course selection guidance</li>
-                    <li><i class="fas fa-check-circle"></i> Document verification</li>
-                    <li><i class="fas fa-check-circle"></i> Application tracking</li>
-                    <li><i class="fas fa-check-circle"></i> Result notifications</li>
-                </ul>
-                <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
-                    <button onclick="prefillService('KUCCPS')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Now</button>
-                    <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
-                </div>
-            </div>
 
-            <div class="service-card">
-                <div class="service-item">
-                    <img src="helb.png" alt="HELB Loan" loading="lazy" />
-                </div>
-                <h3>HELB Loan Applications</h3>
-                <p>Secure your education funding with professional HELB loan application assistance and follow-up services.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> Loan calculation</li>
-                    <li><i class="fas fa-check-circle"></i> Document preparation</li>
-                    <li><i class="fas fa-check-circle"></i> Application submission</li>
-                    <li><i class="fas fa-check-circle"></i> Status monitoring</li>
-                </ul>
-                <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
-                    <button onclick="prefillService('HELB')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Apply Now</button>
-                    <a href="#" class="service-link link-outline"><i class="fas fa-download"></i> Requirements</a>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-item">
-                    <img src="kra.png" alt="KRA Services" loading="lazy" />
-                </div>
-                <h3>KRA Tax Services</h3>
-                <p>Complete tax services including PIN registration, returns filing, and tax compliance assistance.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> PIN registration</li>
-                    <li><i class="fas fa-check-circle"></i> Tax returns filing</li>
-                    <li><i class="fas fa-check-circle"></i> Compliance certificates</li>
-                    <li><i class="fas fa-check-circle"></i> Tax consultancy</li>
-                </ul>
-                <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View Details</a>
-                    <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary"><i class="fas fa-calculator"></i> File Returns</button>
-                    <button onclick="prefillService('KRA_PIN')" class="service-link link-outline"><i class="fas fa-id-card"></i> Get PIN</button>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-item">
-                    <img src="other-services.png" alt="Other Services" loading="lazy" />
-                </div>
-                <h3>Other Government Services</h3>
-                <p>Additional government services including NHIF, NSSF, passport applications, and more digital services.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check-circle"></i> NHIF registrations</li>
-                    <li><i class="fas fa-check-circle"></i> NSSF applications</li>
-                    <li><i class="fas fa-check-circle"></i> Passport services</li>
-                    <li><i class="fas fa-check-circle"></i> Business permits</li>
-                </ul>
-                <div class="service-actions">
-                    <a href="#" class="service-link link-primary"><i class="fas fa-info-circle"></i> View All</a>
-                    <button onclick="prefillService('OTHER')" class="service-link link-secondary"><i class="fas fa-paper-plane"></i> Request Service</button>
-                    <a href="#contact" class="service-link link-outline"><i class="fas fa-phone"></i> Consult</a>
+                <div class="service-card">
+                    <div class="service-item">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h3>Other Government Services</h3>
+                    <p>Additional vital services including NHIF registrations, NSSF applications, passport processing, and business permits.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check-circle"></i> NHIF & NSSF setups</li>
+                        <li><i class="fas fa-check-circle"></i> E-Citizen services</li>
+                        <li><i class="fas fa-check-circle"></i> Business registrations</li>
+                    </ul>
+                    <div class="service-actions">
+                        <button onclick="prefillService('OTHER')" class="service-link link-primary"><i class="fas fa-plus-circle"></i> Request Service</button>
+                        <a href="#contact" class="service-link link-outline"><i class="fas fa-phone"></i> Consult</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     <footer id="contact">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-section">
                     <h4>BTECH Cyber Services</h4>
-                    <p>Your trusted partner for all government digital services. Professional, reliable, and secure assistance for all your online application needs.</p>
+                    <p>Your trusted premium partner for all government digital services. Professional, reliable, and secure assistance.</p>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <a href="../index.html">Home</a>
-                    <a href="#services">Services</a>
+                    <a href="#services">Our Services</a>
                     <a href="#help">Help Center</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#contact">Contact Support</a>
                 </div>
                 <div class="footer-section">
-                    <h4>Services</h4>
-                    <a href="#">KUCCPS Applications</a>
-                    <a href="#">HELB Loans</a>
-                    <a href="#">KRA Services</a>
-                    <a href="#">Other Services</a>
+                    <h4>Top Services</h4>
+                    <a href="javascript:void(0)" onclick="prefillService('KUCCPS')">KUCCPS Applications</a>
+                    <a href="javascript:void(0)" onclick="prefillService('HELB')">HELB Education Loans</a>
+                    <a href="javascript:void(0)" onclick="prefillService('KRA_RETURNS')">KRA Returns & PIN</a>
+                    <a href="javascript:void(0)" onclick="prefillService('OTHER')">NHIF / NSSF</a>
                 </div>
                 <div class="footer-section">
                     <h4>Contact Info</h4>
-                    <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
-                    <a href="tel:+254113996609">+254 113 996 609</a>
-                    <a href="tel:+254734644917">+254 734 644 917</a>
-                    <p style="color: var(--neon-green);">Available 24/7 for support</p>
+                    <a href="mailto:btechkenya@gmail.com"><i class="fas fa-envelope"></i> btechkenya@gmail.com</a>
+                    <a href="tel:+254113996609"><i class="fas fa-phone"></i> +254 113 996 609</a>
+                    <a href="tel:+254734644917"><i class="fas fa-phone"></i> +254 734 644 917</a>
+                    <p style="color: var(--neon-green); margin-top: 10px; font-weight: 500;"><i class="fas fa-circle" style="font-size: 8px; vertical-align: middle;"></i> Available 24/7</p>
                 </div>
             </div>
-            <div class="social-links">
+            <div class="social-links" style="margin-top: 30px;">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 <a href="#"><i class="fab fa-whatsapp"></i></a>
             </div>
-            <div style="text-align: center; margin-top: 30px; color: var(--text-muted); font-size: 0.85rem;">
-                &copy; 2025 BTECH Cyber Services. All rights reserved. Trusted government services partner.
+            <div style="text-align: center; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: var(--text-muted); font-size: 0.85rem; font-family: 'Inter', sans-serif;">
+                &copy; 2025 BTECH Cyber Services. All rights reserved. Your premium digital gateway.
             </div>
         </div>
     </footer>
@@ -465,7 +440,7 @@
     <div class="modal-overlay" id="bookingModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Book Your Application</h3>
+                <h3>Book Your Service</h3>
                 <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
             </div>
             
@@ -474,7 +449,7 @@
             <form id="bookingForm">
                 <div class="form-group">
                     <label for="clientName">Full Name *</label>
-                    <input type="text" id="clientName" name="clientName" class="dark-input" placeholder="Enter your full name" required>
+                    <input type="text" id="clientName" name="clientName" class="dark-input" placeholder="Enter your official name" required>
                 </div>
 
                 <div class="form-group">
@@ -497,39 +472,42 @@
                 </div>
 
                 <div class="form-group" id="otherServiceGroup" style="display: none;">
-                    <label for="otherService">Specify Other Service *</label>
-                    <input type="text" id="otherService" name="otherService" class="dark-input" placeholder="Describe the service you need">
+                    <label for="otherService">Specify Service Needed *</label>
+                    <input type="text" id="otherService" name="otherService" class="dark-input" placeholder="e.g. E-Citizen Password Reset">
                 </div>
 
                 <div class="form-group">
-                    <label for="urgency">Urgency Level</label>
+                    <label for="urgency">Processing Speed</label>
                     <select id="urgency" name="urgency" class="dark-input">
-                        <option value="normal">Normal (1-2 days) - No extra charge</option>
+                        <option value="normal">Standard (1-2 days) - No extra charge</option>
                         <option value="urgent">Urgent (Same day) - +KES 50</option>
                         <option value="express">Express (Within 2 hours) - +KES 100</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="additionalNotes">Additional Notes</label>
-                    <input type="text" id="additionalNotes" name="additionalNotes" class="dark-input" placeholder="Any special requirements">
+                    <label for="additionalNotes">Additional Notes (Optional)</label>
+                    <input type="text" id="additionalNotes" name="additionalNotes" class="dark-input" placeholder="Any special requirements or info">
                 </div>
 
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
                     <button type="button" class="modal-btn btn-cancel" id="cancelBooking">Cancel</button>
-                    <button type="submit" class="modal-btn btn-submit"><i class="fas fa-check"></i> Confirm Booking</button>
+                    <button type="submit" class="modal-btn btn-submit"><i class="fas fa-check-circle"></i> Confirm Booking</button>
                 </div>
             </form>
 
             <div class="payment-info" id="paymentInfo">
-                <h4 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> Payment Instructions</h4>
-                <div id="paymentDetails"></div>
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <h4 style="color: var(--neon-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                    <i class="fas fa-shield-check"></i> Secure Checkout
+                </h4>
+                <div id="paymentDetails" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 25px;"></div>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
                     <button type="button" class="modal-btn btn-submit" id="paystackBtn">
-                        <i class="fas fa-credit-card"></i> Pay Online Now
+                        <i class="fas fa-credit-card"></i> Pay Online Now (Card/M-Pesa)
                     </button>
-                    <button type="button" class="modal-btn btn-cancel" id="payLaterBtn" style="border: 1px solid white; color: white;">
-                        <i class="fas fa-clock"></i> Pay via M-Pesa
+                    <button type="button" class="modal-btn btn-cancel" id="payLaterBtn">
+                        <i class="fas fa-mobile-alt"></i> Manual M-Pesa Payment
                     </button>
                 </div>
             </div>
@@ -539,7 +517,7 @@
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <script>
-        // --- PARTICLE BACKGROUND ---
+        // --- PREMIUM PARTICLE BACKGROUND ---
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles = [];
@@ -548,26 +526,34 @@
         class Particle {
             constructor() {
                 this.x = Math.random() * width; this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
+                // Slowed down movement for a more elegant, professional feel
+                this.vx = (Math.random() - 0.5) * 0.2; 
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.size = Math.random() * 1.5 + 0.5;
             }
             update() {
                 this.x += this.vx; this.y += this.vy;
                 if(this.x < 0 || this.x > width) this.vx *= -1;
                 if(this.y < 0 || this.y > height) this.vy *= -1;
             }
-            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.3)'; ctx.fill(); }
+            draw() { 
+                ctx.beginPath(); 
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); 
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.4)'; 
+                ctx.fill(); 
+            }
         }
-        function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
+        function init() { particles = []; for(let i=0; i<70; i++) particles.push(new Particle()); }
         function animate() {
             ctx.clearRect(0,0,width,height);
             particles.forEach(p => { p.update(); p.draw(); });
             particles.forEach((a, i) => {
                 particles.slice(i+1).forEach(b => {
                     let d = Math.hypot(a.x-b.x, a.y-b.y);
-                    if(d<150) {
+                    if(d < 120) {
                         ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-                        ctx.strokeStyle = `rgba(0, 245, 255, ${1 - d/150})`; ctx.stroke();
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${0.15 - d/800})`; 
+                        ctx.stroke();
                     }
                 });
             });
@@ -576,33 +562,7 @@
         window.addEventListener('resize', () => { resize(); init(); });
         resize(); init(); animate();
 
-        // --- TYPING EFFECT ---
-        const typingElement = document.getElementById('typingText');
-        const phrases = [
-            "Government Services Made Easy",
-            "Professional Application Assistance",
-            "Secure & Reliable Processing", 
-            "24/7 Expert Support Available",
-            "Your Digital Gateway to Success"
-        ];
-        let phraseIndex = 0, charIndex = 0, isDeleting = false;
-        
-        function typeEffect() {
-            const currentPhrase = phrases[phraseIndex];
-            if (!isDeleting) {
-                typingElement.textContent = currentPhrase.slice(0, charIndex + 1);
-                charIndex++;
-                if (charIndex === currentPhrase.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
-            } else {
-                typingElement.textContent = currentPhrase.slice(0, charIndex - 1);
-                charIndex--;
-                if (charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
-            }
-            setTimeout(typeEffect, isDeleting ? 50 : 100);
-        }
-        typeEffect();
-
-        // --- APP LOGIC (Original Content) ---
+        // --- APP LOGIC ---
         let currentBookingData = {};
         let currentAmount = 0;
 
@@ -622,21 +582,24 @@
         function openModal() { modal.classList.add('active'); }
         function closeModal() { 
             modal.classList.remove('active'); 
-            bookingForm.style.display = 'block';
-            paymentInfo.style.display = 'none';
-            bookingForm.reset();
-            alertContainer.innerHTML = '';
+            setTimeout(() => {
+                bookingForm.style.display = 'block';
+                paymentInfo.style.display = 'none';
+                bookingForm.reset();
+                otherServiceGroup.style.display = 'none';
+                alertContainer.innerHTML = '';
+            }, 300); // Wait for fade out
         }
 
         document.getElementById('openModal').addEventListener('click', openModal);
-        document.getElementById('heroBookBtn').addEventListener('click', openModal);
         document.getElementById('closeModal').addEventListener('click', closeModal);
         document.getElementById('cancelBooking').addEventListener('click', closeModal);
 
-        // Prefill
+        // Prefill Service from Cards
         function prefillService(svc) {
             openModal();
             serviceTypeSelect.value = svc;
+            otherServiceGroup.style.display = svc === 'OTHER' ? 'block' : 'none';
         }
 
         // Service Pricing Logic
@@ -648,7 +611,8 @@
         });
 
         function showAlert(message, type) {
-            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+            alertContainer.innerHTML = `<div class="alert alert-${type}"><i class="fas ${icon}"></i> ${message}</div>`;
             setTimeout(() => alertContainer.innerHTML = '', 5000);
         }
 
@@ -672,43 +636,43 @@
                 serviceType: serviceType,
                 otherService: fd.get('otherService'),
                 urgency: urgency,
-                bookingId: 'BTECH-' + Date.now()
+                bookingId: 'BTECH-' + Date.now().toString().slice(-6) // Shorter, cleaner ID
             };
 
-            // Show Payment Info
+            // Switch to Payment View
             bookingForm.style.display = 'none';
             paymentInfo.style.display = 'block';
             
-            const svcName = serviceType === 'OTHER' ? fd.get('otherService') : serviceType;
+            const svcName = serviceType === 'OTHER' ? (fd.get('otherService') || 'Custom Service') : serviceType.replace('_', ' ');
             document.getElementById('paymentDetails').innerHTML = `
-                <div class="payment-row"><span class="payment-label">Client:</span><span class="payment-value">${currentBookingData.clientName}</span></div>
-                <div class="payment-row"><span class="payment-label">Service:</span><span class="payment-value">${svcName}</span></div>
-                <div class="payment-row"><span class="payment-label">Booking ID:</span><span class="payment-value">${currentBookingData.bookingId}</span></div>
-                <div class="payment-row"><span class="payment-label">Total:</span><span class="payment-value" style="color:var(--neon-green); font-weight:bold">KES ${currentAmount}</span></div>
+                <div class="payment-row"><span class="payment-label">Client Name:</span><span class="payment-value" style="color:white;">${currentBookingData.clientName}</span></div>
+                <div class="payment-row"><span class="payment-label">Service Type:</span><span class="payment-value" style="color:white;">${svcName}</span></div>
+                <div class="payment-row"><span class="payment-label">Booking Ref:</span><span class="payment-value" style="font-family: monospace; color:var(--neon-blue);">${currentBookingData.bookingId}</span></div>
+                <div class="payment-row" style="margin-top: 10px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1);"><span class="payment-label" style="font-weight:bold;">Total Amount:</span><span class="payment-value" style="color:var(--neon-green); font-weight:800; font-size:1.1rem;">KES ${currentAmount}</span></div>
             `;
-            showAlert('Booking confirmed! Proceed to payment.', 'success');
+            showAlert('Booking initialized! Please proceed to secure payment.', 'success');
         });
 
-        // Paystack
+        // Paystack Integration
         document.getElementById('paystackBtn').addEventListener('click', () => {
             const handler = PaystackPop.setup({
                 key: 'pk_live_5f7aed7f532c2856d645a4be19928c741c3bde03',
                 email: currentBookingData.clientName.toLowerCase().replace(/\s+/g, '') + '@btechcyber.com',
-                amount: currentAmount * 100,
+                amount: currentAmount * 100, // Paystack expects Kobo/Cents
                 currency: 'KES',
                 ref: currentBookingData.bookingId,
                 callback: function(response) {
-                    alert(`Payment successful! Ref: ${response.reference}. We will contact you shortly.`);
+                    alert(`Payment successful! Reference: ${response.reference}. Our agents will contact you shortly to begin processing.`);
                     closeModal();
                 },
-                onClose: function() { showAlert('Payment cancelled.', 'info'); }
+                onClose: function() { showAlert('Payment window closed. You can try again or use manual payment.', 'info'); }
             });
             handler.openIframe();
         });
 
-        // M-Pesa
+        // M-Pesa Manual
         document.getElementById('payLaterBtn').addEventListener('click', () => {
-            const instructions = `M-PESA Payment Instructions:\n\n1. Buy Goods: 4499436\n2. Amount: ${currentAmount}\n3. Send Ref to +254 734 644 917\n\nBooking Ref: ${currentBookingData.bookingId}`;
+            const instructions = `PREMIUM MANUAL M-PESA PAYMENT\n\n1. Go to M-PESA > Lipa na M-PESA\n2. Select Buy Goods and Services\n3. Enter Till Number: 4499436\n4. Enter Amount: KES ${currentAmount}\n5. Enter your PIN\n\nOnce done, forward the M-PESA confirmation message via WhatsApp to +254 734 644 917 along with your Booking Ref: ${currentBookingData.bookingId}`;
             alert(instructions);
         });
     </script>
