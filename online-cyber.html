@@ -19,7 +19,7 @@
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.85); /* Lightened text muted for better contrast */
+            --text-muted: rgba(255, 255, 255, 0.85); 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -105,22 +105,32 @@
         .service-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            z-index: -2; transition: transform 0.6s ease;
+            z-index: -2; transition: transform 0.6s ease; opacity: 0.8; /* Slightly faded to blend with background */
         }
 
-        /* Dark Gradient Overlay (Lightened so images are clearly visible!) */
+        /* Dark Gradient Overlay - Custom tinted for each card */
         .service-card::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* Starts 40% dark at top, fades to 90% dark at bottom to keep text readable */
-            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.95));
             z-index: -1; transition: all 0.4s ease;
         }
 
-        /* Real-World African / Context Images */
-        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'); } /* Graduation */
-        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80'); } /* African Student/Laptop */
-        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80'); } /* Tax Calculator/Documents */
-        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=800&q=80'); } /* African Customer Service/Huduma */
+        /* Real-World Context Images (Distinctly African/Kenyan & High Quality) */
+        
+        /* KUCCPS: African University Students Studying */
+        .card-kuccps::before { background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        .card-kuccps::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.1) 0%, rgba(0,0,0,0.9) 100%); }
+
+        /* HELB: African Student using a Laptop */
+        .card-helb::before { background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        .card-helb::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.1) 0%, rgba(0,0,0,0.9) 100%); }
+        
+        /* KRA: Finance, Paperwork, Calculator (Tinted Green like your screenshot) */
+        .card-kra::before { background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        .card-kra::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.1) 0%, rgba(0,0,0,0.9) 100%); }
+        
+        /* OTHER: African Help Desk / Customer Service Agent */
+        .card-other::before { background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        .card-other::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.1) 0%, rgba(0,0,0,0.9) 100%); }
 
         /* Card Hover Effects */
         .service-card:nth-child(1) { animation-delay: 0.1s; }
@@ -129,42 +139,42 @@
         .service-card:nth-child(4) { animation-delay: 0.4s; }
 
         .service-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.5); }
-        .service-card:hover::before { transform: scale(1.1); } /* Smooth Image Zoom */
+        .service-card:hover::before { transform: scale(1.1); opacity: 1; } /* Image brightens and zooms */
 
         /* Specific Hover Tints */
-        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.4), rgba(0,0,0,0.95)); }
-        .card-kuccps:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.25); }
+        .card-kuccps:hover::after { background: linear-gradient(to bottom, rgba(0, 245, 255, 0.3), rgba(0,0,0,0.95)); }
+        .card-kuccps:hover { border-color: var(--neon-blue); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.3); }
 
-        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.4), rgba(0,0,0,0.95)); }
-        .card-helb:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.25); }
+        .card-helb:hover::after { background: linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(0,0,0,0.95)); }
+        .card-helb:hover { border-color: var(--neon-gold); box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3); }
 
         .card-kra:hover::after { background: linear-gradient(to bottom, rgba(0, 255, 136, 0.4), rgba(0,0,0,0.95)); }
-        .card-kra:hover { border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.25); }
+        .card-kra:hover { border-color: var(--neon-green); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3); }
 
-        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.4), rgba(0,0,0,0.95)); }
-        .card-other:hover { border-color: var(--neon-red); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.25); }
+        .card-other:hover::after { background: linear-gradient(to bottom, rgba(255, 0, 85, 0.3), rgba(0,0,0,0.95)); }
+        .card-other:hover { border-color: var(--neon-red); box-shadow: 0 10px 40px rgba(255, 0, 85, 0.3); }
 
         /* Internal Card Elements */
         .service-item {
-            width: 80px; height: 80px; background: rgba(0,0,0,0.75); border-radius: 18px;
+            width: 75px; height: 75px; background: rgba(0,0,0,0.8); border-radius: 16px;
             display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
             margin-bottom: 25px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .service-card:hover .service-item { background: rgba(0,0,0,0.95); transform: scale(1.05); }
-        .service-item img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+        .service-card:hover .service-item { background: rgba(0,0,0,1); transform: scale(1.05); }
+        .service-item img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
 
-        .service-card h3 { font-size: 1.6rem; color: white; margin-bottom: 15px; font-weight: 700; text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
+        .service-card h3 { font-size: 1.7rem; color: white; margin-bottom: 15px; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
         .service-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.7; transition: color 0.3s; text-shadow: 0 2px 4px rgba(0,0,0,0.9); }
         .service-card:hover p { color: #fff; }
 
         .service-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
         .service-features li {
-            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;
+            color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;
             display: flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif;
             text-shadow: 0 2px 4px rgba(0,0,0,0.9); font-weight: 500;
         }
-        .service-features li i { color: var(--neon-green); font-size: 1rem; }
+        .service-features li i { color: var(--neon-green); font-size: 1.1rem; }
 
         /* --- MOBILE FRIENDLY BUTTONS GRID --- */
         .service-actions { 
@@ -175,7 +185,7 @@
         }
         
         .service-link {
-            padding: 10px 12px; border-radius: 8px; text-decoration: none;
+            padding: 12px 10px; border-radius: 8px; text-decoration: none;
             font-size: 0.8rem; font-weight: 700; transition: 0.3s; 
             display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
             cursor: pointer; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase;
@@ -278,15 +288,15 @@
             .section-header h2 { font-size: 2.2rem; }
             .service-card { padding: 30px 20px; }
             
-            /* Ensures buttons shrink nicely on small screens without breaking layout */
+            /* Compact buttons per row on mobile */
             .service-actions { 
-                grid-template-columns: 1fr 1fr; /* Two compact buttons per row */
+                grid-template-columns: 1fr 1fr; 
                 gap: 10px; 
             }
             .service-link { 
-                padding: 12px 6px; /* Optimized padding for touch */
-                font-size: 0.75rem; /* Smaller text */
-                white-space: nowrap; /* Prevents awkward text wrapping */
+                padding: 12px 5px; 
+                font-size: 0.75rem; 
+                white-space: nowrap; 
             }
         }
     </style>
@@ -338,7 +348,7 @@
                 <div class="service-item" style="border-color: rgba(0, 245, 255, 0.3);">
                     <img src="kuccps.png" alt="KUCCPS Applications" loading="lazy" onerror="this.style.display='none'" />
                 </div>
-                <h3>KUCCPS Applications</h3>
+                <h3 style="color: var(--neon-blue);">KUCCPS Applications</h3>
                 <p>Complete university and college placement applications through KUCCPS with expert guidance and guaranteed submission.</p>
                 <ul class="service-features">
                     <li><i class="fas fa-check-circle" style="color: var(--neon-blue);"></i> Course selection guidance</li>
@@ -366,7 +376,7 @@
                     <li><i class="fas fa-check-circle" style="color: var(--neon-gold);"></i> Status monitoring</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="helb-details.html" class="service-link link-primary" style="background: var(--neon-gold);"><i class="fas fa-info-circle"></i> View Details</a>
+                    <a href="helb-details.html" class="service-link link-primary" style="background: var(--neon-gold); color: black;"><i class="fas fa-info-circle"></i> View Details</a>
                     <button onclick="prefillService('HELB')" class="service-link link-secondary" style="border-color: var(--neon-gold); color: var(--neon-gold);"><i class="fas fa-paper-plane"></i> Apply Now</button>
                     <a href="HELB APPLICATION REQUIREMENTS (1).pdf" target="_blank" class="service-link link-outline"><i class="fas fa-file-pdf"></i> Requirements</a>
                 </div>
@@ -385,7 +395,7 @@
                     <li><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Tax consultancy</li>
                 </ul>
                 <div class="service-actions">
-                    <a href="kra-details.html" class="service-link link-primary" style="background: var(--neon-green);"><i class="fas fa-info-circle"></i> View Details</a>
+                    <a href="kra-details.html" class="service-link link-primary" style="background: var(--neon-green); color: black;"><i class="fas fa-info-circle"></i> View Details</a>
                     <button onclick="prefillService('KRA_RETURNS')" class="service-link link-secondary" style="border-color: var(--neon-green); color: var(--neon-green);"><i class="fas fa-calculator"></i> File Returns</button>
                     <button onclick="prefillService('KRA_PIN')" class="service-link link-outline"><i class="fas fa-id-card"></i> Get PIN</button>
                 </div>
