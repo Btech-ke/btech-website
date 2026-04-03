@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGI | Executive Command Center</title>
+    
+    <!-- Premium Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDKs (Compat version for Vanilla JS) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-deep: #0B0E14;
+            --surface-1: #151A23;
+            --surface-2: #1E2532;
+            --gold-500: #EAB308;
+            --gold-hover: #FDE047;
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --border-subtle: #334155;
+            --success: #22C55E;
+            --danger: #EF4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        
+        body { background-color: var(--bg-deep); color: var(--text-primary); overflow: hidden; }
+
+        /* --- AUTHENTICATION SCREEN --- */
+        #login-screen {
+            height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center;
+            position: absolute; top: 0; left: 0; z-index: 1000; background-color: var(--bg-deep);
+        }
+        .login-box {
+            background: var(--surface-1); padding: 40px; border-radius: 20px; border: 1px solid var(--border-subtle);
+            width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .login-box h2 { color: var(--gold-500); margin-bottom: 20px; }
+        .login-box input {
+            width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--border-subtle);
+            background: var(--bg-deep); color: white; outline: none;
+        }
+        .login-box button {
+            width: 100%; padding: 15px; border-radius: 10px; background: var(--gold-500); color: black;
+            font-weight: bold; font-size: 16px; border: none; cursor: pointer; transition: 0.3s;
+        }
+        .login-box button:hover { background: var(--gold-hover); }
+
+        /* --- MAIN APP SHELL --- */
+        #app-screen { display: none; height: 100vh; width: 100vw; }
+        
+        .sidebar {
+            width: 260px; height: 100vh; background: var(--surface-1); border-right: 1px solid var(--border-subtle);
+            float: left; display: flex; flex-direction: column;
+        }
+        .sidebar-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-subtle); }
+        .sidebar-header h1 { font-size: 24px; color: var(--gold-500); letter-spacing: 2px; }
+        
+        .nav-menu { padding: 20px 0; flex-grow: 1; overflow-y: auto; }
+        .nav-item {
+            padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-secondary);
+            cursor: pointer; transition: 0.3s; font-weight: 500; border-left: 4px solid transparent;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(234, 179, 8, 0.1); color: var(--gold-500); border-left: 4px solid var(--gold-500);
+        }
+        
+        .main-content { margin-left: 260px; height: 100vh; overflow-y: auto; background: var(--bg-deep); }
+        .topbar {
+            height: 80px; padding: 0 40px; border-bottom: 1px solid var(--border-subtle);
+            display: flex; justify-content: space-between; align-items: center; background: var(--surface-1);
+        }
+        .content-area { padding: 40px; }
+        .view-section { display: none; } /* Hides inactive tabs */
+        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- DASHBOARD WIDGETS --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .stat-card {
+            background: var(--surface-2); padding: 25px; border-radius: 16px; border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .stat-card i { font-size: 24px; color: var(--gold-500); margin-bottom: 15px; }
+        .stat-card h3 { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+        .stat-card p { font-size: 28px; font-weight: 700; margin-top: 5px; }
+
+        /* Tables */
+        .panel { background: var(--surface-2); border-radius: 16px; border: 1px solid var(--border-subtle); padding: 25px; }
+        .panel-header { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
+        th { color: var(--text-secondary); font-size: 13px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <!-- 🔐 LOGIN SCREEN (THE GATEKEEPER) -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>NGI Command Center</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Authorized Executive Personnel Only</p>
+            <input type="email" id="admin-email" placeholder="Email Address">
+            <input type="password" id="admin-pass" placeholder="Password">
+            <button onclick="loginAdmin()" id="login-btn">Authenticate</button>
+            <p id="error-msg" style="color: var(--danger); margin-top: 15px; font-size: 14px; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- 🌐 MAIN APP DASHBOARD -->
+    <div id="app-screen">
+        
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>NGI <span style="color: white; font-weight: 300;">ADMIN</span></h1>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fas fa-chart-pie"></i> Dashboard</div>
+                <div class="nav-item" onclick="switchTab('members', this)"><i class="fas fa-users"></i> Approvals & Members</div>
+                <div class="nav-item" onclick="switchTab('treasury', this)"><i class="fas fa-wallet"></i> Treasury & Fines</div>
+                <div class="nav-item" onclick="switchTab('loans', this)"><i class="fas fa-hand-holding-dollar"></i> Loans Mgmt</div>
+                <div class="nav-item" onclick="switchTab('polls', this)"><i class="fas fa-poll"></i> Polls & Voting</div>
+                <div class="nav-item" onclick="switchTab('announcements', this)"><i class="fas fa-bullhorn"></i> Announcements</div>
+                <div class="nav-item" onclick="switchTab('meetings', this)"><i class="fas fa-book-open"></i> Meetings & Minutes</div>
+                <div class="nav-item" onclick="switchTab('reports', this)"><i class="fas fa-file-invoice"></i> Reports</div>
+            </div>
+            <div class="nav-item" style="border-top: 1px solid var(--border-subtle); color: var(--danger);" onclick="logoutAdmin()">
+                <i class="fas fa-sign-out-alt"></i> Secure Logout
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+            <div class="topbar">
+                <div>
+                    <h2 style="font-size: 18px;" id="welcome-text">Welcome, Executive</h2>
+                </div>
+                <div style="color: var(--text-secondary); font-size: 14px;">
+                    <i class="fas fa-clock"></i> <span id="clock"></span>
+                </div>
+            </div>
+
+            <div class="content-area">
+                
+                <!-- 1. DASHBOARD TAB -->
+                <div id="dashboard" class="view-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card"><i class="fas fa-users"></i><h3>Total Members</h3><p id="stat-members">--</p></div>
+                        <div class="stat-card"><i class="fas fa-hourglass-half"></i><h3>Pending Approvals</h3><p id="stat-pending">--</p></div>
+                        <div class="stat-card"><i class="fas fa-vault"></i><h3>Total Treasury (KES)</h3><p id="stat-treasury">--</p></div>
+                        <div class="stat-card"><i class="fas fa-money-bill-transfer"></i><h3>Active Loans (KES)</h3><p id="stat-loans">--</p></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-header"><h3>Recent System Activity</h3></div>
+                        <p style="color: var(--text-secondary);">Activity feed will load here...</p>
+                    </div>
+                </div>
+
+                <!-- 2. MEMBERS & APPROVALS TAB -->
+                <div id="members" class="view-section">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>Pending Member Approvals</h3>
+                            <button style="padding: 10px 20px; background: var(--gold-500); border:none; border-radius:8px; cursor:pointer; font-weight:bold;">Refresh</button>
+                        </div>
+                        <table>
+                            <thead><tr><th>Name</th><th>Phone</th><th>Date Registered</th><th>Action</th></tr></thead>
+                            <tbody id="pending-table-body">
+                                <!-- Data will be injected here by JS -->
+                                <tr><td colspan="4" style="text-align:center; color: var(--text-secondary);">No pending approvals.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- OTHER TABS (Empty for now, ready to be wired up) -->
+                <div id="treasury" class="view-section"><div class="panel"><h2>Treasury & Fines Engine</h2><p>Manage monthly contributions and exact penalties here.</p></div></div>
+                <div id="loans" class="view-section"><div class="panel"><h2>Loan Applications</h2><p>Approve or deny member loan requests.</p></div></div>
+                <div id="polls" class="view-section"><div class="panel"><h2>Polls Creator</h2><p>Draft and launch votes to the Android app.</p></div></div>
+                <div id="announcements" class="view-section"><div class="panel"><h2>Global Announcements</h2><p>Send push notifications and alerts.</p></div></div>
+                <div id="meetings" class="view-section"><div class="panel"><h2>Meetings & Minutes</h2><p>Schedule calls and upload official PDF minutes.</p></div></div>
+                <div id="reports" class="view-section"><div class="panel"><h2>Financial Reports</h2><p>Export database to Excel/PDF.</p></div></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE & LOGIC SCRIPT -->
+    <script>
+        // 🔥 REPLACE WITH YOUR FIREBASE CONFIG 🔥
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "n-g-i-761b1",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // UI Navigation Logic
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Live Clock
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString(); }, 1000);
+
+        // --- GATEKEEPER SECURITY LOGIC ---
+        function loginAdmin() {
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-pass').value;
+            const errorMsg = document.getElementById('error-msg');
+            const btn = document.getElementById('login-btn');
+
+            btn.innerText = "Verifying...";
+            
+            auth.signInWithEmailAndPassword(email, pass).then((userCredential) => {
+                // They logged in! Now check if they are actually an Admin/Secretary/Treasurer
+                const uid = userCredential.user.uid;
+                db.collection("users").doc(uid).get().then((doc) => {
+                    if (doc.exists) {
+                        const role = doc.data().role;
+                        if (role === "admin" || role === "secretary" || role === "treasurer") {
+                            // ACCESS GRANTED
+                            document.getElementById('welcome-text').innerText = `Welcome, ${doc.data().name} (${role.toUpperCase()})`;
+                            document.getElementById('login-screen').style.display = 'none';
+                            document.getElementById('app-screen').style.display = 'block';
+                            loadDashboardStats(); // Start loading data
+                        } else {
+                            auth.signOut();
+                            errorMsg.innerText = "Access Denied: You are not an executive.";
+                            errorMsg.style.display = "block";
+                            btn.innerText = "Authenticate";
+                        }
+                    }
+                });
+            }).catch((error) => {
+                errorMsg.innerText = "Invalid credentials. Try again.";
+                errorMsg.style.display = "block";
+                btn.innerText = "Authenticate";
+            });
+        }
+
+        function logoutAdmin() {
+            auth.signOut().then(() => { location.reload(); });
+        }
+
+        // This keeps them logged in if they refresh the page
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Re-verify role on refresh
+                db.collection("users").doc(user.uid).get().then((doc) => {
+                    if (doc.exists && ["admin", "secretary", "treasurer"].includes(doc.data().role)) {
+                        document.getElementById('welcome-text').innerText = `Welcome, ${doc.data().name}`;
+                        document.getElementById('login-screen').style.display = 'none';
+                        document.getElementById('app-screen').style.display = 'block';
+                    }
+                });
+            }
+        });
+
+        // --- DASHBOARD DATA LOADING ---
+        function loadDashboardStats() {
+            // Count total members
+            db.collection("users").where("isActive", "==", true).onSnapshot(snap => {
+                document.getElementById('stat-members').innerText = snap.size;
+            });
+            // Count pending approvals
+            db.collection("users").where("isActive", "==", false).onSnapshot(snap => {
+                document.getElementById('stat-pending').innerText = snap.size;
+            });
+        }
+    </script>
+</body>
+</html>
