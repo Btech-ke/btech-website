@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGI Command Center | Ultimate Control</title>
+    <title>NGI | Executive Master Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -11,181 +11,144 @@
 
     <style>
         :root {
-            --bg-dark: #050505; --surface: #121212; --border: #222;
-            --gold: #D4AF37; --gold-dark: #A68026; --white: #FFFFFF;
+            --bg: #050505; --card: #111; --border: #222;
+            --gold: #D4AF37; --gold-dim: #8A6D1D; --white: #FFFFFF;
             --red: #FF4B2B; --green: #00E676; --blue: #2979FF;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
-        body { background: var(--bg-dark); color: var(--white); display: flex; height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: var(--white); display: flex; height: 100vh; overflow: hidden; }
 
-        /* Sidebar Navigation */
-        #sidebar { width: 280px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px; transition: 0.3s; }
-        .logo { font-weight: 800; font-size: 24px; color: var(--gold); margin-bottom: 40px; letter-spacing: 2px; }
-        .nav-btn { padding: 15px; color: #888; cursor: pointer; border-radius: 10px; margin-bottom: 8px; transition: 0.2s; font-weight: 600; display: flex; align-items: center; gap: 12px; }
-        .nav-btn:hover { background: #1a1a1a; color: var(--white); }
-        .nav-btn.active { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+        /* Navigation */
+        #sidebar { width: 280px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 30px; }
+        .logo { font-weight: 800; font-size: 22px; color: var(--gold); margin-bottom: 40px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+        .nav-link { padding: 14px; color: #777; cursor: pointer; border-radius: 8px; margin-bottom: 5px; font-weight: 600; transition: 0.2s; }
+        .nav-link:hover { background: #1a1a1a; color: var(--white); }
+        .nav-link.active { background: var(--gold); color: #000; }
 
-        /* Main Viewport */
-        #main-viewport { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
-        .section { display: none; animation: fadeIn 0.4s ease; }
+        /* Layout Area */
+        #main { flex: 1; padding: 40px; overflow-y: auto; }
+        .section { display: none; animation: slideUp 0.4s ease; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Data Grids */
-        .data-card { background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
-        .table-wrap { overflow-x: auto; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { text-align: left; padding: 15px; border-bottom: 1px solid var(--border); color: var(--gold); font-size: 12px; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
-        tr:hover { background: #151515; }
-
-        /* Status Pills */
-        .pill { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-        .pill-red { background: rgba(255, 75, 43, 0.1); color: var(--red); }
-        .pill-green { background: rgba(0, 230, 118, 0.1); color: var(--green); }
-        .pill-gold { background: rgba(212, 175, 55, 0.1); color: var(--gold); }
-
-        /* Document Editor Modal */
-        #doc-editor { position: fixed; right: -500px; top: 0; width: 450px; height: 100vh; background: var(--surface); border-left: 2px solid var(--gold); box-shadow: -10px 0 30px rgba(0,0,0,0.8); transition: 0.4s; padding: 30px; z-index: 100; overflow-y: auto; }
-        #doc-editor.open { right: 0; }
-        .field-group { margin-bottom: 20px; }
-        label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-weight: 700; }
-        input, select, textarea { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; outline: none; }
+        /* Components */
+        .glass-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 24px; }
+        h1 { font-size: 28px; margin-bottom: 20px; font-weight: 800; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
+        input, select, textarea { width: 100%; background: #000; border: 1px solid var(--border); padding: 14px; border-radius: 10px; color: #fff; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--gold); }
-        .btn-save { background: var(--gold); color: #000; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 20px; }
+        .btn { background: var(--gold); color: #000; padding: 14px 28px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn:hover { transform: scale(1.02); background: var(--white); }
+        .btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold); margin-top: 10px; width: 100%; }
 
-        /* Broadcast & Chat Preview */
-        .chat-bubble { background: #1a1a1a; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--gold); }
+        /* Ledger Table Styling */
+        .table-wrap { overflow-x: auto; margin-top: 20px; border-radius: 12px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { background: #0a0a0a; text-align: left; padding: 18px; color: var(--gold); font-size: 11px; text-transform: uppercase; }
+        td { padding: 18px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+        .status-paid { color: var(--green); font-weight: 800; }
+        .status-due { color: var(--red); font-weight: 800; }
+
+        @media print {
+            #sidebar, .btn, .scheduler-form { display: none !important; }
+            #main { padding: 0; }
+            .glass-card { border: none; }
+            body { background: white; color: black; }
+            th { color: black; border-bottom: 2px solid black; }
+        }
     </style>
 </head>
 <body>
 
     <nav id="sidebar">
-        <div class="logo">NGI VAULT</div>
-        <div class="nav-btn active" onclick="showTab('users')">👥 User Database</div>
-        <div class="nav-btn" onclick="showTab('finance')">💰 Transaction Logs</div>
-        <div class="nav-btn" onclick="showTab('meetings')">🤝 Meetings & Attendance</div>
-        <div class="nav-btn" onclick="showTab('comms')">📢 Global Comms</div>
-        <div class="nav-btn" onclick="showTab('pings')">🔔 Security Pings</div>
+        <div class="logo">NGI EXECUTIVE</div>
+        <div class="nav-link active" onclick="tab('ledger')">📊 Master Ledger</div>
+        <div class="nav-link" onclick="tab('meetings')">📅 Schedule Call</div>
+        <div class="nav-link" onclick="tab('polls')">🗳️ Create Poll</div>
+        <div class="nav-link" onclick="tab('comms')">📢 Broadcast</div>
         <div style="flex:1"></div>
-        <div class="nav-btn" style="color:var(--red)" onclick="firebase.auth().signOut()">🚪 Logout</div>
+        <div class="nav-link" style="color:var(--red)" onclick="firebase.auth().signOut()">🚪 Logout</div>
     </nav>
 
-    <main id="main-viewport">
-        <!-- USER DATABASE SECTION -->
-        <section id="users" class="section active">
-            <div class="data-card">
-                <h1>Executive User Database</h1>
+    <main id="main">
+        <section id="ledger" class="section active">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h1>Weekly Contribution Ledger</h1>
+                <div>
+                    <button class="btn" style="background:var(--white)" onclick="window.print()">📥 Export PDF Report</button>
+                </div>
+            </div>
+            
+            <div class="glass-card">
                 <div class="table-wrap">
-                    <table id="userTable">
+                    <table id="ledgerTable">
                         <thead>
                             <tr>
-                                <th>NGI ID</th>
+                                <th>Member ID</th>
                                 <th>Full Name</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Wallet</th>
-                                <th>Actions</th>
+                                <th>Week 1</th>
+                                <th>Week 2</th>
+                                <th>Week 3</th>
+                                <th>Week 4</th>
+                                <th>Month Total</th>
+                                <th>Arrears</th>
                             </tr>
                         </thead>
-                        <tbody id="userBody"></tbody>
+                        <tbody id="ledgerBody"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- FINANCE SECTION -->
-        <section id="finance" class="section">
-            <div class="data-card">
-                <h1>Live Wallet Ledger</h1>
-                <div class="table-wrap">
-                    <table id="financeTable">
-                        <thead>
-                            <tr>
-                                <th>Ref ID</th>
-                                <th>Member</th>
-                                <th>Amount</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody id="financeBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- MEETINGS SECTION -->
         <section id="meetings" class="section">
-            <div class="data-card">
-                <h1>Meeting History & Attendance</h1>
-                <div class="table-wrap">
-                    <table id="meetingTable">
-                        <thead>
-                            <tr>
-                                <th>Agenda</th>
-                                <th>Status</th>
-                                <th>Attendees</th>
-                                <th>Agora Ch</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="meetingBody"></tbody>
-                    </table>
+            <h1>Schedule Executive Meeting</h1>
+            <div class="glass-card scheduler-form" style="max-width:600px;">
+                <div class="form-group">
+                    <label>Meeting Agenda</label>
+                    <input type="text" id="m-title" placeholder="e.g. Q2 Investment Strategy">
                 </div>
+                <div class="form-group">
+                    <label>Date & Time</label>
+                    <input type="datetime-local" id="m-date">
+                </div>
+                <div class="form-group">
+                    <label>Agora Channel Name</label>
+                    <input type="text" id="m-channel" value="ngi_main_room">
+                </div>
+                <button class="btn" onclick="scheduleMeeting()">🚀 Push to All Devices</button>
             </div>
         </section>
 
-        <!-- COMMS & CHAT SECTION -->
+        <section id="polls" class="section">
+            <h1>Dynamic Poll Architect</h1>
+            <div class="glass-card" style="max-width:600px;">
+                <div class="form-group">
+                    <label>The Question</label>
+                    <textarea id="p-question" rows="2" placeholder="Should we purchase land in Kitengela?"></textarea>
+                </div>
+                <div id="p-options-container">
+                    <label>Choices</label>
+                    <input type="text" class="p-option" placeholder="Option 1" style="margin-bottom:10px;">
+                    <input type="text" class="p-option" placeholder="Option 2" style="margin-bottom:10px;">
+                </div>
+                <button class="btn btn-outline" onclick="addPollOption()">+ Add More Choices</button>
+                <button class="btn" style="width:100%; margin-top:20px;" onclick="launchPoll()">🔥 Launch Governance Poll</button>
+            </div>
+        </section>
+
         <section id="comms" class="section">
-            <div class="data-card">
-                <h1>Broadcast Center</h1>
-                <div class="field-group">
-                    <label>Broadcast Title</label>
-                    <input type="text" id="b-title" placeholder="e.g. Mandatory Meeting">
-                    <label>Message Body</label>
-                    <textarea id="b-msg" rows="4"></textarea>
-                    <button class="btn-save" onclick="sendBroadcast()">🚀 FIRE GLOBAL NOTIFICATION</button>
-                </div>
-            </div>
-            <div class="data-card">
-                <h1>Group Chat Preview</h1>
-                <div id="chat-stream"></div>
-            </div>
-        </section>
-
-        <!-- PINGS SECTION -->
-        <section id="pings" class="section">
-            <div class="data-card">
-                <h1>Real-Time Security Pings</h1>
-                <div class="table-wrap">
-                    <table id="pingTable">
-                        <thead>
-                            <tr>
-                                <th>Sender</th>
-                                <th>Target UID</th>
-                                <th>Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pingBody"></tbody>
-                    </table>
-                </div>
+            <h1>Executive Broadcast</h1>
+            <div class="glass-card" style="max-width:600px;">
+                <label>Message</label>
+                <textarea id="b-msg" rows="5" placeholder="Attention members: Monthly contributions are now due."></textarea>
+                <button class="btn" style="width:100%; margin-top:10px;" onclick="sendBroadcast()">Send Global Notification</button>
             </div>
         </section>
     </main>
 
-    <!-- FLOATING DOCUMENT EDITOR -->
-    <div id="doc-editor">
-        <h2 id="edit-title">Edit Document</h2>
-        <p id="edit-id" style="font-size: 10px; color: #555; margin-bottom: 20px;"></p>
-        <div id="edit-fields"></div>
-        <button class="btn-save" onclick="saveDocument()">UPDATE DATABASE</button>
-        <button class="btn-save" style="background:#222; color:#fff" onclick="closeEditor()">CANCEL</button>
-    </div>
-
     <script>
-        // 🚨 YOUR FIREBASE CONFIG GOES HERE 🚨
+        // 🚨 YOUR SECURE FIREBASE CONFIG 🚨
         const firebaseConfig = {
             apiKey: "AIzaSyCMJdzsgYU5KgJ0T-7JTKJTqnpvEaFB2Zs",
             authDomain: "n-g-i-761b1.firebaseapp.com",
@@ -197,157 +160,111 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let currentEditCollection = '';
-        let currentEditId = '';
-
-        function showTab(tabId) {
+        function tab(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
-            closeEditor();
         }
 
-        /* ─── REAL-TIME DATA ENGINE ─── */
-
-        // 1. Users Listener
-        db.collection("users").onSnapshot(snap => {
-            const tbody = document.getElementById('userBody');
+        /* ─── THE MASTER LEDGER ENGINE ─── */
+        async function loadLedger() {
+            const usersSnap = await db.collection("users").get();
+            const transSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").get();
+            const tbody = document.getElementById('ledgerBody');
             tbody.innerHTML = '';
-            snap.forEach(doc => {
-                const u = doc.data();
+
+            usersSnap.forEach(uDoc => {
+                const user = uDoc.data();
+                const userId = uDoc.id;
+                let w1=0, w2=0, w3=0, w4=0;
+
+                transSnap.docs.forEach(tDoc => {
+                    const t = tDoc.data();
+                    if(t.uid === userId) {
+                        const day = new Date(t.timestamp).getDate();
+                        if(day <= 7) w1 += t.amount;
+                        else if(day <= 14) w2 += t.amount;
+                        else if(day <= 21) w3 += t.amount;
+                        else w4 += t.amount;
+                    }
+                });
+
+                const total = w1+w2+w3+w4;
+                const fmt = (amt) => amt >= 125 ? `<span class="status-paid">${amt}/=</span>` : `<span class="status-due">${amt}/=</span>`;
+
                 tbody.innerHTML += `
                     <tr>
-                        <td style="color:var(--gold)">${u.ngiId || '---'}</td>
-                        <td><b>${u.name}</b><br><small>${u.phone}</small></td>
-                        <td>${u.role}</td>
-                        <td><span class="pill ${u.isActive ? 'pill-green' : 'pill-red'}">${u.isActive ? 'Active' : 'Offline'}</span></td>
-                        <td>KES ${u.walletBalance || 0}</td>
-                        <td><button onclick="openEditor('users', '${doc.id}')" style="background:transparent; color:var(--gold); border:none; cursor:pointer; font-weight:bold">EDIT</button></td>
+                        <td style="color:var(--gold); font-weight:bold">${user.ngiId || 'NEW'}</td>
+                        <td><b>${user.name}</b></td>
+                        <td>${fmt(w1)}</td>
+                        <td>${fmt(w2)}</td>
+                        <td>${fmt(w3)}</td>
+                        <td>${fmt(w4)}</td>
+                        <td style="background:#1a1a1a"><b>${total}/=</b></td>
+                        <td><span style="color:var(--red)">${(500 - total) > 0 ? (500 - total) + '/=' : 'CLEARED'}</span></td>
                     </tr>
                 `;
             });
-        });
+        }
+        loadLedger();
 
-        // 2. Finance Listener
-        db.collection("wallet_transactions").orderBy('timestamp', 'desc').limit(50).onSnapshot(snap => {
-            const tbody = document.getElementById('financeBody');
-            tbody.innerHTML = '';
-            snap.forEach(doc => {
-                const f = doc.data();
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="font-size:10px">${doc.id}</td>
-                        <td>${f.ngiId}</td>
-                        <td style="color:var(--green)">+ KES ${f.amount}</td>
-                        <td>${f.type}</td>
-                        <td><span class="pill pill-gold">${f.status}</span></td>
-                        <td>${new Date(f.timestamp).toLocaleString()}</td>
-                    </tr>
-                `;
+        /* ─── MEETING SCHEDULER ─── */
+        async function scheduleMeeting() {
+            const title = document.getElementById('m-title').value;
+            const date = new Date(document.getElementById('m-date').value).getTime();
+            const channel = document.getElementById('m-channel').value;
+
+            if(!title || !date) return alert("Fill all details");
+
+            await db.collection("meetings").add({
+                title: title,
+                date: date,
+                channelName: channel,
+                status: "Scheduled",
+                timestamp: Date.now()
             });
-        });
-
-        // 3. Meeting History
-        db.collection("meetings").onSnapshot(snap => {
-            const tbody = document.getElementById('meetingBody');
-            tbody.innerHTML = '';
-            snap.forEach(doc => {
-                const m = doc.data();
-                tbody.innerHTML += `
-                    <tr>
-                        <td><b>${m.agenda}</b></td>
-                        <td>${m.status}</td>
-                        <td>✅ ${m.attendees?.length || 0} / ❌ ${m.absentees?.length || 0}</td>
-                        <td><code>${m.agoraChannel}</code></td>
-                        <td>${new Date(m.date).toLocaleDateString()}</td>
-                    </tr>
-                `;
-            });
-        });
-
-        // 4. Chat Feed
-        db.collection("group_chat").doc("ngi_main_group").collection("messages").orderBy('timestamp', 'desc').limit(5).onSnapshot(snap => {
-            const stream = document.getElementById('chat-stream');
-            stream.innerHTML = '';
-            snap.forEach(doc => {
-                const m = doc.data();
-                stream.innerHTML += `
-                    <div class="chat-bubble">
-                        <small style="color:var(--gold)">${m.senderName} (${m.senderNgId})</small>
-                        <p>${m.text}</p>
-                    </div>
-                `;
-            });
-        });
-
-        // 5. Security Pings
-        db.collection("pings").orderBy('timestamp', 'desc').onSnapshot(snap => {
-            const tbody = document.getElementById('pingBody');
-            tbody.innerHTML = '';
-            snap.forEach(doc => {
-                const p = doc.data();
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${p.senderName}</td>
-                        <td style="font-size:10px">${p.targetUid}</td>
-                        <td>${new Date(p.timestamp).toLocaleTimeString()}</td>
-                    </tr>
-                `;
-            });
-        });
-
-        /* ─── DOCUMENT EDITOR LOGIC (No Firebase needed) ─── */
-
-        async function openEditor(col, id) {
-            currentEditCollection = col;
-            currentEditId = id;
-            const doc = await db.collection(col).doc(id).get();
-            const data = doc.data();
-            
-            document.getElementById('edit-title').innerText = `Editing ${col}`;
-            document.getElementById('edit-id').innerText = `ID: ${id}`;
-            const container = document.getElementById('edit-fields');
-            container.innerHTML = '';
-
-            for (const key in data) {
-                container.innerHTML += `
-                    <div class="field-group">
-                        <label>${key}</label>
-                        <input type="text" id="field-${key}" value="${data[key]}">
-                    </div>
-                `;
-            }
-            document.getElementById('doc-editor').classList.add('open');
+            alert("Meeting Broadcasted Successfully!");
         }
 
-        function closeEditor() { document.getElementById('doc-editor').classList.remove('open'); }
+        /* ─── DYNAMIC POLL ARCHITECT ─── */
+        function addPollOption() {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'p-option';
+            input.placeholder = `Option ${document.querySelectorAll('.p-option').length + 1}`;
+            input.style.marginBottom = '10px';
+            document.getElementById('p-options-container').appendChild(input);
+        }
 
-        async function saveDocument() {
-            const docRef = db.collection(currentEditCollection).doc(currentEditId);
-            const doc = await docRef.get();
-            const updates = {};
-            
-            for (const key in doc.data()) {
-                let val = document.getElementById(`field-${key}`).value;
-                if(val === 'true') val = true;
-                if(val === 'false') val = false;
-                if(!isNaN(val) && val !== '') val = Number(val);
-                updates[key] = val;
-            }
-            
-            await docRef.update(updates);
-            alert("Database Updated Successfully!");
-            closeEditor();
+        async function launchPoll() {
+            const question = document.getElementById('p-question').value;
+            const optionInputs = document.querySelectorAll('.p-option');
+            let choices = [];
+
+            optionInputs.forEach(input => {
+                if(input.value.trim() !== "") {
+                    choices.push({ id: Math.random().toString(36).substr(2, 9), text: input.value, votes: [] });
+                }
+            });
+
+            if(!question || choices.length < 2) return alert("Needs question and 2 options");
+
+            await db.collection("polls").add({
+                question: question,
+                choices: choices,
+                status: "Active",
+                createdAt: Date.now()
+            });
+            alert("Poll Published Live!");
         }
 
         async function sendBroadcast() {
-            const title = document.getElementById('b-title').value;
             const msg = document.getElementById('b-msg').value;
             await db.collection("announcements").add({
-                title: title,
                 message: msg,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                title: "Executive Update"
             });
             alert("Broadcast Fired!");
         }
