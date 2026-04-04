@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGI Command Center | Live Production</title>
+    <title>NGI Command Center | Ultimate Control v5.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDKs (v8 Compat for pure HTML reliability) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -15,7 +15,7 @@
         :root {
             --bg: #050505; --surface: #111; --border: #222;
             --gold: #D4AF37; --white: #FFFFFF;
-            --red: #FF4B2B; --green: #00E676;
+            --red: #FF4B2B; --green: #00E676; --blue: #2979FF;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
         body { background: var(--bg); color: var(--white); display: flex; height: 100vh; overflow: hidden; }
@@ -25,8 +25,8 @@
         .auth-card { background: var(--surface); padding: 40px; border-radius: 20px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
         
         /* SIDEBAR */
-        #sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: none; flex-direction: column; padding: 20px; }
-        .logo { font-weight: 800; color: var(--gold); margin-bottom: 30px; text-align: center; letter-spacing: 2px; }
+        #sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .logo { font-weight: 800; color: var(--gold); margin-bottom: 30px; text-align: center; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .nav-btn { padding: 12px 15px; color: #888; cursor: pointer; border-radius: 8px; margin-bottom: 5px; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
         .nav-btn:hover { background: #1a1a1a; color: #fff; }
         .nav-btn.active { background: var(--gold); color: #000; }
@@ -34,141 +34,181 @@
         /* MAIN CONTENT */
         #main-content { flex: 1; padding: 35px; overflow-y: auto; display: none; }
         .section { display: none; }
-        .section.active { display: block; }
+        .section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* TABLES & CARDS */
+        /* DATA CARDS & TABLES */
         .glass-card { background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
-        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { text-align: left; padding: 15px; color: var(--gold); font-size: 11px; background: #000; }
+        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { text-align: left; padding: 15px; color: var(--gold); font-size: 11px; background: #000; text-transform: uppercase; }
         td { padding: 15px; border-bottom: 1px solid #151515; font-size: 13px; }
-        
-        /* BUTTONS */
-        .btn { background: var(--gold); color: #000; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        .btn-red { background: var(--red); color: #fff; }
-        .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
-        .btn-sm { padding: 5px 10px; font-size: 11px; }
+        .edit-cell { cursor: pointer; color: var(--blue); text-decoration: underline; }
 
-        /* EDITOR PANEL */
-        #doc-editor { position: fixed; right: -500px; top: 0; width: 450px; height: 100vh; background: var(--surface); border-left: 2px solid var(--gold); padding: 30px; transition: 0.4s; z-index: 1000; overflow-y: auto; }
-        #doc-editor.open { right: 0; }
+        /* INPUTS */
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 10px; color: var(--gold); margin-bottom: 5px; font-weight: 700; }
-        input, textarea { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; }
+        input, textarea, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; outline: none; }
+
+        /* BUTTONS */
+        .btn { background: var(--gold); color: #000; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
+        .btn-red { background: var(--red); color: #fff; }
+        .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+        .btn-sm { padding: 6px 12px; font-size: 11px; }
+
+        /* MODALS */
+        #doc-editor { position: fixed; right: -500px; top: 0; width: 450px; height: 100vh; background: var(--surface); border-left: 2px solid var(--gold); padding: 30px; transition: 0.4s; z-index: 1000; overflow-y: auto; }
+        #doc-editor.open { right: 0; }
 
         .pill { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; }
-        .pill-green { background: rgba(0, 230, 118, 0.2); color: var(--green); }
-        .pill-red { background: rgba(255, 75, 43, 0.2); color: var(--red); }
+        .pill-green { background: rgba(0, 230, 118, 0.15); color: var(--green); }
+        .pill-red { background: rgba(255, 75, 43, 0.15); color: var(--red); }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
+    <!-- 1. AUTHENTICATION GATE -->
     <div id="auth-overlay">
         <div class="auth-card">
-            <h1 style="color:var(--gold); margin-bottom:20px;">NGI EXECUTIVE</h1>
-            <div id="login-form">
-                <input type="email" id="auth-email" placeholder="Admin Email" style="margin-bottom:10px;">
-                <input type="password" id="auth-password" placeholder="Password" style="margin-bottom:20px;">
-                <button class="btn" style="width:100%; margin-bottom:10px;" onclick="loginEmail()">Login with Credentials</button>
-                <button class="btn btn-outline" style="width:100%;" onclick="loginGoogle()">Sign in with Google</button>
-            </div>
-            <p id="auth-error" style="color:var(--red); font-size:12px; margin-top:15px;"></p>
+            <h1 style="color:var(--gold); margin-bottom:10px;">NGI COMMAND</h1>
+            <p style="color:#555; font-size: 12px; margin-bottom: 30px;">Executive Access Only</p>
+            <input type="email" id="auth-email" placeholder="Admin Email" style="margin-bottom:10px;">
+            <input type="password" id="auth-password" placeholder="Password" style="margin-bottom:20px;">
+            <button class="btn" style="width:100%; margin-bottom:10px;" onclick="loginEmail()">Login to Vault</button>
+            <button class="btn btn-outline" style="width:100%;" onclick="loginGoogle()">Sign-in with Google</button>
+            <p id="auth-error" style="color:var(--red); font-size:11px; margin-top:15px;"></p>
         </div>
     </div>
 
-    <!-- APP SIDEBAR -->
+    <!-- 2. NAVIGATION SIDEBAR -->
     <aside id="sidebar">
-        <div class="logo">NGI VAULT</div>
+        <div class="logo">NGI | SOVEREIGN</div>
         <div class="nav-btn active" onclick="showTab('ledger')">📊 Master Ledger</div>
-        <div class="nav-btn" onclick="showTab('users')">👥 User Directory</div>
-        <div class="nav-btn" onclick="showTab('finance')">💰 Transactions</div>
+        <div class="nav-btn" onclick="showTab('users')">👥 User Database</div>
         <div class="nav-btn" onclick="showTab('loans')">🏦 Loan Requests</div>
-        <div class="nav-btn" onclick="showTab('approvals')">🛡️ Approvals</div>
-        <div class="nav-btn" onclick="showTab('meetings')">📅 Meetings</div>
-        <div class="nav-btn" onclick="showTab('comms')">📢 Broadcasts</div>
+        <div class="nav-btn" onclick="showTab('polls')">🗳️ Poll Intelligence</div>
+        <div class="nav-btn" onclick="showTab('meetings')">📅 Meeting Hub</div>
+        <div class="nav-btn" onclick="showTab('finance')">💰 Transaction Logs</div>
+        <div class="nav-btn" onclick="showTab('comms')">📢 Global Comms</div>
         <div style="flex:1"></div>
-        <div class="nav-btn" style="color:var(--red)" onclick="handleLogout()">🚪 Secure Logout</div>
+        <div class="nav-btn" style="color:var(--red)" onclick="handleLogout()">🚪 Logout System</div>
     </aside>
 
-    <!-- APP MAIN CONTENT -->
+    <!-- 3. MAIN DASHBOARD AREA -->
     <main id="main-content">
-        <!-- LEDGER -->
+
+        <!-- MASTER LEDGER (Editable) -->
         <section id="ledger" class="section active">
-            <h1>Financial Ledger <button class="btn btn-sm" onclick="window.print()">PRINT PDF</button></h1>
-            <div class="glass-card"><div class="table-wrap"><table>
-                <thead><tr><th>ID</th><th>Name</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total</th><th>Status</th></tr></thead>
-                <tbody id="ledgerBody"></tbody>
-            </table></div></div>
-        </section>
-
-        <!-- USERS -->
-        <section id="users" class="section">
-            <h1>Member Directory</h1>
-            <div class="glass-card"><div class="table-wrap"><table>
-                <thead><tr><th>NGI ID</th><th>Name</th><th>Role</th><th>Status</th><th>Wallet</th><th>Actions</th></tr></thead>
-                <tbody id="userBody"></tbody>
-            </table></div></div>
-        </section>
-
-        <!-- LOANS -->
-        <section id="loans" class="section">
-            <h1>Loan Management</h1>
-            <div class="glass-card"><div class="table-wrap"><table>
-                <thead><tr><th>Member</th><th>Amount</th><th>Reason</th><th>Actions</th></tr></thead>
-                <tbody id="loanBody"></tbody>
-            </table></div></div>
-        </section>
-
-        <!-- APPROVALS -->
-        <section id="approvals" class="section">
-            <h1>New Registrations</h1>
-            <div class="glass-card"><div class="table-wrap"><table>
-                <thead><tr><th>Name</th><th>Phone</th><th>Actions</th></tr></thead>
-                <tbody id="approvalBody"></tbody>
-            </table></div></div>
-        </section>
-
-        <!-- BROADCAST -->
-        <section id="comms" class="section">
-            <h1>Global Communications</h1>
+            <h1>Contribution Ledger <button class="btn btn-sm btn-outline" onclick="window.print()">Export PDF</button></h1>
             <div class="glass-card">
-                <label>Message Content</label>
-                <textarea id="b-msg" rows="4" placeholder="Enter broadcast text..."></textarea>
-                <button class="btn" style="margin-top:15px;" onclick="sendBroadcast()">🚀 FIRE NOTIFICATION</button>
+                <p style="color:#666; font-size: 11px; margin-bottom: 10px;">Note: Click on W1-W4 values to manually override contribution amounts.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>NGI ID</th><th>Name</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total</th><th>Arrears</th></tr></thead>
+                        <tbody id="ledgerBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- USER DATABASE (With Edit/Delete) -->
+        <section id="users" class="section">
+            <h1>Executive User Directory</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>NGI ID</th><th>Name</th><th>Role</th><th>Status</th><th>Wallet</th><th>Actions</th></tr></thead>
+                        <tbody id="userBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOAN MANAGEMENT -->
+        <section id="loans" class="section">
+            <h1>Loan Requests Intelligence</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Applicant</th><th>Amount</th><th>Reason</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="loanBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- POLL INTELLIGENCE -->
+        <section id="polls" class="section">
+            <h1>Poll Architect & Voter Log</h1>
+            <div class="glass-card" style="max-width: 600px;">
+                <label>Question</label>
+                <input type="text" id="p-q" style="margin-bottom:15px;">
+                <div id="p-options">
+                    <input type="text" class="p-opt" placeholder="Option 1" style="margin-bottom:5px;">
+                    <input type="text" class="p-opt" placeholder="Option 2" style="margin-bottom:10px;">
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="addPollOpt()">+ Add Option</button>
+                <button class="btn" style="width:100%; margin-top:15px;" onclick="launchPoll()">Launch Live Poll</button>
+            </div>
+            <div id="poll-results-container"></div>
+        </section>
+
+        <!-- MEETING HUB -->
+        <section id="meetings" class="section">
+            <h1>Schedule Audio Meeting</h1>
+            <div class="glass-card" style="max-width: 500px;">
+                <div class="form-group"><label>Agenda</label><input type="text" id="m-agenda" placeholder="e.g. Welfare Review"></div>
+                <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="m-date"></div>
+                <div class="form-group"><label>Agora Channel</label><input type="text" id="m-channel" value="ngi_hq"></div>
+                <button class="btn" style="width:100%" onclick="scheduleMeeting()">Set Meeting & Notify All</button>
+            </div>
+            <div class="glass-card">
+                <h3>Meeting History</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Agenda</th><th>Date</th><th>Status</th><th>Agora</th><th>Actions</th></tr></thead>
+                        <tbody id="meetingBody"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
         <!-- TRANSACTIONS -->
         <section id="finance" class="section">
-            <h1>M-Pesa Transaction Logs</h1>
-            <div class="glass-card"><div class="table-wrap"><table>
-                <thead><tr><th>Ref</th><th>Member</th><th>Amt</th><th>Type</th><th>Time</th><th>Actions</th></tr></thead>
-                <tbody id="financeBody"></tbody>
-            </table></div></div>
-        </section>
-
-        <!-- MEETINGS -->
-        <section id="meetings" class="section">
-            <h1>Schedule Meeting</h1>
-            <div class="glass-card" style="max-width:500px">
-                <div class="form-group"><label>Agenda</label><input type="text" id="m-agenda"></div>
-                <div class="form-group"><label>Date/Time</label><input type="datetime-local" id="m-date"></div>
-                <button class="btn" onclick="scheduleMeeting()">ACTIVATE CALL</button>
+            <h1>Transaction Master Log</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Ref ID</th><th>NGI ID</th><th>Amount</th><th>Type</th><th>Time</th><th>Actions</th></tr></thead>
+                        <tbody id="financeBody"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
+
+        <!-- COMMS -->
+        <section id="comms" class="section">
+            <h1>System-Wide Broadcast</h1>
+            <div class="glass-card" style="max-width: 600px;">
+                <label>Announcement Text</label>
+                <textarea id="b-msg" rows="5"></textarea>
+                <button class="btn" style="width:100%; margin-top:15px;" onclick="sendBroadcast()">🚀 FIRE GLOBAL PUSH</button>
+            </div>
+        </section>
+
     </main>
 
-    <!-- LIVE DOCUMENT EDITOR (GHOST MODE) -->
+    <!-- FLOATING GHOST EDITOR -->
     <div id="doc-editor">
-        <h2 id="ed-title" style="color:var(--gold)">Document Editor</h2>
+        <h2 id="ed-title" style="color:var(--gold)">Ghost Edit Mode</h2>
         <p id="ed-id" style="font-size:10px; color:#555; margin-bottom:20px;"></p>
         <div id="ed-fields"></div>
         <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn" onclick="saveDoc()" style="flex:1">SAVE CHANGES</button>
-            <button class="btn btn-red" onclick="deleteDoc()" style="flex:1">DELETE DOC</button>
+            <button class="btn" onclick="saveDoc()" style="flex:1">Save Changes</button>
+            <button class="btn btn-red" onclick="deleteDoc()" style="flex:1">Delete</button>
         </div>
-        <button class="btn btn-outline" style="width:100%; margin-top:10px;" onclick="closeEditor()">CANCEL</button>
+        <button class="btn btn-outline" style="width:100%; margin-top:10px;" onclick="closeEditor()">Cancel</button>
     </div>
 
     <script>
@@ -185,45 +225,29 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        let currentCol = '', currentId = '', editingData = {};
+        let curCol = '', curId = '', edData = {};
 
-        /* --- AUTHENTICATION LOGIC --- */
+        /* --- AUTH ENGINE --- */
         auth.onAuthStateChanged(user => {
             if (user) {
                 db.collection("users").doc(user.uid).get().then(doc => {
-                    const data = doc.data();
-                    if (doc.exists && (data.role === "Admin" || data.role === "Secretary")) {
+                    const r = doc.data().role;
+                    if (r === "Admin" || r === "Secretary") {
                         document.getElementById('auth-overlay').style.display = 'none';
                         document.getElementById('sidebar').style.display = 'flex';
                         document.getElementById('main-content').style.display = 'block';
-                        initRealTimeListeners();
-                    } else {
-                        auth.signOut();
-                        showAuthError("Access Denied: Not an Authorized Executive Document.");
-                    }
+                        runVaultListeners();
+                    } else { auth.signOut(); alert("Access Denied."); }
                 });
             } else {
                 document.getElementById('auth-overlay').style.display = 'flex';
-                document.getElementById('sidebar').style.display = 'none';
-                document.getElementById('main-content').style.display = 'none';
             }
         });
 
-        function loginEmail() {
-            const e = document.getElementById('auth-email').value;
-            const p = document.getElementById('auth-password').value;
-            auth.signInWithEmailAndPassword(e, p).catch(err => showAuthError(err.message));
-        }
-
-        function loginGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(err => showAuthError(err.message));
-        }
-
+        function loginEmail() { auth.signInWithEmailAndPassword(document.getElementById('auth-email').value, document.getElementById('auth-password').value).catch(e => alert(e.message)); }
+        function loginGoogle() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message)); }
         function handleLogout() { auth.signOut(); window.location.reload(); }
-        function showAuthError(m) { document.getElementById('auth-error').innerText = m; }
 
-        /* --- NAVIGATION --- */
         function showTab(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -232,116 +256,172 @@
             closeEditor();
         }
 
-        /* --- DATA LISTENERS --- */
-        function initRealTimeListeners() {
-            // Users & Ledger
+        /* --- THE VAULT ENGINE --- */
+        function runVaultListeners() {
+            // 1. Users & Dynamic Ledger
             db.collection("users").onSnapshot(async snap => {
                 const uBody = document.getElementById('userBody');
                 const lBody = document.getElementById('ledgerBody');
-                const aBody = document.getElementById('approvalBody');
-                uBody.innerHTML = ''; lBody.innerHTML = ''; aBody.innerHTML = '';
+                uBody.innerHTML = ''; lBody.innerHTML = '';
 
+                // Get all contributions for this month
                 const tSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").get();
 
                 snap.forEach(doc => {
                     const u = doc.data();
-                    
-                    // Approvals
-                    if(!u.approvedByAdmin && !u.isBanned) {
-                        aBody.innerHTML += `<tr><td>${u.name}</td><td>${u.phone}</td><td><button class="btn btn-sm" onclick="quickUpdate('users','${doc.id}', {approvedByAdmin:true, isActive:true})">APPROVE</button></td></tr>`;
-                    }
+                    const uid = doc.id;
 
-                    // Directory
-                    uBody.innerHTML += `<tr><td>${u.ngiId}</td><td><b>${u.name}</b></td><td>${u.role}</td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'BANNED':'ACTIVE'}</span></td><td>${u.walletBalance}</td><td><button class="btn btn-sm btn-outline" onclick="openEditor('users','${doc.id}')">EDIT</button></td></tr>`;
+                    // Directory Table
+                    uBody.innerHTML += `<tr><td>${u.ngiId}</td><td><b>${u.name}</b></td><td>${u.role}</td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td>${u.walletBalance}</td><td><button class="btn btn-sm btn-outline" onclick="openEditor('users','${uid}')">Edit</button></td></tr>`;
 
-                    // Ledger Logic
-                    let w1=0, w2=0, w3=0, w4=0;
+                    // Ledger Logic (Editable)
+                    let w = [0,0,0,0,0]; // w[1]-w[4]
                     tSnap.docs.forEach(tDoc => {
                         const t = tDoc.data();
-                        if(t.uid === doc.id) {
+                        if(t.uid === uid) {
                             const d = new Date(t.timestamp).getDate();
-                            if(d<=7) w1+=t.amount; else if(d<=14) w2+=t.amount; else if(d<=21) w3+=t.amount; else w4+=t.amount;
+                            if(d<=7) w[1]+=t.amount; else if(d<=14) w[2]+=t.amount; else if(d<=21) w[3]+=t.amount; else w[4]+=t.amount;
                         }
                     });
-                    lBody.innerHTML += `<tr><td>${u.ngiId}</td><td>${u.name}</td><td>${w1}</td><td>${w2}</td><td>${w3}</td><td>${w4}</td><td><b>${w1+w2+w3+w4}</b></td><td>${(w1+w2+w3+w4 >= 500)?'✅':'❌'}</td></tr>`;
+                    const total = w[1]+w[2]+w[3]+w[4];
+                    lBody.innerHTML += `<tr><td>${u.ngiId}</td><td>${u.name}</td>
+                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',1)">${w[1]}</td>
+                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',2)">${w[2]}</td>
+                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',3)">${w[3]}</td>
+                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',4)">${w[4]}</td>
+                        <td><b>${total}</b></td><td style="color:var(--red)">${(500-total)>0?(500-total):'0'}</td></tr>`;
                 });
             });
 
-            // Loans
-            db.collection("loans").where("status","==","Pending").onSnapshot(snap => {
-                const body = document.getElementById('loanBody'); body.innerHTML = '';
+            // 2. Loans
+            db.collection("loans").orderBy("timestamp","desc").onSnapshot(snap => {
+                const lBody = document.getElementById('loanBody'); lBody.innerHTML = '';
                 snap.forEach(doc => {
                     const l = doc.data();
-                    body.innerHTML += `<tr><td>${l.name}</td><td>KES ${l.amount}</td><td>${l.reason}</td><td><button class="btn btn-sm" onclick="quickUpdate('loans','${doc.id}', {status:'Approved'})">APPROVE</button> <button class="btn btn-sm btn-red" onclick="quickUpdate('loans','${doc.id}', {status:'Rejected'})">REJECT</button></td></tr>`;
+                    lBody.innerHTML += `<tr><td>${l.name}<br><small>${l.ngiId}</small></td><td>KES ${l.amount}</td><td>${l.reason}</td><td>${new Date(l.timestamp).toLocaleDateString()}</td>
+                    <td>${l.status === 'Pending' ? `<button class="btn btn-sm" onclick="approveLoan('${doc.id}')">Approve</button>` : `<span class="pill pill-green">${l.status}</span>`}</td></tr>`;
                 });
             });
 
-            // Transactions
-            db.collection("wallet_transactions").orderBy("timestamp","desc").limit(20).onSnapshot(snap => {
-                const body = document.getElementById('financeBody'); body.innerHTML = '';
+            // 3. Poll Intelligence (With Voter Log)
+            db.collection("polls").onSnapshot(snap => {
+                const cont = document.getElementById('poll-results-container'); cont.innerHTML = '<h3>Poll Intelligence Log</h3>';
+                snap.forEach(doc => {
+                    const p = doc.data();
+                    let rows = '';
+                    p.choices.forEach(c => {
+                        rows += `<div style="margin-bottom:10px; padding:10px; background:#1a1a1a; border-radius:8px;">
+                            <div style="display:flex; justify-content:space-between"><b>${c.text}</b> <span>${c.votes.length} votes</span></div>
+                            <small style="color:#555">Voters: ${c.votes.join(", ") || 'None'}</small>
+                        </div>`;
+                    });
+                    cont.innerHTML += `<div class="glass-card"><h4>${p.question}</h4><p style="font-size:10px; color:var(--gold); margin-bottom:15px;">Status: ${p.status}</p>${rows}
+                    <button class="btn btn-sm btn-red" onclick="quickUpdate('polls','${doc.id}',{status:'Closed'})">Close Poll</button></div>`;
+                });
+            });
+
+            // 4. Meeting Hub
+            db.collection("meetings").orderBy("date","desc").onSnapshot(snap => {
+                const mBody = document.getElementById('meetingBody'); mBody.innerHTML = '';
+                snap.forEach(doc => {
+                    const m = doc.data();
+                    mBody.innerHTML += `<tr><td>${m.agenda}</td><td>${new Date(m.date).toLocaleString()}</td><td>${m.status}</td><td>${m.agoraChannel}</td>
+                    <td><button class="btn btn-sm btn-red" onclick="quickDelete('meetings','${doc.id}')">Delete</button></td></tr>`;
+                });
+            });
+
+            // 5. Transaction Forensics
+            db.collection("wallet_transactions").orderBy("timestamp","desc").limit(30).onSnapshot(snap => {
+                const fBody = document.getElementById('financeBody'); fBody.innerHTML = '';
                 snap.forEach(doc => {
                     const f = doc.data();
-                    body.innerHTML += `<tr><td style="font-size:10px">${doc.id.substring(0,8)}</td><td>${f.ngiId}</td><td>${f.amount}</td><td>${f.type}</td><td>${new Date(f.timestamp).toLocaleTimeString()}</td><td><button class="btn btn-sm btn-outline" onclick="openEditor('wallet_transactions','${doc.id}')">EDIT</button></td></tr>`;
+                    fBody.innerHTML += `<tr><td>${doc.id.substring(0,8)}</td><td>${f.ngiId}</td><td>${f.amount}</td><td>${f.type}</td><td>${new Date(f.timestamp).toLocaleTimeString()}</td>
+                    <td><button class="btn btn-sm btn-outline" onclick="openEditor('wallet_transactions','${doc.id}')">View</button></td></tr>`;
                 });
             });
         }
 
-        /* --- ACTIONS --- */
-        async function quickUpdate(col, id, data) { await db.collection(col).doc(id).update(data); alert("Action Successful!"); }
+        /* --- COMMAND ACTIONS --- */
+        async function manualLedgerEntry(uid, week) {
+            const amt = prompt(`Enter custom amount for Week ${week}:`);
+            if(!amt) return;
+            const userDoc = await db.collection("users").doc(uid).get();
+            await db.collection("wallet_transactions").add({
+                uid: uid, ngiId: userDoc.data().ngiId, amount: Number(amt),
+                type: "CONTRIBUTION", timestamp: Date.now(), description: "Manual Admin Entry", status: "Completed"
+            });
+            alert("Ledger Updated!");
+        }
 
-        async function sendBroadcast() {
-            const m = document.getElementById('b-msg').value;
-            if(!m) return;
-            await db.collection("announcements").add({ message: m, title: "Executive Broadcast", timestamp: Date.now() });
-            document.getElementById('b-msg').value = '';
-            alert("Broadcast Fired!");
+        async function approveLoan(id) { 
+            const doc = await db.collection("loans").doc(id).get();
+            const loan = doc.data();
+            // 1. Update user wallet
+            const uSnap = await db.collection("users").where("ngiId","==",loan.ngiId).get();
+            const userDoc = uSnap.docs[0];
+            await userDoc.ref.update({ walletBalance: firebase.firestore.FieldValue.increment(loan.amount) });
+            // 2. Close loan
+            await db.collection("loans").doc(id).update({ status: "Approved" });
+            alert("Loan disbursed to member wallet!");
+        }
+
+        async function launchPoll() {
+            const q = document.getElementById('p-q').value;
+            const opts = []; document.querySelectorAll('.p-opt').forEach(i => { if(i.value) opts.push({id:Math.random().toString(36).substr(2,5), text:i.value, votes:[]}) });
+            await db.collection("polls").add({ question: q, choices: opts, status: "Active", createdAt: Date.now() });
+            alert("Poll Live!");
         }
 
         async function scheduleMeeting() {
-            const a = document.getElementById('m-agenda').value;
-            const d = new Date(document.getElementById('m-date').value).getTime();
-            if(!a || !d) return alert("Missing data");
-            await db.collection("meetings").add({ agenda: a, date: d, status: "Active", agoraChannel: "ngi_room", timestamp: Date.now() });
-            alert("Meeting Live!");
+            const agenda = document.getElementById('m-agenda').value;
+            const date = new Date(document.getElementById('m-date').value).getTime();
+            if(!agenda || !date) return alert("Fill all fields");
+            await db.collection("meetings").add({ 
+                agenda: agenda, date: date, status: "Scheduled", 
+                agoraChannel: document.getElementById('m-channel').value,
+                timestamp: Date.now(), hasCall: true 
+            });
+            alert("Meeting Scheduled and Synced!");
         }
 
-        /* --- LIVE GHOST EDITOR CRUD --- */
+        function addPollOpt() {
+            const i = document.createElement('input'); i.type='text'; i.className='p-opt'; i.placeholder='New Option'; i.style.marginBottom='5px';
+            document.getElementById('p-options').appendChild(i);
+        }
+
+        async function sendBroadcast() {
+            const m = document.getElementById('b-msg').value;
+            await db.collection("announcements").add({ message: m, title: "Executive Update", timestamp: Date.now() });
+            document.getElementById('b-msg').value = ''; alert("Broadcast Sent!");
+        }
+
+        /* --- CRUD TOOLSET --- */
+        async function quickUpdate(col, id, data) { await db.collection(col).doc(id).update(data); alert("Updated."); }
+        async function quickDelete(col, id) { if(confirm("Delete permanently?")) await db.collection(col).doc(id).delete(); }
+
         async function openEditor(col, id) {
             curCol = col; curId = id;
-            const doc = await db.collection(col).doc(id).get();
-            editingData = doc.data();
-            document.getElementById('ed-id').innerText = `Document ID: ${id}`;
-            const container = document.getElementById('ed-fields');
-            container.innerHTML = '';
-            
-            for (let key in editingData) {
-                container.innerHTML += `<div class="form-group"><label>${key}</label><input type="text" id="field-${key}" value="${editingData[key]}"></div>`;
-            }
+            const doc = await db.collection(col).doc(id).get(); edData = doc.data();
+            document.getElementById('ed-id').innerText = id;
+            const cont = document.getElementById('ed-fields'); cont.innerHTML = '';
+            for (let key in edData) { cont.innerHTML += `<div class="form-group"><label>${key}</label><input type="text" id="ed-${key}" value="${edData[key]}"></div>`; }
             document.getElementById('doc-editor').classList.add('open');
         }
 
         function closeEditor() { document.getElementById('doc-editor').classList.remove('open'); }
 
         async function saveDoc() {
-            const updates = {};
-            for (let key in editingData) {
-                let val = document.getElementById(`field-${key}`).value;
-                if(val === 'true') val = true; else if(val === 'false') val = false;
-                else if(!isNaN(val) && val !== '') val = Number(val);
-                updates[key] = val;
+            const up = {};
+            for (let k in edData) {
+                let v = document.getElementById(`ed-${k}`).value;
+                if(v === 'true') v=true; else if(v==='false') v=false; else if(!isNaN(v) && v !== '') v=Number(v);
+                up[k] = v;
             }
-            await db.collection(curCol).doc(curId).update(updates);
-            alert("Database Updated Live!");
-            closeEditor();
+            await db.collection(curCol).doc(curId).update(up);
+            alert("Database Saved!"); closeEditor();
         }
 
-        async function deleteDoc() {
-            if(confirm("DANGER: Are you sure you want to PERMANENTLY DELETE this document? This cannot be undone.")) {
-                await db.collection(curCol).doc(curId).delete();
-                alert("Document Deleted Successfully");
-                closeEditor();
-            }
-        }
+        async function deleteDoc() { if(confirm("Delete document?")) { await db.collection(curCol).doc(curId).delete(); closeEditor(); } }
     </script>
 </body>
 </html>
