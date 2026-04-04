@@ -3,97 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGI | Executive Master Panel</title>
+    <title>NGI | Sovereign Vault v3.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
         :root {
-            --bg: #050505; --card: #111; --border: #222;
-            --gold: #D4AF37; --gold-dim: #8A6D1D; --white: #FFFFFF;
+            --bg: #050505; --surface: #111; --border: #222;
+            --gold: #D4AF37; --gold-dark: #A68026; --white: #FFFFFF;
             --red: #FF4B2B; --green: #00E676; --blue: #2979FF;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
         body { background: var(--bg); color: var(--white); display: flex; height: 100vh; overflow: hidden; }
 
-        /* Navigation */
-        #sidebar { width: 280px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 30px; }
-        .logo { font-weight: 800; font-size: 22px; color: var(--gold); margin-bottom: 40px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
-        .nav-link { padding: 14px; color: #777; cursor: pointer; border-radius: 8px; margin-bottom: 5px; font-weight: 600; transition: 0.2s; }
-        .nav-link:hover { background: #1a1a1a; color: var(--white); }
-        .nav-link.active { background: var(--gold); color: #000; }
+        /* Navigation Sidebar */
+        #sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .logo { font-weight: 800; font-size: 20px; color: var(--gold); margin-bottom: 30px; text-align: center; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .nav-group { margin-bottom: 20px; }
+        .nav-label { font-size: 10px; color: #555; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .nav-btn { padding: 12px 15px; color: #888; cursor: pointer; border-radius: 8px; margin-bottom: 4px; font-weight: 600; font-size: 13px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover { background: #1a1a1a; color: var(--white); }
+        .nav-btn.active { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
 
-        /* Layout Area */
-        #main { flex: 1; padding: 40px; overflow-y: auto; }
-        .section { display: none; animation: slideUp 0.4s ease; }
+        /* Main Viewport */
+        #main-content { flex: 1; padding: 35px; overflow-y: auto; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
         .section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Components */
-        .glass-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 24px; }
-        h1 { font-size: 28px; margin-bottom: 20px; font-weight: 800; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
-        input, select, textarea { width: 100%; background: #000; border: 1px solid var(--border); padding: 14px; border-radius: 10px; color: #fff; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--gold); }
-        .btn { background: var(--gold); color: #000; padding: 14px 28px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        /* Dashboard Components */
+        .glass-card { background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
+        h1 { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--white); display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Table Styles */
+        .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); background: #080808; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { text-align: left; padding: 15px; color: var(--gold); font-size: 11px; text-transform: uppercase; background: #000; }
+        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 13px; }
+        tr:hover { background: #121212; }
+
+        /* Inputs & Buttons */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 6px; font-weight: 700; }
+        input, select, textarea { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; outline: none; }
+        .btn { background: var(--gold); color: #000; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; }
         .btn:hover { transform: scale(1.02); background: var(--white); }
-        .btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold); margin-top: 10px; width: 100%; }
+        .btn-sm { padding: 6px 12px; font-size: 11px; }
 
-        /* Ledger Table Styling */
-        .table-wrap { overflow-x: auto; margin-top: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
-        th { background: #0a0a0a; text-align: left; padding: 18px; color: var(--gold); font-size: 11px; text-transform: uppercase; }
-        td { padding: 18px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
-        .status-paid { color: var(--green); font-weight: 800; }
-        .status-due { color: var(--red); font-weight: 800; }
+        /* Document Editor Modal */
+        #doc-editor { position: fixed; right: -500px; top: 0; width: 450px; height: 100vh; background: var(--surface); border-left: 2px solid var(--gold); box-shadow: -10px 0 40px rgba(0,0,0,0.9); transition: 0.4s; padding: 30px; z-index: 1000; overflow-y: auto; }
+        #doc-editor.open { right: 0; }
+
+        /* Status Pills */
+        .pill { padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 800; }
+        .pill-green { background: rgba(0, 230, 118, 0.1); color: var(--green); }
+        .pill-red { background: rgba(255, 75, 43, 0.1); color: var(--red); }
 
         @media print {
-            #sidebar, .btn, .scheduler-form { display: none !important; }
-            #main { padding: 0; }
-            .glass-card { border: none; }
-            body { background: white; color: black; }
-            th { color: black; border-bottom: 2px solid black; }
+            #sidebar, .btn, #doc-editor, .no-print { display: none !important; }
+            body { background: #fff; color: #000; }
+            .glass-card { border: none; padding: 0; }
+            #main-content { padding: 0; }
+            th { color: #000; border-bottom: 2px solid #000; }
         }
     </style>
 </head>
 <body>
 
-    <nav id="sidebar">
-        <div class="logo">NGI EXECUTIVE</div>
-        <div class="nav-link active" onclick="tab('ledger')">📊 Master Ledger</div>
-        <div class="nav-link" onclick="tab('meetings')">📅 Schedule Call</div>
-        <div class="nav-link" onclick="tab('polls')">🗳️ Create Poll</div>
-        <div class="nav-link" onclick="tab('comms')">📢 Broadcast</div>
-        <div style="flex:1"></div>
-        <div class="nav-link" style="color:var(--red)" onclick="firebase.auth().signOut()">🚪 Logout</div>
-    </nav>
+    <aside id="sidebar">
+        <div class="logo">NGI MASTER</div>
+        
+        <div class="nav-group">
+            <span class="nav-label">Finance</span>
+            <div class="nav-btn active" onclick="showTab('ledger')">📊 Master Ledger</div>
+            <div class="nav-btn" onclick="showTab('finance')">💰 Transaction Logs</div>
+            <div class="nav-btn" onclick="showTab('loans')">🏦 Loan Requests</div>
+        </div>
 
-    <main id="main">
+        <div class="nav-group">
+            <span class="nav-label">Management</span>
+            <div class="nav-btn" onclick="showTab('users')">👥 User Directory</div>
+            <div class="nav-btn" onclick="showTab('approvals')">🛡️ Account Approvals</div>
+            <div class="nav-btn" onclick="showTab('meetings')">📅 Meetings</div>
+        </div>
+
+        <div class="nav-group">
+            <span class="nav-label">Intelligence</span>
+            <div class="nav-btn" onclick="showTab('polls')">🗳️ Dynamic Polls</div>
+            <div class="nav-btn" onclick="showTab('comms')">📢 Broadcasts</div>
+            <div class="nav-btn" onclick="showTab('pings')">🔔 Security Pings</div>
+        </div>
+
+        <div style="flex:1"></div>
+        <div class="nav-btn" style="color:var(--red)" onclick="firebase.auth().signOut()">🚪 Logout</div>
+    </aside>
+
+    <main id="main-content">
+        <!-- 1. MASTER LEDGER -->
         <section id="ledger" class="section active">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h1>Weekly Contribution Ledger</h1>
-                <div>
-                    <button class="btn" style="background:var(--white)" onclick="window.print()">📥 Export PDF Report</button>
-                </div>
-            </div>
-            
+            <h1>Weekly Contribution Ledger 
+                <button class="btn btn-sm" style="background:#fff" onclick="window.print()">EXPORT PDF</button>
+            </h1>
             <div class="glass-card">
                 <div class="table-wrap">
-                    <table id="ledgerTable">
+                    <table>
                         <thead>
-                            <tr>
-                                <th>Member ID</th>
-                                <th>Full Name</th>
-                                <th>Week 1</th>
-                                <th>Week 2</th>
-                                <th>Week 3</th>
-                                <th>Week 4</th>
-                                <th>Month Total</th>
-                                <th>Arrears</th>
-                            </tr>
+                            <tr><th>NGI ID</th><th>Name</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total</th><th>Arrears</th></tr>
                         </thead>
                         <tbody id="ledgerBody"></tbody>
                     </table>
@@ -101,51 +120,122 @@
             </div>
         </section>
 
+        <!-- 2. USER DIRECTORY -->
+        <section id="users" class="section">
+            <h1>Active User Base</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>NGI ID</th><th>Name</th><th>Role</th><th>Status</th><th>Wallet</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="userBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. LOAN REQUESTS -->
+        <section id="loans" class="section">
+            <h1>Pending Loan Requests</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Member</th><th>Amount</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="loanBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ACCOUNT APPROVALS -->
+        <section id="approvals" class="section">
+            <h1>New Account Requests</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Name</th><th>Phone</th><th>Join Date</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="approvalBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. TRANSACTION LOGS -->
+        <section id="finance" class="section">
+            <h1>All Transaction Logs</h1>
+            <div class="glass-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>NGI ID</th><th>Amount</th><th>Type</th><th>Status</th><th>Timestamp</th></tr>
+                        </thead>
+                        <tbody id="financeBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MEETINGS -->
         <section id="meetings" class="section">
-            <h1>Schedule Executive Meeting</h1>
-            <div class="glass-card scheduler-form" style="max-width:600px;">
-                <div class="form-group">
-                    <label>Meeting Agenda</label>
-                    <input type="text" id="m-title" placeholder="e.g. Q2 Investment Strategy">
-                </div>
-                <div class="form-group">
-                    <label>Date & Time</label>
-                    <input type="datetime-local" id="m-date">
-                </div>
-                <div class="form-group">
-                    <label>Agora Channel Name</label>
-                    <input type="text" id="m-channel" value="ngi_main_room">
-                </div>
-                <button class="btn" onclick="scheduleMeeting()">🚀 Push to All Devices</button>
+            <h1>Meeting Scheduler</h1>
+            <div class="glass-card" style="max-width:500px">
+                <div class="form-group"><label>Agenda</label><input type="text" id="m-agenda"></div>
+                <div class="form-group"><label>Date/Time</label><input type="datetime-local" id="m-date"></div>
+                <div class="form-group"><label>Agora Channel</label><input type="text" id="m-channel" value="ngi_room"></div>
+                <button class="btn" onclick="scheduleMeeting()">CREATE MEETING</button>
             </div>
         </section>
 
+        <!-- 7. POLLS -->
         <section id="polls" class="section">
-            <h1>Dynamic Poll Architect</h1>
-            <div class="glass-card" style="max-width:600px;">
-                <div class="form-group">
-                    <label>The Question</label>
-                    <textarea id="p-question" rows="2" placeholder="Should we purchase land in Kitengela?"></textarea>
+            <h1>Dynamic Poll Creator</h1>
+            <div class="glass-card" style="max-width:500px">
+                <div class="form-group"><label>Question</label><textarea id="p-q"></textarea></div>
+                <div id="p-options-list">
+                    <input type="text" class="p-opt" placeholder="Option 1" style="margin-bottom:10px">
+                    <input type="text" class="p-opt" placeholder="Option 2" style="margin-bottom:10px">
                 </div>
-                <div id="p-options-container">
-                    <label>Choices</label>
-                    <input type="text" class="p-option" placeholder="Option 1" style="margin-bottom:10px;">
-                    <input type="text" class="p-option" placeholder="Option 2" style="margin-bottom:10px;">
-                </div>
-                <button class="btn btn-outline" onclick="addPollOption()">+ Add More Choices</button>
-                <button class="btn" style="width:100%; margin-top:20px;" onclick="launchPoll()">🔥 Launch Governance Poll</button>
+                <button class="btn btn-sm" style="background:#222; color:#fff" onclick="addPollOpt()">+ ADD OPTION</button>
+                <button class="btn" style="width:100%; margin-top:15px" onclick="launchPoll()">LAUNCH POLL</button>
             </div>
         </section>
 
+        <!-- 8. COMMS -->
         <section id="comms" class="section">
-            <h1>Executive Broadcast</h1>
-            <div class="glass-card" style="max-width:600px;">
-                <label>Message</label>
-                <textarea id="b-msg" rows="5" placeholder="Attention members: Monthly contributions are now due."></textarea>
-                <button class="btn" style="width:100%; margin-top:10px;" onclick="sendBroadcast()">Send Global Notification</button>
+            <h1>Broadcast & Chat</h1>
+            <div class="glass-card">
+                <label>System Broadcast Message</label>
+                <textarea id="b-msg" rows="3" placeholder="Type here..."></textarea>
+                <button class="btn" style="margin-top:10px" onclick="sendBroadcast()">SEND PUSH</button>
+            </div>
+            <div id="chat-stream" class="glass-card"></div>
+        </section>
+
+        <!-- 9. PINGS -->
+        <section id="pings" class="section">
+            <h1>Security Alert History</h1>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Sender</th><th>Target</th><th>Time</th></tr></thead>
+                    <tbody id="pingBody"></tbody>
+                </table>
             </div>
         </section>
     </main>
+
+    <!-- FLOATING EDITOR -->
+    <div id="doc-editor">
+        <h2 id="edit-title">Manual Override</h2>
+        <p id="edit-id" style="font-size: 10px; color: var(--gold); margin-bottom: 20px;"></p>
+        <div id="edit-fields"></div>
+        <button class="btn" onclick="saveDocument()" style="width:100%">SAVE TO FIREBASE</button>
+        <button class="btn" style="background:#222; color:#fff; width:100%; margin-top:10px" onclick="closeEditor()">CLOSE</button>
+    </div>
 
     <script>
         // 🚨 YOUR SECURE FIREBASE CONFIG 🚨
@@ -160,113 +250,137 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        function tab(id) {
+        let curCol = '', curId = '';
+
+        function showTab(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        /* ─── THE MASTER LEDGER ENGINE ─── */
-        async function loadLedger() {
-            const usersSnap = await db.collection("users").get();
+        /* --- REAL-TIME LISTENERS --- */
+
+        // 1. Ledger & User Directory
+        db.collection("users").onSnapshot(async snap => {
+            const uBody = document.getElementById('userBody');
+            const lBody = document.getElementById('ledgerBody');
+            const aBody = document.getElementById('approvalBody');
+            uBody.innerHTML = ''; lBody.innerHTML = ''; aBody.innerHTML = '';
+
             const transSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").get();
-            const tbody = document.getElementById('ledgerBody');
-            tbody.innerHTML = '';
 
-            usersSnap.forEach(uDoc => {
-                const user = uDoc.data();
-                const userId = uDoc.id;
+            snap.forEach(doc => {
+                const u = doc.data();
+                
+                // Pending Approvals
+                if(u.approvedByAdmin === false && !u.isBanned) {
+                    aBody.innerHTML += `<tr><td>${u.name}</td><td>${u.phone}</td><td>${new Date(u.joinDate).toLocaleDateString()}</td>
+                    <td><button class="btn btn-sm" onclick="approveUser('${doc.id}')">APPROVE</button></td></tr>`;
+                }
+
+                // Directory
+                uBody.innerHTML += `<tr><td style="color:var(--gold)">${u.ngiId || '---'}</td>
+                <td><b>${u.name}</b></td><td>${u.role}</td>
+                <td><span class="pill ${u.isBanned ? 'pill-red':'pill-green'}">${u.isBanned?'BANNED':'ACTIVE'}</span></td>
+                <td>KES ${u.walletBalance || 0}</td>
+                <td><button onclick="openEditor('users','${doc.id}')" style="color:var(--gold); background:none; border:none; cursor:pointer">EDIT</button></td></tr>`;
+
+                // Ledger Math
                 let w1=0, w2=0, w3=0, w4=0;
-
                 transSnap.docs.forEach(tDoc => {
                     const t = tDoc.data();
-                    if(t.uid === userId) {
-                        const day = new Date(t.timestamp).getDate();
-                        if(day <= 7) w1 += t.amount;
-                        else if(day <= 14) w2 += t.amount;
-                        else if(day <= 21) w3 += t.amount;
-                        else w4 += t.amount;
+                    if(t.uid === doc.id) {
+                        const d = new Date(t.timestamp).getDate();
+                        if(d <= 7) w1 += t.amount; else if(d <= 14) w2 += t.amount; else if(d <= 21) w3 += t.amount; else w4 += t.amount;
                     }
                 });
-
                 const total = w1+w2+w3+w4;
-                const fmt = (amt) => amt >= 125 ? `<span class="status-paid">${amt}/=</span>` : `<span class="status-due">${amt}/=</span>`;
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="color:var(--gold); font-weight:bold">${user.ngiId || 'NEW'}</td>
-                        <td><b>${user.name}</b></td>
-                        <td>${fmt(w1)}</td>
-                        <td>${fmt(w2)}</td>
-                        <td>${fmt(w3)}</td>
-                        <td>${fmt(w4)}</td>
-                        <td style="background:#1a1a1a"><b>${total}/=</b></td>
-                        <td><span style="color:var(--red)">${(500 - total) > 0 ? (500 - total) + '/=' : 'CLEARED'}</span></td>
-                    </tr>
-                `;
+                lBody.innerHTML += `<tr><td>${u.ngiId}</td><td>${u.name}</td><td>${w1}</td><td>${w2}</td><td>${w3}</td><td>${w4}</td><td><b>${total}</b></td><td style="color:var(--red)">${500-total}</td></tr>`;
             });
-        }
-        loadLedger();
+        });
 
-        /* ─── MEETING SCHEDULER ─── */
-        async function scheduleMeeting() {
-            const title = document.getElementById('m-title').value;
-            const date = new Date(document.getElementById('m-date').value).getTime();
-            const channel = document.getElementById('m-channel').value;
-
-            if(!title || !date) return alert("Fill all details");
-
-            await db.collection("meetings").add({
-                title: title,
-                date: date,
-                channelName: channel,
-                status: "Scheduled",
-                timestamp: Date.now()
+        // 2. Loans
+        db.collection("loans").where("status","==","Pending").onSnapshot(snap => {
+            const body = document.getElementById('loanBody');
+            body.innerHTML = '';
+            snap.forEach(doc => {
+                const l = doc.data();
+                body.innerHTML += `<tr><td>${l.name} (${l.ngiId})</td><td>KES ${l.amount}</td><td>${l.reason}</td><td>PENDING</td>
+                <td><button class="btn btn-sm" onclick="updateLoan('${doc.id}','Approved')">APPROVE</button></td></tr>`;
             });
-            alert("Meeting Broadcasted Successfully!");
-        }
+        });
 
-        /* ─── DYNAMIC POLL ARCHITECT ─── */
-        function addPollOption() {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'p-option';
-            input.placeholder = `Option ${document.querySelectorAll('.p-option').length + 1}`;
-            input.style.marginBottom = '10px';
-            document.getElementById('p-options-container').appendChild(input);
-        }
-
-        async function launchPoll() {
-            const question = document.getElementById('p-question').value;
-            const optionInputs = document.querySelectorAll('.p-option');
-            let choices = [];
-
-            optionInputs.forEach(input => {
-                if(input.value.trim() !== "") {
-                    choices.push({ id: Math.random().toString(36).substr(2, 9), text: input.value, votes: [] });
-                }
+        // 3. Finance
+        db.collection("wallet_transactions").orderBy("timestamp","desc").limit(30).onSnapshot(snap => {
+            const body = document.getElementById('financeBody');
+            body.innerHTML = '';
+            snap.forEach(doc => {
+                const f = doc.data();
+                body.innerHTML += `<tr><td style="font-size:9px">${doc.id}</td><td>${f.ngiId}</td><td>${f.amount}</td><td>${f.type}</td><td>${f.status}</td><td>${new Date(f.timestamp).toLocaleString()}</td></tr>`;
             });
+        });
 
-            if(!question || choices.length < 2) return alert("Needs question and 2 options");
+        /* --- ACTIONS --- */
 
-            await db.collection("polls").add({
-                question: question,
-                choices: choices,
-                status: "Active",
-                createdAt: Date.now()
-            });
-            alert("Poll Published Live!");
-        }
+        async function approveUser(id) { await db.collection("users").doc(id).update({ approvedByAdmin: true, isActive: true }); alert("Approved!"); }
+        
+        async function updateLoan(id, status) { await db.collection("loans").doc(id).update({ status: status }); alert("Loan "+status); }
 
         async function sendBroadcast() {
             const msg = document.getElementById('b-msg').value;
-            await db.collection("announcements").add({
-                message: msg,
-                timestamp: Date.now(),
-                title: "Executive Update"
-            });
+            await db.collection("announcements").add({ title: "Admin Broadcast", message: msg, timestamp: Date.now() });
             alert("Broadcast Fired!");
+        }
+
+        function addPollOpt() {
+            const input = document.createElement('input');
+            input.type = 'text'; input.className = 'p-opt'; input.placeholder = 'New Option'; input.style.marginBottom = '10px';
+            document.getElementById('p-options-list').appendChild(input);
+        }
+
+        async function launchPoll() {
+            const q = document.getElementById('p-q').value;
+            const opts = []; document.querySelectorAll('.p-opt').forEach(i => { if(i.value) opts.push({id:Math.random().toString(36).substr(2,5), text:i.value, votes:[]}) });
+            await db.collection("polls").add({ question: q, choices: opts, status: "Active", createdAt: Date.now() });
+            alert("Poll Live!");
+        }
+
+        async function scheduleMeeting() {
+            const ag = document.getElementById('m-agenda').value;
+            const dt = new Date(document.getElementById('m-date').value).getTime();
+            await db.collection("meetings").add({ agenda: ag, date: dt, status: "Scheduled", agoraChannel: document.getElementById('m-channel').value });
+            alert("Meeting Scheduled!");
+        }
+
+        /* --- GHOST EDITOR --- */
+        async function openEditor(col, id) {
+            curCol = col; curId = id;
+            const doc = await db.collection(col).doc(id).get();
+            const data = doc.data();
+            document.getElementById('edit-id').innerText = id;
+            const container = document.getElementById('edit-fields');
+            container.innerHTML = '';
+            for (const key in data) {
+                container.innerHTML += `<div class="form-group"><label>${key}</label><input type="text" id="edit-${key}" value="${data[key]}"></div>`;
+            }
+            document.getElementById('doc-editor').classList.add('open');
+        }
+
+        function closeEditor() { document.getElementById('doc-editor').classList.remove('open'); }
+
+        async function saveDocument() {
+            const docRef = db.collection(curCol).doc(curId);
+            const doc = await docRef.get();
+            const updates = {};
+            for (const key in doc.data()) {
+                let val = document.getElementById(`edit-${key}`).value;
+                if(val === 'true') val = true; else if(val === 'false') val = false;
+                else if(!isNaN(val) && val !== '') val = Number(val);
+                updates[key] = val;
+            }
+            await docRef.update(updates);
+            alert("Firebase Updated!"); closeEditor();
         }
     </script>
 </body>
