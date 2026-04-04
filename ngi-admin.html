@@ -1,427 +1,1055 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGI Command Center | Ultimate Control v5.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NGI Command Center v6.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --bg: #050505; --surface: #111; --border: #222;
-            --gold: #D4AF37; --white: #FFFFFF;
-            --red: #FF4B2B; --green: #00E676; --blue: #2979FF;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
-        body { background: var(--bg); color: var(--white); display: flex; height: 100vh; overflow: hidden; }
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-        /* AUTH SCREEN */
-        #auth-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .auth-card { background: var(--surface); padding: 40px; border-radius: 20px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
-        
-        /* SIDEBAR */
-        #sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
-        .logo { font-weight: 800; color: var(--gold); margin-bottom: 30px; text-align: center; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .nav-btn { padding: 12px 15px; color: #888; cursor: pointer; border-radius: 8px; margin-bottom: 5px; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-        .nav-btn:hover { background: #1a1a1a; color: #fff; }
-        .nav-btn.active { background: var(--gold); color: #000; }
+<style>
+:root {
+  --bg: #06070A;
+  --surface: #0D0F14;
+  --surface2: #13161D;
+  --border: rgba(255,255,255,0.07);
+  --border-bright: rgba(212,175,55,0.4);
+  --gold: #D4AF37;
+  --gold-dim: rgba(212,175,55,0.15);
+  --white: #F0F2F5;
+  --muted: #5A6070;
+  --red: #FF4B2B;
+  --red-dim: rgba(255,75,43,0.12);
+  --green: #00E676;
+  --green-dim: rgba(0,230,118,0.12);
+  --blue: #4A90E2;
+  --sidebar-w: 260px;
+  --radius: 12px;
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
 
-        /* MAIN CONTENT */
-        #main-content { flex: 1; padding: 35px; overflow-y: auto; display: none; }
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--white);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
 
-        /* DATA CARDS & TABLES */
-        .glass-card { background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
-        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { text-align: left; padding: 15px; color: var(--gold); font-size: 11px; background: #000; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 13px; }
-        .edit-cell { cursor: pointer; color: var(--blue); text-decoration: underline; }
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 99px; }
 
-        /* INPUTS */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 10px; color: var(--gold); margin-bottom: 5px; font-weight: 700; }
-        input, textarea, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; outline: none; }
+/* ─── AUTH ─── */
+#auth-overlay {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%; max-width: 420px;
+  text-align: center;
+  animation: slideUp .4s ease;
+}
+.auth-logo {
+  font-size: 11px; letter-spacing: 5px; color: var(--gold);
+  font-weight: 700; margin-bottom: 6px; text-transform: uppercase;
+}
+.auth-title { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.auth-sub { font-size: 11px; color: var(--muted); margin-bottom: 32px; }
+.auth-card input {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; color: var(--white);
+  font-family: var(--font); font-size: 13px; margin-bottom: 12px;
+  transition: border-color .2s;
+}
+.auth-card input:focus { outline: none; border-color: var(--gold); }
+.btn-gold {
+  width: 100%; background: var(--gold); color: #000;
+  border: none; border-radius: 10px; padding: 14px;
+  font-family: var(--font); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: .2s; margin-bottom: 10px; letter-spacing: .5px;
+}
+.btn-gold:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.btn-outline {
+  width: 100%; background: transparent; color: var(--gold);
+  border: 1px solid var(--border-bright); border-radius: 10px; padding: 14px;
+  font-family: var(--font); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: .2s;
+}
+.btn-outline:hover { background: var(--gold-dim); }
+#auth-error { color: var(--red); font-size: 11px; margin-top: 14px; min-height: 16px; }
 
-        /* BUTTONS */
-        .btn { background: var(--gold); color: #000; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
-        .btn-red { background: var(--red); color: #fff; }
-        .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
-        .btn-sm { padding: 6px 12px; font-size: 11px; }
+/* ─── LAYOUT ─── */
+#sidebar {
+  width: var(--sidebar-w); min-width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: none; flex-direction: column;
+  padding: 24px 14px;
+  overflow-y: auto; overflow-x: hidden;
+  z-index: 100;
+  transition: transform .3s ease;
+}
+#sidebar.mobile-open { transform: translateX(0) !important; }
+.logo-block { padding: 0 8px 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.logo-tag { font-size: 9px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; }
+.logo-title { font-size: 20px; font-weight: 700; color: var(--white); }
+.logo-dot { color: var(--gold); }
 
-        /* MODALS */
-        #doc-editor { position: fixed; right: -500px; top: 0; width: 450px; height: 100vh; background: var(--surface); border-left: 2px solid var(--gold); padding: 30px; transition: 0.4s; z-index: 1000; overflow-y: auto; }
-        #doc-editor.open { right: 0; }
+.nav-section { font-size: 9px; letter-spacing: 3px; color: var(--muted); padding: 0 10px; margin-bottom: 8px; text-transform: uppercase; }
+.nav-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 12px; border-radius: 9px; margin-bottom: 2px;
+  color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 500;
+  transition: .2s; white-space: nowrap;
+}
+.nav-btn .icon { font-size: 15px; width: 20px; text-align: center; }
+.nav-btn:hover { background: var(--surface2); color: var(--white); }
+.nav-btn.active { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-bright); }
+.nav-spacer { flex: 1; }
+.nav-logout {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 12px; border-radius: 9px;
+  color: var(--red); cursor: pointer; font-size: 13px; font-weight: 600;
+  transition: .2s;
+}
+.nav-logout:hover { background: var(--red-dim); }
 
-        .pill { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; }
-        .pill-green { background: rgba(0, 230, 118, 0.15); color: var(--green); }
-        .pill-red { background: rgba(255, 75, 43, 0.15); color: var(--red); }
-    </style>
+/* ─── MOBILE HEADER ─── */
+#mobile-header {
+  display: none; position: fixed; top: 0; left: 0; right: 0; height: 56px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  z-index: 200; align-items: center; padding: 0 16px; gap: 14px;
+}
+#hamburger {
+  background: none; border: none; color: var(--gold); font-size: 22px; cursor: pointer;
+}
+#mobile-title { font-weight: 700; font-size: 15px; color: var(--white); }
+#mobile-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  z-index: 99; backdrop-filter: blur(2px);
+}
+
+/* ─── MAIN ─── */
+#main-content {
+  flex: 1; overflow-y: auto; display: none;
+  padding: 32px;
+}
+
+/* ─── SECTIONS ─── */
+.section { display: none; animation: fadeIn .3s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+.page-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.page-title { font-size: 22px; font-weight: 700; }
+.page-subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ─── GLASS CARD ─── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; margin-bottom: 20px;
+}
+.card-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+}
+
+/* ─── STAT CARDS ─── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 14px; margin-bottom: 22px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+}
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+.stat-value { font-size: 26px; font-weight: 700; color: var(--white); margin-top: 4px; font-family: var(--mono); }
+.stat-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+/* ─── TABLE ─── */
+.table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-top: 14px; }
+table { width: 100%; border-collapse: collapse; min-width: 600px; }
+thead { background: rgba(0,0,0,.5); }
+th { padding: 12px 14px; text-align: left; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+td { padding: 13px 14px; border-bottom: 1px solid var(--border); font-size: 12px; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,.02); }
+
+.edit-cell { color: var(--gold); cursor: pointer; font-family: var(--mono); }
+.edit-cell:hover { text-decoration: underline; }
+
+/* ─── PILLS ─── */
+.pill { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+.pill-green { background: var(--green-dim); color: var(--green); }
+.pill-red { background: var(--red-dim); color: var(--red); }
+.pill-gold { background: var(--gold-dim); color: var(--gold); }
+.pill-blue { background: rgba(74,144,226,.12); color: var(--blue); }
+
+/* ─── FORM ─── */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 9px; padding: 12px 14px; color: var(--white);
+  font-family: var(--font); font-size: 13px; transition: border-color .2s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus { outline: none; border-color: var(--gold); }
+.form-group textarea { resize: vertical; min-height: 90px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.btn-action {
+  background: var(--gold); color: #000; border: none; border-radius: 9px;
+  padding: 12px 20px; font-family: var(--font); font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: .2s; letter-spacing: .5px; white-space: nowrap;
+}
+.btn-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.btn-action.red { background: var(--red); color: #fff; }
+.btn-action.ghost { background: transparent; border: 1px solid var(--border-bright); color: var(--gold); }
+.btn-action.ghost:hover { background: var(--gold-dim); }
+.btn-action.sm { padding: 7px 14px; font-size: 11px; }
+.btn-action.full { width: 100%; }
+
+/* ─── SLIDE PANEL (Ghost Editor) ─── */
+#doc-editor {
+  position: fixed; right: -520px; top: 0; width: 460px; height: 100vh;
+  background: var(--surface); border-left: 1px solid var(--border-bright);
+  padding: 28px; transition: right .35s cubic-bezier(.4,0,.2,1);
+  z-index: 500; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
+}
+#doc-editor.open { right: 0; }
+#ed-panel-title { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+#ed-panel-id { font-size: 10px; color: var(--muted); font-family: var(--mono); margin-bottom: 20px; }
+#ed-fields { flex: 1; }
+.ed-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.ed-close { margin-top: 10px; }
+
+/* ─── LOAN CARD ─── */
+.loan-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.loan-info { flex: 1; min-width: 200px; }
+.loan-name { font-weight: 600; font-size: 14px; }
+.loan-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.loan-amount { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--gold); }
+
+/* ─── POLL ─── */
+.poll-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+.poll-option { background: var(--bg); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+.poll-bar-wrap { background: var(--border); border-radius: 4px; height: 4px; margin-top: 8px; }
+.poll-bar { background: var(--gold); height: 4px; border-radius: 4px; transition: width .6s ease; }
+.poll-voters { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+/* ─── MEETING ─── */
+.meeting-row td:first-child { font-weight: 600; }
+
+/* ─── NOTIFICATION ─── */
+#toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--surface); border: 1px solid var(--border-bright);
+  border-radius: 10px; padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 500;
+  opacity: 0; transform: translateY(10px);
+  transition: .3s; z-index: 9999; max-width: 320px;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: none; }
+#toast .t-icon { font-size: 18px; }
+
+/* ─── LOADING ─── */
+.skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; height: 14px; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  #mobile-header { display: flex; }
+  #main-content { padding: 16px; padding-top: 72px; }
+  #sidebar {
+    display: flex !important;
+    position: fixed; left: 0; top: 0; bottom: 0;
+    transform: translateX(-100%); z-index: 300;
+  }
+  #mobile-overlay { display: block; }
+  #doc-editor { width: 100%; right: -100%; }
+  #doc-editor.open { right: 0; }
+  .form-row { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  table { min-width: 500px; }
+  th, td { padding: 10px 10px; }
+  .page-title { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .auth-card { padding: 28px 22px; }
+  .auth-title { font-size: 22px; }
+}
+
+/* ─── LEDGER ARREARS HIGHLIGHT ─── */
+.arrear-high { color: var(--red); font-weight: 700; font-family: var(--mono); }
+.arrear-zero { color: var(--green); font-family: var(--mono); }
+.contribution-val { font-family: var(--mono); }
+</style>
 </head>
 <body>
 
-    <!-- 1. AUTHENTICATION GATE -->
-    <div id="auth-overlay">
-        <div class="auth-card">
-            <h1 style="color:var(--gold); margin-bottom:10px;">NGI COMMAND</h1>
-            <p style="color:#555; font-size: 12px; margin-bottom: 30px;">Executive Access Only</p>
-            <input type="email" id="auth-email" placeholder="Admin Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-password" placeholder="Password" style="margin-bottom:20px;">
-            <button class="btn" style="width:100%; margin-bottom:10px;" onclick="loginEmail()">Login to Vault</button>
-            <button class="btn btn-outline" style="width:100%;" onclick="loginGoogle()">Sign-in with Google</button>
-            <p id="auth-error" style="color:var(--red); font-size:11px; margin-top:15px;"></p>
-        </div>
+<!-- ══════════════════ AUTH GATE ══════════════════ -->
+<div id="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">NGI System</div>
+    <div class="auth-title">Command Center</div>
+    <div class="auth-sub">Executive Access Only · v6.0</div>
+    <input type="email" id="auth-email" placeholder="Admin Email" autocomplete="email">
+    <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password">
+    <button class="btn-gold" onclick="loginEmail()">🔐 Login to Vault</button>
+    <button class="btn-outline" onclick="loginGoogle()">⊕ &nbsp;Continue with Google</button>
+    <div id="auth-error"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ MOBILE HEADER ══════════════════ -->
+<div id="mobile-header">
+  <button id="hamburger" onclick="toggleMobileNav()">☰</button>
+  <div id="mobile-title">NGI Command</div>
+</div>
+<div id="mobile-overlay" onclick="closeMobileNav()" style="display:none;pointer-events:none;"></div>
+
+<!-- ══════════════════ SIDEBAR ══════════════════ -->
+<aside id="sidebar">
+  <div class="logo-block">
+    <div class="logo-tag">Executive Vault</div>
+    <div class="logo-title">NGI<span class="logo-dot">.</span>HQ</div>
+  </div>
+
+  <div class="nav-section">Modules</div>
+  <div class="nav-btn active" data-tab="ledger" onclick="showTab('ledger',this)"><span class="icon">📊</span>Master Ledger</div>
+  <div class="nav-btn" data-tab="users" onclick="showTab('users',this)"><span class="icon">👥</span>User Directory</div>
+  <div class="nav-btn" data-tab="loans" onclick="showTab('loans',this)"><span class="icon">🏦</span>Loan Requests</div>
+  <div class="nav-btn" data-tab="polls" onclick="showTab('polls',this)"><span class="icon">🗳️</span>Poll Intelligence</div>
+  <div class="nav-btn" data-tab="meetings" onclick="showTab('meetings',this)"><span class="icon">📅</span>Meeting Hub</div>
+  <div class="nav-btn" data-tab="finance" onclick="showTab('finance',this)"><span class="icon">💰</span>Transaction Log</div>
+  <div class="nav-btn" data-tab="comms" onclick="showTab('comms',this)"><span class="icon">📢</span>Broadcasts</div>
+
+  <div class="nav-spacer"></div>
+  <div class="nav-logout" onclick="handleLogout()"><span class="icon">🚪</span>Logout</div>
+</aside>
+
+<!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+<main id="main-content">
+
+  <!-- ── LEDGER ── -->
+  <section id="ledger" class="section active">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Master Ledger</div>
+        <div class="page-subtitle">Live contribution tracking · click W1–W4 to manually override</div>
+      </div>
+      <button class="btn-action ghost sm" onclick="window.print()">⬇ Export PDF</button>
     </div>
-
-    <!-- 2. NAVIGATION SIDEBAR -->
-    <aside id="sidebar">
-        <div class="logo">NGI | SOVEREIGN</div>
-        <div class="nav-btn active" onclick="showTab('ledger')">📊 Master Ledger</div>
-        <div class="nav-btn" onclick="showTab('users')">👥 User Database</div>
-        <div class="nav-btn" onclick="showTab('loans')">🏦 Loan Requests</div>
-        <div class="nav-btn" onclick="showTab('polls')">🗳️ Poll Intelligence</div>
-        <div class="nav-btn" onclick="showTab('meetings')">📅 Meeting Hub</div>
-        <div class="nav-btn" onclick="showTab('finance')">💰 Transaction Logs</div>
-        <div class="nav-btn" onclick="showTab('comms')">📢 Global Comms</div>
-        <div style="flex:1"></div>
-        <div class="nav-btn" style="color:var(--red)" onclick="handleLogout()">🚪 Logout System</div>
-    </aside>
-
-    <!-- 3. MAIN DASHBOARD AREA -->
-    <main id="main-content">
-
-        <!-- MASTER LEDGER (Editable) -->
-        <section id="ledger" class="section active">
-            <h1>Contribution Ledger <button class="btn btn-sm btn-outline" onclick="window.print()">Export PDF</button></h1>
-            <div class="glass-card">
-                <p style="color:#666; font-size: 11px; margin-bottom: 10px;">Note: Click on W1-W4 values to manually override contribution amounts.</p>
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>NGI ID</th><th>Name</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total</th><th>Arrears</th></tr></thead>
-                        <tbody id="ledgerBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- USER DATABASE (With Edit/Delete) -->
-        <section id="users" class="section">
-            <h1>Executive User Directory</h1>
-            <div class="glass-card">
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>NGI ID</th><th>Name</th><th>Role</th><th>Status</th><th>Wallet</th><th>Actions</th></tr></thead>
-                        <tbody id="userBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- LOAN MANAGEMENT -->
-        <section id="loans" class="section">
-            <h1>Loan Requests Intelligence</h1>
-            <div class="glass-card">
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Applicant</th><th>Amount</th><th>Reason</th><th>Date</th><th>Actions</th></tr></thead>
-                        <tbody id="loanBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- POLL INTELLIGENCE -->
-        <section id="polls" class="section">
-            <h1>Poll Architect & Voter Log</h1>
-            <div class="glass-card" style="max-width: 600px;">
-                <label>Question</label>
-                <input type="text" id="p-q" style="margin-bottom:15px;">
-                <div id="p-options">
-                    <input type="text" class="p-opt" placeholder="Option 1" style="margin-bottom:5px;">
-                    <input type="text" class="p-opt" placeholder="Option 2" style="margin-bottom:10px;">
-                </div>
-                <button class="btn btn-sm btn-outline" onclick="addPollOpt()">+ Add Option</button>
-                <button class="btn" style="width:100%; margin-top:15px;" onclick="launchPoll()">Launch Live Poll</button>
-            </div>
-            <div id="poll-results-container"></div>
-        </section>
-
-        <!-- MEETING HUB -->
-        <section id="meetings" class="section">
-            <h1>Schedule Audio Meeting</h1>
-            <div class="glass-card" style="max-width: 500px;">
-                <div class="form-group"><label>Agenda</label><input type="text" id="m-agenda" placeholder="e.g. Welfare Review"></div>
-                <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="m-date"></div>
-                <div class="form-group"><label>Agora Channel</label><input type="text" id="m-channel" value="ngi_hq"></div>
-                <button class="btn" style="width:100%" onclick="scheduleMeeting()">Set Meeting & Notify All</button>
-            </div>
-            <div class="glass-card">
-                <h3>Meeting History</h3>
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Agenda</th><th>Date</th><th>Status</th><th>Agora</th><th>Actions</th></tr></thead>
-                        <tbody id="meetingBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TRANSACTIONS -->
-        <section id="finance" class="section">
-            <h1>Transaction Master Log</h1>
-            <div class="glass-card">
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Ref ID</th><th>NGI ID</th><th>Amount</th><th>Type</th><th>Time</th><th>Actions</th></tr></thead>
-                        <tbody id="financeBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- COMMS -->
-        <section id="comms" class="section">
-            <h1>System-Wide Broadcast</h1>
-            <div class="glass-card" style="max-width: 600px;">
-                <label>Announcement Text</label>
-                <textarea id="b-msg" rows="5"></textarea>
-                <button class="btn" style="width:100%; margin-top:15px;" onclick="sendBroadcast()">🚀 FIRE GLOBAL PUSH</button>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FLOATING GHOST EDITOR -->
-    <div id="doc-editor">
-        <h2 id="ed-title" style="color:var(--gold)">Ghost Edit Mode</h2>
-        <p id="ed-id" style="font-size:10px; color:#555; margin-bottom:20px;"></p>
-        <div id="ed-fields"></div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn" onclick="saveDoc()" style="flex:1">Save Changes</button>
-            <button class="btn btn-red" onclick="deleteDoc()" style="flex:1">Delete</button>
-        </div>
-        <button class="btn btn-outline" style="width:100%; margin-top:10px;" onclick="closeEditor()">Cancel</button>
+    <div class="stat-grid" id="ledger-stats">
+      <div class="stat-card"><div class="stat-label">Total Members</div><div class="stat-value" id="stat-members">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Collected</div><div class="stat-value" id="stat-collected">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Arrears</div><div class="stat-value" id="stat-arrears" style="color:var(--red)">—</div></div>
+      <div class="stat-card"><div class="stat-label">Collection Rate</div><div class="stat-value" id="stat-rate">—</div></div>
     </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>NGI ID</th><th>Member</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total</th><th>Arrears</th></tr></thead>
+          <tbody id="ledgerBody"><tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px">Loading ledger...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        // 🚨 CONFIGURATION 🚨
-        const firebaseConfig = {
-            apiKey: "AIzaSyCMJdzsgYU5KgJ0T-7JTKJTqnpvEaFB2Zs",
-            authDomain: "n-g-i-761b1.firebaseapp.com",
-            projectId: "n-g-i-761b1",
-            storageBucket: "n-g-i-761b1.firebasestorage.app",
-            messagingSenderId: "375248351958",
-            appId: "1:375248351958:web:9b45197e1a1dadeaaa0f77"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+  <!-- ── USERS ── -->
+  <section id="users" class="section">
+    <div class="page-header">
+      <div><div class="page-title">User Directory</div><div class="page-subtitle">Manage member accounts and roles</div></div>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>NGI ID</th><th>Name</th><th>Role</th><th>Status</th><th>Wallet (KES)</th><th>Actions</th></tr></thead>
+          <tbody id="userBody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">Loading members...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-        let curCol = '', curId = '', edData = {};
+  <!-- ── LOANS ── -->
+  <section id="loans" class="section">
+    <div class="page-header">
+      <div><div class="page-title">Loan Requests</div><div class="page-subtitle">Review and approve member loan applications</div></div>
+    </div>
+    <div id="loanContainer"><p style="color:var(--muted);padding:20px">Loading loan requests...</p></div>
+  </section>
 
-        /* --- AUTH ENGINE --- */
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                db.collection("users").doc(user.uid).get().then(doc => {
-                    const r = doc.data().role;
-                    if (r === "Admin" || r === "Secretary") {
-                        document.getElementById('auth-overlay').style.display = 'none';
-                        document.getElementById('sidebar').style.display = 'flex';
-                        document.getElementById('main-content').style.display = 'block';
-                        runVaultListeners();
-                    } else { auth.signOut(); alert("Access Denied."); }
-                });
-            } else {
-                document.getElementById('auth-overlay').style.display = 'flex';
-            }
-        });
+  <!-- ── POLLS ── -->
+  <section id="polls" class="section">
+    <div class="page-header"><div><div class="page-title">Poll Intelligence</div><div class="page-subtitle">Create and monitor live polls</div></div></div>
+    <div class="card">
+      <div class="card-title">New Poll</div>
+      <div class="form-group"><label>Question</label><input type="text" id="p-q" placeholder="Enter poll question..."></div>
+      <div id="p-options">
+        <div class="form-group"><label>Option 1</label><input type="text" class="p-opt" placeholder="e.g. Yes"></div>
+        <div class="form-group"><label>Option 2</label><input type="text" class="p-opt" placeholder="e.g. No"></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-action ghost sm" onclick="addPollOpt()">+ Add Option</button>
+        <button class="btn-action" onclick="launchPoll()">🚀 Launch Poll</button>
+      </div>
+    </div>
+    <div id="poll-results-container"></div>
+  </section>
 
-        function loginEmail() { auth.signInWithEmailAndPassword(document.getElementById('auth-email').value, document.getElementById('auth-password').value).catch(e => alert(e.message)); }
-        function loginGoogle() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message)); }
-        function handleLogout() { auth.signOut(); window.location.reload(); }
+  <!-- ── MEETINGS ── -->
+  <section id="meetings" class="section">
+    <div class="page-header"><div><div class="page-title">Meeting Hub</div><div class="page-subtitle">Schedule and manage group meetings</div></div></div>
+    <div class="card">
+      <div class="card-title">Schedule New Meeting</div>
+      <div class="form-row">
+        <div class="form-group"><label>Meeting Agenda</label><input type="text" id="m-agenda" placeholder="e.g. Monthly Welfare Review"></div>
+        <div class="form-group"><label>Agora Channel</label><input type="text" id="m-channel" value="ngi_hq" placeholder="ngi_hq"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="m-date" min="">
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <input type="time" id="m-time" placeholder="HH:MM">
+        </div>
+      </div>
+      <button class="btn-action full" onclick="scheduleMeeting()">📅 Set Meeting & Notify All</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Meeting History</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Agenda</th><th>Date</th><th>Time</th><th>Channel</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="meetingBody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No meetings yet.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-        function showTab(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            event.currentTarget.classList.add('active');
-            closeEditor();
+  <!-- ── FINANCE ── -->
+  <section id="finance" class="section">
+    <div class="page-header"><div><div class="page-title">Transaction Log</div><div class="page-subtitle">Full audit trail · last 50 entries</div></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ref</th><th>NGI ID</th><th>Amount</th><th>Type</th><th>Description</th><th>Time</th><th></th></tr></thead>
+          <tbody id="financeBody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">Loading transactions...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMMS ── -->
+  <section id="comms" class="section">
+    <div class="page-header"><div><div class="page-title">Global Broadcast</div><div class="page-subtitle">Push announcements to all members</div></div></div>
+    <div class="card" style="max-width:640px">
+      <div class="card-title">New Broadcast</div>
+      <div class="form-group"><label>Title</label><input type="text" id="b-title" placeholder="Announcement title..."></div>
+      <div class="form-group"><label>Message</label><textarea id="b-msg" placeholder="Type your message here..."></textarea></div>
+      <button class="btn-action full" onclick="sendBroadcast()">📡 Fire Global Push</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Broadcast History</div>
+      <div id="broadcastHistory"><p style="color:var(--muted);font-size:12px">Loading...</p></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════ GHOST EDITOR PANEL ══════════════════ -->
+<div id="doc-editor">
+  <div id="ed-panel-title">Edit Document</div>
+  <div id="ed-panel-id"></div>
+  <div id="ed-fields"></div>
+  <div class="ed-actions">
+    <button class="btn-action full" onclick="saveDoc()">💾 Save Changes</button>
+    <button class="btn-action red full" onclick="deleteDoc()">🗑 Delete</button>
+  </div>
+  <button class="btn-action ghost full ed-close" onclick="closeEditor()">✕ Cancel</button>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span class="t-icon" id="toast-icon">✓</span><span id="toast-msg">Done</span></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   FIREBASE CONFIG
+═══════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCMJdzsgYU5KgJ0T-7JTKJTqnpvEaFB2Zs",
+  authDomain: "n-g-i-761b1.firebaseapp.com",
+  projectId: "n-g-i-761b1",
+  storageBucket: "n-g-i-761b1.firebasestorage.app",
+  messagingSenderId: "375248351958",
+  appId: "1:375248351958:web:9b45197e1a1dadeaaa0f77"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* ═══════════════════════════════════════════
+   GLOBALS
+═══════════════════════════════════════════ */
+let curCol = '', curId = '', edData = {};
+let activeListeners = [];  // Store unsubscribe functions
+
+/* ═══════════════════════════════════════════
+   TOAST HELPER
+═══════════════════════════════════════════ */
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  const icons = { ok:'✅', err:'❌', info:'ℹ️' };
+  document.getElementById('toast-icon').textContent = icons[type] || '✅';
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ═══════════════════════════════════════════
+   AUTH ENGINE
+═══════════════════════════════════════════ */
+auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("users").doc(user.uid).get().then(doc => {
+      if (!doc.exists) { auth.signOut(); setError("User record not found."); return; }
+      const role = doc.data().role;
+      if (role === "Admin" || role === "Secretary") {
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('sidebar').style.display = 'flex';
+        document.getElementById('main-content').style.display = 'block';
+        setMinDate();
+        runVaultListeners();
+      } else {
+        auth.signOut();
+        setError("Access denied. Admin or Secretary role required.");
+      }
+    }).catch(e => setError("Error checking permissions: " + e.message));
+  } else {
+    document.getElementById('auth-overlay').style.display = 'flex';
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('main-content').style.display = 'none';
+  }
+});
+
+function setError(msg) { document.getElementById('auth-error').textContent = msg; }
+
+function loginEmail() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass  = document.getElementById('auth-password').value;
+  if (!email || !pass) { setError("Please enter email and password."); return; }
+  setError('');
+  auth.signInWithEmailAndPassword(email, pass)
+      .catch(e => setError(e.message));
+}
+
+function loginGoogle() {
+  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .catch(e => setError(e.message));
+}
+
+function handleLogout() {
+  if (!confirm("Logout of NGI Command?")) return;
+  activeListeners.forEach(fn => fn());
+  activeListeners = [];
+  auth.signOut();
+}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('mobile-title').textContent = el ? el.textContent.trim() : 'NGI Command';
+  closeEditor();
+  closeMobileNav();
+}
+
+function toggleMobileNav() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('mobile-overlay');
+  const open = sb.classList.toggle('mobile-open');
+  ov.style.display = open ? 'block' : 'none';
+  ov.style.pointerEvents = open ? 'auto' : 'none';
+}
+function closeMobileNav() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  const ov = document.getElementById('mobile-overlay');
+  ov.style.display = 'none'; ov.style.pointerEvents = 'none';
+}
+
+/* ═══════════════════════════════════════════
+   DATE HELPERS
+═══════════════════════════════════════════ */
+function setMinDate() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('m-date').min = today;
+}
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-KE', { day:'2-digit', month:'short', year:'numeric' });
+}
+function formatTime(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  return d.toLocaleTimeString('en-KE', { hour:'2-digit', minute:'2-digit', hour12:true });
+}
+function formatDateTime(ts) { return `${formatDate(ts)} · ${formatTime(ts)}`; }
+
+function getWeekOfMonth(date) {
+  const d = date instanceof Date ? date : new Date(date);
+  const day = d.getDate();
+  if (day <= 7) return 1;
+  if (day <= 14) return 2;
+  if (day <= 21) return 3;
+  return 4;
+}
+
+/* ═══════════════════════════════════════════
+   VAULT LISTENERS
+═══════════════════════════════════════════ */
+function runVaultListeners() {
+
+  /* ── 1. USERS + LEDGER (linked) ── */
+  const unsubUsers = db.collection("users").onSnapshot(async userSnap => {
+    // Fetch all contributions
+    let txSnap;
+    try { txSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").get(); }
+    catch(e) { txSnap = { docs: [] }; }
+
+    const uBody = document.getElementById('userBody');
+    const lBody = document.getElementById('ledgerBody');
+    uBody.innerHTML = ''; lBody.innerHTML = '';
+
+    const WEEKLY_TARGET = 125; // per week (500/month)
+    let grandTotal = 0, grandArrears = 0, memberCount = 0;
+
+    userSnap.forEach(doc => {
+      const u = doc.data();
+      const uid = doc.id;
+      memberCount++;
+
+      // Build weekly contribution map
+      const weeks = { 1:0, 2:0, 3:0, 4:0 };
+      txSnap.docs.forEach(tDoc => {
+        const t = tDoc.data();
+        if (t.uid === uid) {
+          const wk = getWeekOfMonth(t.timestamp);
+          weeks[wk] = (weeks[wk] || 0) + Number(t.amount);
         }
+      });
+      const total   = weeks[1]+weeks[2]+weeks[3]+weeks[4];
+      const arrears = Math.max(0, 500 - total);
+      grandTotal += total; grandArrears += arrears;
 
-        /* --- THE VAULT ENGINE --- */
-        function runVaultListeners() {
-            // 1. Users & Dynamic Ledger
-            db.collection("users").onSnapshot(async snap => {
-                const uBody = document.getElementById('userBody');
-                const lBody = document.getElementById('ledgerBody');
-                uBody.innerHTML = ''; lBody.innerHTML = '';
+      // User Directory row
+      uBody.innerHTML += `
+        <tr>
+          <td style="font-family:var(--mono);color:var(--gold)">${u.ngiId || '—'}</td>
+          <td><b>${u.name || '—'}</b><br><small style="color:var(--muted)">${u.phone || ''}</small></td>
+          <td>${u.role || '—'}</td>
+          <td><span class="pill ${u.isBanned ? 'pill-red':'pill-green'}">${u.isBanned ? 'Banned':'Active'}</span></td>
+          <td style="font-family:var(--mono)">KES ${(u.walletBalance || 0).toLocaleString()}</td>
+          <td><button class="btn-action ghost sm" onclick="openEditor('users','${uid}')">Edit</button></td>
+        </tr>`;
 
-                // Get all contributions for this month
-                const tSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").get();
+      // Ledger row
+      lBody.innerHTML += `
+        <tr>
+          <td style="font-family:var(--mono);color:var(--gold)">${u.ngiId || '—'}</td>
+          <td><b>${u.name || '—'}</b></td>
+          <td class="edit-cell contribution-val" onclick="manualLedgerEntry('${uid}',1,this)">${weeks[1]}</td>
+          <td class="edit-cell contribution-val" onclick="manualLedgerEntry('${uid}',2,this)">${weeks[2]}</td>
+          <td class="edit-cell contribution-val" onclick="manualLedgerEntry('${uid}',3,this)">${weeks[3]}</td>
+          <td class="edit-cell contribution-val" onclick="manualLedgerEntry('${uid}',4,this)">${weeks[4]}</td>
+          <td style="font-family:var(--mono);font-weight:700">${total}</td>
+          <td><span class="${arrears>0?'arrear-high':'arrear-zero'}">${arrears > 0 ? arrears : '✓'}</span></td>
+        </tr>`;
+    });
 
-                snap.forEach(doc => {
-                    const u = doc.data();
-                    const uid = doc.id;
+    // Stat cards
+    const rate = memberCount > 0 ? Math.round((grandTotal / (memberCount * 500)) * 100) : 0;
+    document.getElementById('stat-members').textContent   = memberCount;
+    document.getElementById('stat-collected').textContent = `${grandTotal.toLocaleString()}`;
+    document.getElementById('stat-arrears').textContent   = `${grandArrears.toLocaleString()}`;
+    document.getElementById('stat-rate').textContent      = `${rate}%`;
 
-                    // Directory Table
-                    uBody.innerHTML += `<tr><td>${u.ngiId}</td><td><b>${u.name}</b></td><td>${u.role}</td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td>${u.walletBalance}</td><td><button class="btn btn-sm btn-outline" onclick="openEditor('users','${uid}')">Edit</button></td></tr>`;
+    if (!uBody.innerHTML) uBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No members found.</td></tr>';
+    if (!lBody.innerHTML) lBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px">No ledger data.</td></tr>';
+  }, err => console.error("Users listener:", err));
+  activeListeners.push(unsubUsers);
 
-                    // Ledger Logic (Editable)
-                    let w = [0,0,0,0,0]; // w[1]-w[4]
-                    tSnap.docs.forEach(tDoc => {
-                        const t = tDoc.data();
-                        if(t.uid === uid) {
-                            const d = new Date(t.timestamp).getDate();
-                            if(d<=7) w[1]+=t.amount; else if(d<=14) w[2]+=t.amount; else if(d<=21) w[3]+=t.amount; else w[4]+=t.amount;
-                        }
-                    });
-                    const total = w[1]+w[2]+w[3]+w[4];
-                    lBody.innerHTML += `<tr><td>${u.ngiId}</td><td>${u.name}</td>
-                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',1)">${w[1]}</td>
-                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',2)">${w[2]}</td>
-                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',3)">${w[3]}</td>
-                        <td class="edit-cell" onclick="manualLedgerEntry('${uid}',4)">${w[4]}</td>
-                        <td><b>${total}</b></td><td style="color:var(--red)">${(500-total)>0?(500-total):'0'}</td></tr>`;
-                });
-            });
+  /* ── 2. LOANS ── */
+  const unsubLoans = db.collection("loans").orderBy("timestamp","desc").onSnapshot(snap => {
+    const cont = document.getElementById('loanContainer');
+    if (snap.empty) { cont.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:10px">No loan requests at this time.</p>'; return; }
+    cont.innerHTML = '';
+    snap.forEach(doc => {
+      const l = doc.data();
+      const isPending = (l.status || 'Pending') === 'Pending';
+      cont.innerHTML += `
+        <div class="loan-card">
+          <div class="loan-info">
+            <div class="loan-name">${l.name || 'Unknown'}</div>
+            <div class="loan-meta">${l.ngiId || '—'} &nbsp;·&nbsp; ${formatDate(l.timestamp)} &nbsp;·&nbsp; ${l.reason || 'No reason given'}</div>
+          </div>
+          <div class="loan-amount">KES ${Number(l.amount || 0).toLocaleString()}</div>
+          <div>
+            ${isPending
+              ? `<button class="btn-action sm" onclick="approveLoan('${doc.id}')">✓ Approve</button>`
+              : `<span class="pill pill-green">${l.status}</span>`}
+          </div>
+        </div>`;
+    });
+  }, err => console.error("Loans listener:", err));
+  activeListeners.push(unsubLoans);
 
-            // 2. Loans
-            db.collection("loans").orderBy("timestamp","desc").onSnapshot(snap => {
-                const lBody = document.getElementById('loanBody'); lBody.innerHTML = '';
-                snap.forEach(doc => {
-                    const l = doc.data();
-                    lBody.innerHTML += `<tr><td>${l.name}<br><small>${l.ngiId}</small></td><td>KES ${l.amount}</td><td>${l.reason}</td><td>${new Date(l.timestamp).toLocaleDateString()}</td>
-                    <td>${l.status === 'Pending' ? `<button class="btn btn-sm" onclick="approveLoan('${doc.id}')">Approve</button>` : `<span class="pill pill-green">${l.status}</span>`}</td></tr>`;
-                });
-            });
+  /* ── 3. POLLS ── */
+  const unsubPolls = db.collection("polls").orderBy("createdAt","desc").onSnapshot(snap => {
+    const cont = document.getElementById('poll-results-container');
+    if (snap.empty) { cont.innerHTML = ''; return; }
+    cont.innerHTML = '';
+    snap.forEach(doc => {
+      const p = doc.data();
+      const totalVotes = (p.choices || []).reduce((s,c) => s + (c.votes||[]).length, 0);
+      let opts = '';
+      (p.choices || []).forEach(c => {
+        const pct = totalVotes > 0 ? Math.round(((c.votes||[]).length / totalVotes)*100) : 0;
+        opts += `
+          <div class="poll-option">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-weight:600;font-size:13px">${c.text}</span>
+              <span style="font-family:var(--mono);color:var(--gold)">${(c.votes||[]).length} &nbsp;(${pct}%)</span>
+            </div>
+            <div class="poll-bar-wrap"><div class="poll-bar" style="width:${pct}%"></div></div>
+            <div class="poll-voters">Voters: ${(c.votes||[]).join(', ') || 'None yet'}</div>
+          </div>`;
+      });
+      const isActive = p.status === 'Active';
+      cont.innerHTML += `
+        <div class="poll-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-weight:700;font-size:15px">${p.question}</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px">${totalVotes} total vote${totalVotes!==1?'s':''}</div>
+            </div>
+            <span class="pill ${isActive?'pill-gold':'pill-red'}">${p.status}</span>
+          </div>
+          ${opts}
+          ${isActive ? `<button class="btn-action red sm" style="margin-top:12px" onclick="closePoll('${doc.id}')">Close Poll</button>` : ''}
+        </div>`;
+    });
+  }, err => console.error("Polls listener:", err));
+  activeListeners.push(unsubPolls);
 
-            // 3. Poll Intelligence (With Voter Log)
-            db.collection("polls").onSnapshot(snap => {
-                const cont = document.getElementById('poll-results-container'); cont.innerHTML = '<h3>Poll Intelligence Log</h3>';
-                snap.forEach(doc => {
-                    const p = doc.data();
-                    let rows = '';
-                    p.choices.forEach(c => {
-                        rows += `<div style="margin-bottom:10px; padding:10px; background:#1a1a1a; border-radius:8px;">
-                            <div style="display:flex; justify-content:space-between"><b>${c.text}</b> <span>${c.votes.length} votes</span></div>
-                            <small style="color:#555">Voters: ${c.votes.join(", ") || 'None'}</small>
-                        </div>`;
-                    });
-                    cont.innerHTML += `<div class="glass-card"><h4>${p.question}</h4><p style="font-size:10px; color:var(--gold); margin-bottom:15px;">Status: ${p.status}</p>${rows}
-                    <button class="btn btn-sm btn-red" onclick="quickUpdate('polls','${doc.id}',{status:'Closed'})">Close Poll</button></div>`;
-                });
-            });
+  /* ── 4. MEETINGS ── */
+  const unsubMeet = db.collection("meetings").orderBy("timestamp","desc").onSnapshot(snap => {
+    const mBody = document.getElementById('meetingBody');
+    if (snap.empty) { mBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No meetings scheduled.</td></tr>'; return; }
+    mBody.innerHTML = '';
+    snap.forEach(doc => {
+      const m = doc.data();
+      const isPast = m.date < Date.now();
+      mBody.innerHTML += `
+        <tr class="meeting-row">
+          <td>${m.agenda || '—'}</td>
+          <td>${formatDate(m.date)}</td>
+          <td>${formatTime(m.date)}</td>
+          <td style="font-family:var(--mono);font-size:11px">${m.agoraChannel || '—'}</td>
+          <td><span class="pill ${isPast?'pill-red':'pill-green'}">${isPast?'Ended':'Upcoming'}</span></td>
+          <td>
+            <button class="btn-action red sm" onclick="deleteMeeting('${doc.id}')">Delete</button>
+          </td>
+        </tr>`;
+    });
+  }, err => console.error("Meetings listener:", err));
+  activeListeners.push(unsubMeet);
 
-            // 4. Meeting Hub
-            db.collection("meetings").orderBy("date","desc").onSnapshot(snap => {
-                const mBody = document.getElementById('meetingBody'); mBody.innerHTML = '';
-                snap.forEach(doc => {
-                    const m = doc.data();
-                    mBody.innerHTML += `<tr><td>${m.agenda}</td><td>${new Date(m.date).toLocaleString()}</td><td>${m.status}</td><td>${m.agoraChannel}</td>
-                    <td><button class="btn btn-sm btn-red" onclick="quickDelete('meetings','${doc.id}')">Delete</button></td></tr>`;
-                });
-            });
+  /* ── 5. TRANSACTIONS ── */
+  const unsubTx = db.collection("wallet_transactions").orderBy("timestamp","desc").limit(50).onSnapshot(snap => {
+    const fBody = document.getElementById('financeBody');
+    if (snap.empty) { fBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No transactions yet.</td></tr>'; return; }
+    fBody.innerHTML = '';
+    snap.forEach(doc => {
+      const f = doc.data();
+      const isCredit = ['CONTRIBUTION','CREDIT','TOPUP'].includes(f.type);
+      fBody.innerHTML += `
+        <tr>
+          <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${doc.id.substring(0,8)}…</td>
+          <td style="font-family:var(--mono)">${f.ngiId || '—'}</td>
+          <td style="font-family:var(--mono);color:${isCredit?'var(--green)':'var(--red)'}">
+            ${isCredit?'+':'-'}KES ${Number(f.amount||0).toLocaleString()}
+          </td>
+          <td><span class="pill ${isCredit?'pill-green':'pill-red'}">${f.type||'—'}</span></td>
+          <td style="font-size:11px;color:var(--muted)">${f.description || '—'}</td>
+          <td style="font-size:11px">${formatDateTime(f.timestamp)}</td>
+          <td><button class="btn-action ghost sm" onclick="openEditor('wallet_transactions','${doc.id}')">View</button></td>
+        </tr>`;
+    });
+  }, err => console.error("Transactions listener:", err));
+  activeListeners.push(unsubTx);
 
-            // 5. Transaction Forensics
-            db.collection("wallet_transactions").orderBy("timestamp","desc").limit(30).onSnapshot(snap => {
-                const fBody = document.getElementById('financeBody'); fBody.innerHTML = '';
-                snap.forEach(doc => {
-                    const f = doc.data();
-                    fBody.innerHTML += `<tr><td>${doc.id.substring(0,8)}</td><td>${f.ngiId}</td><td>${f.amount}</td><td>${f.type}</td><td>${new Date(f.timestamp).toLocaleTimeString()}</td>
-                    <td><button class="btn btn-sm btn-outline" onclick="openEditor('wallet_transactions','${doc.id}')">View</button></td></tr>`;
-                });
-            });
-        }
+  /* ── 6. BROADCASTS ── */
+  const unsubBC = db.collection("announcements").orderBy("timestamp","desc").limit(20).onSnapshot(snap => {
+    const hist = document.getElementById('broadcastHistory');
+    if (snap.empty) { hist.innerHTML = '<p style="color:var(--muted);font-size:12px">No broadcasts sent yet.</p>'; return; }
+    hist.innerHTML = '';
+    snap.forEach(doc => {
+      const b = doc.data();
+      hist.innerHTML += `
+        <div style="border-bottom:1px solid var(--border);padding:14px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px">
+            <span style="font-weight:700;font-size:13px">${b.title || 'Announcement'}</span>
+            <span style="font-size:10px;color:var(--muted)">${formatDateTime(b.timestamp)}</span>
+          </div>
+          <p style="font-size:12px;color:var(--muted);line-height:1.6">${b.message || ''}</p>
+        </div>`;
+    });
+  }, err => console.error("Broadcasts listener:", err));
+  activeListeners.push(unsubBC);
+}
 
-        /* --- COMMAND ACTIONS --- */
-        async function manualLedgerEntry(uid, week) {
-            const amt = prompt(`Enter custom amount for Week ${week}:`);
-            if(!amt) return;
-            const userDoc = await db.collection("users").doc(uid).get();
-            await db.collection("wallet_transactions").add({
-                uid: uid, ngiId: userDoc.data().ngiId, amount: Number(amt),
-                type: "CONTRIBUTION", timestamp: Date.now(), description: "Manual Admin Entry", status: "Completed"
-            });
-            alert("Ledger Updated!");
-        }
+/* ═══════════════════════════════════════════
+   COMMAND ACTIONS
+═══════════════════════════════════════════ */
+async function manualLedgerEntry(uid, week, cell) {
+  const current = cell ? cell.textContent.trim() : '0';
+  const amt = prompt(`Manual override for Week ${week}\nCurrent: KES ${current}\n\nEnter new amount (KES):`);
+  if (amt === null || amt === '') return;
+  const amount = Number(amt);
+  if (isNaN(amount) || amount < 0) { toast("Invalid amount entered.", "err"); return; }
 
-        async function approveLoan(id) { 
-            const doc = await db.collection("loans").doc(id).get();
-            const loan = doc.data();
-            // 1. Update user wallet
-            const uSnap = await db.collection("users").where("ngiId","==",loan.ngiId).get();
-            const userDoc = uSnap.docs[0];
-            await userDoc.ref.update({ walletBalance: firebase.firestore.FieldValue.increment(loan.amount) });
-            // 2. Close loan
-            await db.collection("loans").doc(id).update({ status: "Approved" });
-            alert("Loan disbursed to member wallet!");
-        }
+  try {
+    let userDoc = await db.collection("users").doc(uid).get();
+    const userData = userDoc.data();
+    // Create a tx with a date that falls in the right week
+    const weekStartDay = (week - 1) * 7 + 1;
+    const now = new Date();
+    const entryDate = new Date(now.getFullYear(), now.getMonth(), weekStartDay + 1);
 
-        async function launchPoll() {
-            const q = document.getElementById('p-q').value;
-            const opts = []; document.querySelectorAll('.p-opt').forEach(i => { if(i.value) opts.push({id:Math.random().toString(36).substr(2,5), text:i.value, votes:[]}) });
-            await db.collection("polls").add({ question: q, choices: opts, status: "Active", createdAt: Date.now() });
-            alert("Poll Live!");
-        }
+    await db.collection("wallet_transactions").add({
+      uid, ngiId: userData.ngiId || '—',
+      amount, type: "CONTRIBUTION",
+      timestamp: entryDate.getTime(),
+      description: `Manual Admin Entry (Week ${week})`,
+      status: "Completed"
+    });
+    toast(`Week ${week} updated to KES ${amount}`);
+  } catch(e) {
+    toast("Error: " + e.message, "err");
+  }
+}
 
-        async function scheduleMeeting() {
-            const agenda = document.getElementById('m-agenda').value;
-            const date = new Date(document.getElementById('m-date').value).getTime();
-            if(!agenda || !date) return alert("Fill all fields");
-            await db.collection("meetings").add({ 
-                agenda: agenda, date: date, status: "Scheduled", 
-                agoraChannel: document.getElementById('m-channel').value,
-                timestamp: Date.now(), hasCall: true 
-            });
-            alert("Meeting Scheduled and Synced!");
-        }
+async function approveLoan(id) {
+  if (!confirm("Approve this loan and credit the member's wallet?")) return;
+  try {
+    const docRef  = db.collection("loans").doc(id);
+    const loanDoc = await docRef.get();
+    const loan    = loanDoc.data();
+    const uSnap   = await db.collection("users").where("ngiId","==", loan.ngiId).get();
+    if (uSnap.empty) { toast("Member not found.", "err"); return; }
+    const userRef = uSnap.docs[0].ref;
 
-        function addPollOpt() {
-            const i = document.createElement('input'); i.type='text'; i.className='p-opt'; i.placeholder='New Option'; i.style.marginBottom='5px';
-            document.getElementById('p-options').appendChild(i);
-        }
+    await db.runTransaction(async tx => {
+      tx.update(userRef, { walletBalance: firebase.firestore.FieldValue.increment(Number(loan.amount)) });
+      tx.update(docRef,  { status: "Approved" });
+      tx.set(db.collection("wallet_transactions").doc(), {
+        uid: uSnap.docs[0].id, ngiId: loan.ngiId,
+        amount: Number(loan.amount), type: "LOAN_DISBURSEMENT",
+        timestamp: Date.now(), description: `Loan Approved: ${loan.reason || ''}`,
+        status: "Completed"
+      });
+    });
+    toast("Loan approved & wallet credited ✓");
+  } catch(e) { toast("Error: " + e.message, "err"); }
+}
 
-        async function sendBroadcast() {
-            const m = document.getElementById('b-msg').value;
-            await db.collection("announcements").add({ message: m, title: "Executive Update", timestamp: Date.now() });
-            document.getElementById('b-msg').value = ''; alert("Broadcast Sent!");
-        }
+async function launchPoll() {
+  const q = document.getElementById('p-q').value.trim();
+  if (!q) { toast("Please enter a question.", "err"); return; }
+  const opts = [];
+  document.querySelectorAll('.p-opt').forEach(i => {
+    if (i.value.trim()) opts.push({ id: Math.random().toString(36).substr(2,6), text: i.value.trim(), votes: [] });
+  });
+  if (opts.length < 2) { toast("Add at least 2 options.", "err"); return; }
+  try {
+    await db.collection("polls").add({ question: q, choices: opts, status: "Active", createdAt: Date.now() });
+    document.getElementById('p-q').value = '';
+    document.querySelectorAll('.p-opt').forEach(i => i.value = '');
+    toast("Poll launched live ✓");
+  } catch(e) { toast("Error: " + e.message, "err"); }
+}
 
-        /* --- CRUD TOOLSET --- */
-        async function quickUpdate(col, id, data) { await db.collection(col).doc(id).update(data); alert("Updated."); }
-        async function quickDelete(col, id) { if(confirm("Delete permanently?")) await db.collection(col).doc(id).delete(); }
+function addPollOpt() {
+  const container = document.getElementById('p-options');
+  const count = container.querySelectorAll('.p-opt').length + 1;
+  const wrap = document.createElement('div');
+  wrap.className = 'form-group';
+  wrap.innerHTML = `<label>Option ${count}</label><input type="text" class="p-opt" placeholder="Enter option...">`;
+  container.appendChild(wrap);
+}
 
-        async function openEditor(col, id) {
-            curCol = col; curId = id;
-            const doc = await db.collection(col).doc(id).get(); edData = doc.data();
-            document.getElementById('ed-id').innerText = id;
-            const cont = document.getElementById('ed-fields'); cont.innerHTML = '';
-            for (let key in edData) { cont.innerHTML += `<div class="form-group"><label>${key}</label><input type="text" id="ed-${key}" value="${edData[key]}"></div>`; }
-            document.getElementById('doc-editor').classList.add('open');
-        }
+async function closePoll(id) {
+  try {
+    await db.collection("polls").doc(id).update({ status: "Closed" });
+    toast("Poll closed.");
+  } catch(e) { toast("Error: " + e.message, "err"); }
+}
 
-        function closeEditor() { document.getElementById('doc-editor').classList.remove('open'); }
+async function scheduleMeeting() {
+  const agenda   = document.getElementById('m-agenda').value.trim();
+  const dateStr  = document.getElementById('m-date').value;
+  const timeStr  = document.getElementById('m-time').value;
+  const channel  = document.getElementById('m-channel').value.trim() || 'ngi_hq';
 
-        async function saveDoc() {
-            const up = {};
-            for (let k in edData) {
-                let v = document.getElementById(`ed-${k}`).value;
-                if(v === 'true') v=true; else if(v==='false') v=false; else if(!isNaN(v) && v !== '') v=Number(v);
-                up[k] = v;
-            }
-            await db.collection(curCol).doc(curId).update(up);
-            alert("Database Saved!"); closeEditor();
-        }
+  if (!agenda)   { toast("Please enter a meeting agenda.", "err"); return; }
+  if (!dateStr)  { toast("Please select a date.", "err"); return; }
+  if (!timeStr)  { toast("Please select a time.", "err"); return; }
 
-        async function deleteDoc() { if(confirm("Delete document?")) { await db.collection(curCol).doc(curId).delete(); closeEditor(); } }
-    </script>
+  // Combine date + time correctly
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hour, minute]     = timeStr.split(':').map(Number);
+  const meetingDate = new Date(year, month - 1, day, hour, minute);
+  const ts = meetingDate.getTime();
+
+  if (isNaN(ts)) { toast("Invalid date/time. Please try again.", "err"); return; }
+  if (ts < Date.now()) { toast("Meeting date/time is in the past.", "err"); return; }
+
+  try {
+    await db.collection("meetings").add({
+      agenda, date: ts, agoraChannel: channel,
+      status: "Scheduled", timestamp: Date.now(), hasCall: true
+    });
+    // Clear form
+    document.getElementById('m-agenda').value = '';
+    document.getElementById('m-date').value   = '';
+    document.getElementById('m-time').value   = '';
+    toast("Meeting scheduled & synced ✓");
+  } catch(e) { toast("Error: " + e.message, "err"); }
+}
+
+async function deleteMeeting(id) {
+  if (!confirm("Delete this meeting permanently?")) return;
+  try {
+    await db.collection("meetings").doc(id).delete();
+    toast("Meeting deleted.");
+  } catch(e) { toast("Error: " + e.message, "err"); }
+}
+
+async function sendBroadcast() {
+  const title = document.getElementById('b-title').value.trim();
+  const msg   = document.getElementById('b-msg').value.trim();
+  if (!title) { toast("Please enter a broadcast title.", "err"); return; }
+  if (!msg)   { toast("Please enter a message.", "err"); return; }
+  try {
+    await db.collection("announcements").add({ title, message: msg, timestamp: Date.now() });
+    document.getElementById('b-title').value = '';
+    document.getElementById('b-msg').value   = '';
+    toast("Broadcast sent to all members ✓");
+  } catch(e) { toast("Error: " + e.message, "err"); }
+}
+
+/* ═══════════════════════════════════════════
+   GHOST EDITOR CRUD
+═══════════════════════════════════════════ */
+async function openEditor(col, id) {
+  curCol = col; curId = id;
+  try {
+    const docSnap = await db.collection(col).doc(id).get();
+    if (!docSnap.exists) { toast("Document not found.", "err"); return; }
+    edData = docSnap.data();
+    document.getElementById('ed-panel-title').textContent = `Edit · ${col}`;
+    document.getElementById('ed-panel-id').textContent    = `ID: ${id}`;
+    const cont = document.getElementById('ed-fields');
+    cont.innerHTML = '';
+    for (const key in edData) {
+      const val = edData[key];
+      const displayVal = typeof val === 'object' ? JSON.stringify(val) : val;
+      cont.innerHTML += `
+        <div class="form-group">
+          <label>${key}</label>
+          <input type="text" id="ed-${key}" value="${String(displayVal).replace(/"/g,'&quot;')}">
+        </div>`;
+    }
+    document.getElementById('doc-editor').classList.add('open');
+  } catch(e) { toast("Error opening editor: " + e.message, "err"); }
+}
+
+function closeEditor() { document.getElementById('doc-editor').classList.remove('open'); }
+
+async function saveDoc() {
+  const updates = {};
+  for (const k in edData) {
+    const el = document.getElementById(`ed-${k}`);
+    if (!el) continue;
+    let v = el.value;
+    if (v === 'true') v = true;
+    else if (v === 'false') v = false;
+    else if (v !== '' && !isNaN(Number(v)) && typeof edData[k] === 'number') v = Number(v);
+    updates[k] = v;
+  }
+  try {
+    await db.collection(curCol).doc(curId).update(updates);
+    toast("Saved to database ✓");
+    closeEditor();
+  } catch(e) { toast("Save failed: " + e.message, "err"); }
+}
+
+async function deleteDoc() {
+  if (!confirm("Permanently delete this document? This cannot be undone.")) return;
+  try {
+    await db.collection(curCol).doc(curId).delete();
+    toast("Document deleted.");
+    closeEditor();
+  } catch(e) { toast("Delete failed: " + e.message, "err"); }
+}
+
+/* ═══════════════════════════════════════════
+   KEYBOARD SHORTCUT
+═══════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeEditor();
+});
+</script>
 </body>
 </html>
