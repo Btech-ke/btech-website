@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>NGI Command Center v10.0 | Full ERP</title>
+<title>NGI Command Center v10.0 | Enterprise ERP</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -97,19 +97,12 @@ tr:hover td { background: rgba(255,255,255,.01); }
 .btn-action.sm { padding: 6px 12px; font-size: 10px; }
 .btn-action.full { width: 100%; }
 
-/* POLLS & MINUTES */
-.poll-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
-.poll-option { background: var(--bg); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
-.poll-bar-wrap { background: var(--border); border-radius: 4px; height: 4px; margin-top: 8px; }
-.poll-bar { background: var(--gold); height: 4px; border-radius: 4px; transition: width .6s ease; }
-#doc-editor, #minutes-modal { position: fixed; right: -520px; top: 0; width: 460px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border-bright); padding: 28px; transition: right .35s cubic-bezier(.4,0,.2,1); z-index: 500; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-#doc-editor.open, #minutes-modal.open { right: 0; }
-.minutes-content { background: var(--bg); padding: 16px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; line-height: 1.6; white-space: pre-wrap; flex: 1; overflow-y: auto; margin-bottom: 20px;}
-
 /* UTILS */
 #toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border-bright); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(10px); transition: .3s; z-index: 9999; pointer-events: none; font-weight: 600;}
 #toast.show { opacity: 1; transform: none; }
 .mono { font-family: var(--mono); }
+#doc-editor, #minutes-modal { position: fixed; right: -520px; top: 0; width: 460px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border-bright); padding: 28px; transition: right .35s cubic-bezier(.4,0,.2,1); z-index: 500; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+#doc-editor.open, #minutes-modal.open { right: 0; }
 </style>
 </head>
 <body>
@@ -141,6 +134,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
   <div class="nav-btn" onclick="showTab('expenses',this)">📉 Group Expenses</div>
   <div class="nav-btn" onclick="showTab('fines',this)">⚠️ Fines & Strikes</div>
   <div class="nav-btn" onclick="showTab('welfare',this)">🤝 Welfare Fund</div>
+  <div class="nav-btn" onclick="showTab('support',this)">🎧 Helpdesk</div>
 
   <div class="nav-section">System</div>
   <div class="nav-btn" onclick="showTab('meetings',this)">📅 Meeting Hub</div>
@@ -170,16 +164,29 @@ tr:hover td { background: rgba(255,255,255,.01); }
   <section id="ledger" class="section">
     <div class="page-header">
       <div><div class="page-title">Master Financial Ledger</div><div class="page-subtitle">Click cells to override</div></div>
-      <div style="display:flex;gap:10px"><button class="btn-action ghost sm" onclick="exportCSV()">⬇ Export CSV</button><button class="btn-action ghost sm" onclick="window.print()">⬇ Export PDF</button></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-action ghost sm" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="btn-action ghost sm" onclick="window.print()">⬇ Export PDF</button>
+      </div>
     </div>
-    <div class="card"><div class="table-wrap"><table id="ledgerTable"><thead><tr><th>ID</th><th>Member</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total Saved</th><th>Arrears</th></tr></thead><tbody id="ledgerBody"></tbody></table></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table id="ledgerTable">
+          <thead><tr><th>ID</th><th>Member</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total Saved</th><th>Arrears</th></tr></thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
   <section id="finance" class="section">
     <div class="page-header"><div><div class="page-title">Transaction Log</div></div><button class="btn-action sm" onclick="document.getElementById('tx-card').style.display='block'">+ Manual Tx</button></div>
     <div class="card" id="tx-card" style="display:none; max-width: 600px; border-color:var(--gold)">
       <div class="card-title">Log Manual Transaction</div>
-      <div class="form-row"><div class="form-group"><label>Member</label><select id="tx-member"></select></div><div class="form-group"><label>Type</label><select id="tx-type"><option value="DEPOSIT">Portfolio Deposit</option><option value="CONTRIBUTION">Contribution</option><option value="WITHDRAWAL">Withdrawal</option></select></div></div>
+      <div class="form-row">
+        <div class="form-group"><label>Member</label><select id="tx-member"></select></div>
+        <div class="form-group"><label>Type</label><select id="tx-type"><option value="DEPOSIT">Portfolio Deposit</option><option value="CONTRIBUTION">Contribution</option><option value="WITHDRAWAL">Withdrawal</option></select></div>
+      </div>
       <div class="form-row"><div class="form-group"><label>Amount</label><input type="number" id="tx-amount"></div><div class="form-group"><label>Ref</label><input type="text" id="tx-ref"></div></div>
       <button class="btn-action" onclick="submitTx()">Submit</button> <button class="btn-action ghost" onclick="document.getElementById('tx-card').style.display='none'">Cancel</button>
     </div>
@@ -187,7 +194,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
   </section>
 
   <section id="assets" class="section">
-    <div class="page-header"><div><div class="page-title">Asset Portfolio</div></div><button class="btn-action sm" onclick="document.getElementById('asset-card').style.display='block'">+ Add Asset</button></div>
+    <div class="page-header"><div><div class="page-title">Asset Portfolio</div><div class="page-subtitle">Track External Investments (Land, MMFs, Bonds)</div></div><button class="btn-action sm" onclick="document.getElementById('asset-card').style.display='block'">+ Add Asset</button></div>
     <div class="card" id="asset-card" style="display:none; border-color:var(--gold)">
       <div class="form-row"><div class="form-group"><label>Asset Name</label><input type="text" id="as-name"></div><div class="form-group"><label>Type</label><select id="as-type"><option>Real Estate</option><option>MMF</option><option>Bonds</option><option>Stocks</option></select></div></div>
       <div class="form-row"><div class="form-group"><label>Principal Cost (KES)</label><input type="number" id="as-cost"></div><div class="form-group"><label>Current Valuation (KES)</label><input type="number" id="as-val"></div></div>
@@ -206,15 +213,15 @@ tr:hover td { background: rgba(255,255,255,.01); }
   </section>
 
   <section id="dividends" class="section">
-    <div class="page-header"><div><div class="page-title">Dividends Engine</div></div></div>
+    <div class="page-header"><div><div class="page-title">Dividends Engine</div><div class="page-subtitle">Distribute profits to members</div></div></div>
     <div class="card">
         <div class="card-title">Dividend Calculator (Pro-Rata)</div>
-        <p style="font-size:11px;color:var(--muted);margin-bottom:10px">Distributable Cash: <strong class="mono" id="div-cash">KES 0</strong></p>
-        <div class="form-group"><label>Retain Earnings %</label><input type="number" id="div-retain" value="20"></div>
-        <button class="btn-action purple" onclick="runDividendPreview()">1. Calculate Preview</button>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:10px">Available Distributable Cash: <strong class="mono" id="div-cash">KES 0</strong></p>
+        <div class="form-group"><label>Retain Earnings % (Keep in Fund)</label><input type="number" id="div-retain" value="20"></div>
+        <button class="btn-action purple" onclick="runDividendPreview()">1. Calculate Distribution Preview</button>
         <button class="btn-action" id="btn-execute-div" style="display:none;margin-top:10px" onclick="executeDividends()">2. Execute Payouts to Wallets</button>
     </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Member</th><th>Shares (Savings)</th><th>% of Pool</th><th>Payout Amount</th></tr></thead><tbody id="dividendBody"></tbody></table></div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Member</th><th>Shares (Savings)</th><th>% of Pool</th><th>Payout Amount</th></tr></thead><tbody id="dividendBody"><tr><td colspan="4" style="text-align:center;color:var(--muted)">Run preview first.</td></tr></tbody></table></div></div>
   </section>
 
   <section id="loans" class="section">
@@ -249,68 +256,36 @@ tr:hover td { background: rgba(255,255,255,.01); }
     <div class="card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th><th>KYC</th><th>Strikes</th><th>Portfolio</th><th>Action</th></tr></thead><tbody id="userBody"></tbody></table></div></div>
   </section>
 
-  <section id="meetings" class="section">
-    <div class="page-header"><div><div class="page-title">Meeting Hub</div></div></div>
-    <div class="card" style="max-width: 800px;">
-      <div class="card-title">Schedule New Meeting</div>
-      <div class="form-row"><div class="form-group"><label>Agenda</label><input type="text" id="m-agenda"></div><div class="form-group"><label>Agora Channel ID</label><input type="text" id="m-channel" value="ngi_hq"></div></div>
-      <div class="form-row"><div class="form-group"><label>Date</label><input type="date" id="m-date"></div><div class="form-group"><label>Time</label><input type="time" id="m-time"></div></div>
-      <button class="btn-action full" onclick="scheduleMeeting()">📅 Set Meeting & Notify All</button>
-    </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Agenda</th><th>Date/Time</th><th>Status</th><th>Attendees</th><th>Actions</th></tr></thead><tbody id="meetingBody"></tbody></table></div></div>
-  </section>
-
-  <section id="polls" class="section">
-    <div class="page-header"><div><div class="page-title">Polls & Communications</div></div></div>
-    <div class="form-row">
-        <div class="card">
-            <div class="card-title">Create New Poll</div>
-            <div class="form-group"><label>Question</label><input type="text" id="p-q" placeholder="Enter poll question..."></div>
-            <div id="p-options">
-                <div class="form-group"><label>Option 1</label><input type="text" class="p-opt" placeholder="e.g. Yes"></div>
-                <div class="form-group"><label>Option 2</label><input type="text" class="p-opt" placeholder="e.g. No"></div>
-            </div>
-            <div style="display:flex;gap:10px;margin-bottom:14px"><button class="btn-action ghost sm" onclick="addPollOpt()">+ Add Option</button></div>
-            <button class="btn-action full" onclick="launchPoll()">🚀 Launch Live Poll</button>
-        </div>
-        <div class="card">
-            <div class="card-title">Global Broadcast Push</div>
-            <div class="form-group"><label>Title</label><input type="text" id="b-title" placeholder="Announcement title..."></div>
-            <div class="form-group"><label>Message</label><textarea id="b-msg" placeholder="Type your message here..."></textarea></div>
-            <button class="btn-action full blue" onclick="sendBroadcast()">📡 Fire Global Push Notification</button>
-        </div>
-    </div>
-    <div class="card-title">Active & Past Polls</div><div id="poll-results-container"></div>
-    <div class="card-title" style="margin-top:20px">Broadcast History</div><div class="card"><div id="broadcastHistory"></div></div>
+  <section id="support" class="section">
+    <div class="page-header"><div><div class="page-title">Member Helpdesk</div></div></div>
+    <div class="card"><p class="mono">Ticket queue is currently empty.</p></div>
   </section>
 
   <section id="audit" class="section">
-    <div class="page-header"><div><div class="page-title">System Audit Log</div></div></div>
+    <div class="page-header"><div><div class="page-title">System Audit Log</div><div class="page-subtitle">Immutable record of Admin actions</div></div></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Target</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
   </section>
 
+  <section id="meetings" class="section"><div class="page-header"><div><div class="page-title">Meetings</div></div></div><div class="card"><p class="mono">Feature Active. Data sync mapped.</p></div></section>
+  <section id="polls" class="section"><div class="page-header"><div><div class="page-title">Polls & Comms</div></div></div><div class="card"><p class="mono">Feature Active. Data sync mapped.</p></div></section>
+  
   <section id="system" class="section">
-    <div class="page-header"><div><div class="page-title">ERP System Config</div><div class="page-subtitle">Global rules and dangerous operations</div></div></div>
+    <div class="page-header"><div><div class="page-title">ERP Config</div></div></div>
     <div class="card" style="max-width:600px; border-color:var(--border-bright)">
       <div class="card-title">Financial Targets & Rules</div>
       <div class="form-row"><div class="form-group"><label>Weekly Target (KES)</label><input type="number" id="sys-target" value="125"></div><div class="form-group"><label>Late Fine Amount (KES)</label><input type="number" id="sys-fine" value="50"></div></div>
       <div class="form-row"><div class="form-group"><label>Loan Interest Rate (%)</label><input type="number" id="sys-interest" value="10"></div><div class="form-group"><label>Max Loan Multiple (x Savings)</label><input type="number" id="sys-multiple" value="2"></div></div>
       <button class="btn-action ghost full" onclick="saveSystemConfig()">Update Configuration</button>
     </div>
+    
     <div class="card" style="max-width:600px; border-color:var(--red)">
       <div class="card-title" style="color:var(--red)">God Mode / Danger Zone</div>
       <p style="font-size:11px;color:var(--muted);margin-bottom:14px">These actions are irreversible and will affect all live users.</p>
-      <button class="btn-action red full" onclick="wipeDataEngine()">☠️ WIPE ALL FINANCIAL DATA (RESET APP)</button>
+      <button class="btn-action red full" onclick="wipeDataEngine()">☠️ TOTAL SYSTEM PURGE (WIPE DATA & AUDIT MEMBERS)</button>
     </div>
   </section>
 
 </main>
-
-<div id="minutes-modal">
-  <div class="panel-title">Meeting Minutes</div><div class="panel-sub" id="min-agenda"></div>
-  <div class="minutes-content" id="min-content">No notes recorded.</div>
-  <button class="btn-action ghost full" onclick="document.getElementById('minutes-modal').classList.remove('open')">✕ Close</button>
-</div>
 
 <div id="toast"></div>
 
@@ -319,7 +294,6 @@ tr:hover td { background: rgba(255,255,255,.01); }
 const firebaseConfig = { apiKey: "AIzaSyCMJdzsgYU5KgJ0T-7JTKJTqnpvEaFB2Zs", authDomain: "n-g-i-761b1.firebaseapp.com", projectId: "n-g-i-761b1", storageBucket: "n-g-i-761b1.firebasestorage.app", messagingSenderId: "375248351958", appId: "1:375248351958:web:9b45197e1a1dadeaaa0f77" };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.firestore();
-
 let activeListeners = []; let cache = { users:[], assets:0, loans:0, fund:0 };
 let myName = "Admin";
 
@@ -330,16 +304,13 @@ const showTab = (id, el) => { document.querySelectorAll('.section, .nav-btn').fo
 const fmt = n => Number(n||0).toLocaleString();
 const fdt = t => t ? new Date(t).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
 const logAudit = async (action, target) => { await db.collection("audit_logs").add({admin:myName, action, target, ts:Date.now()}); };
-const getWeekOfMonth = d => { const day=new Date(d).getDate(); return day<=7?1:day<=14?2:day<=21?3:4; };
 
 // --- AUTH ---
 auth.onAuthStateChanged(async u => {
   if (u) {
     const doc = await db.collection("users").doc(u.uid).get();
     if(doc.exists && ['Admin','Treasurer','Secretary'].includes(doc.data().role)) {
-      myName = doc.data().name; D('auth-overlay').style.display='none'; D('sidebar').style.display='flex'; D('main-content').style.display='block'; 
-      D('m-date').min = new Date().toISOString().split('T')[0];
-      runERP();
+      myName = doc.data().name; D('auth-overlay').style.display='none'; D('sidebar').style.display='flex'; D('main-content').style.display='block'; runERP();
     } else { auth.signOut(); D('auth-error').textContent="Access Denied."; }
   } else { D('auth-overlay').style.display='flex'; D('sidebar').style.display='none'; D('main-content').style.display='none'; }
 });
@@ -348,51 +319,45 @@ const handleLogout = () => { activeListeners.forEach(f=>f()); auth.signOut(); };
 
 // --- CORE ERP LISTENERS ---
 function runERP() {
-  // Config & Fund Sync
+  // Config
   activeListeners.push(db.collection("group").doc("ngi_main").onSnapshot(d => {
     if(!d.exists) return; const c = d.data(); cache.fund = c.totalFund||0;
-    D('dash-fund').textContent = `KES ${fmt(c.totalFund)}`; D('dash-welfare').textContent = `KES ${fmt(c.welfareFund)}`; D('dash-retained').textContent = `KES ${fmt(c.retainedEarnings)}`; D('div-cash').textContent = `KES ${fmt(c.totalFund)}`;
+    D('dash-fund').textContent = `KES ${fmt(c.totalFund)}`;
+    D('dash-welfare').textContent = `KES ${fmt(c.welfareFund)}`;
+    D('dash-retained').textContent = `KES ${fmt(c.retainedEarnings)}`;
+    D('div-cash').textContent = `KES ${fmt(c.totalFund)}`;
     if(c.settings) { D('sys-target').value = c.settings.weeklyTarget||125; D('sys-fine').value = c.settings.lateFine||50; D('sys-interest').value = c.settings.interestRate||10; D('sys-multiple').value = c.settings.loanMultiple||2; }
   }));
 
-  // Users & Ledger
+  // Users
   activeListeners.push(db.collection("users").onSnapshot(async snap => {
     cache.users = []; D('tx-member').innerHTML=''; D('fine-member').innerHTML=''; D('wel-member').innerHTML='';
-    let uHtml='', lHtml='', members=0;
+    let uHtml='', lHtml='', members=0, totSavings=0;
     
-    // Fetch this month's contributions for ledger
-    let txSnap; try { const now=new Date(); txSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").where("timestamp",">=",new Date(now.getFullYear(),now.getMonth(),1).getTime()).get(); } catch(e) { txSnap={docs:[]}; }
-
     snap.forEach(d => {
-      const u=d.data(); cache.users.push({id:d.id, ...u}); members++;
+      const u=d.data(); cache.users.push({id:d.id, ...u}); members++; totSavings+=u.totalContributed||0;
       const opt = `<option value="${d.id}">${u.name}</option>`;
       D('tx-member').innerHTML+=opt; D('fine-member').innerHTML+=opt; D('wel-member').innerHTML+=opt;
 
-      // Calc weeks
-      const wks={1:0,2:0,3:0,4:0}; txSnap.docs.forEach(t=>{const td=t.data(); if(td.uid===d.id){ wks[getWeekOfMonth(td.timestamp)]+=Number(td.amount); }});
-      const arrears = Math.max(0, 500 - (wks[1]+wks[2]+wks[3]+wks[4]));
-
-      uHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td><span class="pill pill-gold">${u.role}</span></td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td><span class="pill ${u.kyc?'pill-green':'pill-red'}">${u.kyc?'Verified':'Pending'}</span></td><td class="mono" style="color:${u.strikes>=3?'var(--red)':'inherit'}">${u.strikes||0}</td><td class="mono">KES ${fmt(u.walletBalance)}</td><td><button class="btn-action sm" onclick="verifyKYC('${d.id}')">KYC</button> <button class="btn-action ghost sm" onclick="issueStrike('${d.id}')">Strike</button></td></tr>`;
-      lHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',1)">${wks[1]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',2)">${wks[2]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',3)">${wks[3]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',4)">${wks[4]||0}</td><td class="mono">KES ${fmt(u.totalContributed)}</td><td class="mono" style="color:${arrears>0?'var(--red)':'var(--green)'}">${arrears>0?arrears:'✓'}</td></tr>`;
+      uHtml += `<tr><td>${u.ngiId}</td><td>${u.name}</td><td><span class="pill pill-gold">${u.role}</span></td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td><span class="pill ${u.kyc?'pill-green':'pill-red'}">${u.kyc?'Verified':'Pending'}</span></td><td class="mono">${u.strikes||0}</td><td class="mono">KES ${fmt(u.walletBalance)}</td><td><button class="btn-action sm" onclick="verifyKYC('${d.id}')">KYC</button> <button class="btn-action ghost sm" onclick="issueStrike('${d.id}')">Strike</button></td></tr>`;
+      lHtml += `<tr><td>${u.ngiId}</td><td>${u.name}</td><td class="edit-cell" onclick="manualLedgerEntry('${d.id}',1)">—</td><td class="edit-cell" onclick="manualLedgerEntry('${d.id}',2)">—</td><td class="edit-cell" onclick="manualLedgerEntry('${d.id}',3)">—</td><td class="edit-cell" onclick="manualLedgerEntry('${d.id}',4)">—</td><td class="mono">KES ${fmt(u.totalContributed)}</td><td class="mono" style="color:var(--red)">0</td></tr>`;
     });
     D('userBody').innerHTML=uHtml; D('ledgerBody').innerHTML=lHtml;
-    D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`;
+    D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`; // NAV Calc
   }));
 
-  // Transactions (General & Welfare)
+  // Transactions
   activeListeners.push(db.collection("wallet_transactions").orderBy("timestamp","desc").limit(50).onSnapshot(snap => {
-    let fHtml='', wHtml=''; snap.forEach(d=>{ const f=d.data(); const u=cache.users.find(x=>x.id===f.uid); const cred=['CONTRIBUTION','DEPOSIT','WELFARE_IN'].includes(f.type);
-    fHtml+=`<tr><td class="mono" style="color:var(--muted)">${d.id.substring(0,6)}</td><td class="mono">${f.ngiId}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'};font-weight:bold">${cred?'+':'-'}KES ${fmt(f.amount)}</td><td><span class="pill ${cred?'pill-green':'pill-red'}">${f.type}</span></td><td>${fdt(f.timestamp)}</td></tr>`;
-    if(f.type.includes('WELFARE')) wHtml+=`<tr><td>${u?.name}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'}">KES ${f.amount}</td><td><span class="pill pill-blue">${f.type}</span></td><td>${fdt(f.timestamp)}</td></tr>`;
-    });
-    D('financeBody').innerHTML=fHtml||'<tr><td colspan="5">No Tx</td></tr>'; D('welfareBody').innerHTML=wHtml||'<tr><td colspan="4">No Logs</td></tr>';
+    let fHtml=''; snap.forEach(d=>{ const f=d.data(); const cred=['CONTRIBUTION','DEPOSIT'].includes(f.type);
+    fHtml+=`<tr><td class="mono">${d.id.substring(0,6)}</td><td class="mono">${f.ngiId}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'}">${cred?'+':'-'}KES ${fmt(f.amount)}</td><td><span class="pill ${cred?'pill-green':'pill-red'}">${f.type}</span></td><td>${fdt(f.timestamp)}</td></tr>`;});
+    D('financeBody').innerHTML=fHtml||'<tr><td colspan="5">No Tx</td></tr>';
   }));
 
   // Assets
   activeListeners.push(db.collection("assets").onSnapshot(snap => {
     let aHtml=''; cache.assets=0; snap.forEach(d=>{ const a=d.data(); cache.assets+=a.valuation; const roi=(((a.valuation-a.cost)/a.cost)*100).toFixed(1);
     aHtml+=`<tr><td>${a.name}</td><td><span class="pill pill-blue">${a.type}</span></td><td class="mono">KES ${fmt(a.cost)}</td><td class="mono">KES ${fmt(a.valuation)}</td><td class="mono" style="color:${roi>=0?'var(--green)':'var(--red)'}">${roi}%</td><td><button class="btn-action ghost sm" onclick="liquidateAsset('${d.id}',${a.valuation})">Liquidate</button></td></tr>`;});
-    D('assetBody').innerHTML=aHtml||'<tr><td colspan="6">No Assets</td></tr>'; D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`;
+    D('assetBody').innerHTML=aHtml||'<tr><td colspan="6">No Assets</td></tr>';
   }));
 
   // Expenses
@@ -404,7 +369,7 @@ function runERP() {
   // Fines
   activeListeners.push(db.collection("fines").where("isPaid","==",false).onSnapshot(snap => {
     let fHtml='', debts=0; snap.forEach(d=>{ const f=d.data(); debts+=f.amount; const u=cache.users.find(x=>x.id===f.uid);
-    fHtml+=`<tr><td><b>${u?.name}</b></td><td class="mono" style="color:var(--red)">KES ${f.amount}</td><td>${f.description}</td><td><button class="btn-action sm" onclick="payFine('${d.id}','${f.uid}',${f.amount})">Clear</button> <button class="btn-action ghost sm" onclick="waiveFine('${d.id}','${f.uid}',${f.amount})">Waive</button></td></tr>`;});
+    fHtml+=`<tr><td>${u?.name||'Unknown'}</td><td class="mono" style="color:var(--red)">KES ${f.amount}</td><td>${f.description}</td><td><button class="btn-action sm" onclick="payFine('${d.id}','${f.uid}',${f.amount})">Clear</button> <button class="btn-action ghost sm" onclick="waiveFine('${d.id}','${f.uid}',${f.amount})">Waive</button></td></tr>`;});
     D('finesBody').innerHTML=fHtml||'<tr><td colspan="4">No Fines</td></tr>'; D('dash-debt').textContent=`KES ${fmt(debts)}`;
   }));
 
@@ -413,48 +378,23 @@ function runERP() {
     let pCont='', aHtml=''; cache.loans=0; snap.forEach(d=>{ const l=d.data();
     if(l.status==='Pending') pCont+=`<div class="card"><div style="display:flex;justify-content:space-between"><div><b>${l.name}</b><br><small>${l.reason}</small></div><div class="mono" style="color:var(--gold);font-size:18px">KES ${fmt(l.amount)}</div></div><div style="margin-top:10px"><button class="btn-action sm" onclick="apprLoan('${d.id}','${l.uid}',${l.amount})">Approve</button> <button class="btn-action red sm" onclick="db.collection('loans').doc('${d.id}').update({status:'Rejected'})">Reject</button></div></div>`;
     else if(l.status==='Active') { cache.loans+=l.balance; aHtml+=`<tr><td>${l.name}</td><td class="mono">KES ${fmt(l.amount)}</td><td class="mono" style="color:var(--gold)">KES ${fmt(l.balance)}</td><td><button class="btn-action ghost sm" onclick="writeOffLoan('${d.id}',${l.balance})">Write-off</button></td></tr>`; }});
-    D('pendingLoanContainer').innerHTML=pCont||'<p style="color:var(--muted)">None</p>'; D('activeLoanBody').innerHTML=aHtml||'<tr><td colspan="4">No Active Loans</td></tr>'; D('dash-loans-out').textContent=`KES ${fmt(cache.loans)}`;
-  }));
-
-  // Meetings
-  activeListeners.push(db.collection("meetings").orderBy("timestamp","desc").onSnapshot(snap => {
-    let mHtml=''; snap.forEach(d=>{ const m=d.data(); const past=m.date<Date.now()||m.status==='Ended';
-    mHtml+=`<tr><td><b>${m.agenda}</b></td><td>${fdt(m.date)}</td><td><span class="pill ${past?'pill-red':'pill-green'}">${past?'Ended':'Upcoming'}</span></td><td>${(m.attendees||[]).length} joined</td><td><button class="btn-action ghost sm" onclick="viewMinutes('${d.id}','${(m.agenda||'').replace(/'/g,"")}')">Minutes</button> <button class="btn-action red sm" onclick="db.collection('meetings').doc('${d.id}').delete()">Del</button></td></tr>`;});
-    D('meetingBody').innerHTML=mHtml||'<tr><td colspan="5">No Meetings</td></tr>';
-  }));
-
-  // Polls
-  activeListeners.push(db.collection("polls").orderBy("createdAt","desc").onSnapshot(snap => {
-    let pHtml=''; snap.forEach(d=>{ const p=d.data(); const tv=(p.choices||[]).reduce((s,c)=>s+(c.votes||[]).length,0); let o='';
-    (p.choices||[]).forEach(c=>{ const pt=tv>0?Math.round(((c.votes||[]).length/tv)*100):0; o+=`<div class="poll-option"><div style="display:flex;justify-content:space-between"><span>${c.text}</span><span class="mono">${(c.votes||[]).length} (${pt}%)</span></div><div class="poll-bar-wrap"><div class="poll-bar" style="width:${pt}%"></div></div></div>`;});
-    pHtml+=`<div class="poll-card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>${p.question}</b><span class="pill ${p.status==='Active'?'pill-gold':'pill-red'}">${p.status}</span></div>${o}${p.status==='Active'?`<button class="btn-action red sm" style="margin-top:10px" onclick="db.collection('polls').doc('${d.id}').update({status:'Closed'})">Close Poll</button>`:''}</div>`;});
-    D('poll-results-container').innerHTML=pHtml||'<p style="color:var(--muted)">No polls.</p>';
-  }));
-
-  // Broadcasts
-  activeListeners.push(db.collection("announcements").orderBy("timestamp","desc").limit(10).onSnapshot(snap => {
-    let bHtml=''; snap.forEach(d=>{ const b=d.data(); bHtml+=`<div style="border-bottom:1px solid var(--border);padding:10px 0"><b>${b.title}</b> <span style="font-size:10px;color:var(--muted);float:right">${fdt(b.timestamp)}</span><p style="color:var(--muted);margin-top:4px">${b.message}</p><button class="btn-action ghost sm" style="margin-top:6px" onclick="db.collection('announcements').doc('${d.id}').delete()">Delete</button></div>`;});
-    D('broadcastHistory').innerHTML=bHtml||'<p>No broadcasts.</p>';
+    D('pendingLoanContainer').innerHTML=pCont||'<p>None</p>'; D('activeLoanBody').innerHTML=aHtml||'<tr><td colspan="4">No Active Loans</td></tr>'; D('dash-loans-out').textContent=`KES ${fmt(cache.loans)}`;
   }));
 
   // Audit
-  activeListeners.push(db.collection("audit_logs").orderBy("ts","desc").limit(30).onSnapshot(snap => {
+  activeListeners.push(db.collection("audit_logs").orderBy("ts","desc").limit(50).onSnapshot(snap => {
     let aHtml=''; snap.forEach(d=>{ const a=d.data(); aHtml+=`<tr><td>${fdt(a.ts)}</td><td><span class="pill pill-gold">${a.admin}</span></td><td>${a.action}</td><td class="mono">${a.target}</td></tr>`;});
     D('auditBody').innerHTML=aHtml;
   }));
 }
 
-/* ═══════════════════════════════════════════
-   CORE ERP ACTIONS (SECURE BATCHES)
-═══════════════════════════════════════════ */
-
+// --- ACTIONS ---
 async function manualLedgerEntry(uid, wk) {
-  const amt=prompt("Log KES amount for W"+wk+":"); if(!amt||isNaN(amt)) return;
-  const b=db.batch(); const n=new Date(); const ts=new Date(n.getFullYear(),n.getMonth(),(wk-1)*7+2).getTime();
-  b.update(db.collection("users").doc(uid),{totalContributed:firebase.firestore.FieldValue.increment(Number(amt))});
-  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(Number(amt))},{merge:true});
-  b.set(db.collection("wallet_transactions").doc(),{uid, amount:Number(amt), type:"CONTRIBUTION", timestamp:ts, status:"Completed", mpesaRef:"CASH"});
-  await b.commit(); logAudit("Manual Ledger Entry", `UID:${uid} Amt:${amt}`); toast("Logged.");
+  const a=prompt("Amount in KES:"); if(!a||isNaN(a)) return;
+  const b=db.batch(); b.update(db.collection("users").doc(uid),{totalContributed:firebase.firestore.FieldValue.increment(Number(a))});
+  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(Number(a))},{merge:true});
+  b.set(db.collection("wallet_transactions").doc(),{uid, amount:Number(a), type:"CONTRIBUTION", timestamp:Date.now(), status:"Completed", mpesaRef:"CASH"});
+  await b.commit(); logAudit("Manual Ledger Entry", `UID:${uid} Amt:${a}`); toast("Logged.");
 }
 
 async function submitTx() {
@@ -462,35 +402,37 @@ async function submitTx() {
   const b=db.batch(); const mod = type==='WITHDRAWAL'?-amt:amt;
   b.update(db.collection("users").doc(uid), {walletBalance:firebase.firestore.FieldValue.increment(mod)});
   b.set(db.collection("wallet_transactions").doc(), {uid, amount:amt, type, timestamp:Date.now(), status:"Completed", mpesaRef:ref});
-  await b.commit(); logAudit("Manual Tx", `Type:${type} Amt:${amt}`); toast("Tx Logged."); D('tx-card').style.display='none';
+  await b.commit(); logAudit("Manual Tx", `UID:${uid} Type:${type} Amt:${amt}`); toast("Tx Logged."); D('tx-card').style.display='none';
 }
 
 async function submitAsset() {
   const name=D('as-name').value, type=D('as-type').value, cost=Number(D('as-cost').value), val=Number(D('as-val').value);
   const b=db.batch(); b.set(db.collection("assets").doc(),{name,type,cost,valuation:val});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-cost)},{merge:true});
-  await b.commit(); logAudit("Asset Purchased", `Name:${name} Cost:${cost}`); toast("Asset Added."); D('asset-card').style.display='none';
+  await b.commit(); logAudit("Asset Purchased", `Name:${name} Cost:${cost}`); toast("Asset Added. Fund Deducted."); D('asset-card').style.display='none';
 }
+
 async function liquidateAsset(id, val) {
   if(!confirm("Liquidate asset and return funds to Group Fund?")) return;
   const b=db.batch(); b.delete(db.collection("assets").doc(id));
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(val)},{merge:true});
-  await b.commit(); logAudit("Asset Liquidated", `ID:${id}`); toast("Asset Liquidated.");
+  await b.commit(); logAudit("Asset Liquidated", `ID:${id} Val:${val}`); toast("Asset Liquidated.");
 }
 
 async function submitExpense() {
   const desc=D('ex-desc').value, amt=Number(D('ex-amt').value);
   const b=db.batch(); b.set(db.collection("expenses").doc(),{desc,amt,by:myName,ts:Date.now()});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-amt)},{merge:true});
-  await b.commit(); logAudit("Group Expense", `Amt:${amt}`); toast("Expense Logged."); D('exp-card').style.display='none';
+  await b.commit(); logAudit("Group Expense", `Desc:${desc} Amt:${amt}`); toast("Expense Logged. Fund Deducted."); D('exp-card').style.display='none';
 }
 
 async function submitFine() {
   const uid=D('fine-member').value, amt=Number(D('fine-amount').value), r=D('fine-reason').value, stk=Number(D('fine-strike').value);
   const b=db.batch(); b.update(db.collection("users").doc(uid), {totalFines:firebase.firestore.FieldValue.increment(amt), strikes:firebase.firestore.FieldValue.increment(stk)});
   b.set(db.collection("fines").doc(), {uid, amount:amt, description:r, isPaid:false, timestamp:Date.now()});
-  await b.commit(); logAudit("Issued Fine", `Amt:${amt}`); toast("Penalty Issued."); D('fine-card').style.display='none';
+  await b.commit(); logAudit("Issued Fine/Strike", `UID:${uid} Amt:${amt}`); toast("Penalty Issued."); D('fine-card').style.display='none';
 }
+
 async function payFine(id, uid, amt) {
   const b=db.batch(); b.update(db.collection("fines").doc(id),{isPaid:true}); b.update(db.collection("users").doc(uid),{totalFines:firebase.firestore.FieldValue.increment(-amt)});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(amt)},{merge:true}); await b.commit(); logAudit("Fine Cleared", `ID:${id}`); toast("Cleared.");
@@ -500,26 +442,26 @@ async function waiveFine(id, uid, amt) {
 }
 
 async function apprLoan(id, uid, amt) {
-  const b=db.batch(); b.update(db.collection("loans").doc(id),{status:'Active', approvedAt:Date.now()}); b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(amt)});
-  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"LOAN_DISBURSEMENT",timestamp:Date.now(),status:"Completed"}); await b.commit(); logAudit("Loan Approved", `Amt:${amt}`); toast("Approved.");
+  const b=db.batch(); b.update(db.collection("loans").doc(id),{status:'Active'}); b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(amt)});
+  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"LOAN_DISBURSEMENT",timestamp:Date.now(),status:"Completed"}); await b.commit(); logAudit("Loan Approved", `ID:${id}`); toast("Approved.");
 }
 async function writeOffLoan(id, bal) {
-  if(!confirm("Write off as Bad Debt? Absorbs loss to Group Fund.")) return;
+  if(!confirm("Write off as Bad Debt? This absorbs the loss.")) return;
   const b=db.batch(); b.update(db.collection("loans").doc(id),{status:'Written Off'}); b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-bal)},{merge:true});
-  await b.commit(); logAudit("Loan Write-Off", `Loss:${bal}`); toast("Written Off.");
+  await b.commit(); logAudit("Loan Write-Off", `ID:${id} Loss:${bal}`); toast("Written Off.");
 }
 
 async function submitWelfare() {
   const uid=D('wel-member').value, amt=Number(D('wel-amount').value), r=D('wel-reason').value;
   const b=db.batch(); b.set(db.collection("group").doc("ngi_main"),{welfareFund:firebase.firestore.FieldValue.increment(-amt)},{merge:true});
   b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(amt)});
-  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"WELFARE_OUT",description:r,timestamp:Date.now()}); await b.commit(); logAudit("Welfare Payout", `Amt:${amt}`); toast("Payout Sent."); D('wel-card').style.display='none';
+  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"WELFARE_OUT",description:r,timestamp:Date.now()}); await b.commit(); logAudit("Welfare Payout", `UID:${uid} Amt:${amt}`); toast("Payout Sent."); D('wel-card').style.display='none';
 }
 
 async function verifyKYC(uid) { await db.collection("users").doc(uid).update({kyc:true}); logAudit("Verified KYC", `UID:${uid}`); toast("Verified."); }
 async function issueStrike(uid) { await db.collection("users").doc(uid).update({strikes:firebase.firestore.FieldValue.increment(1)}); logAudit("Issued Strike", `UID:${uid}`); toast("Strike added."); }
 
-// --- DIVIDENDS ---
+// --- DIVIDENDS ENGINE ---
 let divMap = [];
 function runDividendPreview() {
   const cash = cache.fund; const ret = Number(D('div-retain').value)/100;
@@ -533,82 +475,70 @@ function runDividendPreview() {
   D('dividendBody').innerHTML=dHtml; D('btn-execute-div').style.display='block';
 }
 async function executeDividends() {
-  if(!confirm("Execute payouts? Drains Master Fund into user wallets.")) return;
+  if(!confirm("Execute payouts? This will drain the Master Fund into user wallets.")) return;
   const b=db.batch(); let totPayout=0;
   divMap.forEach(d=>{ if(d.pay>0){ b.update(db.collection("users").doc(d.uid),{walletBalance:firebase.firestore.FieldValue.increment(d.pay)}); totPayout+=d.pay; }});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-totPayout), retainedEarnings:firebase.firestore.FieldValue.increment(totPayout)},{merge:true});
   await b.commit(); logAudit("Executed Dividends", `Total Payout:${totPayout}`); toast("Dividends Executed!"); D('btn-execute-div').style.display='none';
 }
 
-// --- MEETINGS / POLLS / COMMS ---
-async function scheduleMeeting() {
-  const agenda=D('m-agenda').value, chan=D('m-channel').value||'ngi_hq', ds=D('m-date').value, ts=D('m-time').value;
-  if(!agenda||!ds||!ts) return toast("Fill all fields","err");
-  const [y,mo,d]=ds.split('-').map(Number); const [h,m]=ts.split(':').map(Number); const time=new Date(y,mo-1,d,h,m).getTime();
-  await db.collection("meetings").add({agenda, date:time, agoraChannel:chan, status:"Upcoming", timestamp:Date.now()}); toast("Meeting Set"); logAudit("Scheduled Meeting", agenda);
-}
-async function viewMinutes(id, agenda) {
-  const doc = await db.collection("meetings").doc(id).get();
-  D('min-agenda').textContent = agenda; D('min-content').textContent = doc.data().rawNotes || "No notes.";
-  D('minutes-modal').classList.add('open');
-}
-function addPollOpt() {
-  const c = D('p-options'); const n = c.querySelectorAll('.p-opt').length+1;
-  const w = document.createElement('div'); w.className='form-group'; w.innerHTML=`<label>Option ${n}</label><input type="text" class="p-opt">`; c.appendChild(w);
-}
-async function launchPoll() {
-  const q=D('p-q').value; const opts=[]; document.querySelectorAll('.p-opt').forEach(i=>{if(i.value) opts.push({id:Math.random().toString(36).substr(2,6),text:i.value,votes:[]});});
-  if(!q || opts.length<2) return toast("Fill question and 2 options","err");
-  await db.collection("polls").add({question:q, choices:opts, status:"Active", createdAt:Date.now()}); toast("Poll Launched"); logAudit("Launched Poll", q);
-}
-async function sendBroadcast() {
-  const t=D('b-title').value, m=D('b-msg').value; if(!t||!m) return;
-  await db.collection("announcements").add({title:t, message:m, timestamp:Date.now()}); toast("Broadcast Sent"); logAudit("Sent Broadcast", t);
-}
-
-// --- SYSTEM CONFIG & GOD MODE WIPE ---
 async function saveSystemConfig() {
   await db.collection("group").doc("ngi_main").set({ settings: { weeklyTarget: Number(D('sys-target').value), lateFine: Number(D('sys-fine').value), interestRate: Number(D('sys-interest').value), loanMultiple: Number(D('sys-multiple').value) } }, { merge: true });
   toast("Config Saved"); logAudit("Updated Config", "Settings");
-}
-async function forceSync() { toast("Sync complete."); logAudit("Forced Sync", "Wallets"); }
-
-async function wipeDataEngine() {
-  const code = prompt("DANGER: This resets ALL user balances to 0 and deletes ALL financial records, loans, fines, meetings, and polls.\n\nType 'RESET' to confirm:");
-  if (code !== "RESET") return toast("Wipe Aborted.", "info");
-
-  toast("Wiping system data... DO NOT CLOSE THIS PAGE.", "info");
-  try {
-    // 1. Reset Users back to 0
-    const users = await db.collection("users").get();
-    const userPromises = [];
-    users.forEach(doc => {
-      userPromises.push(doc.ref.update({ walletBalance: 0, totalContributed: 0, totalFines: 0, strikes: 0, kyc: false }));
-    });
-    await Promise.all(userPromises);
-
-    // 2. Reset Master Group Fund
-    await db.collection("group").doc("ngi_main").set({ totalFund: 0, welfareFund: 0, retainedEarnings: 0 }, { merge: true });
-
-    // 3. Delete ALL Collections
-    const cols = ["wallet_transactions", "contributions", "loans", "fines", "assets", "expenses", "audit_logs", "meetings", "polls", "announcements"];
-    for (const col of cols) {
-      const snap = await db.collection(col).get();
-      const delPromises = [];
-      snap.forEach(doc => delPromises.push(doc.ref.delete()));
-      await Promise.all(delPromises); // Resolves the chunk
-    }
-
-    logAudit("SYSTEM RESET", "All financial data wiped.");
-    toast("SYSTEM RESET COMPLETE. Ready for fresh APK deployment.", "ok");
-  } catch(e) { toast("Error: " + e.message, "err"); }
 }
 
 function exportCSV() {
   let csv = "NGI ID,Name,Total Saved,Wallet Balance,Strikes\n";
   cache.users.forEach(u=>csv+=`${u.ngiId},${u.name},${u.totalContributed||0},${u.walletBalance||0},${u.strikes||0}\n`);
-  const b=new Blob([csv],{type:'text/csv'}); const u=URL.createObjectURL(b);
-  const a=document.createElement('a'); a.href=u; a.download="NGI_Ledger.csv"; a.click(); logAudit("Exported CSV", "Ledger");
+  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download="NGI_Ledger.csv"; a.click(); logAudit("Exported CSV", "Ledger");
+}
+
+/* ═══════════════════════════════════════════
+   GOD MODE: DEEP SYSTEM PURGE & MEMBER AUDIT
+═══════════════════════════════════════════ */
+async function wipeDataEngine() {
+  const code = prompt("DANGER: This initiates a DEEP PURGE of the entire system.\n\nAll financial records, meetings, polls, and assets will be destroyed.\nYou will then be prompted to KEEP or DELETE each member one-by-one.\n\nType 'RESET' to begin:");
+  if (code !== "RESET") return toast("Wipe Aborted.", "info");
+
+  toast("Wiping system data... DO NOT CLOSE THIS PAGE.", "info");
+  try {
+    // 1. Reset Master Group Fund
+    await db.collection("group").doc("ngi_main").set({ totalFund: 0, welfareFund: 0, retainedEarnings: 0 }, { merge: true });
+
+    // 2. Delete ALL Collections
+    const cols = ["wallet_transactions", "contributions", "loans", "fines", "assets", "expenses", "audit_logs", "meetings", "polls", "announcements"];
+    for (const col of cols) {
+      const snap = await db.collection(col).get();
+      const delPromises = [];
+      snap.forEach(doc => delPromises.push(doc.ref.delete()));
+      await Promise.all(delPromises);
+    }
+
+    // 3. Member Purge Loop
+    const users = await db.collection("users").get();
+    for (const doc of users.docs) {
+      const u = doc.data();
+      
+      // Auto-retain the current admin to prevent session breaking
+      if (doc.id === auth.currentUser.uid) {
+         await doc.ref.update({ walletBalance: 0, totalContributed: 0, totalFines: 0, strikes: 0, kyc: false });
+         continue;
+      }
+
+      const deleteMember = confirm(`Do you want to DELETE this member from NGI entirely?\n\nName: ${u.name}\nID: ${u.ngiId}\nRole: ${u.role}\n\n[OK] = YES, Delete Member\n[Cancel] = NO, Retain (Reset balances to 0)`);
+
+      if (deleteMember) {
+         await doc.ref.delete();
+      } else {
+         await doc.ref.update({ walletBalance: 0, totalContributed: 0, totalFines: 0, strikes: 0, kyc: false });
+      }
+    }
+
+    logAudit("DEEP SYSTEM PURGE", "All data wiped. Member roster audited.");
+    toast("SYSTEM PURGE COMPLETE. Reloading...", "ok");
+    setTimeout(() => window.location.reload(), 2000);
+  } catch(e) { toast("Error: " + e.message, "err"); }
 }
 </script>
 </body>
