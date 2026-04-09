@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>NGI Command Center v7.0</title>
+<title>NGI Command Center v8.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <!-- Firebase SDKs -->
@@ -13,152 +13,72 @@
 
 <style>
 :root {
-  --bg: #06070A;
-  --surface: #0D0F14;
-  --surface2: #13161D;
-  --border: rgba(255,255,255,0.07);
-  --border-bright: rgba(212,175,55,0.4);
-  --gold: #D4AF37;
-  --gold-dim: rgba(212,175,55,0.15);
-  --white: #F0F2F5;
-  --muted: #5A6070;
-  --red: #FF4B2B;
-  --red-dim: rgba(255,75,43,0.12);
-  --green: #00E676;
-  --green-dim: rgba(0,230,118,0.12);
-  --blue: #4A90E2;
-  --sidebar-w: 260px;
-  --radius: 12px;
-  --font: 'Space Grotesk', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+  --bg: #06070A; --surface: #0D0F14; --surface2: #13161D;
+  --border: rgba(255,255,255,0.07); --border-bright: rgba(212,175,55,0.4);
+  --gold: #D4AF37; --gold-dim: rgba(212,175,55,0.15);
+  --white: #F0F2F5; --muted: #5A6070;
+  --red: #FF4B2B; --red-dim: rgba(255,75,43,0.12);
+  --green: #00E676; --green-dim: rgba(0,230,118,0.12);
+  --blue: #4A90E2; --blue-dim: rgba(74,144,226,0.12);
+  --sidebar-w: 260px; --radius: 12px;
+  --font: 'Space Grotesk', sans-serif; --mono: 'JetBrains Mono', monospace;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--white);
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-}
-
-/* ─── SCROLLBAR ─── */
+body { font-family: var(--font); background: var(--bg); color: var(--white); height: 100vh; overflow: hidden; display: flex; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 99px; }
 
 /* ─── AUTH ─── */
-#auth-overlay {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  z-index: 9999;
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-}
-.auth-card {
-  background: var(--surface);
-  border: 1px solid var(--border-bright);
-  border-radius: 20px;
-  padding: 40px 36px;
-  width: 100%; max-width: 420px;
-  text-align: center;
-  animation: slideUp .4s ease;
-}
-.auth-logo {
-  font-size: 11px; letter-spacing: 5px; color: var(--gold);
-  font-weight: 700; margin-bottom: 6px; text-transform: uppercase;
-}
+#auth-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.auth-card { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 20px; padding: 40px 36px; width: 100%; max-width: 420px; text-align: center; animation: slideUp .4s ease; }
+.auth-logo { font-size: 11px; letter-spacing: 5px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
 .auth-title { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
 .auth-sub { font-size: 11px; color: var(--muted); margin-bottom: 32px; }
-.auth-card input {
-  width: 100%; background: var(--bg); border: 1px solid var(--border);
-  border-radius: 10px; padding: 14px 16px; color: var(--white);
-  font-family: var(--font); font-size: 13px; margin-bottom: 12px;
-  transition: border-color .2s;
-}
+.auth-card input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; color: var(--white); font-family: var(--font); font-size: 13px; margin-bottom: 12px; transition: border-color .2s; }
 .auth-card input:focus { outline: none; border-color: var(--gold); }
-.btn-gold {
-  width: 100%; background: var(--gold); color: #000;
-  border: none; border-radius: 10px; padding: 14px;
-  font-family: var(--font); font-size: 13px; font-weight: 700;
-  cursor: pointer; transition: .2s; margin-bottom: 10px; letter-spacing: .5px;
-}
+.btn-gold { width: 100%; background: var(--gold); color: #000; border: none; border-radius: 10px; padding: 14px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; transition: .2s; margin-bottom: 10px; letter-spacing: .5px; }
 .btn-gold:hover { filter: brightness(1.15); transform: translateY(-1px); }
-.btn-outline {
-  width: 100%; background: transparent; color: var(--gold);
-  border: 1px solid var(--border-bright); border-radius: 10px; padding: 14px;
-  font-family: var(--font); font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: .2s;
-}
+.btn-outline { width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--border-bright); border-radius: 10px; padding: 14px; font-family: var(--font); font-size: 13px; font-weight: 600; cursor: pointer; transition: .2s; }
 .btn-outline:hover { background: var(--gold-dim); }
 #auth-error { color: var(--red); font-size: 11px; margin-top: 14px; min-height: 16px; }
 
 /* ─── LAYOUT ─── */
-#sidebar {
-  width: var(--sidebar-w); min-width: var(--sidebar-w);
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: none; flex-direction: column;
-  padding: 24px 14px;
-  overflow-y: auto; overflow-x: hidden;
-  z-index: 100;
-  transition: transform .3s ease;
-}
+#sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: none; flex-direction: column; padding: 24px 14px; overflow-y: auto; overflow-x: hidden; z-index: 100; transition: transform .3s ease; }
 #sidebar.mobile-open { transform: translateX(0) !important; }
 .logo-block { padding: 0 8px 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
 .logo-tag { font-size: 9px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; }
 .logo-title { font-size: 20px; font-weight: 700; color: var(--white); }
 .logo-dot { color: var(--gold); }
-
 .nav-section { font-size: 9px; letter-spacing: 3px; color: var(--muted); padding: 0 10px; margin-bottom: 8px; text-transform: uppercase; margin-top: 14px; }
-.nav-btn {
-  display: flex; align-items: center; gap: 10px;
-  padding: 11px 12px; border-radius: 9px; margin-bottom: 2px;
-  color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 500;
-  transition: .2s; white-space: nowrap;
-}
+.nav-btn { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 9px; margin-bottom: 2px; color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 500; transition: .2s; white-space: nowrap; }
 .nav-btn .icon { font-size: 15px; width: 20px; text-align: center; }
 .nav-btn:hover { background: var(--surface2); color: var(--white); }
 .nav-btn.active { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-bright); }
 .nav-spacer { flex: 1; }
-.nav-logout {
-  display: flex; align-items: center; gap: 10px;
-  padding: 11px 12px; border-radius: 9px;
-  color: var(--red); cursor: pointer; font-size: 13px; font-weight: 600;
-  transition: .2s; margin-top: 20px;
-}
+.nav-logout { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 9px; color: var(--red); cursor: pointer; font-size: 13px; font-weight: 600; transition: .2s; margin-top: 20px; }
 .nav-logout:hover { background: var(--red-dim); }
 
 /* ─── MOBILE HEADER ─── */
-#mobile-header {
-  display: none; position: fixed; top: 0; left: 0; right: 0; height: 56px;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  z-index: 200; align-items: center; padding: 0 16px; gap: 14px;
-}
+#mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 56px; background: var(--surface); border-bottom: 1px solid var(--border); z-index: 200; align-items: center; padding: 0 16px; gap: 14px; }
 #hamburger { background: none; border: none; color: var(--gold); font-size: 22px; cursor: pointer; }
 #mobile-title { font-weight: 700; font-size: 15px; color: var(--white); }
 #mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 99; backdrop-filter: blur(2px); }
 
 /* ─── MAIN ─── */
 #main-content { flex: 1; overflow-y: auto; display: none; padding: 32px; }
-
-/* ─── SECTIONS ─── */
 .section { display: none; animation: fadeIn .3s ease; }
 .section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
-
 .page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
 .page-title { font-size: 22px; font-weight: 700; }
 .page-subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-/* ─── CARDS ─── */
+/* ─── CARDS & STATS ─── */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 20px; }
 .card-title { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-
-/* ─── STAT CARDS ─── */
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin-bottom: 22px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; position: relative; overflow: hidden; }
 .stat-card::after { content:''; position:absolute; top:0; right:0; width:60px; height:100%; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.03)); pointer-events: none; }
@@ -173,7 +93,6 @@ th { padding: 12px 14px; text-align: left; font-size: 10px; letter-spacing: 2px;
 td { padding: 13px 14px; border-bottom: 1px solid var(--border); font-size: 12px; vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(255,255,255,.02); }
-
 .edit-cell { color: var(--gold); cursor: pointer; font-family: var(--mono); background: rgba(212,175,55,0.05); border-radius: 4px; padding: 4px 8px; text-align: center; }
 .edit-cell:hover { background: rgba(212,175,55,0.15); }
 
@@ -182,75 +101,45 @@ tr:hover td { background: rgba(255,255,255,.02); }
 .pill-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,230,118,0.2); }
 .pill-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,75,43,0.2); }
 .pill-gold { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-bright); }
-.pill-blue { background: rgba(74,144,226,.12); color: var(--blue); border: 1px solid rgba(74,144,226,0.2); }
+.pill-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,144,226,0.2); }
 
 /* ─── FORM ─── */
 .form-group { margin-bottom: 14px; width: 100%; }
 .form-group label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-.form-group input, .form-group textarea, .form-group select {
-  width: 100%; background: var(--bg); border: 1px solid var(--border);
-  border-radius: 9px; padding: 12px 14px; color: var(--white);
-  font-family: var(--font); font-size: 13px; transition: border-color .2s;
-}
+.form-group input, .form-group textarea, .form-group select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; color: var(--white); font-family: var(--font); font-size: 13px; transition: border-color .2s; }
 .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--gold); }
 .form-group textarea { resize: vertical; min-height: 90px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-.btn-action {
-  background: var(--gold); color: #000; border: none; border-radius: 9px;
-  padding: 12px 20px; font-family: var(--font); font-size: 12px; font-weight: 700;
-  cursor: pointer; transition: .2s; letter-spacing: .5px; white-space: nowrap;
-}
+.btn-action { background: var(--gold); color: #000; border: none; border-radius: 9px; padding: 12px 20px; font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer; transition: .2s; letter-spacing: .5px; white-space: nowrap; }
 .btn-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
 .btn-action.red { background: var(--red); color: #fff; }
+.btn-action.blue { background: var(--blue); color: #fff; }
 .btn-action.ghost { background: transparent; border: 1px solid var(--border-bright); color: var(--gold); }
 .btn-action.ghost:hover { background: var(--gold-dim); }
 .btn-action.sm { padding: 7px 14px; font-size: 11px; }
 .btn-action.full { width: 100%; }
 
 /* ─── MODALS & PANELS ─── */
-#doc-editor, #minutes-modal {
-  position: fixed; right: -520px; top: 0; width: 460px; height: 100vh;
-  background: var(--surface); border-left: 1px solid var(--border-bright);
-  padding: 28px; transition: right .35s cubic-bezier(.4,0,.2,1);
-  z-index: 500; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
-}
+#doc-editor, #minutes-modal { position: fixed; right: -520px; top: 0; width: 460px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border-bright); padding: 28px; transition: right .35s cubic-bezier(.4,0,.2,1); z-index: 500; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
 #doc-editor.open, #minutes-modal.open { right: 0; }
 .panel-title { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
 .panel-sub { font-size: 10px; color: var(--muted); font-family: var(--mono); margin-bottom: 20px; }
 .minutes-content { background: var(--bg); padding: 16px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; line-height: 1.6; white-space: pre-wrap; flex: 1; overflow-y: auto; margin-bottom: 20px;}
 
-/* ─── LOAN CARD ─── */
-.loan-card {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-}
+/* ─── LOANS & POLLS ─── */
+.loan-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .loan-info { flex: 1; min-width: 200px; }
 .loan-name { font-weight: 600; font-size: 14px; }
 .loan-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
 .loan-amount { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--gold); }
-
-/* ─── POLL ─── */
 .poll-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
 .poll-option { background: var(--bg); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
 .poll-bar-wrap { background: var(--border); border-radius: 4px; height: 4px; margin-top: 8px; }
 .poll-bar { background: var(--gold); height: 4px; border-radius: 4px; transition: width .6s ease; }
 .poll-voters { font-size: 10px; color: var(--muted); margin-top: 4px; }
 
-/* ─── NOTIFICATION ─── */
-#toast {
-  position: fixed; bottom: 24px; right: 24px;
-  background: var(--surface); border: 1px solid var(--border-bright);
-  border-radius: 10px; padding: 14px 20px;
-  display: flex; align-items: center; gap: 10px;
-  font-size: 13px; font-weight: 500;
-  opacity: 0; transform: translateY(10px);
-  transition: .3s; z-index: 9999; max-width: 320px; pointer-events: none;
-}
+#toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border-bright); border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; opacity: 0; transform: translateY(10px); transition: .3s; z-index: 9999; max-width: 320px; pointer-events: none; }
 #toast.show { opacity: 1; transform: none; }
-
-/* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   body { flex-direction: column; }
   #mobile-header { display: flex; }
@@ -263,10 +152,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
   .page-title { font-size: 18px; }
 }
-@media (max-width: 480px) {
-  .stat-grid { grid-template-columns: 1fr; }
-}
-
+@media (max-width: 480px) { .stat-grid { grid-template-columns: 1fr; } }
 .arrear-high { color: var(--red); font-weight: 700; font-family: var(--mono); }
 .arrear-zero { color: var(--green); font-family: var(--mono); }
 </style>
@@ -278,7 +164,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
   <div class="auth-card">
     <div class="auth-logo">NGI System</div>
     <div class="auth-title">Command Center</div>
-    <div class="auth-sub">Executive Access Only · v7.0</div>
+    <div class="auth-sub">Executive Access Only · v8.0</div>
     <input type="email" id="auth-email" placeholder="Admin Email" autocomplete="email">
     <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password">
     <button class="btn-gold" onclick="loginEmail()">🔐 Login to Vault</button>
@@ -301,11 +187,15 @@ tr:hover td { background: rgba(255,255,255,.02); }
     <div class="logo-title">NGI<span class="logo-dot">.</span>HQ</div>
   </div>
 
+  <div class="nav-section">Dashboard</div>
+  <div class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',this)"><span class="icon">🏠</span>Overview</div>
+
   <div class="nav-section">Finance</div>
-  <div class="nav-btn active" data-tab="ledger" onclick="showTab('ledger',this)"><span class="icon">📊</span>Master Ledger</div>
+  <div class="nav-btn" data-tab="ledger" onclick="showTab('ledger',this)"><span class="icon">📊</span>Master Ledger</div>
   <div class="nav-btn" data-tab="finance" onclick="showTab('finance',this)"><span class="icon">💰</span>Transaction Log</div>
   <div class="nav-btn" data-tab="loans" onclick="showTab('loans',this)"><span class="icon">🏦</span>Loans Engine</div>
   <div class="nav-btn" data-tab="fines" onclick="showTab('fines',this)"><span class="icon">⚠️</span>Fines & Penalties</div>
+  <div class="nav-btn" data-tab="welfare" onclick="showTab('welfare',this)"><span class="icon">🤝</span>Welfare Fund</div>
 
   <div class="nav-section">Operations</div>
   <div class="nav-btn" data-tab="users" onclick="showTab('users',this)"><span class="icon">👥</span>User Directory</div>
@@ -321,8 +211,30 @@ tr:hover td { background: rgba(255,255,255,.02); }
 <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
 <main id="main-content">
 
+  <!-- ── DASHBOARD (NEW) ── -->
+  <section id="dashboard" class="section active">
+    <div class="page-header">
+      <div><div class="page-title">Executive Overview</div><div class="page-subtitle">Real-time health of the NGI Chama</div></div>
+    </div>
+    <div class="stat-grid" id="dash-stats">
+      <div class="stat-card"><div class="stat-label">Master Group Fund</div><div class="stat-value" style="color:var(--gold)" id="dash-group-fund">KES 0</div></div>
+      <div class="stat-card"><div class="stat-label">Welfare Fund</div><div class="stat-value" style="color:var(--blue)" id="dash-welfare-fund">KES 0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Members</div><div class="stat-value" id="dash-members">0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Arrears</div><div class="stat-value" id="dash-arrears" style="color:var(--red)">KES 0</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Recent System Activity</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Description</th><th>Time</th></tr></thead>
+          <tbody id="dashActivityBody"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:30px">Loading activity...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <!-- ── LEDGER ── -->
-  <section id="ledger" class="section active">
+  <section id="ledger" class="section">
     <div class="page-header">
       <div>
         <div class="page-title">Master Financial Ledger</div>
@@ -330,15 +242,9 @@ tr:hover td { background: rgba(255,255,255,.02); }
       </div>
       <button class="btn-action ghost sm" onclick="window.print()">⬇ Export PDF</button>
     </div>
-    <div class="stat-grid" id="ledger-stats">
-      <div class="stat-card"><div class="stat-label">Master Group Fund</div><div class="stat-value" style="color:var(--gold)" id="stat-group-fund">KES 0</div></div>
-      <div class="stat-card"><div class="stat-label">Total Members</div><div class="stat-value" id="stat-members">0</div></div>
-      <div class="stat-card"><div class="stat-label">Current Month Collected</div><div class="stat-value" id="stat-collected">KES 0</div></div>
-      <div class="stat-card"><div class="stat-label">Outstanding Arrears</div><div class="stat-value" id="stat-arrears" style="color:var(--red)">KES 0</div></div>
-    </div>
     <div class="card">
       <div class="table-wrap">
-        <table>
+        <table id="ledgerTable">
           <thead><tr><th>NGI ID</th><th>Member</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total Saved</th><th>Arrears</th></tr></thead>
           <tbody id="ledgerBody"><tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px">Loading ledger...</td></tr></tbody>
         </table>
@@ -350,17 +256,13 @@ tr:hover td { background: rgba(255,255,255,.02); }
   <section id="finance" class="section">
     <div class="page-header">
       <div><div class="page-title">Transaction Log</div><div class="page-subtitle">Full immutable audit trail</div></div>
-      <button class="btn-action ghost sm" onclick="showManualTxModal()">+ Manual Entry</button>
+      <button class="btn-action ghost sm" onclick="document.getElementById('manual-tx-card').style.display='block'">+ Manual Entry</button>
     </div>
     
-    <!-- Manual Entry Block -->
     <div class="card" id="manual-tx-card" style="display:none; max-width: 600px; border-color:var(--gold)">
       <div class="card-title">Log Manual Cash Transaction</div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Select Member</label>
-          <select id="tx-member"></select>
-        </div>
+        <div class="form-group"><label>Select Member</label><select id="tx-member"></select></div>
         <div class="form-group">
           <label>Transaction Type</label>
           <select id="tx-type">
@@ -395,33 +297,29 @@ tr:hover td { background: rgba(255,255,255,.02); }
     <div class="page-header">
       <div><div class="page-title">Loans Engine</div><div class="page-subtitle">Review applications and track active loans</div></div>
     </div>
-    
     <div class="card-title" style="margin-top:10px">Pending Applications</div>
     <div id="pendingLoanContainer"><p style="color:var(--muted);padding:20px;background:var(--surface2);border-radius:10px">No pending applications.</p></div>
 
     <div class="card-title" style="margin-top:30px">Active Loans</div>
     <div class="table-wrap" style="background:var(--surface)">
       <table>
-        <thead><tr><th>Member</th><th>Principal</th><th>Repayable</th><th>Paid</th><th>Balance</th><th>Due Date</th></tr></thead>
-        <tbody id="activeLoanBody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No active loans.</td></tr></tbody>
+        <thead><tr><th>Member</th><th>Principal</th><th>Repayable</th><th>Paid</th><th>Balance</th><th>Due Date</th><th>Action</th></tr></thead>
+        <tbody id="activeLoanBody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No active loans.</td></tr></tbody>
       </table>
     </div>
   </section>
 
-  <!-- ── FINES (NEW) ── -->
+  <!-- ── FINES ── -->
   <section id="fines" class="section">
     <div class="page-header">
-      <div><div class="page-title">Fines & Penalties</div><div class="page-subtitle">Enforce rules and collect revenue for the Group Fund</div></div>
+      <div><div class="page-title">Fines & Penalties</div><div class="page-subtitle">Enforce rules and collect revenue</div></div>
       <button class="btn-action ghost sm" onclick="document.getElementById('issue-fine-card').style.display='block'">+ Issue Fine</button>
     </div>
 
     <div class="card" id="issue-fine-card" style="display:none; max-width: 600px; border-color:var(--red)">
       <div class="card-title" style="color:var(--red)">Issue Manual Penalty</div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Select Member</label>
-          <select id="fine-member"></select>
-        </div>
+        <div class="form-group"><label>Select Member</label><select id="fine-member"></select></div>
         <div class="form-group"><label>Amount (KES)</label><input type="number" id="fine-amount" value="50"></div>
       </div>
       <div class="form-group"><label>Reason</label><input type="text" id="fine-reason" placeholder="e.g. Disrupted the meeting"></div>
@@ -437,6 +335,37 @@ tr:hover td { background: rgba(255,255,255,.02); }
         <table>
           <thead><tr><th>Member</th><th>Amount</th><th>Reason</th><th>Date Issued</th><th>Actions</th></tr></thead>
           <tbody id="finesBody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No outstanding fines.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WELFARE (NEW) ── -->
+  <section id="welfare" class="section">
+    <div class="page-header">
+      <div><div class="page-title">Welfare Fund</div><div class="page-subtitle">Manage solidarity, bereavements, and emergencies</div></div>
+      <button class="btn-action ghost sm" onclick="document.getElementById('welfare-payout-card').style.display='block'">+ Log Payout</button>
+    </div>
+
+    <div class="card" id="welfare-payout-card" style="display:none; max-width: 600px; border-color:var(--blue)">
+      <div class="card-title" style="color:var(--blue)">Log Welfare Payout (Emergency/Bereavement)</div>
+      <div class="form-row">
+        <div class="form-group"><label>Select Member (Recipient)</label><select id="welfare-member"></select></div>
+        <div class="form-group"><label>Amount to Deduct (KES)</label><input type="number" id="welfare-amount" placeholder="e.g. 5000"></div>
+      </div>
+      <div class="form-group"><label>Reason / Description</label><input type="text" id="welfare-reason" placeholder="e.g. Medical Emergency Support"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-action blue" onclick="submitWelfarePayout()">Deduct & Payout</button>
+        <button class="btn-action ghost" onclick="document.getElementById('welfare-payout-card').style.display='none'">Cancel</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Welfare Transaction Log</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Member</th><th>Amount</th><th>Type</th><th>Description</th><th>Time</th></tr></thead>
+          <tbody id="welfareBody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">Loading welfare logs...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -470,7 +399,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
         <div class="form-group"><label>Date</label><input type="date" id="m-date"></div>
         <div class="form-group"><label>Time</label><input type="time" id="m-time" placeholder="HH:MM"></div>
       </div>
-      <button class="btn-action" onclick="scheduleMeeting()">📅 Set Meeting & Notify All</button>
+      <button class="btn-action full" onclick="scheduleMeeting()">📅 Set Meeting & Notify All</button>
     </div>
     <div class="card">
       <div class="card-title">Meeting History & Minutes</div>
@@ -493,10 +422,10 @@ tr:hover td { background: rgba(255,255,255,.02); }
         <div class="form-group"><label>Option 1</label><input type="text" class="p-opt" placeholder="e.g. Yes"></div>
         <div class="form-group"><label>Option 2</label><input type="text" class="p-opt" placeholder="e.g. No"></div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
         <button class="btn-action ghost sm" onclick="addPollOpt()">+ Add Option</button>
-        <button class="btn-action" onclick="launchPoll()">🚀 Launch Live Poll</button>
       </div>
+      <button class="btn-action full" onclick="launchPoll()">🚀 Launch Live Poll</button>
     </div>
     <div id="poll-results-container"></div>
   </section>
@@ -520,14 +449,14 @@ tr:hover td { background: rgba(255,255,255,.02); }
   <section id="system" class="section">
     <div class="page-header"><div><div class="page-title">System Config</div><div class="page-subtitle">Global Chama Variables (Danger Zone)</div></div></div>
     <div class="card" style="max-width:600px; border-color:var(--border-bright)">
-      <div class="card-title">NGI Main Group Data</div>
-      <div class="form-row">
-        <div class="form-group"><label>Master Group Fund (KES)</label><input type="number" id="sys-fund" readonly style="color:var(--gold); font-family:var(--mono)"></div>
-        <div class="form-group"><label>Member Count</label><input type="number" id="sys-members" readonly></div>
-      </div>
+      <div class="card-title">Financial Targets & Rules</div>
       <div class="form-row">
         <div class="form-group"><label>Weekly Target (KES)</label><input type="number" id="sys-target" value="125"></div>
         <div class="form-group"><label>Late Fine Amount (KES)</label><input type="number" id="sys-fine" value="50"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Loan Interest Rate (%)</label><input type="number" id="sys-interest" value="10"></div>
+        <div class="form-group"><label>Max Loan Multiple (x Savings)</label><input type="number" id="sys-multiple" value="2"></div>
       </div>
       <button class="btn-action ghost full" onclick="saveSystemConfig()">Update Configuration</button>
     </div>
@@ -576,7 +505,7 @@ const db   = firebase.firestore();
 
 let curCol = '', curId = '', edData = {};
 let activeListeners = [];
-let allUsersCache = []; // For dropdowns
+let allUsersCache = []; 
 
 /* ═══════════════════════════════════════════
    TOAST HELPER
@@ -616,19 +545,13 @@ auth.onAuthStateChanged(user => {
 });
 
 function setError(msg) { document.getElementById('auth-error').textContent = msg; }
-
 function loginEmail() {
   const email = document.getElementById('auth-email').value.trim();
   const pass  = document.getElementById('auth-password').value;
   if (!email || !pass) { setError("Please enter credentials."); return; }
-  setError('');
-  auth.signInWithEmailAndPassword(email, pass).catch(e => setError(e.message));
+  setError(''); auth.signInWithEmailAndPassword(email, pass).catch(e => setError(e.message));
 }
-
-function loginGoogle() {
-  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => setError(e.message));
-}
-
+function loginGoogle() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => setError(e.message)); }
 function handleLogout() {
   if (!confirm("Logout of NGI Command?")) return;
   activeListeners.forEach(fn => fn()); activeListeners = [];
@@ -647,7 +570,6 @@ function showTab(id, el) {
   closeEditor(); document.getElementById('minutes-modal').classList.remove('open');
   closeMobileNav();
 }
-
 function toggleMobileNav() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('mobile-overlay');
@@ -659,25 +581,11 @@ function closeMobileNav() {
   document.getElementById('sidebar').classList.remove('mobile-open');
   document.getElementById('mobile-overlay').style.display = 'none'; 
 }
-
-function setMinDate() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('m-date').min = today;
-}
-
-function formatDate(ts) {
-  if (!ts) return '—';
-  return new Date(ts).toLocaleDateString('en-KE', { day:'2-digit', month:'short', year:'numeric' });
-}
-function formatTime(ts) {
-  if (!ts) return '—';
-  return new Date(ts).toLocaleTimeString('en-KE', { hour:'2-digit', minute:'2-digit', hour12:true });
-}
+function setMinDate() { document.getElementById('m-date').min = new Date().toISOString().split('T')[0]; }
+function formatDate(ts) { return ts ? new Date(ts).toLocaleDateString('en-KE', { day:'2-digit', month:'short', year:'numeric' }) : '—'; }
+function formatTime(ts) { return ts ? new Date(ts).toLocaleTimeString('en-KE', { hour:'2-digit', minute:'2-digit', hour12:true }) : '—'; }
 function formatDateTime(ts) { return `${formatDate(ts)} · ${formatTime(ts)}`; }
-function getWeekOfMonth(date) {
-  const day = new Date(date).getDate();
-  if (day <= 7) return 1; if (day <= 14) return 2; if (day <= 21) return 3; return 4;
-}
+function getWeekOfMonth(date) { const day = new Date(date).getDate(); if (day <= 7) return 1; if (day <= 14) return 2; if (day <= 21) return 3; return 4; }
 
 /* ═══════════════════════════════════════════
    VAULT LISTENERS (The Core Engine)
@@ -688,9 +596,16 @@ function runVaultListeners() {
   const unsubGroup = db.collection("group").doc("ngi_main").onSnapshot(doc => {
     if(doc.exists) {
       const data = doc.data();
+      document.getElementById('dash-group-fund').textContent = `KES ${Number(data.totalFund||0).toLocaleString()}`;
       document.getElementById('stat-group-fund').textContent = `KES ${Number(data.totalFund||0).toLocaleString()}`;
-      document.getElementById('sys-fund').value = data.totalFund || 0;
-      document.getElementById('sys-members').value = data.memberCount || 0;
+      document.getElementById('dash-welfare-fund').textContent = `KES ${Number(data.welfareFund||0).toLocaleString()}`;
+      
+      if(data.settings) {
+        document.getElementById('sys-target').value = data.settings.weeklyTarget || 125;
+        document.getElementById('sys-fine').value = data.settings.lateFine || 50;
+        document.getElementById('sys-interest').value = data.settings.interestRate || 10;
+        document.getElementById('sys-multiple').value = data.settings.loanMultiple || 2;
+      }
     }
   });
   activeListeners.push(unsubGroup);
@@ -701,7 +616,6 @@ function runVaultListeners() {
     try { 
       const now = new Date();
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-      // Fetch only this month's contributions for the ledger view
       txSnap = await db.collection("wallet_transactions")
         .where("type","==","CONTRIBUTION")
         .where("timestamp", ">=", startOfMonth)
@@ -711,25 +625,24 @@ function runVaultListeners() {
     const uBody = document.getElementById('userBody');
     const lBody = document.getElementById('ledgerBody');
     
-    // Populate Dropdowns for Manual Entry & Fines
     const dropTx = document.getElementById('tx-member');
     const dropFine = document.getElementById('fine-member');
-    dropTx.innerHTML = ''; dropFine.innerHTML = '';
+    const dropWel = document.getElementById('welfare-member');
+    dropTx.innerHTML = ''; dropFine.innerHTML = ''; dropWel.innerHTML = '';
     allUsersCache = [];
 
     uBody.innerHTML = ''; lBody.innerHTML = '';
     let grandTotalMonth = 0, grandArrears = 0, memberCount = 0;
 
     userSnap.forEach(doc => {
-      const u = doc.data();
-      const uid = doc.id;
+      const u = doc.data(); const uid = doc.id;
       memberCount++;
       allUsersCache.push({id: uid, name: u.name, ngiId: u.ngiId});
 
       dropTx.innerHTML += `<option value="${uid}">${u.name} (${u.ngiId})</option>`;
       dropFine.innerHTML += `<option value="${uid}">${u.name} (${u.ngiId})</option>`;
+      dropWel.innerHTML += `<option value="${uid}">${u.name} (${u.ngiId})</option>`;
 
-      // Calc this month's weeks
       const weeks = { 1:0, 2:0, 3:0, 4:0 };
       txSnap.docs.forEach(tDoc => {
         const t = tDoc.data();
@@ -740,11 +653,8 @@ function runVaultListeners() {
       });
       const monthTotal = weeks[1]+weeks[2]+weeks[3]+weeks[4];
       const arrears = Math.max(0, 500 - monthTotal);
-      
-      grandTotalMonth += monthTotal; 
-      grandArrears += arrears;
+      grandTotalMonth += monthTotal; grandArrears += arrears;
 
-      // User Directory Row
       const roles = ['Member', 'Admin', 'Treasurer', 'Secretary'];
       let roleSelect = `<select onchange="changeRole('${uid}', this.value)" style="background:transparent; border:1px solid var(--border); color:var(--white); padding:4px; border-radius:4px;">`;
       roles.forEach(r => roleSelect += `<option value="${r}" ${u.role === r ? 'selected':''}>${r}</option>`);
@@ -757,10 +667,12 @@ function runVaultListeners() {
           <td>${roleSelect}</td>
           <td><span class="pill ${u.isBanned ? 'pill-red':'pill-green'}">${u.isBanned ? 'Banned':'Active'}</span></td>
           <td style="font-family:var(--mono)">KES ${(u.walletBalance || 0).toLocaleString()}</td>
-          <td><button class="btn-action ghost sm" onclick="openEditor('users','${uid}')">Edit User</button></td>
+          <td>
+             <button class="btn-action ghost sm" onclick="openEditor('users','${uid}')">Edit</button>
+             <button class="btn-action ${u.isBanned ? 'green':'red'} sm" onclick="toggleBan('${uid}', ${!u.isBanned})">${u.isBanned ? 'Unban':'Ban'}</button>
+          </td>
         </tr>`;
 
-      // Ledger Row
       lBody.innerHTML += `
         <tr>
           <td style="font-family:var(--mono);color:var(--gold)">${u.ngiId || '—'}</td>
@@ -774,21 +686,21 @@ function runVaultListeners() {
         </tr>`;
     });
 
-    document.getElementById('stat-members').textContent   = memberCount;
+    document.getElementById('dash-members').textContent = memberCount;
+    document.getElementById('dash-arrears').textContent = `KES ${grandArrears.toLocaleString()}`;
+    document.getElementById('stat-members').textContent = memberCount;
     document.getElementById('stat-collected').textContent = `KES ${grandTotalMonth.toLocaleString()}`;
-    document.getElementById('stat-arrears').textContent   = `KES ${grandArrears.toLocaleString()}`;
+    document.getElementById('stat-arrears').textContent = `KES ${grandArrears.toLocaleString()}`;
 
     if (!uBody.innerHTML) uBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No members found.</td></tr>';
   }, err => console.error("Users listener:", err));
   activeListeners.push(unsubUsers);
 
-  // ── FINES (NEW) ──
+  // ── FINES ──
   const unsubFines = db.collection("fines").where("isPaid","==",false).onSnapshot(async snap => {
     const fBody = document.getElementById('finesBody');
     if (snap.empty) { fBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No outstanding fines.</td></tr>'; return; }
     fBody.innerHTML = '';
-    
-    // Need names, so we use cache
     snap.forEach(doc => {
       const f = doc.data();
       const user = allUsersCache.find(u => u.id === f.uid) || {name: 'Unknown'};
@@ -811,16 +723,12 @@ function runVaultListeners() {
   const unsubLoans = db.collection("loans").orderBy("timestamp","desc").onSnapshot(snap => {
     const pCont = document.getElementById('pendingLoanContainer');
     const aBody = document.getElementById('activeLoanBody');
-    
     pCont.innerHTML = ''; aBody.innerHTML = '';
     let hasPending = false, hasActive = false;
 
     snap.forEach(doc => {
       const l = doc.data();
-      const isPending = (l.status || 'Pending') === 'Pending';
-      const isActive = l.status === 'Active';
-
-      if (isPending) {
+      if (l.status === 'Pending') {
         hasPending = true;
         pCont.innerHTML += `
           <div class="loan-card">
@@ -834,7 +742,7 @@ function runVaultListeners() {
               <button class="btn-action red sm" onclick="rejectLoan('${doc.id}')">✕ Reject</button>
             </div>
           </div>`;
-      } else if (isActive) {
+      } else if (l.status === 'Active') {
         hasActive = true;
         aBody.innerHTML += `
           <tr>
@@ -844,12 +752,13 @@ function runVaultListeners() {
             <td style="font-family:var(--mono);color:var(--green)">${(l.amountRepaid||0).toLocaleString()}</td>
             <td style="font-family:var(--mono);font-weight:bold;color:var(--gold)">${l.balance.toLocaleString()}</td>
             <td style="font-size:11px">${formatDate(l.dueDate)}</td>
+            <td><button class="btn-action ghost sm" onclick="logLoanRepayment('${doc.id}', '${l.uid}')">Log Pay</button></td>
           </tr>`;
       }
     });
     if(!hasPending) pCont.innerHTML = '<p style="color:var(--muted);padding:10px">No pending applications.</p>';
-    if(!hasActive) aBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No active loans.</td></tr>';
-  }, err => console.error("Loans listener:", err));
+    if(!hasActive) aBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No active loans.</td></tr>';
+  });
   activeListeners.push(unsubLoans);
 
   // ── MEETINGS ──
@@ -861,7 +770,6 @@ function runVaultListeners() {
       const m = doc.data();
       const isPast = m.date < Date.now() || m.status === 'Ended';
       const attCount = (m.attendees || []).length;
-      
       mBody.innerHTML += `
         <tr>
           <td style="font-weight:bold">${m.agenda || '—'}</td>
@@ -869,22 +777,36 @@ function runVaultListeners() {
           <td><span class="pill ${isPast?'pill-red':'pill-green'}">${m.status || (isPast?'Ended':'Upcoming')}</span></td>
           <td style="font-family:var(--mono)">${attCount} joined</td>
           <td>
-            <button class="btn-action ghost sm" onclick="viewMinutes('${doc.id}', '${(m.agenda||'').replace(/'/g,"")}')">View Minutes</button>
+            <button class="btn-action ghost sm" onclick="viewMinutes('${doc.id}', '${(m.agenda||'').replace(/'/g,"")}')">Minutes</button>
             <button class="btn-action red sm" style="margin-left:5px" onclick="deleteDocSafe('meetings','${doc.id}')">Del</button>
           </td>
         </tr>`;
     });
-  }, err => console.error("Meetings listener:", err));
+  });
   activeListeners.push(unsubMeet);
 
-  // ── TRANSACTIONS ──
+  // ── TRANSACTIONS (General & Welfare) ──
   const unsubTx = db.collection("wallet_transactions").orderBy("timestamp","desc").limit(50).onSnapshot(snap => {
     const fBody = document.getElementById('financeBody');
-    if (snap.empty) { fBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No transactions yet.</td></tr>'; return; }
-    fBody.innerHTML = '';
+    const wBody = document.getElementById('welfareBody');
+    const aBody = document.getElementById('dashActivityBody');
+    
+    if (snap.empty) { 
+      fBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No transactions yet.</td></tr>'; 
+      wBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No welfare logs.</td></tr>'; 
+      aBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:30px">No activity.</td></tr>'; 
+      return; 
+    }
+    
+    fBody.innerHTML = ''; wBody.innerHTML = ''; aBody.innerHTML = '';
+    let aCount = 0;
+
     snap.forEach(doc => {
       const f = doc.data();
-      const isCredit = ['CONTRIBUTION','DEPOSIT','LOAN_DISBURSEMENT'].includes(f.type);
+      const user = allUsersCache.find(u => u.id === f.uid) || {name: 'Unknown'};
+      const isCredit = ['CONTRIBUTION','DEPOSIT','LOAN_DISBURSEMENT','WELFARE_IN'].includes(f.type);
+      
+      // Finance Log
       fBody.innerHTML += `
         <tr>
           <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${doc.id.substring(0,8)}</td>
@@ -896,21 +818,89 @@ function runVaultListeners() {
           <td style="font-size:11px;color:var(--muted)">${f.description || '—'}</td>
           <td style="font-size:10px">${formatDateTime(f.timestamp)}</td>
         </tr>`;
+
+      // Welfare Log
+      if(f.type.includes('WELFARE')) {
+        wBody.innerHTML += `
+          <tr>
+            <td><b>${user.name}</b><br><small style="color:var(--muted)">${f.ngiId}</small></td>
+            <td style="font-family:var(--mono);color:${isCredit?'var(--green)':'var(--red)'};font-weight:bold">${isCredit?'+':'-'}KES ${f.amount}</td>
+            <td><span class="pill pill-blue">${f.type}</span></td>
+            <td style="font-size:11px;color:var(--muted)">${f.description || '—'}</td>
+            <td style="font-size:10px">${formatDateTime(f.timestamp)}</td>
+          </tr>`;
+      }
+
+      // Dash Activity (Latest 5)
+      if(aCount++ < 5) {
+        aBody.innerHTML += `
+          <tr>
+            <td><span class="pill ${isCredit?'pill-green':'pill-red'}">${f.type}</span></td>
+            <td style="font-size:12px">${user.name}: ${f.description || ''} (KES ${f.amount})</td>
+            <td style="font-size:10px;color:var(--muted)">${formatDateTime(f.timestamp)}</td>
+          </tr>`;
+      }
     });
-  }, err => console.error("Transactions listener:", err));
+    if(!wBody.innerHTML) wBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No welfare logs.</td></tr>'; 
+  });
   activeListeners.push(unsubTx);
 
-  // POLLS & COMMS (Kept identical to previous working logic for brevity, just fetching)
-  // ... (Assuming standard Polls and Comms fetch here as before)
+  // ── POLLS ──
+  const unsubPolls = db.collection("polls").orderBy("createdAt","desc").onSnapshot(snap => {
+    const cont = document.getElementById('poll-results-container');
+    if (snap.empty) { cont.innerHTML = ''; return; }
+    cont.innerHTML = '';
+    snap.forEach(doc => {
+      const p = doc.data();
+      const totalVotes = (p.choices || []).reduce((s,c) => s + (c.votes||[]).length, 0);
+      let opts = '';
+      (p.choices || []).forEach(c => {
+        const pct = totalVotes > 0 ? Math.round(((c.votes||[]).length / totalVotes)*100) : 0;
+        opts += `<div class="poll-option">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600;font-size:13px">${c.text}</span><span style="font-family:var(--mono);color:var(--gold)">${(c.votes||[]).length} (${pct}%)</span></div>
+            <div class="poll-bar-wrap"><div class="poll-bar" style="width:${pct}%"></div></div>
+          </div>`;
+      });
+      const isActive = p.status === 'Active';
+      cont.innerHTML += `<div class="poll-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+            <div><div style="font-weight:700;font-size:15px">${p.question}</div><div style="font-size:10px;color:var(--muted);margin-top:3px">${totalVotes} total votes</div></div>
+            <span class="pill ${isActive?'pill-gold':'pill-red'}">${p.status}</span>
+          </div>
+          ${opts}
+          ${isActive ? `<button class="btn-action red sm" style="margin-top:12px" onclick="closePoll('${doc.id}')">Close Poll</button>` : ''}
+        </div>`;
+    });
+  });
+  activeListeners.push(unsubPolls);
+
+  // ── COMMS ──
+  const unsubBC = db.collection("announcements").orderBy("timestamp","desc").limit(20).onSnapshot(snap => {
+    const hist = document.getElementById('broadcastHistory');
+    if (snap.empty) { hist.innerHTML = '<p style="color:var(--muted);font-size:12px">No broadcasts sent yet.</p>'; return; }
+    hist.innerHTML = '';
+    snap.forEach(doc => {
+      const b = doc.data();
+      hist.innerHTML += `<div style="border-bottom:1px solid var(--border);padding:14px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px">
+            <span style="font-weight:700;font-size:13px">${b.title || 'Announcement'}</span>
+            <span style="font-size:10px;color:var(--muted)">${formatDateTime(b.timestamp)}</span>
+          </div>
+          <p style="font-size:12px;color:var(--muted);line-height:1.6">${b.message || ''}</p>
+          <button class="btn-action ghost sm" style="margin-top:10px" onclick="deleteDocSafe('announcements','${doc.id}')">Delete</button>
+        </div>`;
+    });
+  });
+  activeListeners.push(unsubBC);
 }
 
 /* ═══════════════════════════════════════════
    ADMIN COMMAND ACTIONS (SECURE BATCHES)
 ═══════════════════════════════════════════ */
 
-// 1. Manual Ledger Override (Highly Secure Batch)
+// 1. Manual Ledger Override
 async function manualLedgerEntry(uid, week) {
-  const amt = prompt(`Log manual Contribution for Week ${week}\n\nEnter amount in KES (e.g. 125):`);
+  const amt = prompt(`Log manual Contribution for Week ${week}\n\nEnter amount in KES:`);
   if (!amt || isNaN(Number(amt)) || Number(amt) <= 0) return;
   const amount = Number(amt);
 
@@ -920,48 +910,30 @@ async function manualLedgerEntry(uid, week) {
     const entryDate = new Date(now.getFullYear(), now.getMonth(), (week - 1) * 7 + 2).getTime();
 
     const batch = db.batch();
+    batch.update(db.collection("users").doc(uid), { totalContributed: firebase.firestore.FieldValue.increment(amount) });
+    batch.set(db.collection("group").doc("ngi_main"), { totalFund: firebase.firestore.FieldValue.increment(amount) }, { merge: true });
     
-    // 1. Update user's lifetime savings
-    batch.update(db.collection("users").doc(uid), { 
-      totalContributed: firebase.firestore.FieldValue.increment(amount) 
-    });
-
-    // 2. Update Master Group Fund
-    batch.set(db.collection("group").doc("ngi_main"), { 
-      totalFund: firebase.firestore.FieldValue.increment(amount) 
-    }, { merge: true });
-
-    // 3. Log Transaction
     const txRef = db.collection("wallet_transactions").doc();
-    batch.set(txRef, {
-      uid, ngiId: user.ngiId, amount, type: "CONTRIBUTION",
-      timestamp: entryDate, description: `Admin Manual Entry (W${week})`, status: "Completed", mpesaRef: "CASH"
-    });
-
-    // 4. Log Contribution specific doc
-    const conRef = db.collection("contributions").doc();
-    batch.set(conRef, {
-      uid, ngiId: user.ngiId, amount, weekNumber: week, year: now.getFullYear(),
-      timestamp: entryDate, status: "Paid", method: "Cash"
-    });
+    batch.set(txRef, { uid, ngiId: user.ngiId, amount, type: "CONTRIBUTION", timestamp: entryDate, description: `Admin Manual Entry (W${week})`, status: "Completed", mpesaRef: "CASH" });
+    
+    batch.set(db.collection("contributions").doc(), { uid, ngiId: user.ngiId, amount, weekNumber: week, year: now.getFullYear(), timestamp: entryDate, status: "Paid", method: "Cash" });
 
     await batch.commit();
     toast(`Successfully logged KES ${amount} for ${user.name}`);
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
 
-// 2. Change Role
+// 2. Roles & Bans
 async function changeRole(uid, newRole) {
   if(!confirm(`Change role to ${newRole}?`)) return;
-  try {
-    await db.collection("users").doc(uid).update({ role: newRole });
-    toast(`Role updated to ${newRole}`);
-  } catch(e) { toast("Error: " + e.message, "err"); }
+  try { await db.collection("users").doc(uid).update({ role: newRole }); toast(`Role updated to ${newRole}`); } catch(e) { toast("Error", "err"); }
+}
+async function toggleBan(uid, banStatus) {
+  if(!confirm(`Are you sure you want to ${banStatus ? 'ban' : 'unban'} this user?`)) return;
+  try { await db.collection("users").doc(uid).update({ isBanned: banStatus }); toast(`User status updated.`); } catch(e) { toast("Error", "err"); }
 }
 
 // 3. Manual General Transaction (Deposit/Withdraw)
-function showManualTxModal() { document.getElementById('manual-tx-card').style.display = 'block'; }
-
 async function submitManualTx() {
   const uid = document.getElementById('tx-member').value;
   const type = document.getElementById('tx-type').value;
@@ -976,21 +948,13 @@ async function submitManualTx() {
     const isCredit = type !== 'WITHDRAWAL';
     const modifier = isCredit ? amount : -amount;
 
-    // 1. Update wallet balance
-    batch.update(db.collection("users").doc(uid), { 
-      walletBalance: firebase.firestore.FieldValue.increment(modifier) 
-    });
-
-    // 2. Log Tx
+    batch.update(db.collection("users").doc(uid), { walletBalance: firebase.firestore.FieldValue.increment(modifier) });
     const txRef = db.collection("wallet_transactions").doc();
-    batch.set(txRef, {
-      uid, ngiId: user.ngiId, amount, type,
-      timestamp: Date.now(), description: `Admin Logged: ${ref}`, status: "Completed", mpesaRef: ref
-    });
+    batch.set(txRef, { uid, ngiId: user.ngiId, amount, type, timestamp: Date.now(), description: `Admin Logged: ${ref}`, status: "Completed", mpesaRef: ref });
 
     await batch.commit();
     document.getElementById('manual-tx-card').style.display = 'none';
-    document.getElementById('tx-amount').value = '';
+    document.getElementById('tx-amount').value = ''; document.getElementById('tx-ref').value = '';
     toast(`Logged ${type} of KES ${amount} for ${user.name}`);
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
@@ -1006,23 +970,13 @@ async function submitManualFine() {
 
   try {
     const batch = db.batch();
-    
-    // Add to user total fines
-    batch.update(db.collection("users").doc(uid), { 
-      totalFines: firebase.firestore.FieldValue.increment(amount) 
-    });
-
-    // Create Fine Doc
+    batch.update(db.collection("users").doc(uid), { totalFines: firebase.firestore.FieldValue.increment(amount) });
     const fineRef = db.collection("fines").doc();
     const now = new Date();
-    batch.set(fineRef, {
-      id: fineRef.id, uid, ngiId: user.ngiId, amount, type: "Manual Penalty", description: reason,
-      isPaid: false, timestamp: Date.now(), weekNumber: getWeekOfMonth(now), year: now.getFullYear()
-    });
+    batch.set(fineRef, { id: fineRef.id, uid, ngiId: user.ngiId, amount, type: "Manual Penalty", description: reason, isPaid: false, timestamp: Date.now(), weekNumber: getWeekOfMonth(now), year: now.getFullYear() });
 
     await batch.commit();
-    document.getElementById('issue-fine-card').style.display = 'none';
-    document.getElementById('fine-reason').value = '';
+    document.getElementById('issue-fine-card').style.display = 'none'; document.getElementById('fine-reason').value = '';
     toast(`Penalty issued to ${user.name}`);
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
@@ -1031,134 +985,169 @@ async function markFinePaid(fineId, uid, amount) {
   if(!confirm("Mark fine as paid in Cash? This adds to the Group Fund.")) return;
   try {
     const batch = db.batch();
-    // 1. Mark paid
     batch.update(db.collection("fines").doc(fineId), { isPaid: true, paidAt: Date.now() });
-    // 2. Reduce user debt
     batch.update(db.collection("users").doc(uid), { totalFines: firebase.firestore.FieldValue.increment(-amount) });
-    // 3. Boost Group Fund
     batch.set(db.collection("group").doc("ngi_main"), { totalFund: firebase.firestore.FieldValue.increment(amount) }, { merge: true });
     
-    await batch.commit();
-    toast("Fine cleared and added to Group Fund.");
+    const txRef = db.collection("wallet_transactions").doc();
+    batch.set(txRef, { uid, amount, type: "FINE", timestamp: Date.now(), description: `Manual Fine Payment`, status: "Completed" });
+
+    await batch.commit(); toast("Fine cleared and added to Group Fund.");
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
-
 async function waiveFine(fineId, uid, amount) {
-  if(!confirm("Waive (forgive) this fine? The group will not collect this money.")) return;
+  if(!confirm("Waive (forgive) this fine?")) return;
   try {
     const batch = db.batch();
     batch.delete(db.collection("fines").doc(fineId));
     batch.update(db.collection("users").doc(uid), { totalFines: firebase.firestore.FieldValue.increment(-amount) });
-    await batch.commit();
-    toast("Fine forgiven.");
+    await batch.commit(); toast("Fine forgiven.");
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
 
-// 5. Loan Engine
+// 5. Loans
 async function approveLoan(loanId, uid, amount) {
-  if (!confirm(`Approve this KES ${amount.toLocaleString()} loan? It will be sent to their Portfolio.`)) return;
+  if (!confirm(`Approve this KES ${amount.toLocaleString()} loan?`)) return;
   try {
     const batch = db.batch();
     const user = allUsersCache.find(u => u.id === uid);
-
-    // Update Loan Doc
     batch.update(db.collection("loans").doc(loanId), { status: "Active", approvedAt: Date.now() });
-    
-    // Send Money to User Wallet
     batch.update(db.collection("users").doc(uid), { walletBalance: firebase.firestore.FieldValue.increment(amount) });
     
-    // Log Disbursement
     const txRef = db.collection("wallet_transactions").doc();
-    batch.set(txRef, {
-      uid, ngiId: user.ngiId, amount, type: "LOAN_DISBURSEMENT",
-      timestamp: Date.now(), description: `Loan Approved`, status: "Completed", mpesaRef: "SYSTEM"
-    });
+    batch.set(txRef, { uid, ngiId: user.ngiId, amount, type: "LOAN_DISBURSEMENT", timestamp: Date.now(), description: `Loan Approved`, status: "Completed", mpesaRef: "SYSTEM" });
+
+    await batch.commit(); toast("Loan approved.");
+  } catch(e) { toast("Error", "err"); }
+}
+async function rejectLoan(loanId) {
+  if (!confirm("Reject loan?")) return;
+  await db.collection("loans").doc(loanId).update({ status: "Rejected" }); toast("Loan rejected.");
+}
+async function logLoanRepayment(loanId, uid) {
+  const amt = prompt("Enter manual repayment amount (KES):");
+  if(!amt || isNaN(Number(amt)) || Number(amt)<=0) return;
+  try {
+    const batch = db.batch();
+    batch.update(db.collection("loans").doc(loanId), { amountRepaid: firebase.firestore.FieldValue.increment(Number(amt)), balance: firebase.firestore.FieldValue.increment(-Number(amt)) });
+    const txRef = db.collection("wallet_transactions").doc();
+    batch.set(txRef, { uid, amount: Number(amt), type: "LOAN_REPAYMENT", timestamp: Date.now(), description: `Manual Repayment`, status: "Completed" });
+    await batch.commit(); toast("Repayment logged.");
+  } catch(e) { toast("Error", "err"); }
+}
+
+// 6. Welfare Payouts (NEW)
+async function submitWelfarePayout() {
+  const uid = document.getElementById('welfare-member').value;
+  const amount = Number(document.getElementById('welfare-amount').value);
+  const reason = document.getElementById('welfare-reason').value;
+
+  if (!uid || !amount || amount <= 0 || !reason) { toast("Fill all fields", "err"); return; }
+  const user = allUsersCache.find(u => u.id === uid);
+
+  try {
+    const batch = db.batch();
+    // 1. Deduct from master welfare fund
+    batch.set(db.collection("group").doc("ngi_main"), { welfareFund: firebase.firestore.FieldValue.increment(-amount) }, { merge: true });
+    // 2. Add to user wallet so they can withdraw
+    batch.update(db.collection("users").doc(uid), { walletBalance: firebase.firestore.FieldValue.increment(amount) });
+    // 3. Log the transaction
+    const txRef = db.collection("wallet_transactions").doc();
+    batch.set(txRef, { uid, ngiId: user.ngiId, amount, type: "WELFARE_OUT", timestamp: Date.now(), description: `Welfare Payout: ${reason}`, status: "Completed" });
 
     await batch.commit();
-    toast("Loan approved & portfolio credited ✓");
+    document.getElementById('welfare-payout-card').style.display = 'none';
+    document.getElementById('welfare-amount').value = ''; document.getElementById('welfare-reason').value = '';
+    toast(`Welfare Payout sent to ${user.name}`);
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
 
-async function rejectLoan(loanId) {
-  if (!confirm("Reject this loan request?")) return;
-  await db.collection("loans").doc(loanId).update({ status: "Rejected" });
-  toast("Loan rejected.");
-}
-
-// 6. View Meeting Minutes
-async function viewMinutes(id, agenda) {
-  try {
-    const doc = await db.collection("meetings").doc(id).get();
-    const notes = doc.data().rawNotes || "No notes were scribed during this meeting.";
-    document.getElementById('min-agenda').textContent = agenda;
-    document.getElementById('min-content').textContent = notes;
-    document.getElementById('minutes-modal').classList.add('open');
-  } catch(e) { toast("Error loading minutes", "err"); }
-}
-
-// 7. Schedule Meeting
+// 7. Meetings
 async function scheduleMeeting() {
-  const agenda   = document.getElementById('m-agenda').value.trim();
-  const dateStr  = document.getElementById('m-date').value;
-  const timeStr  = document.getElementById('m-time').value;
-  const channel  = document.getElementById('m-channel').value.trim() || 'ngi_hq';
+  const agenda = document.getElementById('m-agenda').value.trim();
+  const dateStr = document.getElementById('m-date').value;
+  const timeStr = document.getElementById('m-time').value;
+  const channel = document.getElementById('m-channel').value.trim() || 'ngi_hq';
 
-  if (!agenda || !dateStr || !timeStr) { toast("Fill all meeting details", "err"); return; }
-
+  if (!agenda || !dateStr || !timeStr) { toast("Fill all details", "err"); return; }
   const [year, month, day] = dateStr.split('-').map(Number);
-  const [hour, minute]     = timeStr.split(':').map(Number);
+  const [hour, minute] = timeStr.split(':').map(Number);
   const ts = new Date(year, month - 1, day, hour, minute).getTime();
 
   if (ts < Date.now()) { toast("Time is in the past.", "err"); return; }
-
+  try { await db.collection("meetings").add({ agenda, date: ts, agoraChannel: channel, status: "Upcoming", timestamp: Date.now(), hasCall: true }); toast("Meeting scheduled ✓"); } catch(e) { toast("Error", "err"); }
+}
+async function viewMinutes(id, agenda) {
   try {
-    await db.collection("meetings").add({ agenda, date: ts, agoraChannel: channel, status: "Upcoming", timestamp: Date.now(), hasCall: true });
-    toast("Meeting scheduled & broadcasted ✓");
-  } catch(e) { toast("Error: " + e.message, "err"); }
+    const doc = await db.collection("meetings").doc(id).get();
+    document.getElementById('min-agenda').textContent = agenda;
+    document.getElementById('min-content').textContent = doc.data().rawNotes || "No notes were scribed during this meeting.";
+    document.getElementById('minutes-modal').classList.add('open');
+  } catch(e) { toast("Error", "err"); }
 }
 
-// 8. Delete Helper
-async function deleteDocSafe(col, id) {
-  if (!confirm("Permanently delete this record?")) return;
-  await db.collection(col).doc(id).delete();
-  toast("Record deleted.");
+// 8. Polls & Broadcasts
+function addPollOpt() {
+  const cont = document.getElementById('p-options');
+  const c = cont.querySelectorAll('.p-opt').length + 1;
+  const w = document.createElement('div'); w.className = 'form-group';
+  w.innerHTML = `<label>Option ${c}</label><input type="text" class="p-opt" placeholder="Enter option...">`;
+  cont.appendChild(w);
+}
+async function launchPoll() {
+  const q = document.getElementById('p-q').value.trim();
+  if (!q) return;
+  const opts = []; document.querySelectorAll('.p-opt').forEach(i => { if (i.value.trim()) opts.push({ id: Math.random().toString(36).substr(2,6), text: i.value.trim(), votes: [] }); });
+  if (opts.length < 2) return;
+  try { await db.collection("polls").add({ question: q, choices: opts, status: "Active", createdAt: Date.now() }); toast("Poll launched live"); } catch(e) { toast("Error", "err"); }
+}
+async function closePoll(id) { await db.collection("polls").doc(id).update({ status: "Closed" }); toast("Poll closed."); }
+
+async function sendBroadcast() {
+  const title = document.getElementById('b-title').value.trim();
+  const msg = document.getElementById('b-msg').value.trim();
+  if (!title || !msg) return;
+  try { await db.collection("announcements").add({ title, message: msg, timestamp: Date.now() }); toast("Broadcast sent"); } catch(e) { toast("Error", "err"); }
 }
 
-// 9. Ghost Editor (Keep same logic for quick raw edits)
+// 9. Config
+async function saveSystemConfig() {
+  const target = Number(document.getElementById('sys-target').value);
+  const fine = Number(document.getElementById('sys-fine').value);
+  const interest = Number(document.getElementById('sys-interest').value);
+  const multiple = Number(document.getElementById('sys-multiple').value);
+  
+  try {
+    await db.collection("group").doc("ngi_main").set({
+      settings: { weeklyTarget: target, lateFine: fine, interestRate: interest, loanMultiple: multiple }
+    }, { merge: true });
+    toast("System Configuration Saved Globally");
+  } catch(e) { toast("Error", "err"); }
+}
+
+// 10. Utils
+async function deleteDocSafe(col, id) { if (confirm("Permanently delete?")) { await db.collection(col).doc(id).delete(); toast("Deleted."); } }
+
+// 11. Ghost Editor
 async function openEditor(col, id) {
   curCol = col; curId = id;
-  const docSnap = await db.collection(col).doc(id).get();
-  edData = docSnap.data();
+  const docSnap = await db.collection(col).doc(id).get(); edData = docSnap.data();
   document.getElementById('ed-panel-id').textContent = `${col} / ${id}`;
-  const cont = document.getElementById('ed-fields');
-  cont.innerHTML = '';
-  for (const k in edData) {
-    cont.innerHTML += `<div class="form-group"><label>${k}</label><input type="text" id="ed-${k}" value="${String(edData[k]).replace(/"/g,'&quot;')}"></div>`;
-  }
+  const cont = document.getElementById('ed-fields'); cont.innerHTML = '';
+  for (const k in edData) { cont.innerHTML += `<div class="form-group"><label>${k}</label><input type="text" id="ed-${k}" value="${String(edData[k]).replace(/"/g,'&quot;')}"></div>`; }
   document.getElementById('doc-editor').classList.add('open');
 }
 function closeEditor() { document.getElementById('doc-editor').classList.remove('open'); }
 async function saveDoc() {
   const updates = {};
   for (const k in edData) {
-    const el = document.getElementById(`ed-${k}`);
-    if (!el) continue;
-    let v = el.value;
-    if (v === 'true') v = true; else if (v === 'false') v = false; else if (!isNaN(v) && v !== '') v = Number(v);
+    const el = document.getElementById(`ed-${k}`); if (!el) continue;
+    let v = el.value; if (v === 'true') v = true; else if (v === 'false') v = false; else if (!isNaN(v) && v !== '') v = Number(v);
     updates[k] = v;
   }
-  await db.collection(curCol).doc(curId).update(updates);
-  toast("Raw edits saved."); closeEditor();
+  await db.collection(curCol).doc(curId).update(updates); toast("Raw edits saved."); closeEditor();
 }
-async function deleteDoc() {
-  await deleteDocSafe(curCol, curId); closeEditor();
-}
-
-// 10. System Config
-async function saveSystemConfig() {
-  toast("Global Variables Updated.");
-  // Add logic to save variables to group/ngi_main if you expand the settings.
-}
+async function deleteDoc() { await deleteDocSafe(curCol, curId); closeEditor(); }
 
 </script>
 </body>
