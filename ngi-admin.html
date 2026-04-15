@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>NGI Command Center v10.2 | Full ERP</title>
+<title>NGI Command Center v10.3 | Full ERP</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -116,7 +116,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
 
 <div id="auth-overlay">
   <div class="auth-card">
-    <div class="auth-logo">NGI System</div><div class="auth-title">ERP Vault v10.2</div><div class="auth-sub">Enterprise Administration</div>
+    <div class="auth-logo">NGI System</div><div class="auth-title">ERP Vault v10.3</div><div class="auth-sub">Enterprise Administration</div>
     <input type="email" id="auth-email" placeholder="Admin Email" autocomplete="email">
     <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password">
     <button class="btn-gold" onclick="loginEmail()">🔐 Authenticate</button>
@@ -183,7 +183,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
       <div class="form-row"><div class="form-group"><label>Amount</label><input type="number" id="tx-amount"></div><div class="form-group"><label>Ref</label><input type="text" id="tx-ref"></div></div>
       <button class="btn-action" onclick="submitTx()">Submit</button> <button class="btn-action ghost" onclick="document.getElementById('tx-card').style.display='none'">Cancel</button>
     </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Ref</th><th>Member</th><th>Amount</th><th>Type</th><th>Time</th></tr></thead><tbody id="financeBody"></tbody></table></div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Ref</th><th>Member</th><th>Amount</th><th>Type</th><th>Time</th><th>Actions</th></tr></thead><tbody id="financeBody"></tbody></table></div></div>
   </section>
 
   <section id="assets" class="section">
@@ -193,7 +193,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
       <div class="form-row"><div class="form-group"><label>Principal Cost (KES)</label><input type="number" id="as-cost"></div><div class="form-group"><label>Current Valuation (KES)</label><input type="number" id="as-val"></div></div>
       <button class="btn-action" onclick="submitAsset()">Log Asset</button> <button class="btn-action ghost" onclick="document.getElementById('asset-card').style.display='none'">Cancel</button>
     </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Asset</th><th>Type</th><th>Cost</th><th>Valuation</th><th>ROI</th><th>Action</th></tr></thead><tbody id="assetBody"></tbody></table></div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Asset</th><th>Type</th><th>Cost</th><th>Valuation</th><th>ROI</th><th>Actions</th></tr></thead><tbody id="assetBody"></tbody></table></div></div>
   </section>
 
   <section id="expenses" class="section">
@@ -202,7 +202,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
       <div class="form-row"><div class="form-group"><label>Description</label><input type="text" id="ex-desc"></div><div class="form-group"><label>Amount (KES)</label><input type="number" id="ex-amt"></div></div>
       <button class="btn-action red" onclick="submitExpense()">Deduct from Group Fund</button> <button class="btn-action ghost" onclick="document.getElementById('exp-card').style.display='none'">Cancel</button>
     </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Logged By</th></tr></thead><tbody id="expenseBody"></tbody></table></div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Logged By</th><th>Actions</th></tr></thead><tbody id="expenseBody"></tbody></table></div></div>
   </section>
 
   <section id="dividends" class="section">
@@ -221,7 +221,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
     <div class="page-header"><div><div class="page-title">Loans & Risk</div></div></div>
     <div class="card-title">Pending Applications</div><div id="pendingLoanContainer" style="margin-bottom:20px"></div>
     <div class="card-title">Active Loans</div>
-    <div class="table-wrap" style="background:var(--surface)"><table><thead><tr><th>Member</th><th>Principal</th><th>Balance</th><th>Action</th></tr></thead><tbody id="activeLoanBody"></tbody></table></div>
+    <div class="table-wrap" style="background:var(--surface)"><table><thead><tr><th>Member</th><th>Principal</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="activeLoanBody"></tbody></table></div>
   </section>
 
   <section id="fines" class="section">
@@ -241,12 +241,12 @@ tr:hover td { background: rgba(255,255,255,.01); }
       <div class="form-group"><label>Reason</label><input type="text" id="wel-reason"></div>
       <button class="btn-action blue" onclick="submitWelfare()">Payout</button> <button class="btn-action ghost" onclick="document.getElementById('wel-card').style.display='none'">Cancel</button>
     </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Member</th><th>Amount</th><th>Type</th><th>Date</th></tr></thead><tbody id="welfareBody"></tbody></table></div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Member</th><th>Amount</th><th>Type</th><th>Date</th><th>Actions</th></tr></thead><tbody id="welfareBody"></tbody></table></div></div>
   </section>
 
   <section id="users" class="section">
     <div class="page-header"><div><div class="page-title">Members & KYC</div></div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th><th>KYC</th><th>Strikes</th><th>Portfolio</th><th>Action</th></tr></thead><tbody id="userBody"></tbody></table></div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th><th>KYC</th><th>Strikes</th><th>Portfolio</th><th>Actions</th></tr></thead><tbody id="userBody"></tbody></table></div></div>
   </section>
 
   <section id="meetings" class="section">
@@ -364,7 +364,7 @@ tr:hover td { background: rgba(255,255,255,.01); }
   <div id="ed-fields" style="flex:1"></div>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
     <button class="btn-action full" onclick="saveDoc()">💾 Save Changes</button>
-    <button class="btn-action red full" onclick="deleteDoc()">🗑 Delete</button>
+    <button class="btn-action red full" onclick="deleteDoc()">🗑 Delete Record</button>
   </div>
   <button class="btn-action ghost full" style="margin-top: 10px;" onclick="closeEditor()">✕ Cancel</button>
 </div>
@@ -411,7 +411,6 @@ function runERP() {
     if(!d.exists) return; const c = d.data(); cache.fund = c.totalFund||0;
     D('dash-fund').textContent = `KES ${fmt(c.totalFund)}`; D('dash-welfare').textContent = `KES ${fmt(c.welfareFund)}`; D('dash-retained').textContent = `KES ${fmt(c.retainedEarnings)}`; D('div-cash').textContent = `KES ${fmt(c.totalFund)}`;
     
-    // Load Financial Settings
     if(c.settings) { 
         D('sys-target').value = c.settings.weeklyTarget||125; 
         D('sys-fine').value = c.settings.lateFine||50; 
@@ -420,7 +419,6 @@ function runERP() {
         D('sys-regfee').value = c.settings.regFee||1000;
     }
 
-    // Load Maintenance Settings
     if(c.maintenance) {
         D('maint-status').value = c.maintenance.isActive ? "true" : "false";
         D('maint-reason').value = c.maintenance.reason || "";
@@ -446,42 +444,41 @@ function runERP() {
 
       const wks={1:0,2:0,3:0,4:0}; txSnap.docs.forEach(t=>{const td=t.data(); if(td.uid===d.id){ wks[getWeekOfMonth(td.timestamp)]+=Number(td.amount); }});
       const target = Number(D('sys-target').value) || 125;
-      const expectedTotal = target * 4;
-      const arrears = Math.max(0, expectedTotal - (wks[1]+wks[2]+wks[3]+wks[4]));
+      const arrears = Math.max(0, (target*4) - (wks[1]+wks[2]+wks[3]+wks[4]));
 
-      uHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td><span class="pill pill-gold">${u.role}</span></td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td><span class="pill ${u.kyc?'pill-green':'pill-red'}">${u.kyc?'Verified':'Pending'}</span></td><td class="mono" style="color:${u.strikes>=3?'var(--red)':'inherit'}">${u.strikes||0}</td><td class="mono">KES ${fmt(u.walletBalance)}</td><td><button class="btn-action sm" onclick="verifyKYC('${d.id}')">KYC</button> <button class="btn-action ghost sm" onclick="issueStrike('${d.id}')">Strike</button></td></tr>`;
+      uHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td><span class="pill pill-gold">${u.role}</span></td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td><span class="pill ${u.kyc?'pill-green':'pill-red'}">${u.kyc?'Verified':'Pending'}</span></td><td class="mono" style="color:${u.strikes>=3?'var(--red)':'inherit'}">${u.strikes||0}</td><td class="mono">KES ${fmt(u.walletBalance)}</td><td><button class="btn-action sm" onclick="verifyKYC('${d.id}')">KYC</button> <button class="btn-action ghost sm" onclick="issueStrike('${d.id}')">Strike</button> <button class="btn-action ghost sm" onclick="openEditor('users', '${d.id}')">Edit</button></td></tr>`;
       lHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',1)">${wks[1]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',2)">${wks[2]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',3)">${wks[3]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',4)">${wks[4]||0}</td><td class="mono">KES ${fmt(u.totalContributed)}</td><td class="mono" style="color:${arrears>0?'var(--red)':'var(--green)'}">${arrears>0?arrears:'✓'}</td></tr>`;
     });
-    D('userBody').innerHTML=uHtml; D('ledgerBody').innerHTML=lHtml;
+    D('userBody').innerHTML=uHtml; D('ledgerBody').innerHTML=lHtml; 
     D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`;
   }));
 
   // Transactions
   activeListeners.push(db.collection("wallet_transactions").orderBy("timestamp","desc").limit(50).onSnapshot(snap => {
     let fHtml='', wHtml=''; snap.forEach(d=>{ const f=d.data(); const u=cache.users.find(x=>x.id===f.uid); const cred=['CONTRIBUTION','DEPOSIT','WELFARE_IN'].includes(f.type);
-    fHtml+=`<tr><td class="mono" style="color:var(--muted)">${d.id.substring(0,6)}</td><td class="mono">${f.ngiId}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'};font-weight:bold">${cred?'+':'-'}KES ${fmt(f.amount)}</td><td><span class="pill ${cred?'pill-green':'pill-red'}">${f.type}</span></td><td>${fdt(f.timestamp)}</td></tr>`;
-    if(f.type.includes('WELFARE')) wHtml+=`<tr><td>${u?.name}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'}">KES ${f.amount}</td><td><span class="pill pill-blue">${f.type}</span></td><td>${fdt(f.timestamp)}</td></tr>`;
+    fHtml+=`<tr><td class="mono" style="color:var(--muted)">${d.id.substring(0,6)}</td><td class="mono">${f.ngiId}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'};font-weight:bold">${cred?'+':'-'}KES ${fmt(f.amount)}</td><td><span class="pill ${cred?'pill-green':'pill-red'}">${f.type}</span></td><td>${fdt(f.timestamp)}</td><td><button class="btn-action ghost sm" onclick="openEditor('wallet_transactions', '${d.id}')">Edit</button></td></tr>`;
+    if(f.type.includes('WELFARE')) wHtml+=`<tr><td>${u?.name}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'}">KES ${f.amount}</td><td><span class="pill pill-blue">${f.type}</span></td><td>${fdt(f.timestamp)}</td><td><button class="btn-action ghost sm" onclick="openEditor('wallet_transactions', '${d.id}')">Edit</button></td></tr>`;
     });
-    D('financeBody').innerHTML=fHtml||'<tr><td colspan="5">No Tx</td></tr>'; D('welfareBody').innerHTML=wHtml||'<tr><td colspan="4">No Logs</td></tr>';
+    D('financeBody').innerHTML=fHtml||'<tr><td colspan="6">No Tx</td></tr>'; D('welfareBody').innerHTML=wHtml||'<tr><td colspan="5">No Logs</td></tr>';
   }));
 
   // Assets
   activeListeners.push(db.collection("assets").onSnapshot(snap => {
     let aHtml=''; cache.assets=0; snap.forEach(d=>{ const a=d.data(); cache.assets+=a.valuation; const roi=(((a.valuation-a.cost)/a.cost)*100).toFixed(1);
-    aHtml+=`<tr><td>${a.name}</td><td><span class="pill pill-blue">${a.type}</span></td><td class="mono">KES ${fmt(a.cost)}</td><td class="mono">KES ${fmt(a.valuation)}</td><td class="mono" style="color:${roi>=0?'var(--green)':'var(--red)'}">${roi}%</td><td><button class="btn-action ghost sm" onclick="liquidateAsset('${d.id}',${a.valuation})">Liquidate</button></td></tr>`;});
+    aHtml+=`<tr><td>${a.name}</td><td><span class="pill pill-blue">${a.type}</span></td><td class="mono">KES ${fmt(a.cost)}</td><td class="mono">KES ${fmt(a.valuation)}</td><td class="mono" style="color:${roi>=0?'var(--green)':'var(--red)'}">${roi}%</td><td><button class="btn-action ghost sm" onclick="liquidateAsset('${d.id}',${a.valuation})">Liquidate</button> <button class="btn-action ghost sm" onclick="openEditor('assets', '${d.id}')">Edit</button></td></tr>`;});
     D('assetBody').innerHTML=aHtml||'<tr><td colspan="6">No Assets</td></tr>'; D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`;
   }));
 
   // Expenses
   activeListeners.push(db.collection("expenses").orderBy("ts","desc").onSnapshot(snap => {
-    let eHtml=''; snap.forEach(d=>{ const e=d.data(); eHtml+=`<tr><td>${fdt(e.ts)}</td><td>${e.desc}</td><td class="mono" style="color:var(--red)">-KES ${fmt(e.amt)}</td><td>${e.by}</td></tr>`;});
-    D('expenseBody').innerHTML=eHtml||'<tr><td colspan="4">No Expenses</td></tr>';
+    let eHtml=''; snap.forEach(d=>{ const e=d.data(); eHtml+=`<tr><td>${fdt(e.ts)}</td><td>${e.desc}</td><td class="mono" style="color:var(--red)">-KES ${fmt(e.amt)}</td><td>${e.by}</td><td><button class="btn-action ghost sm" onclick="openEditor('expenses', '${d.id}')">Edit</button></td></tr>`;});
+    D('expenseBody').innerHTML=eHtml||'<tr><td colspan="5">No Expenses</td></tr>';
   }));
 
   // Fines
   activeListeners.push(db.collection("fines").where("isPaid","==",false).onSnapshot(snap => {
     let fHtml='', debts=0; snap.forEach(d=>{ const f=d.data(); debts+=f.amount; const u=cache.users.find(x=>x.id===f.uid);
-    fHtml+=`<tr><td><b>${u?.name}</b></td><td class="mono" style="color:var(--red)">KES ${f.amount}</td><td>${f.description}</td><td><button class="btn-action sm" onclick="payFine('${d.id}','${f.uid}',${f.amount})">Clear</button> <button class="btn-action ghost sm" onclick="waiveFine('${d.id}','${f.uid}',${f.amount})">Waive</button></td></tr>`;});
+    fHtml+=`<tr><td><b>${u?.name}</b></td><td class="mono" style="color:var(--red)">KES ${f.amount}</td><td>${f.description}</td><td><button class="btn-action sm" onclick="payFine('${d.id}','${f.uid}',${f.amount})">Clear</button> <button class="btn-action ghost sm" onclick="waiveFine('${d.id}','${f.uid}',${f.amount})">Waive</button> <button class="btn-action ghost sm" onclick="openEditor('fines', '${d.id}')">Edit</button></td></tr>`;});
     D('finesBody').innerHTML=fHtml||'<tr><td colspan="4">No Fines</td></tr>'; D('dash-debt').textContent=`KES ${fmt(debts)}`;
   }));
 
@@ -489,14 +486,14 @@ function runERP() {
   activeListeners.push(db.collection("loans").onSnapshot(snap => {
     let pCont='', aHtml=''; cache.loans=0; snap.forEach(d=>{ const l=d.data();
     if(l.status==='Pending') pCont+=`<div class="card"><div style="display:flex;justify-content:space-between"><div><b>${l.name}</b><br><small>${l.reason}</small></div><div class="mono" style="color:var(--gold);font-size:18px">KES ${fmt(l.amount)}</div></div><div style="margin-top:10px"><button class="btn-action sm" onclick="apprLoan('${d.id}','${l.uid}',${l.amount})">Approve</button> <button class="btn-action red sm" onclick="db.collection('loans').doc('${d.id}').update({status:'Rejected'})">Reject</button></div></div>`;
-    else if(l.status==='Active') { cache.loans+=l.balance; aHtml+=`<tr><td>${l.name}</td><td class="mono">KES ${fmt(l.amount)}</td><td class="mono" style="color:var(--gold)">KES ${fmt(l.balance)}</td><td><button class="btn-action ghost sm" onclick="writeOffLoan('${d.id}',${l.balance})">Write-off</button></td></tr>`; }});
+    else if(l.status==='Active') { cache.loans+=l.balance; aHtml+=`<tr><td>${l.name}</td><td class="mono">KES ${fmt(l.amount)}</td><td class="mono" style="color:var(--gold)">KES ${fmt(l.balance)}</td><td><button class="btn-action ghost sm" onclick="writeOffLoan('${d.id}',${l.balance})">Write-off</button> <button class="btn-action ghost sm" onclick="openEditor('loans', '${d.id}')">Edit</button></td></tr>`; }});
     D('pendingLoanContainer').innerHTML=pCont||'<p style="color:var(--muted)">None</p>'; D('activeLoanBody').innerHTML=aHtml||'<tr><td colspan="4">No Active Loans</td></tr>'; D('dash-loans-out').textContent=`KES ${fmt(cache.loans)}`;
   }));
 
   // Meetings
   activeListeners.push(db.collection("meetings").orderBy("timestamp","desc").onSnapshot(snap => {
     let mHtml=''; snap.forEach(d=>{ const m=d.data(); const isPast = m.date < Date.now() || m.status === 'Ended';
-    mHtml+=`<tr><td><b>${m.agenda}</b></td><td>${fdt(m.date)}</td><td><span class="pill ${isPast?'pill-red':'pill-green'}">${m.status || (isPast?'Ended':'Upcoming')}</span></td><td class="mono">${(m.attendees||[]).length} joined</td><td><button class="btn-action ghost sm" onclick="viewMinutes('${d.id}','${(m.agenda||'').replace(/'/g,"")}')">Minutes</button> <button class="btn-action red sm" style="margin-left:5px" onclick="db.collection('meetings').doc('${d.id}').delete()">Del</button></td></tr>`;});
+    mHtml+=`<tr><td><b>${m.agenda}</b></td><td>${fdt(m.date)}</td><td><span class="pill ${isPast?'pill-red':'pill-green'}">${m.status || (isPast?'Ended':'Upcoming')}</span></td><td class="mono">${(m.attendees||[]).length} joined</td><td><button class="btn-action ghost sm" onclick="viewMinutes('${d.id}','${(m.agenda||'').replace(/'/g,"")}')">Minutes</button> <button class="btn-action ghost sm" onclick="openEditor('meetings', '${d.id}')">Edit</button> <button class="btn-action red sm" style="margin-left:5px" onclick="db.collection('meetings').doc('${d.id}').delete()">Del</button></td></tr>`;});
     D('meetingBody').innerHTML=mHtml||'<tr><td colspan="5" style="text-align:center">No meetings scheduled.</td></tr>';
   }));
 
@@ -506,7 +503,7 @@ function runERP() {
     (p.choices||[]).forEach(c=>{ const pct = totVotes>0 ? Math.round(((c.votes||[]).length/totVotes)*100) : 0;
       opts+=`<div class="poll-option"><div style="display:flex;justify-content:space-between"><span>${c.text}</span><span class="mono">${(c.votes||[]).length} (${pct}%)</span></div><div class="poll-bar-wrap"><div class="poll-bar" style="width:${pct}%"></div></div></div>`;
     });
-    pHtml+=`<div class="poll-card"><div style="display:flex;justify-content:space-between;margin-bottom:14px"><div><b>${p.question}</b><br><small style="color:var(--muted)">${totVotes} votes</small></div><span class="pill ${p.status==='Active'?'pill-gold':'pill-red'}">${p.status}</span></div>${opts}${p.status==='Active'?`<button class="btn-action red sm" style="margin-top:10px" onclick="db.collection('polls').doc('${d.id}').update({status:'Closed'})">Close Poll</button>`:''}</div>`;
+    pHtml+=`<div class="poll-card"><div style="display:flex;justify-content:space-between;margin-bottom:14px"><div><b>${p.question}</b><br><small style="color:var(--muted)">${totVotes} votes</small></div><span class="pill ${p.status==='Active'?'pill-gold':'pill-red'}">${p.status}</span></div>${opts}<div style="margin-top:10px">${p.status==='Active'?`<button class="btn-action red sm" onclick="db.collection('polls').doc('${d.id}').update({status:'Closed'})">Close Poll</button> `:''}<button class="btn-action ghost sm" onclick="openEditor('polls', '${d.id}')">Edit Poll Raw Data</button></div></div>`;
     });
     D('poll-results-container').innerHTML=pHtml||'<p style="color:var(--muted)">No active or past polls.</p>';
   }));
@@ -671,7 +668,7 @@ async function saveMaintenanceConfig() {
     const isActive = D('maint-status').value === "true";
     const reason = D('maint-reason').value.trim() || "System undergoing maintenance.";
     const endStr = D('maint-end').value;
-    const endTime = endStr ? new Date(endStr).getTime() : Date.now() + (3600 * 1000); // Default to 1 hr if empty
+    const endTime = endStr ? new Date(endStr).getTime() : Date.now() + (3600 * 1000);
 
     await db.collection("group").doc("ngi_main").set({
         maintenance: { isActive, reason, endTime }
@@ -715,24 +712,67 @@ async function wipeDataEngine() {
   } catch(e) { toast("Error: " + e.message, "err"); }
 }
 
-// --- GHOST EDITOR (Advanced Debug) ---
+// --- UNIVERSAL GHOST EDITOR (Advanced Debugging & Raw Editing) ---
 async function openEditor(col, id) {
-  curCol = col; curId = id; const docSnap = await db.collection(col).doc(id).get(); edData = docSnap.data();
-  D('ed-panel-id').textContent = `${col} / ${id}`; const cont = D('ed-fields'); cont.innerHTML = '';
-  for (const k in edData) { cont.innerHTML += `<div class="form-group"><label>${k}</label><input type="text" id="ed-${k}" value="${String(edData[k]).replace(/"/g,'&quot;')}"></div>`; }
+  curCol = col; curId = id; 
+  const docSnap = await db.collection(col).doc(id).get(); 
+  edData = docSnap.data();
+  
+  D('ed-panel-id').textContent = `${col} / ${id}`; 
+  const cont = D('ed-fields'); 
+  cont.innerHTML = '';
+  
+  for (const k in edData) { 
+      let val = edData[k];
+      // Convert nested objects/arrays to JSON strings so they don't render as [object Object]
+      if (typeof val === 'object' && val !== null) {
+          val = JSON.stringify(val);
+      }
+      cont.innerHTML += `<div class="form-group"><label>${k}</label><input type="text" id="ed-${k}" value="${String(val).replace(/"/g,'&quot;')}"></div>`; 
+  }
   D('doc-editor').classList.add('open');
 }
+
 function closeEditor() { D('doc-editor').classList.remove('open'); }
+
 async function saveDoc() {
   const updates = {};
   for (const k in edData) {
-    const el = D(`ed-${k}`); if (!el) continue;
-    let v = el.value; if (v === 'true') v = true; else if (v === 'false') v = false; else if (!isNaN(v) && v !== '') v = Number(v);
+    const el = D(`ed-${k}`); 
+    if (!el) continue;
+    
+    let v = el.value; 
+    
+    // Type casting logic
+    if (v === 'true') v = true; 
+    else if (v === 'false') v = false; 
+    else if (!isNaN(v) && v !== '') v = Number(v);
+    else if (v.startsWith('{') || v.startsWith('[')) {
+        // Attempt to parse back into JSON objects/arrays if the admin edited nested data
+        try { v = JSON.parse(v); } catch(e) { console.error("JSON parse failed for", k); }
+    }
+    
     updates[k] = v;
   }
-  await db.collection(curCol).doc(curId).update(updates); toast("Raw edits saved."); closeEditor();
+  
+  try {
+      await db.collection(curCol).doc(curId).update(updates); 
+      toast("Raw edits saved to database."); 
+      logAudit("Raw Document Edit", `${curCol}/${curId}`);
+      closeEditor();
+  } catch (e) {
+      toast("Error saving document", "err");
+  }
 }
-async function deleteDoc() { if(confirm("Delete document?")){ await db.collection(curCol).doc(curId).delete(); toast("Deleted."); closeEditor(); } }
+
+async function deleteDoc() { 
+    if(confirm("DANGER: Are you sure you want to permanently delete this database record?")){ 
+        await db.collection(curCol).doc(curId).delete(); 
+        toast("Document Deleted."); 
+        logAudit("Document Deletion", `${curCol}/${curId}`);
+        closeEditor(); 
+    } 
+}
 </script>
 </body>
 </html>
