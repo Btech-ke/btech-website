@@ -2,776 +2,1660 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>NGI Command Center v10.3 | Full ERP</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NGI Command Center v10.3</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
 <style>
+/* ══════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════ */
 :root {
-  --bg: #06070A; --surface: #0D0F14; --surface2: #13161D; --border: rgba(255,255,255,0.07); --border-bright: rgba(212,175,55,0.4);
-  --gold: #D4AF37; --gold-dim: rgba(212,175,55,0.15); --white: #F0F2F5; --muted: #5A6070;
-  --red: #FF4B2B; --red-dim: rgba(255,75,43,0.12); --green: #00E676; --green-dim: rgba(0,230,118,0.12);
-  --blue: #4A90E2; --blue-dim: rgba(74,144,226,0.12); --purple: #9b59b6; --purple-dim: rgba(155,89,182,0.12);
-  --sidebar-w: 260px; --radius: 10px; --font: 'Space Grotesk', sans-serif; --mono: 'JetBrains Mono', monospace;
+  --bg:       #07080D;
+  --s1:       #0C0E16;
+  --s2:       #111420;
+  --s3:       #181C2A;
+  --border:   rgba(255,255,255,0.06);
+  --border2:  rgba(255,255,255,0.11);
+
+  --gold:     #E8B84B;
+  --gold-2:   #F5D080;
+  --gold-bg:  rgba(232,184,75,0.10);
+  --gold-bdr: rgba(232,184,75,0.30);
+
+  --green:    #34D399;
+  --green-bg: rgba(52,211,153,0.10);
+  --red:      #F87171;
+  --red-bg:   rgba(248,113,113,0.10);
+  --blue:     #60A5FA;
+  --blue-bg:  rgba(96,165,250,0.10);
+  --purple:   #A78BFA;
+  --purp-bg:  rgba(167,139,250,0.10);
+  --orange:   #FB923C;
+  --oran-bg:  rgba(251,146,60,0.10);
+
+  --text:     #E8EAF0;
+  --muted:    #5C6380;
+  --faint:    #333750;
+
+  --font:     'Plus Jakarta Sans', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --radius:   12px;
+  --radius-sm:8px;
+  --sidebar:  270px;
+  --nav-h:    64px;
+  --trans:    0.2s ease;
 }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 13px; }
-body { font-family: var(--font); background: var(--bg); color: var(--white); height: 100vh; overflow: hidden; display: flex; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
+html { font-size: 14px; -webkit-tap-highlight-color: transparent; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+
+/* ══ SCROLLBAR ══ */
+::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 99px; }
+::-webkit-scrollbar-thumb { background: var(--gold-bdr); border-radius: 99px; }
 
-/* AUTH */
-#auth-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.auth-card { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; padding: 40px; width: 100%; max-width: 400px; text-align: center; }
-.auth-card input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; color: var(--white); font-family: var(--font); margin-bottom: 12px; }
-.auth-card input:focus { outline: none; border-color: var(--gold); }
-.btn-gold { width: 100%; background: var(--gold); color: #000; border: none; border-radius: 8px; padding: 14px; font-weight: 700; cursor: pointer; transition: .2s; margin-bottom: 10px; }
-.btn-gold:hover { filter: brightness(1.15); }
-.btn-outline { width: 100%; background: transparent; color: var(--gold); border: 1px solid var(--border-bright); border-radius: 8px; padding: 14px; font-weight: 600; cursor: pointer; transition: .2s; }
-.btn-outline:hover { background: var(--gold-dim); }
-#auth-error { color: var(--red); font-size: 11px; margin-top: 14px; min-height: 16px; }
+/* ══════════════════════════════════════
+   AUTH OVERLAY
+══════════════════════════════════════ */
+#auth-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: radial-gradient(ellipse at 60% 40%, rgba(232,184,75,0.06) 0%, var(--bg) 70%);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.auth-wrap { width: 100%; max-width: 400px; }
+.auth-logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+.auth-logo-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: var(--gold-bg); border: 1px solid var(--gold-bdr);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.auth-logo-text { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.auth-logo-text span { color: var(--gold); }
+.auth-card {
+  background: var(--s1); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 32px;
+}
+.auth-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.5px; }
+.auth-card p { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+.auth-field { position: relative; margin-bottom: 14px; }
+.auth-field label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.auth-field input {
+  width: 100%; background: var(--bg); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 13px 14px; color: var(--text);
+  font-family: var(--font); font-size: 13px; transition: var(--trans);
+}
+.auth-field input:focus { outline: none; border-color: var(--gold); background: var(--s2); }
+.btn-primary {
+  width: 100%; background: var(--gold); color: #0a0a0a; border: none;
+  border-radius: var(--radius-sm); padding: 14px; font-family: var(--font);
+  font-size: 14px; font-weight: 800; cursor: pointer; transition: var(--trans); letter-spacing: 0.3px;
+}
+.btn-primary:hover { background: var(--gold-2); }
+.btn-primary:active { transform: scale(0.99); }
+#auth-error { color: var(--red); font-size: 11px; margin-top: 12px; text-align: center; min-height: 14px; }
 
-/* LAYOUT */
-#sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: none; flex-direction: column; padding: 20px 10px; overflow-y: auto; z-index: 100; transition: transform .3s ease; }
-.logo-block { padding: 0 10px 16px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-.logo-title { font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: 1px;}
-.nav-section { font-size: 9px; letter-spacing: 2px; color: var(--muted); padding: 0 10px; margin: 16px 0 6px; text-transform: uppercase; font-weight:700;}
-.nav-btn { display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 8px; color: var(--muted); cursor: pointer; font-weight: 500; transition: .2s; }
-.nav-btn:hover { background: var(--surface2); color: var(--white); }
-.nav-btn.active { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-bright); }
-.nav-logout { margin-top: auto; color: var(--red); padding: 10px; cursor: pointer; font-weight: 600; border-radius:8px;}
-.nav-logout:hover { background: var(--red-dim); }
+/* ══════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════ */
+#app { display: none; flex: 1; overflow: hidden; position: relative; }
+@media (min-width: 768px) { #app { flex-direction: row; display: none; } }
 
-/* MAIN */
-#main-content { flex: 1; overflow-y: auto; display: none; padding: 24px; }
-.section { display: none; animation: fadeIn .2s ease; }
-.section.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap:10px;}
-.page-title { font-size: 20px; font-weight: 700; }
-.page-subtitle { font-size: 11px; color: var(--muted); }
+/* ══════════════════════════════════════
+   SIDEBAR (DESKTOP)
+══════════════════════════════════════ */
+#sidebar {
+  width: var(--sidebar); background: var(--s1); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: 0; overflow-y: auto;
+  flex-shrink: 0; z-index: 200;
+}
+.sb-header {
+  padding: 20px 18px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.sb-icon {
+  width: 38px; height: 38px; background: var(--gold-bg); border: 1px solid var(--gold-bdr);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+.sb-brand { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; }
+.sb-brand span { color: var(--gold); }
+.sb-version { font-size: 9px; color: var(--muted); font-family: var(--mono); margin-top: 1px; }
 
-/* CARDS & UI */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
-.card-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
-.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; margin-bottom: 16px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-.stat-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-.stat-value { font-size: 22px; font-weight: 700; color: var(--white); margin-top: 4px; font-family: var(--mono); }
+.sb-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+.sb-section {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--faint); padding: 0 8px; margin: 18px 0 6px;
+}
+.sb-section:first-child { margin-top: 4px; }
+.nb {
+  display: flex; align-items: center; gap: 10px; padding: 10px 10px;
+  border-radius: var(--radius-sm); color: var(--muted); cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: var(--trans); position: relative;
+}
+.nb:hover { background: var(--s2); color: var(--text); }
+.nb.active {
+  background: var(--gold-bg); color: var(--gold);
+  border: 1px solid var(--gold-bdr);
+}
+.nb .nb-icon { font-size: 15px; width: 22px; text-align: center; flex-shrink: 0; }
+.sb-footer {
+  padding: 12px 10px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.sb-logout {
+  display: flex; align-items: center; gap: 10px; padding: 10px;
+  border-radius: var(--radius-sm); color: var(--red); cursor: pointer;
+  font-size: 13px; font-weight: 600; transition: var(--trans);
+}
+.sb-logout:hover { background: var(--red-bg); }
+.sb-user {
+  display: flex; align-items: center; gap: 10px; padding: 10px;
+  margin-bottom: 6px;
+}
+.sb-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--gold-bg); border: 1px solid var(--gold-bdr);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.sb-user-name { font-size: 12px; font-weight: 700; color: var(--text); }
+.sb-user-role { font-size: 10px; color: var(--muted); }
 
-/* TABLES */
-.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
-table { width: 100%; border-collapse: collapse; min-width: 700px; text-align: left; }
-thead { background: rgba(0,0,0,.3); }
-th { padding: 10px 12px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
-td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 11px; vertical-align: middle; }
-tr:hover td { background: rgba(255,255,255,.01); }
-.edit-cell { color: var(--gold); cursor: pointer; font-family: var(--mono); background: rgba(212,175,55,0.05); padding: 4px; border-radius: 4px; }
-.edit-cell:hover { background: rgba(212,175,55,0.15); }
+/* ══════════════════════════════════════
+   MOBILE TOP BAR
+══════════════════════════════════════ */
+#mobile-topbar {
+  display: none; background: var(--s1); border-bottom: 1px solid var(--border);
+  padding: 0 16px; height: 56px; align-items: center; justify-content: space-between;
+  flex-shrink: 0; z-index: 300;
+}
+.mob-brand { font-size: 16px; font-weight: 800; }
+.mob-brand span { color: var(--gold); }
+.mob-menu-btn {
+  width: 38px; height: 38px; background: var(--s2); border: 1px solid var(--border2);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px;
+}
+.mob-page-title {
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  background: var(--s2); border: 1px solid var(--border);
+  padding: 4px 12px; border-radius: 20px; max-width: 140px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
-/* PILLS & BUTTONS */
-.pill { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
-.pill-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,230,118,0.2); }
-.pill-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,75,43,0.2); }
-.pill-gold { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-bright); }
-.pill-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,144,226,0.2); }
-.pill-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(155,89,182,0.2); }
+/* MOBILE DRAWER */
+#mob-drawer {
+  position: fixed; inset: 0; z-index: 9000; pointer-events: none;
+}
+#mob-drawer-bg {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.6);
+  opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(4px);
+}
+#mob-drawer-panel {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 280px;
+  background: var(--s1); border-right: 1px solid var(--border2);
+  transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto; display: flex; flex-direction: column;
+}
+#mob-drawer.open { pointer-events: all; }
+#mob-drawer.open #mob-drawer-bg { opacity: 1; }
+#mob-drawer.open #mob-drawer-panel { transform: translateX(0); }
+.drawer-header {
+  padding: 20px 18px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.drawer-nav { flex: 1; padding: 10px 10px; }
+.drawer-footer { padding: 12px; border-top: 1px solid var(--border); }
 
-.form-group { margin-bottom: 12px; width: 100%; }
-.form-group label { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
-.form-group input, .form-group textarea, .form-group select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px; color: var(--white); font-family: var(--font); font-size: 12px; }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--gold); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* ══════════════════════════════════════
+   MOBILE BOTTOM NAV
+══════════════════════════════════════ */
+#mob-bottom-nav {
+  display: none; height: var(--nav-h); background: var(--s1);
+  border-top: 1px solid var(--border); flex-shrink: 0;
+  align-items: stretch; z-index: 300;
+}
+.mob-nav-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; cursor: pointer; transition: var(--trans);
+  border: none; background: none; color: var(--muted); font-family: var(--font);
+  padding: 8px 4px; position: relative;
+}
+.mob-nav-btn.active { color: var(--gold); }
+.mob-nav-btn.active::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 32px; height: 2px; background: var(--gold); border-radius: 0 0 4px 4px;
+}
+.mob-nav-icon { font-size: 20px; line-height: 1; }
+.mob-nav-label { font-size: 9px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
 
-.btn-action { background: var(--gold); color: #000; border: none; border-radius: 6px; padding: 10px 16px; font-family: var(--font); font-size: 11px; font-weight: 700; cursor: pointer; transition: .2s; }
-.btn-action:hover { filter: brightness(1.15); }
-.btn-action.red { background: var(--red); color: #fff; }
-.btn-action.blue { background: var(--blue); color: #fff; }
-.btn-action.purple { background: var(--purple); color: #fff; }
-.btn-action.ghost { background: transparent; border: 1px solid var(--border-bright); color: var(--gold); }
-.btn-action.ghost:hover { background: var(--gold-dim); }
-.btn-action.sm { padding: 6px 12px; font-size: 10px; }
-.btn-action.full { width: 100%; }
+/* ══════════════════════════════════════
+   MAIN CONTENT
+══════════════════════════════════════ */
+#main-content {
+  flex: 1; overflow-y: auto; background: var(--bg);
+  display: flex; flex-direction: column;
+}
+.page { display: none; padding: 24px; animation: pageIn 0.2s ease; flex: 1; }
+.page.active { display: block; }
+@keyframes pageIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
 
-/* POLLS & MINUTES */
-.poll-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
-.poll-option { background: var(--bg); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
-.poll-bar-wrap { background: var(--border); border-radius: 4px; height: 4px; margin-top: 8px; }
-.poll-bar { background: var(--gold); height: 4px; border-radius: 4px; transition: width .6s ease; }
-#doc-editor, #minutes-modal { position: fixed; right: -520px; top: 0; width: 460px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border-bright); padding: 28px; transition: right .35s cubic-bezier(.4,0,.2,1); z-index: 500; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-#doc-editor.open, #minutes-modal.open { right: 0; }
-.minutes-content { background: var(--bg); padding: 16px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; line-height: 1.6; white-space: pre-wrap; flex: 1; overflow-y: auto; margin-bottom: 20px;}
+/* ══════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════ */
+.ph { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+.ph-left h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.ph-left p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.ph-right { display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* UTILS */
-#toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border-bright); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(10px); transition: .3s; z-index: 9999; pointer-events: none; font-weight: 600;}
-#toast.show { opacity: 1; transform: none; }
+/* ══════════════════════════════════════
+   CARDS
+══════════════════════════════════════ */
+.card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+}
+.card-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px; display: flex; align-items: center; gap: 6px;
+}
+.card-title::before { content:''; width:3px; height:12px; background:var(--gold); border-radius:2px; }
+.card-highlight { border-color: var(--gold-bdr); background: radial-gradient(ellipse at top left, var(--gold-bg), var(--s1)); }
+.card-danger { border-color: rgba(248,113,113,0.25); }
+
+/* ══════════════════════════════════════
+   STAT GRID
+══════════════════════════════════════ */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px;
+}
+@media (min-width: 640px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+.stat-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 18px;
+  transition: var(--trans); cursor: default;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-label { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+.stat-value {
+  font-family: var(--mono); font-size: 20px; font-weight: 700;
+  margin-top: 6px; letter-spacing: -0.5px;
+}
+.stat-card.gold .stat-value { color: var(--gold); }
+.stat-card.green .stat-value { color: var(--green); }
+.stat-card.red .stat-value { color: var(--red); }
+.stat-card.blue .stat-value { color: var(--blue); }
+.stat-card.purple .stat-value { color: var(--purple); }
+
+/* ══════════════════════════════════════
+   FORM ELEMENTS
+══════════════════════════════════════ */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
+.fg { margin-bottom: 12px; }
+.fg label {
+  display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+}
+.fg input, .fg textarea, .fg select {
+  width: 100%; background: var(--bg); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 11px 13px; color: var(--text);
+  font-family: var(--font); font-size: 13px; transition: var(--trans); appearance: none;
+}
+.fg input:focus, .fg textarea:focus, .fg select:focus { outline: none; border-color: var(--gold); background: var(--s2); }
+.fg textarea { resize: vertical; min-height: 80px; }
+.fg select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%235C6380' d='M4 6l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px; padding-right: 36px; }
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px;
+  border-radius: var(--radius-sm); font-family: var(--font); font-size: 12px;
+  font-weight: 700; cursor: pointer; border: none; transition: var(--trans);
+  white-space: nowrap; letter-spacing: 0.2px;
+}
+.btn:active { transform: scale(0.98); }
+.btn-gold { background: var(--gold); color: #0a0a0a; }
+.btn-gold:hover { background: var(--gold-2); }
+.btn-ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold-bdr); }
+.btn-ghost:hover { background: var(--gold-bg); }
+.btn-red { background: var(--red); color: #fff; }
+.btn-red:hover { filter: brightness(1.1); }
+.btn-red-ghost { background: transparent; color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+.btn-red-ghost:hover { background: var(--red-bg); }
+.btn-blue { background: var(--blue); color: #0a0a0a; }
+.btn-blue:hover { filter: brightness(1.1); }
+.btn-blue-ghost { background: transparent; color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+.btn-blue-ghost:hover { background: var(--blue-bg); }
+.btn-purple { background: var(--purple); color: #0a0a0a; }
+.btn-purple:hover { filter: brightness(1.1); }
+.btn-sm { padding: 7px 12px; font-size: 11px; }
+.btn-full { width: 100%; justify-content: center; }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+.btn-danger:hover { background: var(--red); color: #fff; }
+
+/* ══════════════════════════════════════
+   FORM PANELS (collapsible add forms)
+══════════════════════════════════════ */
+.add-panel {
+  background: var(--s1); border: 1px solid var(--gold-bdr);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+  display: none;
+}
+.add-panel.visible { display: block; animation: pageIn 0.2s ease; }
+.add-panel-red { border-color: rgba(248,113,113,0.3); }
+.add-panel-blue { border-color: rgba(96,165,250,0.3); }
+
+/* ══════════════════════════════════════
+   TABLES (responsive)
+══════════════════════════════════════ */
+.table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 560px; }
+thead { background: rgba(0,0,0,0.4); }
+th {
+  padding: 10px 14px; font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--gold); text-align: left; white-space: nowrap;
+}
+td { padding: 13px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.4; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.015); }
+.td-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.editable { color: var(--gold); cursor: pointer; font-family: var(--mono); padding: 3px 6px; border-radius: 4px; background: var(--gold-bg); font-size: 12px; transition: var(--trans); }
+.editable:hover { background: rgba(232,184,75,0.2); }
+
+/* ══════════════════════════════════════
+   PILLS / BADGES
+══════════════════════════════════════ */
+.pill {
+  display: inline-flex; align-items: center; padding: 3px 8px;
+  border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.pill-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+.pill-red   { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(248,113,113,0.2); }
+.pill-gold  { background: var(--gold-bg);  color: var(--gold);  border: 1px solid var(--gold-bdr); }
+.pill-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid rgba(96,165,250,0.2); }
+.pill-purple{ background: var(--purp-bg);  color: var(--purple);border: 1px solid rgba(167,139,250,0.2); }
+.pill-orange{ background: var(--oran-bg);  color: var(--orange);border: 1px solid rgba(251,146,60,0.2); }
+
+/* ══════════════════════════════════════
+   SLIDE PANEL (editor drawer)
+══════════════════════════════════════ */
+#slide-editor {
+  position: fixed; right: -520px; top: 0; width: min(460px, 100vw); height: 100dvh;
+  background: var(--s1); border-left: 1px solid var(--gold-bdr);
+  padding: 0; transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+  z-index: 800; display: flex; flex-direction: column;
+}
+#slide-editor.open { right: 0; }
+.ed-header { padding: 20px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.ed-title { font-size: 16px; font-weight: 800; }
+.ed-sub { font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 2px; word-break: break-all; }
+.ed-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.ed-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex-shrink: 0; }
+
+/* ══════════════════════════════════════
+   MINUTES PANEL
+══════════════════════════════════════ */
+#minutes-panel {
+  position: fixed; right: -520px; top: 0; width: min(460px, 100vw); height: 100dvh;
+  background: var(--s1); border-left: 1px solid var(--gold-bdr);
+  transition: right 0.35s cubic-bezier(0.4,0,0.2,1); z-index: 800;
+  display: flex; flex-direction: column;
+}
+#minutes-panel.open { right: 0; }
+.min-header { padding: 20px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.min-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.min-content {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px; font-size: 13px; line-height: 1.8; white-space: pre-wrap; min-height: 200px;
+}
+.min-footer { padding: 16px 24px; border-top: 1px solid var(--border); flex-shrink: 0; }
+
+/* ══════════════════════════════════════
+   OVERLAY BG (for panels)
+══════════════════════════════════════ */
+#panel-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+  z-index: 700; display: none; cursor: pointer;
+}
+#panel-bg.visible { display: block; }
+
+/* ══════════════════════════════════════
+   LOAN CARDS
+══════════════════════════════════════ */
+.loan-card {
+  background: var(--s2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 18px;
+  margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  flex-wrap: wrap;
+}
+.loan-card-info h4 { font-size: 14px; font-weight: 700; }
+.loan-card-info p { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.loan-card-amount { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--gold); }
+.loan-card-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+/* ══════════════════════════════════════
+   POLL CARDS
+══════════════════════════════════════ */
+.poll-card {
+  background: var(--s2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; margin-bottom: 14px;
+}
+.poll-q { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.poll-votes { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+.poll-opt { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+.poll-opt-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.poll-opt-text { font-size: 12px; font-weight: 600; }
+.poll-opt-pct { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.poll-bar-bg { background: var(--s3); border-radius: 4px; height: 4px; }
+.poll-bar { background: var(--gold); height: 4px; border-radius: 4px; transition: width 0.6s ease; }
+
+/* ══════════════════════════════════════
+   EMPTY STATES
+══════════════════════════════════════ */
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+.empty p { font-size: 12px; }
+
+/* ══════════════════════════════════════
+   SECTION DIVIDER
+══════════════════════════════════════ */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ══════════════════════════════════════
+   BROADCAST ITEM
+══════════════════════════════════════ */
+.bc-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.bc-item:last-child { border-bottom: none; }
+.bc-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.bc-item-title { font-size: 13px; font-weight: 700; }
+.bc-item-time { font-size: 10px; color: var(--muted); }
+.bc-item-msg { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+#toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: var(--s2); border: 1px solid var(--gold-bdr);
+  border-radius: 10px; padding: 10px 18px; white-space: nowrap;
+  opacity: 0; transition: 0.3s; z-index: 99999; pointer-events: none;
+  font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+  max-width: calc(100vw - 40px); box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+@media (min-width: 768px) { #toast { bottom: 24px; } }
+
+/* ══════════════════════════════════════
+   MAINTENANCE CARD
+══════════════════════════════════════ */
+.maint-indicator {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+  background: var(--red-bg); border: 1px solid rgba(248,113,113,0.3);
+  border-radius: 8px; margin-bottom: 14px; font-size: 12px; color: var(--red); font-weight: 600;
+}
+.dot-live { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
+.dot-down { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 767px) {
+  #sidebar { display: none !important; }
+  #mobile-topbar { display: flex !important; }
+  #mob-bottom-nav { display: flex !important; }
+  #app { flex-direction: column !important; }
+  .page { padding: 16px; }
+  .ph h1 { font-size: 17px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-card { padding: 14px; }
+  .stat-value { font-size: 17px; }
+  .card { padding: 16px; }
+  table { min-width: 500px; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 768px) {
+  #app { flex-direction: row; }
+  #mob-bottom-nav { display: none !important; }
+  #mobile-topbar { display: none !important; }
+  #sidebar { display: flex; }
+  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  #toast { bottom: 24px; }
+}
+
+@media (min-width: 1200px) {
+  .stat-grid { gap: 16px; }
+  .card { padding: 24px; }
+  .page { padding: 28px; }
+}
+
+/* ══ MONO UTIL ══ */
 .mono { font-family: var(--mono); }
+.text-gold { color: var(--gold); }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+.text-blue { color: var(--blue); }
+.text-muted { color: var(--muted); }
+.text-sm { font-size: 11px; }
+.fw-bold { font-weight: 700; }
 </style>
 </head>
 <body>
 
+<!-- ════════════════════════════
+     AUTH OVERLAY
+════════════════════════════ -->
 <div id="auth-overlay">
-  <div class="auth-card">
-    <div class="auth-logo">NGI System</div><div class="auth-title">ERP Vault v10.3</div><div class="auth-sub">Enterprise Administration</div>
-    <input type="email" id="auth-email" placeholder="Admin Email" autocomplete="email">
-    <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password">
-    <button class="btn-gold" onclick="loginEmail()">🔐 Authenticate</button>
-    <div id="auth-error"></div>
+  <div class="auth-wrap">
+    <div class="auth-logo-row">
+      <div class="auth-logo-icon">🏛️</div>
+      <div>
+        <div class="auth-logo-text">NGI <span>ERP</span></div>
+        <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">v10.3 · Enterprise Vault</div>
+      </div>
+    </div>
+    <div class="auth-card">
+      <h2>Secure Access</h2>
+      <p>Restricted to authorised administrators only</p>
+      <div class="auth-field"><label>Admin Email</label><input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="btn-primary" onclick="loginEmail()">🔐 Authenticate</button>
+      <div id="auth-error"></div>
+    </div>
   </div>
 </div>
 
-<aside id="sidebar">
-  <div class="logo-block"><div class="logo-title">NGI ERP<span class="logo-dot">.</span></div></div>
-  <div class="nav-section">Core Operations</div>
-  <div class="nav-btn active" onclick="showTab('dashboard',this)">🏠 Dashboard</div>
-  <div class="nav-btn" onclick="showTab('ledger',this)">📊 Master Ledger</div>
-  <div class="nav-btn" onclick="showTab('finance',this)">💰 Transactions</div>
-  <div class="nav-btn" onclick="showTab('users',this)">👥 Members & KYC</div>
-  
-  <div class="nav-section">Wealth & Assets</div>
-  <div class="nav-btn" onclick="showTab('loans',this)">🏦 Loans & Risk</div>
-  <div class="nav-btn" onclick="showTab('assets',this)">🏢 Asset Portfolio</div>
-  <div class="nav-btn" onclick="showTab('dividends',this)">💸 Dividends Engine</div>
-  
-  <div class="nav-section">Overhead & Support</div>
-  <div class="nav-btn" onclick="showTab('expenses',this)">📉 Group Expenses</div>
-  <div class="nav-btn" onclick="showTab('fines',this)">⚠️ Fines & Strikes</div>
-  <div class="nav-btn" onclick="showTab('welfare',this)">🤝 Welfare Fund</div>
+<!-- ════════════════════════════
+     APP SHELL
+════════════════════════════ -->
+<div id="app">
 
-  <div class="nav-section">System</div>
-  <div class="nav-btn" onclick="showTab('meetings',this)">📅 Meeting Hub</div>
-  <div class="nav-btn" onclick="showTab('polls',this)">🗳️ Polls & Comms</div>
-  <div class="nav-btn" onclick="showTab('audit',this)">🛡️ Audit Logs</div>
-  <div class="nav-btn" onclick="showTab('system',this)">⚙️ ERP Config</div>
-
-  <div class="nav-logout" onclick="handleLogout()">🚪 Secure Logout</div>
-</aside>
-
-<main id="main-content">
-
-  <section id="dashboard" class="section active">
-    <div class="page-header"><div><div class="page-title">Enterprise Dashboard</div></div></div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Net Asset Value (NAV)</div><div class="stat-value" style="color:var(--gold)" id="dash-nav">KES 0</div></div>
-      <div class="stat-card"><div class="stat-label">Liquid Group Fund</div><div class="stat-value" style="color:var(--green)" id="dash-fund">KES 0</div></div>
-      <div class="stat-card"><div class="stat-label">Active Loans Out</div><div class="stat-value" style="color:var(--blue)" id="dash-loans-out">KES 0</div></div>
-      <div class="stat-card"><div class="stat-label">Total Arrears & Fines</div><div class="stat-value" style="color:var(--red)" id="dash-debt">KES 0</div></div>
-    </div>
-    <div class="form-row">
-        <div class="card"><div class="card-title">Welfare Pool</div><div class="stat-value" id="dash-welfare">KES 0</div></div>
-        <div class="card"><div class="card-title">Retained Earnings</div><div class="stat-value" id="dash-retained">KES 0</div></div>
-    </div>
-  </section>
-
-  <section id="ledger" class="section">
-    <div class="page-header">
-      <div><div class="page-title">Master Financial Ledger</div><div class="page-subtitle">Click cells to override</div></div>
-      <div style="display:flex;gap:10px"><button class="btn-action ghost sm" onclick="exportCSV()">⬇ Export CSV</button><button class="btn-action ghost sm" onclick="window.print()">⬇ Export PDF</button></div>
-    </div>
-    <div class="card"><div class="table-wrap"><table id="ledgerTable"><thead><tr><th>ID</th><th>Member</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total Saved</th><th>Arrears</th></tr></thead><tbody id="ledgerBody"></tbody></table></div></div>
-  </section>
-
-  <section id="finance" class="section">
-    <div class="page-header"><div><div class="page-title">Transaction Log</div></div><button class="btn-action sm" onclick="document.getElementById('tx-card').style.display='block'">+ Manual Tx</button></div>
-    <div class="card" id="tx-card" style="display:none; max-width: 600px; border-color:var(--gold)">
-      <div class="card-title">Log Manual Transaction</div>
-      <div class="form-row"><div class="form-group"><label>Member</label><select id="tx-member"></select></div><div class="form-group"><label>Type</label><select id="tx-type"><option value="DEPOSIT">Portfolio Deposit</option><option value="CONTRIBUTION">Contribution</option><option value="WITHDRAWAL">Withdrawal</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label>Amount</label><input type="number" id="tx-amount"></div><div class="form-group"><label>Ref</label><input type="text" id="tx-ref"></div></div>
-      <button class="btn-action" onclick="submitTx()">Submit</button> <button class="btn-action ghost" onclick="document.getElementById('tx-card').style.display='none'">Cancel</button>
-    </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Ref</th><th>Member</th><th>Amount</th><th>Type</th><th>Time</th><th>Actions</th></tr></thead><tbody id="financeBody"></tbody></table></div></div>
-  </section>
-
-  <section id="assets" class="section">
-    <div class="page-header"><div><div class="page-title">Asset Portfolio</div></div><button class="btn-action sm" onclick="document.getElementById('asset-card').style.display='block'">+ Add Asset</button></div>
-    <div class="card" id="asset-card" style="display:none; border-color:var(--gold)">
-      <div class="form-row"><div class="form-group"><label>Asset Name</label><input type="text" id="as-name"></div><div class="form-group"><label>Type</label><select id="as-type"><option>Real Estate</option><option>MMF</option><option>Bonds</option><option>Stocks</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label>Principal Cost (KES)</label><input type="number" id="as-cost"></div><div class="form-group"><label>Current Valuation (KES)</label><input type="number" id="as-val"></div></div>
-      <button class="btn-action" onclick="submitAsset()">Log Asset</button> <button class="btn-action ghost" onclick="document.getElementById('asset-card').style.display='none'">Cancel</button>
-    </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Asset</th><th>Type</th><th>Cost</th><th>Valuation</th><th>ROI</th><th>Actions</th></tr></thead><tbody id="assetBody"></tbody></table></div></div>
-  </section>
-
-  <section id="expenses" class="section">
-    <div class="page-header"><div><div class="page-title">Group Expenses</div></div><button class="btn-action red sm" onclick="document.getElementById('exp-card').style.display='block'">+ Log Expense</button></div>
-    <div class="card" id="exp-card" style="display:none; border-color:var(--red)">
-      <div class="form-row"><div class="form-group"><label>Description</label><input type="text" id="ex-desc"></div><div class="form-group"><label>Amount (KES)</label><input type="number" id="ex-amt"></div></div>
-      <button class="btn-action red" onclick="submitExpense()">Deduct from Group Fund</button> <button class="btn-action ghost" onclick="document.getElementById('exp-card').style.display='none'">Cancel</button>
-    </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Logged By</th><th>Actions</th></tr></thead><tbody id="expenseBody"></tbody></table></div></div>
-  </section>
-
-  <section id="dividends" class="section">
-    <div class="page-header"><div><div class="page-title">Dividends Engine</div></div></div>
-    <div class="card">
-        <div class="card-title">Dividend Calculator (Pro-Rata)</div>
-        <p style="font-size:11px;color:var(--muted);margin-bottom:10px">Distributable Cash: <strong class="mono" id="div-cash">KES 0</strong></p>
-        <div class="form-group"><label>Retain Earnings %</label><input type="number" id="div-retain" value="20"></div>
-        <button class="btn-action purple" onclick="runDividendPreview()">1. Calculate Preview</button>
-        <button class="btn-action" id="btn-execute-div" style="display:none;margin-top:10px" onclick="executeDividends()">2. Execute Payouts to Wallets</button>
-    </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Member</th><th>Shares (Savings)</th><th>% of Pool</th><th>Payout Amount</th></tr></thead><tbody id="dividendBody"></tbody></table></div></div>
-  </section>
-
-  <section id="loans" class="section">
-    <div class="page-header"><div><div class="page-title">Loans & Risk</div></div></div>
-    <div class="card-title">Pending Applications</div><div id="pendingLoanContainer" style="margin-bottom:20px"></div>
-    <div class="card-title">Active Loans</div>
-    <div class="table-wrap" style="background:var(--surface)"><table><thead><tr><th>Member</th><th>Principal</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="activeLoanBody"></tbody></table></div>
-  </section>
-
-  <section id="fines" class="section">
-    <div class="page-header"><div><div class="page-title">Fines & Strikes</div></div><button class="btn-action red sm" onclick="document.getElementById('fine-card').style.display='block'">+ Issue Penalty</button></div>
-    <div class="card" id="fine-card" style="display:none; border-color:var(--red)">
-      <div class="form-row"><div class="form-group"><label>Member</label><select id="fine-member"></select></div><div class="form-group"><label>Amount</label><input type="number" id="fine-amount" value="50"></div></div>
-      <div class="form-row"><div class="form-group"><label>Reason</label><input type="text" id="fine-reason"></div><div class="form-group"><label>Strike Level</label><select id="fine-strike"><option value="0">No Strike</option><option value="1">Issue 1 Strike</option></select></div></div>
-      <button class="btn-action red" onclick="submitFine()">Issue</button> <button class="btn-action ghost" onclick="document.getElementById('fine-card').style.display='none'">Cancel</button>
-    </div>
-    <div class="card"><div class="card-title">Unpaid Fines</div><div class="table-wrap"><table><thead><tr><th>Member</th><th>Amount</th><th>Reason</th><th>Actions</th></tr></thead><tbody id="finesBody"></tbody></table></div></div>
-  </section>
-
-  <section id="welfare" class="section">
-    <div class="page-header"><div><div class="page-title">Welfare Fund</div></div><button class="btn-action blue sm" onclick="document.getElementById('wel-card').style.display='block'">+ Log Payout</button></div>
-    <div class="card" id="wel-card" style="display:none; border-color:var(--blue)">
-      <div class="form-row"><div class="form-group"><label>Recipient</label><select id="wel-member"></select></div><div class="form-group"><label>Amount</label><input type="number" id="wel-amount"></div></div>
-      <div class="form-group"><label>Reason</label><input type="text" id="wel-reason"></div>
-      <button class="btn-action blue" onclick="submitWelfare()">Payout</button> <button class="btn-action ghost" onclick="document.getElementById('wel-card').style.display='none'">Cancel</button>
-    </div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Member</th><th>Amount</th><th>Type</th><th>Date</th><th>Actions</th></tr></thead><tbody id="welfareBody"></tbody></table></div></div>
-  </section>
-
-  <section id="users" class="section">
-    <div class="page-header"><div><div class="page-title">Members & KYC</div></div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th><th>KYC</th><th>Strikes</th><th>Portfolio</th><th>Actions</th></tr></thead><tbody id="userBody"></tbody></table></div></div>
-  </section>
-
-  <section id="meetings" class="section">
-    <div class="page-header"><div><div class="page-title">Meeting Hub</div><div class="page-subtitle">Schedule live video calls and view auto-generated minutes</div></div></div>
-    <div class="card" style="max-width: 800px;">
-      <div class="card-title">Schedule New Meeting</div>
-      <div class="form-row">
-        <div class="form-group"><label>Meeting Agenda / Title</label><input type="text" id="m-agenda" placeholder="e.g. Monthly Welfare Review"></div>
-        <div class="form-group"><label>Agora Channel ID (Optional)</label><input type="text" id="m-channel" value="ngi_hq" placeholder="ngi_hq"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Date</label><input type="date" id="m-date"></div>
-        <div class="form-group"><label>Time</label><input type="time" id="m-time" placeholder="HH:MM"></div>
-      </div>
-      <button class="btn-action full" onclick="scheduleMeeting()">📅 Set Meeting & Notify Members</button>
-    </div>
-    <div class="card">
-      <div class="card-title">Meeting History & Minutes</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Agenda</th><th>Date/Time</th><th>Status</th><th>Attendees</th><th>Actions</th></tr></thead>
-          <tbody id="meetingBody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">Loading meetings...</td></tr></tbody>
-        </table>
+  <!-- DESKTOP SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-header">
+      <div class="sb-icon">🏛️</div>
+      <div>
+        <div class="sb-brand">NGI <span>ERP</span></div>
+        <div class="sb-version">v10.3 · Production</div>
       </div>
     </div>
-  </section>
+    <nav class="sb-nav">
+      <div class="sb-section">Core</div>
+      <div class="nb active" onclick="showTab('dashboard',this)"><span class="nb-icon">🏠</span> Dashboard</div>
+      <div class="nb" onclick="showTab('ledger',this)"><span class="nb-icon">📊</span> Master Ledger</div>
+      <div class="nb" onclick="showTab('finance',this)"><span class="nb-icon">💳</span> Transactions</div>
+      <div class="nb" onclick="showTab('users',this)"><span class="nb-icon">👥</span> Members & KYC</div>
+      <div class="sb-section">Wealth</div>
+      <div class="nb" onclick="showTab('loans',this)"><span class="nb-icon">🏦</span> Loans & Risk</div>
+      <div class="nb" onclick="showTab('assets',this)"><span class="nb-icon">🏢</span> Asset Portfolio</div>
+      <div class="nb" onclick="showTab('dividends',this)"><span class="nb-icon">💸</span> Dividends</div>
+      <div class="sb-section">Overhead</div>
+      <div class="nb" onclick="showTab('expenses',this)"><span class="nb-icon">📉</span> Group Expenses</div>
+      <div class="nb" onclick="showTab('fines',this)"><span class="nb-icon">⚠️</span> Fines & Strikes</div>
+      <div class="nb" onclick="showTab('welfare',this)"><span class="nb-icon">🤝</span> Welfare Fund</div>
+      <div class="sb-section">System</div>
+      <div class="nb" onclick="showTab('meetings',this)"><span class="nb-icon">📅</span> Meeting Hub</div>
+      <div class="nb" onclick="showTab('polls',this)"><span class="nb-icon">🗳️</span> Polls & Comms</div>
+      <div class="nb" onclick="showTab('audit',this)"><span class="nb-icon">🛡️</span> Audit Logs</div>
+      <div class="nb" onclick="showTab('config',this)"><span class="nb-icon">⚙️</span> ERP Config</div>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-avatar">👤</div>
+        <div><div class="sb-user-name" id="sb-name">Admin</div><div class="sb-user-role">Administrator</div></div>
+      </div>
+      <div class="sb-logout" onclick="handleLogout()">🚪 Secure Logout</div>
+    </div>
+  </aside>
 
-  <section id="polls" class="section">
-    <div class="page-header"><div><div class="page-title">Polls & Communications</div><div class="page-subtitle">Group voting and global push announcements</div></div></div>
-    <div class="form-row">
+  <!-- MOBILE TOP BAR -->
+  <div id="mobile-topbar">
+    <div class="mob-brand">NGI <span>ERP</span></div>
+    <div class="mob-page-title" id="mob-page-title">Dashboard</div>
+    <div class="mob-menu-btn" onclick="openDrawer()">☰</div>
+  </div>
+
+  <!-- MOBILE DRAWER -->
+  <div id="mob-drawer">
+    <div id="mob-drawer-bg" onclick="closeDrawer()"></div>
+    <div id="mob-drawer-panel">
+      <div class="drawer-header">
+        <div class="sb-icon">🏛️</div>
+        <div>
+          <div class="sb-brand">NGI <span>ERP</span></div>
+          <div class="sb-version">v10.3</div>
+        </div>
+      </div>
+      <nav class="drawer-nav">
+        <div class="sb-section">Core</div>
+        <div class="nb" onclick="showTab('dashboard',null,'Dashboard');closeDrawer()"><span class="nb-icon">🏠</span> Dashboard</div>
+        <div class="nb" onclick="showTab('ledger',null,'Ledger');closeDrawer()"><span class="nb-icon">📊</span> Master Ledger</div>
+        <div class="nb" onclick="showTab('finance',null,'Transactions');closeDrawer()"><span class="nb-icon">💳</span> Transactions</div>
+        <div class="nb" onclick="showTab('users',null,'Members');closeDrawer()"><span class="nb-icon">👥</span> Members & KYC</div>
+        <div class="sb-section">Wealth</div>
+        <div class="nb" onclick="showTab('loans',null,'Loans');closeDrawer()"><span class="nb-icon">🏦</span> Loans & Risk</div>
+        <div class="nb" onclick="showTab('assets',null,'Assets');closeDrawer()"><span class="nb-icon">🏢</span> Asset Portfolio</div>
+        <div class="nb" onclick="showTab('dividends',null,'Dividends');closeDrawer()"><span class="nb-icon">💸</span> Dividends</div>
+        <div class="sb-section">Overhead</div>
+        <div class="nb" onclick="showTab('expenses',null,'Expenses');closeDrawer()"><span class="nb-icon">📉</span> Expenses</div>
+        <div class="nb" onclick="showTab('fines',null,'Fines');closeDrawer()"><span class="nb-icon">⚠️</span> Fines & Strikes</div>
+        <div class="nb" onclick="showTab('welfare',null,'Welfare');closeDrawer()"><span class="nb-icon">🤝</span> Welfare Fund</div>
+        <div class="sb-section">System</div>
+        <div class="nb" onclick="showTab('meetings',null,'Meetings');closeDrawer()"><span class="nb-icon">📅</span> Meeting Hub</div>
+        <div class="nb" onclick="showTab('polls',null,'Polls');closeDrawer()"><span class="nb-icon">🗳️</span> Polls & Comms</div>
+        <div class="nb" onclick="showTab('audit',null,'Audit');closeDrawer()"><span class="nb-icon">🛡️</span> Audit Logs</div>
+        <div class="nb" onclick="showTab('config',null,'Config');closeDrawer()"><span class="nb-icon">⚙️</span> ERP Config</div>
+      </nav>
+      <div class="drawer-footer">
+        <div class="sb-user">
+          <div class="sb-avatar">👤</div>
+          <div><div class="sb-user-name" id="sb-name-mob">Admin</div><div class="sb-user-role">Administrator</div></div>
+        </div>
+        <div class="sb-logout" onclick="handleLogout()">🚪 Logout</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+
+    <!-- ═══════════ DASHBOARD ═══════════ -->
+    <section id="dashboard" class="page active">
+      <div class="ph">
+        <div class="ph-left"><h1>Enterprise Dashboard</h1><p>Real-time financial overview</p></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card gold"><div class="stat-label">Net Asset Value</div><div class="stat-value" id="dash-nav">KES 0</div></div>
+        <div class="stat-card green"><div class="stat-label">Liquid Group Fund</div><div class="stat-value" id="dash-fund">KES 0</div></div>
+        <div class="stat-card blue"><div class="stat-label">Active Loans Out</div><div class="stat-value" id="dash-loans-out">KES 0</div></div>
+        <div class="stat-card red"><div class="stat-label">Arrears & Fines</div><div class="stat-value" id="dash-debt">KES 0</div></div>
+      </div>
+      <div class="form-grid" style="margin-bottom:16px">
+        <div class="stat-card purple"><div class="stat-label">Welfare Pool</div><div class="stat-value" style="color:var(--purple)" id="dash-welfare">KES 0</div></div>
+        <div class="stat-card" style="border-color:var(--gold-bdr)"><div class="stat-label">Retained Earnings</div><div class="stat-value text-gold" id="dash-retained">KES 0</div></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ LEDGER ═══════════ -->
+    <section id="ledger" class="page">
+      <div class="ph">
+        <div class="ph-left"><h1>Master Ledger</h1><p>Tap cells to log manual entries</p></div>
+        <div class="ph-right">
+          <button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ CSV</button>
+          <button class="btn btn-ghost btn-sm" onclick="window.print()">⬇ PDF</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table id="ledgerTable">
+            <thead><tr><th>ID</th><th>Member</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>Total Saved</th><th>Arrears</th></tr></thead>
+            <tbody id="ledgerBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ FINANCE ═══════════ -->
+    <section id="finance" class="page">
+      <div class="ph">
+        <div class="ph-left"><h1>Transaction Log</h1><p>All financial movements</p></div>
+        <div class="ph-right"><button class="btn btn-gold btn-sm" onclick="togglePanel('tx-panel')">＋ Manual Tx</button></div>
+      </div>
+      <div class="add-panel" id="tx-panel">
+        <div class="card-title">Log Manual Transaction</div>
+        <div class="form-grid">
+          <div class="fg"><label>Member</label><select id="tx-member"></select></div>
+          <div class="fg"><label>Type</label><select id="tx-type"><option value="DEPOSIT">Portfolio Deposit</option><option value="CONTRIBUTION">Contribution</option><option value="WITHDRAWAL">Withdrawal</option></select></div>
+        </div>
+        <div class="form-grid">
+          <div class="fg"><label>Amount (KES)</label><input type="number" id="tx-amount" placeholder="0"></div>
+          <div class="fg"><label>Reference</label><input type="text" id="tx-ref" placeholder="e.g. MPESA REF"></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-gold" onclick="submitTx()">Submit</button>
+          <button class="btn btn-ghost" onclick="togglePanel('tx-panel')">Cancel</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Ref</th><th>Member</th><th>Amount</th><th>Type</th><th>Time</th><th>Actions</th></tr></thead><tbody id="financeBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ ASSETS ═══════════ -->
+    <section id="assets" class="page">
+      <div class="ph">
+        <div class="ph-left"><h1>Asset Portfolio</h1><p>Investments & real estate</p></div>
+        <div class="ph-right"><button class="btn btn-gold btn-sm" onclick="togglePanel('asset-panel')">＋ Add Asset</button></div>
+      </div>
+      <div class="add-panel" id="asset-panel">
+        <div class="card-title">Log New Asset</div>
+        <div class="form-grid">
+          <div class="fg"><label>Asset Name</label><input type="text" id="as-name" placeholder="e.g. Ruiru Plot"></div>
+          <div class="fg"><label>Type</label><select id="as-type"><option>Real Estate</option><option>MMF</option><option>Bonds</option><option>Stocks</option></select></div>
+        </div>
+        <div class="form-grid">
+          <div class="fg"><label>Principal Cost (KES)</label><input type="number" id="as-cost" placeholder="0"></div>
+          <div class="fg"><label>Current Valuation (KES)</label><input type="number" id="as-val" placeholder="0"></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-gold" onclick="submitAsset()">Log Asset</button>
+          <button class="btn btn-ghost" onclick="togglePanel('asset-panel')">Cancel</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Asset</th><th>Type</th><th>Cost</th><th>Valuation</th><th>ROI</th><th>Actions</th></tr></thead><tbody id="assetBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ EXPENSES ═══════════ -->
+    <section id="expenses" class="page">
+      <div class="ph">
+        <div class="ph-left"><h1>Group Expenses</h1><p>Deductions from group fund</p></div>
+        <div class="ph-right"><button class="btn btn-red btn-sm" onclick="togglePanel('exp-panel')">＋ Log Expense</button></div>
+      </div>
+      <div class="add-panel add-panel-red" id="exp-panel">
+        <div class="card-title" style="color:var(--red)">Log Group Expense</div>
+        <div class="form-grid">
+          <div class="fg"><label>Description</label><input type="text" id="ex-desc" placeholder="e.g. Meeting venue"></div>
+          <div class="fg"><label>Amount (KES)</label><input type="number" id="ex-amt" placeholder="0"></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-red" onclick="submitExpense()">Deduct from Fund</button>
+          <button class="btn btn-ghost" onclick="togglePanel('exp-panel')">Cancel</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>By</th><th>Actions</th></tr></thead><tbody id="expenseBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ DIVIDENDS ═══════════ -->
+    <section id="dividends" class="page">
+      <div class="ph"><div class="ph-left"><h1>Dividends Engine</h1><p>Pro-rata distribution calculator</p></div></div>
+      <div class="card card-highlight">
+        <div class="card-title">Distribution Calculator</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:12px;background:var(--s2);border-radius:8px;border:1px solid var(--border)">
+          <span style="font-size:11px;color:var(--muted)">Available Pool:</span>
+          <span class="mono fw-bold text-gold" id="div-cash">KES 0</span>
+        </div>
+        <div class="fg"><label>Retain Earnings %</label><input type="number" id="div-retain" value="20" style="max-width:160px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-purple" onclick="runDividendPreview()">1. Calculate Preview</button>
+          <button class="btn btn-gold" id="btn-execute-div" style="display:none" onclick="executeDividends()">2. Execute Payouts ✓</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Member</th><th>Shares (Savings)</th><th>% of Pool</th><th>Payout Amount</th></tr></thead><tbody id="dividendBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ LOANS ═══════════ -->
+    <section id="loans" class="page">
+      <div class="ph"><div class="ph-left"><h1>Loans & Risk</h1><p>Applications, approvals, and write-offs</p></div></div>
+      <div class="section-label">Pending Applications</div>
+      <div id="pendingLoanContainer"></div>
+      <div class="section-label">Active Loans</div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Member</th><th>Principal</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="activeLoanBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ FINES ═══════════ -->
+    <section id="fines" class="page">
+      <div class="ph">
+        <div class="ph-left"><h1>Fines & Strikes</h1><p>Penalties and disciplinary actions</p></div>
+        <div class="ph-right"><button class="btn btn-red btn-sm" onclick="togglePanel('fine-panel')">＋ Issue Penalty</button></div>
+      </div>
+      <div class="add-panel add-panel-red" id="fine-panel">
+        <div class="card-title" style="color:var(--red)">Issue Penalty</div>
+        <div class="form-grid">
+          <div class="fg"><label>Member</label><select id="fine-member"></select></div>
+          <div class="fg"><label>Amount (KES)</label><input type="number" id="fine-amount" value="50"></div>
+        </div>
+        <div class="form-grid">
+          <div class="fg"><label>Reason</label><input type="text" id="fine-reason" placeholder="e.g. Late contribution"></div>
+          <div class="fg"><label>Strike</label><select id="fine-strike"><option value="0">No Strike</option><option value="1">Issue 1 Strike</option></select></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-red" onclick="submitFine()">Issue Penalty</button>
+          <button class="btn btn-ghost" onclick="togglePanel('fine-panel')">Cancel</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Member</th><th>Amount</th><th>Reason</th><th>Actions</th></tr></thead><tbody id="finesBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ WELFARE ═══════════ -->
+    <section id="welfare" class="page">
+      <div class="ph">
+        <div class="ph-left"><h1>Welfare Fund</h1><p>Member support payouts</p></div>
+        <div class="ph-right"><button class="btn btn-blue btn-sm" onclick="togglePanel('wel-panel')">＋ Log Payout</button></div>
+      </div>
+      <div class="add-panel add-panel-blue" id="wel-panel">
+        <div class="card-title" style="color:var(--blue)">Log Welfare Payout</div>
+        <div class="form-grid">
+          <div class="fg"><label>Recipient</label><select id="wel-member"></select></div>
+          <div class="fg"><label>Amount (KES)</label><input type="number" id="wel-amount" placeholder="0"></div>
+        </div>
+        <div class="fg"><label>Reason</label><input type="text" id="wel-reason" placeholder="e.g. Medical emergency"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-blue" onclick="submitWelfare()">Payout</button>
+          <button class="btn btn-ghost" onclick="togglePanel('wel-panel')">Cancel</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Member</th><th>Amount</th><th>Type</th><th>Date</th><th>Actions</th></tr></thead><tbody id="welfareBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ USERS ═══════════ -->
+    <section id="users" class="page">
+      <div class="ph"><div class="ph-left"><h1>Members & KYC</h1><p>Roster, verification & profiles</p></div></div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th><th>KYC</th><th>Strikes</th><th>Portfolio</th><th>Actions</th></tr></thead><tbody id="userBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ MEETINGS ═══════════ -->
+    <section id="meetings" class="page">
+      <div class="ph"><div class="ph-left"><h1>Meeting Hub</h1><p>Schedule calls, view auto-minutes</p></div></div>
+      <div class="card card-highlight" style="max-width:700px">
+        <div class="card-title">Schedule New Meeting</div>
+        <div class="form-grid">
+          <div class="fg"><label>Agenda / Title</label><input type="text" id="m-agenda" placeholder="e.g. Monthly Welfare Review"></div>
+          <div class="fg"><label>Agora Channel ID</label><input type="text" id="m-channel" value="ngi_hq"></div>
+        </div>
+        <div class="form-grid">
+          <div class="fg"><label>Date</label><input type="date" id="m-date"></div>
+          <div class="fg"><label>Time</label><input type="time" id="m-time"></div>
+        </div>
+        <button class="btn btn-gold btn-full" onclick="scheduleMeeting()">📅 Set Meeting & Notify Members</button>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Agenda</th><th>Date/Time</th><th>Status</th><th>Attendees</th><th>Actions</th></tr></thead>
+          <tbody id="meetingBody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ POLLS ═══════════ -->
+    <section id="polls" class="page">
+      <div class="ph"><div class="ph-left"><h1>Polls & Communications</h1><p>Live votes & global broadcasts</p></div></div>
+      <div class="form-grid" style="margin-bottom:16px">
         <div class="card">
-            <div class="card-title">Create New Live Poll</div>
-            <div class="form-group"><label>Question</label><input type="text" id="p-q" placeholder="e.g. Should we buy land in Ruiru?"></div>
-            <div id="p-options">
-                <div class="form-group"><label>Option 1</label><input type="text" class="p-opt" placeholder="e.g. Yes, buy it"></div>
-                <div class="form-group"><label>Option 2</label><input type="text" class="p-opt" placeholder="e.g. No, wait for MMFs"></div>
-            </div>
-            <div style="display:flex;gap:10px;margin-bottom:14px"><button class="btn-action ghost sm" onclick="addPollOpt()">+ Add Option</button></div>
-            <button class="btn-action full" onclick="launchPoll()">🚀 Launch Live Poll</button>
+          <div class="card-title">Create Live Poll</div>
+          <div class="fg"><label>Question</label><input type="text" id="p-q" placeholder="e.g. Should we buy land in Ruiru?"></div>
+          <div id="p-options">
+            <div class="fg"><label>Option 1</label><input type="text" class="p-opt" placeholder="Yes, buy it"></div>
+            <div class="fg"><label>Option 2</label><input type="text" class="p-opt" placeholder="No, wait"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:14px">
+            <button class="btn btn-ghost btn-sm" onclick="addPollOpt()">＋ Add Option</button>
+          </div>
+          <button class="btn btn-gold btn-full" onclick="launchPoll()">🚀 Launch Poll</button>
         </div>
         <div class="card">
-            <div class="card-title">Global Broadcast Push</div>
-            <div class="form-group"><label>Title</label><input type="text" id="b-title" placeholder="Announcement title..."></div>
-            <div class="form-group"><label>Message</label><textarea id="b-msg" placeholder="Type your message here..."></textarea></div>
-            <button class="btn-action full blue" onclick="sendBroadcast()">📡 Fire Global Push Notification</button>
+          <div class="card-title">Global Broadcast</div>
+          <div class="fg"><label>Title</label><input type="text" id="b-title" placeholder="Announcement title..."></div>
+          <div class="fg"><label>Message</label><textarea id="b-msg" placeholder="Type your message..."></textarea></div>
+          <button class="btn btn-blue btn-full" onclick="sendBroadcast()">📡 Fire Push Notification</button>
         </div>
-    </div>
-    <div class="card-title">Active & Past Polls</div><div id="poll-results-container"></div>
-    <div class="card-title" style="margin-top:20px">Broadcast History</div><div class="card"><div id="broadcastHistory"></div></div>
-  </section>
+      </div>
+      <div class="section-label">Active & Past Polls</div>
+      <div id="poll-results-container"></div>
+      <div class="section-label" style="margin-top:20px">Broadcast History</div>
+      <div class="card"><div id="broadcastHistory"><div class="empty"><div class="empty-icon">📡</div><p>No broadcasts yet</p></div></div></div>
+    </section>
 
-  <section id="audit" class="section">
-    <div class="page-header"><div><div class="page-title">System Audit Log</div></div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Target</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
-  </section>
+    <!-- ═══════════ AUDIT ═══════════ -->
+    <section id="audit" class="page">
+      <div class="ph"><div class="ph-left"><h1>Audit Log</h1><p>Full admin action history</p></div></div>
+      <div class="card" style="padding:0">
+        <div class="table-wrap">
+          <table><thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Target</th></tr></thead><tbody id="auditBody"></tbody></table>
+        </div>
+      </div>
+    </section>
 
-  <section id="system" class="section">
-    <div class="page-header"><div><div class="page-title">ERP System Config</div><div class="page-subtitle">Global rules and dangerous operations</div></div></div>
-    
-    <div class="form-row">
-        <div class="card" style="border-color:var(--border-bright)">
-          <div class="card-title">Financial Targets & Rules</div>
-          <div class="form-row">
-            <div class="form-group"><label>Weekly Target (KES)</label><input type="number" id="sys-target" value="125"></div>
-            <div class="form-group"><label>Late Fine Amount (KES)</label><input type="number" id="sys-fine" value="50"></div>
+    <!-- ═══════════ CONFIG ═══════════ -->
+    <section id="config" class="page">
+      <div class="ph"><div class="ph-left"><h1>ERP Configuration</h1><p>Global rules & system controls</p></div></div>
+      <div class="form-grid">
+        <!-- Financial Rules -->
+        <div class="card card-highlight">
+          <div class="card-title">Financial Rules</div>
+          <div class="form-grid">
+            <div class="fg"><label>Weekly Target (KES)</label><input type="number" id="sys-target" value="125"></div>
+            <div class="fg"><label>Late Fine (KES)</label><input type="number" id="sys-fine" value="50"></div>
           </div>
-          <div class="form-row">
-            <div class="form-group"><label>Registration Fee (KES)</label><input type="number" id="sys-regfee" value="1000"></div>
-            <div class="form-group"><label>Loan Interest Rate (%)</label><input type="number" id="sys-interest" value="10"></div>
+          <div class="form-grid">
+            <div class="fg"><label>Registration Fee (KES)</label><input type="number" id="sys-regfee" value="1000"></div>
+            <div class="fg"><label>Loan Interest Rate (%)</label><input type="number" id="sys-interest" value="10"></div>
           </div>
-          <div class="form-group"><label>Max Loan Multiple (x Savings)</label><input type="number" id="sys-multiple" value="2"></div>
-          <button class="btn-action ghost full" onclick="saveSystemConfig()">💾 Update Configuration Globally</button>
+          <div class="fg"><label>Max Loan Multiple (× Savings)</label><input type="number" id="sys-multiple" value="2"></div>
+          <button class="btn btn-gold btn-full" onclick="saveSystemConfig()">💾 Update Global Config</button>
         </div>
 
-        <div class="card" style="border-color:var(--gold)">
-          <div class="card-title">Global Kill Switch (Maintenance Mode)</div>
-          <p style="font-size:11px;color:var(--muted);margin-bottom:14px">Lock down the app instantly for all Android users.</p>
-          
-          <div class="form-row">
-            <div class="form-group">
-                <label>Status</label>
-                <select id="maint-status"><option value="false">Live (Active)</option><option value="true">Under Maintenance (Locked)</option></select>
+        <!-- Maintenance -->
+        <div class="card">
+          <div class="card-title">🛡️ Maintenance Mode</div>
+          <p style="font-size:11px;color:var(--muted);margin-bottom:14px">Instantly lock/unlock the app for all Android users.</p>
+          <div class="form-grid">
+            <div class="fg"><label>Status</label>
+              <select id="maint-status"><option value="false">🟢 Live (Active)</option><option value="true">🔴 Maintenance (Locked)</option></select>
             </div>
-            <div class="form-group">
-                <label>Expected End Time</label>
-                <input type="datetime-local" id="maint-end">
-            </div>
+            <div class="fg"><label>Expected End Time</label><input type="datetime-local" id="maint-end"></div>
           </div>
-          <div class="form-group">
-            <label>Maintenance Reason (Shown to users)</label>
-            <input type="text" id="maint-reason" placeholder="e.g. Upgrading server infrastructure...">
-          </div>
-          <button class="btn-action full" onclick="saveMaintenanceConfig()" style="background:var(--gold);color:#000;">🛡️ Update Maintenance Status</button>
+          <div class="fg"><label>Reason (Shown to users)</label><input type="text" id="maint-reason" placeholder="e.g. Upgrading server..."></div>
+          <button class="btn btn-gold btn-full" onclick="saveMaintenanceConfig()">Update Maintenance Status</button>
         </div>
-    </div>
-    
-    <div class="card" style="max-width:600px; border-color:var(--red)">
-      <div class="card-title" style="color:var(--red)">God Mode / Danger Zone</div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:14px">These actions are irreversible and will affect all live users.</p>
-      <button class="btn-action red full" onclick="wipeDataEngine()">☠️ TOTAL SYSTEM PURGE (WIPE DATA & AUDIT MEMBERS)</button>
-    </div>
-  </section>
+      </div>
 
-</main>
+      <!-- Danger Zone -->
+      <div class="card card-danger" style="max-width:560px">
+        <div class="card-title" style="color:var(--red)">☠️ Danger Zone</div>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:16px">These actions are irreversible and affect all live users immediately.</p>
+        <button class="btn btn-danger btn-full" onclick="wipeDataEngine()">☠️ TOTAL SYSTEM PURGE (WIPE DATA & AUDIT MEMBERS)</button>
+      </div>
+    </section>
 
-<div id="minutes-modal">
-  <div class="panel-title">Meeting Minutes</div><div class="panel-sub" id="min-agenda"></div>
-  <div class="minutes-content" id="min-content">No notes recorded.</div>
-  <button class="btn-action ghost full" onclick="document.getElementById('minutes-modal').classList.remove('open')">✕ Close</button>
+  </main>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav id="mob-bottom-nav">
+    <button class="mob-nav-btn active" data-tab="dashboard" onclick="showTab('dashboard',null,'Dashboard');setActiveBottomNav(this)">
+      <span class="mob-nav-icon">🏠</span><span class="mob-nav-label">Home</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="ledger" onclick="showTab('ledger',null,'Ledger');setActiveBottomNav(this)">
+      <span class="mob-nav-icon">📊</span><span class="mob-nav-label">Ledger</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="finance" onclick="showTab('finance',null,'Transactions');setActiveBottomNav(this)">
+      <span class="mob-nav-icon">💳</span><span class="mob-nav-label">Finance</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="users" onclick="showTab('users',null,'Members');setActiveBottomNav(this)">
+      <span class="mob-nav-icon">👥</span><span class="mob-nav-label">Members</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="loans" onclick="showTab('loans',null,'Loans');setActiveBottomNav(this)">
+      <span class="mob-nav-icon">🏦</span><span class="mob-nav-label">Loans</span>
+    </button>
+  </nav>
+
+</div><!-- end #app -->
+
+<!-- SLIDE PANELS -->
+<div id="panel-bg" onclick="closePanels()"></div>
+
+<div id="slide-editor">
+  <div class="ed-header">
+    <div class="ed-title">Edit Record</div>
+    <div class="ed-sub" id="ed-panel-id">—</div>
+  </div>
+  <div class="ed-body" id="ed-fields"></div>
+  <div class="ed-footer">
+    <button class="btn btn-gold btn-full" onclick="saveDoc()">💾 Save</button>
+    <button class="btn btn-red btn-full" onclick="deleteDoc()">🗑 Delete</button>
+  </div>
+  <div style="padding:0 24px 20px"><button class="btn btn-ghost btn-full" onclick="closePanels()">✕ Cancel</button></div>
 </div>
 
-<div id="doc-editor">
-  <div class="panel-title">Edit Record</div>
-  <div class="panel-sub" id="ed-panel-id"></div>
-  <div id="ed-fields" style="flex:1"></div>
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
-    <button class="btn-action full" onclick="saveDoc()">💾 Save Changes</button>
-    <button class="btn-action red full" onclick="deleteDoc()">🗑 Delete Record</button>
+<div id="minutes-panel">
+  <div class="min-header">
+    <div class="ed-title">Meeting Minutes</div>
+    <div class="ed-sub" id="min-agenda">—</div>
   </div>
-  <button class="btn-action ghost full" style="margin-top: 10px;" onclick="closeEditor()">✕ Cancel</button>
+  <div class="min-body">
+    <div class="min-content" id="min-content">No notes recorded.</div>
+  </div>
+  <div class="min-footer">
+    <button class="btn btn-ghost btn-full" onclick="closePanels()">✕ Close</button>
+  </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-// --- FIREBASE INIT ---
-const firebaseConfig = { apiKey: "AIzaSyCMJdzsgYU5KgJ0T-7JTKJTqnpvEaFB2Zs", authDomain: "n-g-i-761b1.firebaseapp.com", projectId: "n-g-i-761b1", storageBucket: "n-g-i-761b1.firebasestorage.app", messagingSenderId: "375248351958", appId: "1:375248351958:web:9b45197e1a1dadeaaa0f77" };
+/* ════════════════════════════════════════
+   FIREBASE INIT
+════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCMJdzsgYU5KgJ0T-7JTKJTqnpvEaFB2Zs",
+  authDomain: "n-g-i-761b1.firebaseapp.com",
+  projectId: "n-g-i-761b1",
+  storageBucket: "n-g-i-761b1.firebasestorage.app",
+  messagingSenderId: "375248351958",
+  appId: "1:375248351958:web:9b45197e1a1dadeaaa0f77"
+};
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth(); const db = firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-let activeListeners = []; let cache = { users:[], assets:0, loans:0, fund:0 };
+/* ════ STATE ════ */
+let activeListeners = [];
+let cache = { users:[], assets:0, loans:0, fund:0 };
 let myName = "Admin";
 let curCol = '', curId = '', edData = {};
 
-// --- UTILS ---
-const toast = (m,t='ok') => { const el=document.getElementById('toast'); el.textContent=(t==='err'?'❌ ':'✅ ')+m; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); };
+/* ════ UTILS ════ */
 const D = id => document.getElementById(id);
-const showTab = (id, el) => { document.querySelectorAll('.section, .nav-btn').forEach(x=>x.classList.remove('active')); D(id).classList.add('active'); if(el) el.classList.add('active'); closeEditor(); D('minutes-modal').classList.remove('open'); };
-const fmt = n => Number(n||0).toLocaleString();
+const fmt = n => Number(n||0).toLocaleString('en-KE');
 const fdt = t => t ? new Date(t).toLocaleString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
-const logAudit = async (action, target) => { await db.collection("audit_logs").add({admin:myName, action, target, ts:Date.now()}); };
+const logAudit = (action, target) => db.collection("audit_logs").add({admin:myName,action,target,ts:Date.now()});
 const getWeekOfMonth = d => { const day=new Date(d).getDate(); return day<=7?1:day<=14?2:day<=21?3:4; };
+const toast = (m,t='ok') => {
+  const el=D('toast');
+  el.innerHTML=(t==='err'?'<span>❌</span>':'<span>✅</span>')+' '+m;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3200);
+};
+const togglePanel = id => { const el=D(id); el.classList.toggle('visible'); };
+const closePanels = () => {
+  D('slide-editor').classList.remove('open');
+  D('minutes-panel').classList.remove('open');
+  D('panel-bg').classList.remove('visible');
+};
+const openDrawer = () => D('mob-drawer').classList.add('open');
+const closeDrawer = () => D('mob-drawer').classList.remove('open');
+const setActiveBottomNav = el => document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active')) || el.classList.add('active');
 
-// --- AUTH ---
+/* ════ NAV ════ */
+function showTab(id, sidebarEl, title) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active'));
+  D(id).classList.add('active');
+  if (sidebarEl) sidebarEl.classList.add('active');
+  closePanels();
+  if (title && D('mob-page-title')) D('mob-page-title').textContent = title;
+}
+
+/* ════════════════════════════════════════
+   AUTH
+════════════════════════════════════════ */
 auth.onAuthStateChanged(async u => {
   if (u) {
     const doc = await db.collection("users").doc(u.uid).get();
-    if(doc.exists && ['Admin','Treasurer','Secretary'].includes(doc.data().role)) {
-      myName = doc.data().name; D('auth-overlay').style.display='none'; D('sidebar').style.display='flex'; D('main-content').style.display='block'; 
+    if (doc.exists && ['Admin','Treasurer','Secretary'].includes(doc.data().role)) {
+      myName = doc.data().name;
+      D('auth-overlay').style.display = 'none';
+      D('app').style.display = 'flex';
+      D('sb-name').textContent = myName;
+      D('sb-name-mob').textContent = myName;
       D('m-date').min = new Date().toISOString().split('T')[0];
       runERP();
-    } else { auth.signOut(); D('auth-error').textContent="Access Denied. You must have Admin permissions in Firestore."; }
-  } else { D('auth-overlay').style.display='flex'; D('sidebar').style.display='none'; D('main-content').style.display='none'; }
+    } else {
+      auth.signOut();
+      D('auth-error').textContent = "Access Denied. You must have Admin permissions.";
+    }
+  } else {
+    D('auth-overlay').style.display = 'flex';
+    D('app').style.display = 'none';
+  }
 });
-const loginEmail = () => auth.signInWithEmailAndPassword(D('auth-email').value, D('auth-password').value).catch(e=>D('auth-error').textContent=e.message);
+const loginEmail = () => auth.signInWithEmailAndPassword(D('auth-email').value, D('auth-password').value).catch(e => D('auth-error').textContent = e.message);
 const handleLogout = () => { activeListeners.forEach(f=>f()); auth.signOut(); };
 
-// --- CORE ERP LISTENERS ---
+/* ════════════════════════════════════════
+   CORE ERP LISTENERS
+════════════════════════════════════════ */
 function runERP() {
-  // Config, Fund & Maintenance Sync
+  // Group Config & Fund
   activeListeners.push(db.collection("group").doc("ngi_main").onSnapshot(d => {
-    if(!d.exists) return; const c = d.data(); cache.fund = c.totalFund||0;
-    D('dash-fund').textContent = `KES ${fmt(c.totalFund)}`; D('dash-welfare').textContent = `KES ${fmt(c.welfareFund)}`; D('dash-retained').textContent = `KES ${fmt(c.retainedEarnings)}`; D('div-cash').textContent = `KES ${fmt(c.totalFund)}`;
-    
-    if(c.settings) { 
-        D('sys-target').value = c.settings.weeklyTarget||125; 
-        D('sys-fine').value = c.settings.lateFine||50; 
-        D('sys-interest').value = c.settings.interestRate||10; 
-        D('sys-multiple').value = c.settings.loanMultiple||2; 
-        D('sys-regfee').value = c.settings.regFee||1000;
+    if (!d.exists) return;
+    const c = d.data();
+    cache.fund = c.totalFund||0;
+    D('dash-fund').textContent = `KES ${fmt(c.totalFund)}`;
+    D('dash-welfare').textContent = `KES ${fmt(c.welfareFund)}`;
+    D('dash-retained').textContent = `KES ${fmt(c.retainedEarnings)}`;
+    D('div-cash').textContent = `KES ${fmt(c.totalFund)}`;
+    if (c.settings) {
+      D('sys-target').value = c.settings.weeklyTarget||125;
+      D('sys-fine').value = c.settings.lateFine||50;
+      D('sys-interest').value = c.settings.interestRate||10;
+      D('sys-multiple').value = c.settings.loanMultiple||2;
+      D('sys-regfee').value = c.settings.regFee||1000;
     }
-
-    if(c.maintenance) {
-        D('maint-status').value = c.maintenance.isActive ? "true" : "false";
-        D('maint-reason').value = c.maintenance.reason || "";
-        if(c.maintenance.endTime) {
-            const d = new Date(c.maintenance.endTime);
-            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-            D('maint-end').value = d.toISOString().slice(0,16);
-        }
+    if (c.maintenance) {
+      D('maint-status').value = c.maintenance.isActive ? "true" : "false";
+      D('maint-reason').value = c.maintenance.reason||'';
+      if (c.maintenance.endTime) {
+        const dt = new Date(c.maintenance.endTime);
+        dt.setMinutes(dt.getMinutes()-dt.getTimezoneOffset());
+        D('maint-end').value = dt.toISOString().slice(0,16);
+      }
     }
   }));
 
   // Users & Ledger
   activeListeners.push(db.collection("users").onSnapshot(async snap => {
-    cache.users = []; D('tx-member').innerHTML=''; D('fine-member').innerHTML=''; D('wel-member').innerHTML='';
-    let uHtml='', lHtml='', members=0;
-    
-    let txSnap; try { const now=new Date(); txSnap = await db.collection("wallet_transactions").where("type","==","CONTRIBUTION").where("timestamp",">=",new Date(now.getFullYear(),now.getMonth(),1).getTime()).get(); } catch(e) { txSnap={docs:[]}; }
+    cache.users = [];
+    D('tx-member').innerHTML=''; D('fine-member').innerHTML=''; D('wel-member').innerHTML='';
+    let uHtml='', lHtml='';
+    let txSnap;
+    try {
+      const now = new Date();
+      txSnap = await db.collection("wallet_transactions")
+        .where("type","==","CONTRIBUTION")
+        .where("timestamp",">=",new Date(now.getFullYear(),now.getMonth(),1).getTime())
+        .get();
+    } catch(e) { txSnap={docs:[]}; }
 
     snap.forEach(d => {
-      const u=d.data(); cache.users.push({id:d.id, ...u}); members++;
+      const u = d.data();
+      cache.users.push({id:d.id,...u});
       const opt = `<option value="${d.id}">${u.name}</option>`;
       D('tx-member').innerHTML+=opt; D('fine-member').innerHTML+=opt; D('wel-member').innerHTML+=opt;
 
-      const wks={1:0,2:0,3:0,4:0}; txSnap.docs.forEach(t=>{const td=t.data(); if(td.uid===d.id){ wks[getWeekOfMonth(td.timestamp)]+=Number(td.amount); }});
-      const target = Number(D('sys-target').value) || 125;
-      const arrears = Math.max(0, (target*4) - (wks[1]+wks[2]+wks[3]+wks[4]));
+      const wks={1:0,2:0,3:0,4:0};
+      txSnap.docs.forEach(t=>{ const td=t.data(); if(td.uid===d.id) wks[getWeekOfMonth(td.timestamp)]+=Number(td.amount); });
+      const target = Number(D('sys-target').value)||125;
+      const arrears = Math.max(0,(target*4)-(wks[1]+wks[2]+wks[3]+wks[4]));
+      const strikesColor = (u.strikes||0)>=3?'color:var(--red)':'';
 
-      uHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td><span class="pill pill-gold">${u.role}</span></td><td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td><td><span class="pill ${u.kyc?'pill-green':'pill-red'}">${u.kyc?'Verified':'Pending'}</span></td><td class="mono" style="color:${u.strikes>=3?'var(--red)':'inherit'}">${u.strikes||0}</td><td class="mono">KES ${fmt(u.walletBalance)}</td><td><button class="btn-action sm" onclick="verifyKYC('${d.id}')">KYC</button> <button class="btn-action ghost sm" onclick="issueStrike('${d.id}')">Strike</button> <button class="btn-action ghost sm" onclick="openEditor('users', '${d.id}')">Edit</button></td></tr>`;
-      lHtml += `<tr><td class="mono" style="color:var(--gold)">${u.ngiId}</td><td><b>${u.name}</b></td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',1)">${wks[1]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',2)">${wks[2]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',3)">${wks[3]||0}</td><td class="edit-cell mono" onclick="manualLedgerEntry('${d.id}',4)">${wks[4]||0}</td><td class="mono">KES ${fmt(u.totalContributed)}</td><td class="mono" style="color:${arrears>0?'var(--red)':'var(--green)'}">${arrears>0?arrears:'✓'}</td></tr>`;
+      uHtml += `<tr>
+        <td class="mono text-gold">${u.ngiId}</td>
+        <td><b>${u.name}</b></td>
+        <td><span class="pill pill-gold">${u.role}</span></td>
+        <td><span class="pill ${u.isBanned?'pill-red':'pill-green'}">${u.isBanned?'Banned':'Active'}</span></td>
+        <td><span class="pill ${u.kyc?'pill-green':'pill-red'}">${u.kyc?'Verified':'Pending'}</span></td>
+        <td class="mono" style="${strikesColor}">${u.strikes||0}</td>
+        <td class="mono">KES ${fmt(u.walletBalance)}</td>
+        <td><div class="td-actions">
+          <button class="btn btn-ghost btn-sm" onclick="verifyKYC('${d.id}')">KYC</button>
+          <button class="btn btn-ghost btn-sm" onclick="issueStrike('${d.id}')">Strike</button>
+          <button class="btn btn-gold btn-sm" onclick="openEditor('users','${d.id}')">Edit</button>
+        </div></td>
+      </tr>`;
+
+      lHtml += `<tr>
+        <td class="mono text-gold">${u.ngiId}</td>
+        <td><b>${u.name}</b></td>
+        <td class="editable mono" onclick="manualLedgerEntry('${d.id}',1)">${wks[1]||0}</td>
+        <td class="editable mono" onclick="manualLedgerEntry('${d.id}',2)">${wks[2]||0}</td>
+        <td class="editable mono" onclick="manualLedgerEntry('${d.id}',3)">${wks[3]||0}</td>
+        <td class="editable mono" onclick="manualLedgerEntry('${d.id}',4)">${wks[4]||0}</td>
+        <td class="mono">KES ${fmt(u.totalContributed)}</td>
+        <td class="mono" style="${arrears>0?'color:var(--red)':'color:var(--green)'}">${arrears>0?'KES '+fmt(arrears):'✓'}</td>
+      </tr>`;
     });
-    D('userBody').innerHTML=uHtml; D('ledgerBody').innerHTML=lHtml; 
-    D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`;
+    D('userBody').innerHTML = uHtml||`<tr><td colspan="8" class="empty"><div class="empty-icon">👥</div><p>No members</p></td></tr>`;
+    D('ledgerBody').innerHTML = lHtml||`<tr><td colspan="8" class="empty"><p>No data</p></td></tr>`;
+    D('dash-nav').textContent = `KES ${fmt(cache.fund+cache.loans+cache.assets)}`;
   }));
 
   // Transactions
   activeListeners.push(db.collection("wallet_transactions").orderBy("timestamp","desc").limit(50).onSnapshot(snap => {
-    let fHtml='', wHtml=''; snap.forEach(d=>{ const f=d.data(); const u=cache.users.find(x=>x.id===f.uid); const cred=['CONTRIBUTION','DEPOSIT','WELFARE_IN'].includes(f.type);
-    fHtml+=`<tr><td class="mono" style="color:var(--muted)">${d.id.substring(0,6)}</td><td class="mono">${f.ngiId}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'};font-weight:bold">${cred?'+':'-'}KES ${fmt(f.amount)}</td><td><span class="pill ${cred?'pill-green':'pill-red'}">${f.type}</span></td><td>${fdt(f.timestamp)}</td><td><button class="btn-action ghost sm" onclick="openEditor('wallet_transactions', '${d.id}')">Edit</button></td></tr>`;
-    if(f.type.includes('WELFARE')) wHtml+=`<tr><td>${u?.name}</td><td class="mono" style="color:${cred?'var(--green)':'var(--red)'}">KES ${f.amount}</td><td><span class="pill pill-blue">${f.type}</span></td><td>${fdt(f.timestamp)}</td><td><button class="btn-action ghost sm" onclick="openEditor('wallet_transactions', '${d.id}')">Edit</button></td></tr>`;
+    let fHtml='', wHtml='';
+    snap.forEach(d => {
+      const f=d.data();
+      const cred=['CONTRIBUTION','DEPOSIT','WELFARE_IN'].includes(f.type);
+      fHtml+=`<tr>
+        <td class="mono text-muted">${d.id.substring(0,8)}</td>
+        <td class="mono">${f.ngiId||'—'}</td>
+        <td class="mono fw-bold" style="color:${cred?'var(--green)':'var(--red)'}">${cred?'+':'-'}KES ${fmt(f.amount)}</td>
+        <td><span class="pill ${cred?'pill-green':'pill-red'}">${f.type}</span></td>
+        <td class="text-muted text-sm">${fdt(f.timestamp)}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openEditor('wallet_transactions','${d.id}')">Edit</button></td>
+      </tr>`;
+      if(f.type.includes('WELFARE')) wHtml+=`<tr>
+        <td>${cache.users.find(x=>x.id===f.uid)?.name||'—'}</td>
+        <td class="mono" style="color:${cred?'var(--green)':'var(--red)'}">KES ${f.amount}</td>
+        <td><span class="pill pill-blue">${f.type}</span></td>
+        <td class="text-muted text-sm">${fdt(f.timestamp)}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openEditor('wallet_transactions','${d.id}')">Edit</button></td>
+      </tr>`;
     });
-    D('financeBody').innerHTML=fHtml||'<tr><td colspan="6">No Tx</td></tr>'; D('welfareBody').innerHTML=wHtml||'<tr><td colspan="5">No Logs</td></tr>';
+    D('financeBody').innerHTML=fHtml||`<tr><td colspan="6"><div class="empty"><div class="empty-icon">💳</div><p>No transactions</p></div></td></tr>`;
+    D('welfareBody').innerHTML=wHtml||`<tr><td colspan="5"><div class="empty"><div class="empty-icon">🤝</div><p>No welfare logs</p></div></td></tr>`;
   }));
 
   // Assets
   activeListeners.push(db.collection("assets").onSnapshot(snap => {
-    let aHtml=''; cache.assets=0; snap.forEach(d=>{ const a=d.data(); cache.assets+=a.valuation; const roi=(((a.valuation-a.cost)/a.cost)*100).toFixed(1);
-    aHtml+=`<tr><td>${a.name}</td><td><span class="pill pill-blue">${a.type}</span></td><td class="mono">KES ${fmt(a.cost)}</td><td class="mono">KES ${fmt(a.valuation)}</td><td class="mono" style="color:${roi>=0?'var(--green)':'var(--red)'}">${roi}%</td><td><button class="btn-action ghost sm" onclick="liquidateAsset('${d.id}',${a.valuation})">Liquidate</button> <button class="btn-action ghost sm" onclick="openEditor('assets', '${d.id}')">Edit</button></td></tr>`;});
-    D('assetBody').innerHTML=aHtml||'<tr><td colspan="6">No Assets</td></tr>'; D('dash-nav').textContent = `KES ${fmt(cache.fund + cache.loans + cache.assets)}`;
+    let aHtml=''; cache.assets=0;
+    snap.forEach(d => {
+      const a=d.data(); cache.assets+=a.valuation;
+      const roi=(((a.valuation-a.cost)/a.cost)*100).toFixed(1);
+      aHtml+=`<tr>
+        <td class="fw-bold">${a.name}</td>
+        <td><span class="pill pill-blue">${a.type}</span></td>
+        <td class="mono">KES ${fmt(a.cost)}</td>
+        <td class="mono">KES ${fmt(a.valuation)}</td>
+        <td class="mono" style="color:${roi>=0?'var(--green)':'var(--red)'}">${roi}%</td>
+        <td><div class="td-actions">
+          <button class="btn btn-ghost btn-sm" onclick="liquidateAsset('${d.id}',${a.valuation})">Liquidate</button>
+          <button class="btn btn-gold btn-sm" onclick="openEditor('assets','${d.id}')">Edit</button>
+        </div></td>
+      </tr>`;
+    });
+    D('assetBody').innerHTML=aHtml||`<tr><td colspan="6"><div class="empty"><div class="empty-icon">🏢</div><p>No assets</p></div></td></tr>`;
+    D('dash-nav').textContent = `KES ${fmt(cache.fund+cache.loans+cache.assets)}`;
   }));
 
   // Expenses
   activeListeners.push(db.collection("expenses").orderBy("ts","desc").onSnapshot(snap => {
-    let eHtml=''; snap.forEach(d=>{ const e=d.data(); eHtml+=`<tr><td>${fdt(e.ts)}</td><td>${e.desc}</td><td class="mono" style="color:var(--red)">-KES ${fmt(e.amt)}</td><td>${e.by}</td><td><button class="btn-action ghost sm" onclick="openEditor('expenses', '${d.id}')">Edit</button></td></tr>`;});
-    D('expenseBody').innerHTML=eHtml||'<tr><td colspan="5">No Expenses</td></tr>';
+    let eHtml='';
+    snap.forEach(d => {
+      const e=d.data();
+      eHtml+=`<tr>
+        <td class="text-muted text-sm">${fdt(e.ts)}</td>
+        <td>${e.desc}</td>
+        <td class="mono text-red fw-bold">-KES ${fmt(e.amt)}</td>
+        <td>${e.by}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openEditor('expenses','${d.id}')">Edit</button></td>
+      </tr>`;
+    });
+    D('expenseBody').innerHTML=eHtml||`<tr><td colspan="5"><div class="empty"><div class="empty-icon">📉</div><p>No expenses</p></div></td></tr>`;
   }));
 
   // Fines
   activeListeners.push(db.collection("fines").where("isPaid","==",false).onSnapshot(snap => {
-    let fHtml='', debts=0; snap.forEach(d=>{ const f=d.data(); debts+=f.amount; const u=cache.users.find(x=>x.id===f.uid);
-    fHtml+=`<tr><td><b>${u?.name}</b></td><td class="mono" style="color:var(--red)">KES ${f.amount}</td><td>${f.description}</td><td><button class="btn-action sm" onclick="payFine('${d.id}','${f.uid}',${f.amount})">Clear</button> <button class="btn-action ghost sm" onclick="waiveFine('${d.id}','${f.uid}',${f.amount})">Waive</button> <button class="btn-action ghost sm" onclick="openEditor('fines', '${d.id}')">Edit</button></td></tr>`;});
-    D('finesBody').innerHTML=fHtml||'<tr><td colspan="4">No Fines</td></tr>'; D('dash-debt').textContent=`KES ${fmt(debts)}`;
+    let fHtml='', debts=0;
+    snap.forEach(d => {
+      const f=d.data(); debts+=f.amount;
+      const u=cache.users.find(x=>x.id===f.uid);
+      fHtml+=`<tr>
+        <td class="fw-bold">${u?.name||'—'}</td>
+        <td class="mono text-red fw-bold">KES ${f.amount}</td>
+        <td>${f.description}</td>
+        <td><div class="td-actions">
+          <button class="btn btn-gold btn-sm" onclick="payFine('${d.id}','${f.uid}',${f.amount})">Clear</button>
+          <button class="btn btn-ghost btn-sm" onclick="waiveFine('${d.id}','${f.uid}',${f.amount})">Waive</button>
+          <button class="btn btn-ghost btn-sm" onclick="openEditor('fines','${d.id}')">Edit</button>
+        </div></td>
+      </tr>`;
+    });
+    D('finesBody').innerHTML=fHtml||`<tr><td colspan="4"><div class="empty"><div class="empty-icon">✅</div><p>No unpaid fines</p></div></td></tr>`;
+    D('dash-debt').textContent = `KES ${fmt(debts)}`;
   }));
 
   // Loans
   activeListeners.push(db.collection("loans").onSnapshot(snap => {
-    let pCont='', aHtml=''; cache.loans=0; snap.forEach(d=>{ const l=d.data();
-    if(l.status==='Pending') pCont+=`<div class="card"><div style="display:flex;justify-content:space-between"><div><b>${l.name}</b><br><small>${l.reason}</small></div><div class="mono" style="color:var(--gold);font-size:18px">KES ${fmt(l.amount)}</div></div><div style="margin-top:10px"><button class="btn-action sm" onclick="apprLoan('${d.id}','${l.uid}',${l.amount})">Approve</button> <button class="btn-action red sm" onclick="db.collection('loans').doc('${d.id}').update({status:'Rejected'})">Reject</button></div></div>`;
-    else if(l.status==='Active') { cache.loans+=l.balance; aHtml+=`<tr><td>${l.name}</td><td class="mono">KES ${fmt(l.amount)}</td><td class="mono" style="color:var(--gold)">KES ${fmt(l.balance)}</td><td><button class="btn-action ghost sm" onclick="writeOffLoan('${d.id}',${l.balance})">Write-off</button> <button class="btn-action ghost sm" onclick="openEditor('loans', '${d.id}')">Edit</button></td></tr>`; }});
-    D('pendingLoanContainer').innerHTML=pCont||'<p style="color:var(--muted)">None</p>'; D('activeLoanBody').innerHTML=aHtml||'<tr><td colspan="4">No Active Loans</td></tr>'; D('dash-loans-out').textContent=`KES ${fmt(cache.loans)}`;
+    let pCont='', aHtml=''; cache.loans=0;
+    snap.forEach(d => {
+      const l=d.data();
+      if (l.status==='Pending') {
+        pCont+=`<div class="loan-card">
+          <div class="loan-card-info"><h4>${l.name}</h4><p>${l.reason}</p></div>
+          <div>
+            <div class="loan-card-amount">KES ${fmt(l.amount)}</div>
+            <div class="loan-card-actions">
+              <button class="btn btn-gold btn-sm" onclick="apprLoan('${d.id}','${l.uid}',${l.amount})">✓ Approve</button>
+              <button class="btn btn-red-ghost btn-sm" onclick="db.collection('loans').doc('${d.id}').update({status:'Rejected'})">✗ Reject</button>
+            </div>
+          </div>
+        </div>`;
+      } else if (l.status==='Active') {
+        cache.loans+=l.balance;
+        aHtml+=`<tr>
+          <td class="fw-bold">${l.name}</td>
+          <td class="mono">KES ${fmt(l.amount)}</td>
+          <td class="mono text-gold">KES ${fmt(l.balance)}</td>
+          <td><div class="td-actions">
+            <button class="btn btn-ghost btn-sm" onclick="writeOffLoan('${d.id}',${l.balance})">Write-off</button>
+            <button class="btn btn-gold btn-sm" onclick="openEditor('loans','${d.id}')">Edit</button>
+          </div></td>
+        </tr>`;
+      }
+    });
+    D('pendingLoanContainer').innerHTML=pCont||`<div class="card" style="padding:20px"><p class="text-muted text-sm">No pending applications</p></div>`;
+    D('activeLoanBody').innerHTML=aHtml||`<tr><td colspan="4"><div class="empty"><div class="empty-icon">🏦</div><p>No active loans</p></div></td></tr>`;
+    D('dash-loans-out').textContent = `KES ${fmt(cache.loans)}`;
   }));
 
   // Meetings
   activeListeners.push(db.collection("meetings").orderBy("timestamp","desc").onSnapshot(snap => {
-    let mHtml=''; snap.forEach(d=>{ const m=d.data(); const isPast = m.date < Date.now() || m.status === 'Ended';
-    mHtml+=`<tr><td><b>${m.agenda}</b></td><td>${fdt(m.date)}</td><td><span class="pill ${isPast?'pill-red':'pill-green'}">${m.status || (isPast?'Ended':'Upcoming')}</span></td><td class="mono">${(m.attendees||[]).length} joined</td><td><button class="btn-action ghost sm" onclick="viewMinutes('${d.id}','${(m.agenda||'').replace(/'/g,"")}')">Minutes</button> <button class="btn-action ghost sm" onclick="openEditor('meetings', '${d.id}')">Edit</button> <button class="btn-action red sm" style="margin-left:5px" onclick="db.collection('meetings').doc('${d.id}').delete()">Del</button></td></tr>`;});
-    D('meetingBody').innerHTML=mHtml||'<tr><td colspan="5" style="text-align:center">No meetings scheduled.</td></tr>';
+    let mHtml='';
+    snap.forEach(d => {
+      const m=d.data();
+      const isPast = m.date < Date.now() || m.status==='Ended';
+      mHtml+=`<tr>
+        <td class="fw-bold">${m.agenda}</td>
+        <td class="text-muted text-sm">${fdt(m.date)}</td>
+        <td><span class="pill ${isPast?'pill-red':'pill-green'}">${m.status||(isPast?'Ended':'Upcoming')}</span></td>
+        <td class="mono">${(m.attendees||[]).length}</td>
+        <td><div class="td-actions">
+          <button class="btn btn-ghost btn-sm" onclick="viewMinutes('${d.id}','${(m.agenda||'').replace(/'/g,'')}')">Minutes</button>
+          <button class="btn btn-ghost btn-sm" onclick="openEditor('meetings','${d.id}')">Edit</button>
+          <button class="btn btn-red-ghost btn-sm" onclick="db.collection('meetings').doc('${d.id}').delete()">Del</button>
+        </div></td>
+      </tr>`;
+    });
+    D('meetingBody').innerHTML=mHtml||`<tr><td colspan="5"><div class="empty"><div class="empty-icon">📅</div><p>No meetings scheduled</p></div></td></tr>`;
   }));
 
   // Polls
   activeListeners.push(db.collection("polls").orderBy("createdAt","desc").onSnapshot(snap => {
-    let pHtml=''; snap.forEach(d=>{ const p=d.data(); const totVotes = (p.choices||[]).reduce((s,c)=>s+(c.votes||[]).length,0); let opts='';
-    (p.choices||[]).forEach(c=>{ const pct = totVotes>0 ? Math.round(((c.votes||[]).length/totVotes)*100) : 0;
-      opts+=`<div class="poll-option"><div style="display:flex;justify-content:space-between"><span>${c.text}</span><span class="mono">${(c.votes||[]).length} (${pct}%)</span></div><div class="poll-bar-wrap"><div class="poll-bar" style="width:${pct}%"></div></div></div>`;
+    let pHtml='';
+    snap.forEach(d => {
+      const p=d.data();
+      const totVotes=(p.choices||[]).reduce((s,c)=>s+(c.votes||[]).length,0);
+      let opts='';
+      (p.choices||[]).forEach(c => {
+        const pct=totVotes>0?Math.round(((c.votes||[]).length/totVotes)*100):0;
+        opts+=`<div class="poll-opt">
+          <div class="poll-opt-top"><span class="poll-opt-text">${c.text}</span><span class="poll-opt-pct">${(c.votes||[]).length} · ${pct}%</span></div>
+          <div class="poll-bar-bg"><div class="poll-bar" style="width:${pct}%"></div></div>
+        </div>`;
+      });
+      pHtml+=`<div class="poll-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:10px">
+          <div><div class="poll-q">${p.question}</div><div class="poll-votes">${totVotes} vote${totVotes===1?'':'s'}</div></div>
+          <span class="pill ${p.status==='Active'?'pill-gold':'pill-red'}">${p.status}</span>
+        </div>
+        ${opts}
+        <div style="display:flex;gap:8px;margin-top:12px">
+          ${p.status==='Active'?`<button class="btn btn-red btn-sm" onclick="db.collection('polls').doc('${d.id}').update({status:'Closed'})">Close Poll</button>`:''}
+          <button class="btn btn-ghost btn-sm" onclick="openEditor('polls','${d.id}')">Edit</button>
+        </div>
+      </div>`;
     });
-    pHtml+=`<div class="poll-card"><div style="display:flex;justify-content:space-between;margin-bottom:14px"><div><b>${p.question}</b><br><small style="color:var(--muted)">${totVotes} votes</small></div><span class="pill ${p.status==='Active'?'pill-gold':'pill-red'}">${p.status}</span></div>${opts}<div style="margin-top:10px">${p.status==='Active'?`<button class="btn-action red sm" onclick="db.collection('polls').doc('${d.id}').update({status:'Closed'})">Close Poll</button> `:''}<button class="btn-action ghost sm" onclick="openEditor('polls', '${d.id}')">Edit Poll Raw Data</button></div></div>`;
-    });
-    D('poll-results-container').innerHTML=pHtml||'<p style="color:var(--muted)">No active or past polls.</p>';
+    D('poll-results-container').innerHTML=pHtml||`<div class="card"><div class="empty"><div class="empty-icon">🗳️</div><p>No polls yet</p></div></div>`;
   }));
 
   // Broadcasts
   activeListeners.push(db.collection("announcements").orderBy("timestamp","desc").limit(20).onSnapshot(snap => {
-    let bHtml=''; snap.forEach(d=>{ const b=d.data();
-    bHtml+=`<div style="border-bottom:1px solid var(--border);padding:14px 0"><div style="display:flex;justify-content:space-between"><b>${b.title}</b><span style="font-size:10px;color:var(--muted)">${fdt(b.timestamp)}</span></div><p style="color:var(--muted);margin-top:6px;font-size:12px;line-height:1.5">${b.message}</p><button class="btn-action ghost sm" style="margin-top:10px" onclick="db.collection('announcements').doc('${d.id}').delete()">Delete</button></div>`;});
-    D('broadcastHistory').innerHTML=bHtml||'<p style="color:var(--muted)">No broadcasts sent yet.</p>';
+    let bHtml='';
+    snap.forEach(d => {
+      const b=d.data();
+      bHtml+=`<div class="bc-item">
+        <div class="bc-item-top"><span class="bc-item-title">${b.title}</span><span class="bc-item-time">${fdt(b.timestamp)}</span></div>
+        <p class="bc-item-msg">${b.message}</p>
+        <div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="db.collection('announcements').doc('${d.id}').delete()">Delete</button></div>
+      </div>`;
+    });
+    D('broadcastHistory').innerHTML=bHtml||`<div class="empty"><div class="empty-icon">📡</div><p>No broadcasts sent yet</p></div>`;
   }));
 
   // Audit
   activeListeners.push(db.collection("audit_logs").orderBy("ts","desc").limit(30).onSnapshot(snap => {
-    let aHtml=''; snap.forEach(d=>{ const a=d.data(); aHtml+=`<tr><td>${fdt(a.ts)}</td><td><span class="pill pill-gold">${a.admin}</span></td><td>${a.action}</td><td class="mono">${a.target}</td></tr>`;});
-    D('auditBody').innerHTML=aHtml;
+    let aHtml='';
+    snap.forEach(d => {
+      const a=d.data();
+      aHtml+=`<tr>
+        <td class="text-muted text-sm">${fdt(a.ts)}</td>
+        <td><span class="pill pill-gold">${a.admin}</span></td>
+        <td>${a.action}</td>
+        <td class="mono text-sm text-muted">${a.target}</td>
+      </tr>`;
+    });
+    D('auditBody').innerHTML=aHtml||`<tr><td colspan="4"><div class="empty"><div class="empty-icon">🛡️</div><p>No audit logs</p></div></td></tr>`;
   }));
 }
 
-/* ═══════════════════════════════════════════
-   CORE ERP ACTIONS (SECURE BATCHES)
-═══════════════════════════════════════════ */
-
+/* ════════════════════════════════════════
+   ERP ACTIONS
+════════════════════════════════════════ */
 async function manualLedgerEntry(uid, wk) {
-  const amt=prompt("Log KES amount for W"+wk+":"); if(!amt||isNaN(amt)) return;
-  const b=db.batch(); const n=new Date(); const ts=new Date(n.getFullYear(),n.getMonth(),(wk-1)*7+2).getTime();
+  const amt = prompt(`Log KES amount for Week ${wk}:`);
+  if (!amt||isNaN(amt)) return;
+  const b=db.batch(); const n=new Date();
+  const ts=new Date(n.getFullYear(),n.getMonth(),(wk-1)*7+2).getTime();
   b.update(db.collection("users").doc(uid),{totalContributed:firebase.firestore.FieldValue.increment(Number(amt))});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(Number(amt))},{merge:true});
-  b.set(db.collection("wallet_transactions").doc(),{uid, amount:Number(amt), type:"CONTRIBUTION", timestamp:ts, status:"Completed", mpesaRef:"CASH"});
-  await b.commit(); logAudit("Manual Ledger Entry", `UID:${uid} Amt:${amt}`); toast("Logged.");
+  b.set(db.collection("wallet_transactions").doc(),{uid,amount:Number(amt),type:"CONTRIBUTION",timestamp:ts,status:"Completed",mpesaRef:"CASH"});
+  await b.commit(); logAudit("Manual Ledger Entry",`UID:${uid} Amt:${amt}`); toast("Entry logged.");
 }
 
 async function submitTx() {
   const uid=D('tx-member').value, type=D('tx-type').value, amt=Number(D('tx-amount').value), ref=D('tx-ref').value;
-  const b=db.batch(); const mod = type==='WITHDRAWAL'?-amt:amt;
-  b.update(db.collection("users").doc(uid), {walletBalance:firebase.firestore.FieldValue.increment(mod)});
-  b.set(db.collection("wallet_transactions").doc(), {uid, amount:amt, type, timestamp:Date.now(), status:"Completed", mpesaRef:ref});
-  await b.commit(); logAudit("Manual Tx", `Type:${type} Amt:${amt}`); toast("Tx Logged."); D('tx-card').style.display='none';
+  const b=db.batch(); const mod=type==='WITHDRAWAL'?-amt:amt;
+  b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(mod)});
+  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type,timestamp:Date.now(),status:"Completed",mpesaRef:ref});
+  await b.commit(); logAudit("Manual Tx",`Type:${type} Amt:${amt}`); toast("Transaction logged."); togglePanel('tx-panel');
 }
 
 async function submitAsset() {
   const name=D('as-name').value, type=D('as-type').value, cost=Number(D('as-cost').value), val=Number(D('as-val').value);
-  const b=db.batch(); b.set(db.collection("assets").doc(),{name,type,cost,valuation:val});
+  const b=db.batch();
+  b.set(db.collection("assets").doc(),{name,type,cost,valuation:val});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-cost)},{merge:true});
-  await b.commit(); logAudit("Asset Purchased", `Name:${name} Cost:${cost}`); toast("Asset Added."); D('asset-card').style.display='none';
+  await b.commit(); logAudit("Asset Purchased",`Name:${name} Cost:${cost}`); toast("Asset added."); togglePanel('asset-panel');
 }
 async function liquidateAsset(id, val) {
-  if(!confirm("Liquidate asset and return funds to Group Fund?")) return;
-  const b=db.batch(); b.delete(db.collection("assets").doc(id));
+  if (!confirm("Liquidate asset and return funds to Group Fund?")) return;
+  const b=db.batch();
+  b.delete(db.collection("assets").doc(id));
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(val)},{merge:true});
-  await b.commit(); logAudit("Asset Liquidated", `ID:${id}`); toast("Asset Liquidated.");
+  await b.commit(); logAudit("Asset Liquidated",`ID:${id}`); toast("Asset liquidated.");
 }
 
 async function submitExpense() {
   const desc=D('ex-desc').value, amt=Number(D('ex-amt').value);
-  const b=db.batch(); b.set(db.collection("expenses").doc(),{desc,amt,by:myName,ts:Date.now()});
+  const b=db.batch();
+  b.set(db.collection("expenses").doc(),{desc,amt,by:myName,ts:Date.now()});
   b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-amt)},{merge:true});
-  await b.commit(); logAudit("Group Expense", `Amt:${amt}`); toast("Expense Logged."); D('exp-card').style.display='none';
+  await b.commit(); logAudit("Group Expense",`Amt:${amt}`); toast("Expense logged."); togglePanel('exp-panel');
 }
 
 async function submitFine() {
   const uid=D('fine-member').value, amt=Number(D('fine-amount').value), r=D('fine-reason').value, stk=Number(D('fine-strike').value);
-  const b=db.batch(); b.update(db.collection("users").doc(uid), {totalFines:firebase.firestore.FieldValue.increment(amt), strikes:firebase.firestore.FieldValue.increment(stk)});
-  b.set(db.collection("fines").doc(), {uid, amount:amt, description:r, isPaid:false, timestamp:Date.now()});
-  await b.commit(); logAudit("Issued Fine", `Amt:${amt}`); toast("Penalty Issued."); D('fine-card').style.display='none';
+  const b=db.batch();
+  b.update(db.collection("users").doc(uid),{totalFines:firebase.firestore.FieldValue.increment(amt),strikes:firebase.firestore.FieldValue.increment(stk)});
+  b.set(db.collection("fines").doc(),{uid,amount:amt,description:r,isPaid:false,timestamp:Date.now()});
+  await b.commit(); logAudit("Issued Fine",`Amt:${amt}`); toast("Penalty issued."); togglePanel('fine-panel');
 }
 async function payFine(id, uid, amt) {
-  const b=db.batch(); b.update(db.collection("fines").doc(id),{isPaid:true}); b.update(db.collection("users").doc(uid),{totalFines:firebase.firestore.FieldValue.increment(-amt)});
-  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(amt)},{merge:true}); await b.commit(); logAudit("Fine Cleared", `ID:${id}`); toast("Cleared.");
+  const b=db.batch();
+  b.update(db.collection("fines").doc(id),{isPaid:true});
+  b.update(db.collection("users").doc(uid),{totalFines:firebase.firestore.FieldValue.increment(-amt)});
+  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(amt)},{merge:true});
+  await b.commit(); logAudit("Fine Cleared",`ID:${id}`); toast("Fine cleared.");
 }
 async function waiveFine(id, uid, amt) {
-  const b=db.batch(); b.delete(db.collection("fines").doc(id)); b.update(db.collection("users").doc(uid),{totalFines:firebase.firestore.FieldValue.increment(-amt)}); await b.commit(); logAudit("Fine Waived", `ID:${id}`); toast("Waived.");
+  const b=db.batch();
+  b.delete(db.collection("fines").doc(id));
+  b.update(db.collection("users").doc(uid),{totalFines:firebase.firestore.FieldValue.increment(-amt)});
+  await b.commit(); logAudit("Fine Waived",`ID:${id}`); toast("Fine waived.");
 }
 
 async function apprLoan(id, uid, amt) {
-  const b=db.batch(); b.update(db.collection("loans").doc(id),{status:'Active', approvedAt:Date.now()}); b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(amt)});
-  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"LOAN_DISBURSEMENT",timestamp:Date.now(),status:"Completed"}); await b.commit(); logAudit("Loan Approved", `Amt:${amt}`); toast("Approved.");
+  const b=db.batch();
+  b.update(db.collection("loans").doc(id),{status:'Active',approvedAt:Date.now()});
+  b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(amt)});
+  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"LOAN_DISBURSEMENT",timestamp:Date.now(),status:"Completed"});
+  await b.commit(); logAudit("Loan Approved",`Amt:${amt}`); toast("Loan approved & disbursed.");
 }
 async function writeOffLoan(id, bal) {
-  if(!confirm("Write off as Bad Debt? Absorbs loss to Group Fund.")) return;
-  const b=db.batch(); b.update(db.collection("loans").doc(id),{status:'Written Off'}); b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-bal)},{merge:true});
-  await b.commit(); logAudit("Loan Write-Off", `Loss:${bal}`); toast("Written Off.");
+  if (!confirm("Write off as Bad Debt? Absorbs loss to Group Fund.")) return;
+  const b=db.batch();
+  b.update(db.collection("loans").doc(id),{status:'Written Off'});
+  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-bal)},{merge:true});
+  await b.commit(); logAudit("Loan Write-Off",`Loss:${bal}`); toast("Written off.");
 }
 
 async function submitWelfare() {
   const uid=D('wel-member').value, amt=Number(D('wel-amount').value), r=D('wel-reason').value;
-  const b=db.batch(); b.set(db.collection("group").doc("ngi_main"),{welfareFund:firebase.firestore.FieldValue.increment(-amt)},{merge:true});
+  const b=db.batch();
+  b.set(db.collection("group").doc("ngi_main"),{welfareFund:firebase.firestore.FieldValue.increment(-amt)},{merge:true});
   b.update(db.collection("users").doc(uid),{walletBalance:firebase.firestore.FieldValue.increment(amt)});
-  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"WELFARE_OUT",description:r,timestamp:Date.now()}); await b.commit(); logAudit("Welfare Payout", `UID:${uid} Amt:${amt}`); toast("Payout Sent."); D('wel-card').style.display='none';
+  b.set(db.collection("wallet_transactions").doc(),{uid,amount:amt,type:"WELFARE_OUT",description:r,timestamp:Date.now()});
+  await b.commit(); logAudit("Welfare Payout",`UID:${uid} Amt:${amt}`); toast("Welfare payout sent."); togglePanel('wel-panel');
 }
 
-async function verifyKYC(uid) { await db.collection("users").doc(uid).update({kyc:true}); logAudit("Verified KYC", `UID:${uid}`); toast("Verified."); }
-async function issueStrike(uid) { await db.collection("users").doc(uid).update({strikes:firebase.firestore.FieldValue.increment(1)}); logAudit("Issued Strike", `UID:${uid}`); toast("Strike added."); }
+async function verifyKYC(uid) { await db.collection("users").doc(uid).update({kyc:true}); logAudit("Verified KYC",`UID:${uid}`); toast("KYC Verified."); }
+async function issueStrike(uid) { await db.collection("users").doc(uid).update({strikes:firebase.firestore.FieldValue.increment(1)}); logAudit("Issued Strike",`UID:${uid}`); toast("Strike added."); }
 
-// --- DIVIDENDS ENGINE ---
-let divMap = [];
+/* ════ DIVIDENDS ════ */
+let divMap=[];
 function runDividendPreview() {
-  const cash = cache.fund; const ret = Number(D('div-retain').value)/100;
-  const pool = cash * (1 - ret); const totShares = cache.users.reduce((s,u)=>s+(u.totalContributed||0),0);
+  const cash=cache.fund, ret=Number(D('div-retain').value)/100;
+  const pool=cash*(1-ret), totShares=cache.users.reduce((s,u)=>s+(u.totalContributed||0),0);
   let dHtml=''; divMap=[];
   cache.users.forEach(u => {
-    const s = u.totalContributed||0; const pct = totShares>0 ? s/totShares : 0; const pay = pool * pct;
-    divMap.push({uid:u.id, pay});
-    dHtml+=`<tr><td>${u.name}</td><td class="mono">KES ${fmt(s)}</td><td class="mono">${(pct*100).toFixed(2)}%</td><td class="mono" style="color:var(--gold);font-weight:bold">KES ${fmt(pay)}</td></tr>`;
+    const s=u.totalContributed||0, pct=totShares>0?s/totShares:0, pay=pool*pct;
+    divMap.push({uid:u.id,pay});
+    dHtml+=`<tr><td class="fw-bold">${u.name}</td><td class="mono">KES ${fmt(s)}</td><td class="mono">${(pct*100).toFixed(2)}%</td><td class="mono text-gold fw-bold">KES ${fmt(pay)}</td></tr>`;
   });
-  D('dividendBody').innerHTML=dHtml; D('btn-execute-div').style.display='block';
+  D('dividendBody').innerHTML=dHtml; D('btn-execute-div').style.display='inline-flex';
 }
 async function executeDividends() {
-  if(!confirm("Execute payouts? This will drain the Master Fund into user wallets.")) return;
+  if (!confirm("Execute payouts? This will drain the Master Fund into user wallets.")) return;
   const b=db.batch(); let totPayout=0;
   divMap.forEach(d=>{ if(d.pay>0){ b.update(db.collection("users").doc(d.uid),{walletBalance:firebase.firestore.FieldValue.increment(d.pay)}); totPayout+=d.pay; }});
-  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-totPayout), retainedEarnings:firebase.firestore.FieldValue.increment(totPayout)},{merge:true});
-  await b.commit(); logAudit("Executed Dividends", `Total Payout:${totPayout}`); toast("Dividends Executed!"); D('btn-execute-div').style.display='none';
+  b.set(db.collection("group").doc("ngi_main"),{totalFund:firebase.firestore.FieldValue.increment(-totPayout),retainedEarnings:firebase.firestore.FieldValue.increment(totPayout)},{merge:true});
+  await b.commit(); logAudit("Executed Dividends",`Total Payout:${totPayout}`); toast("Dividends executed!"); D('btn-execute-div').style.display='none';
 }
 
-// --- MEETINGS, POLLS, COMMS ---
+/* ════ MEETINGS ════ */
 async function scheduleMeeting() {
-  const agenda = D('m-agenda').value.trim(), chan = D('m-channel').value.trim() || 'ngi_hq', ds = D('m-date').value, ts = D('m-time').value;
-  if (!agenda || !ds || !ts) return toast("Fill all meeting details", "err");
-  const [y, m, d] = ds.split('-').map(Number); const [h, min] = ts.split(':').map(Number);
-  const time = new Date(y, m - 1, d, h, min).getTime();
-  if (time < Date.now()) return toast("Meeting time is in the past.", "err");
-  try { await db.collection("meetings").add({ agenda, date: time, agoraChannel: chan, status: "Upcoming", timestamp: Date.now(), hasCall: true }); toast("Meeting Scheduled ✓"); logAudit("Scheduled Meeting", agenda); D('m-agenda').value=''; } catch(e) { toast("Error: " + e.message, "err"); }
+  const agenda=D('m-agenda').value.trim(), chan=D('m-channel').value.trim()||'ngi_hq', ds=D('m-date').value, ts=D('m-time').value;
+  if (!agenda||!ds||!ts) return toast("Fill all meeting details","err");
+  const [y,m,d]=ds.split('-').map(Number), [h,min]=ts.split(':').map(Number);
+  const time=new Date(y,m-1,d,h,min).getTime();
+  if (time<Date.now()) return toast("Meeting time is in the past.","err");
+  try {
+    await db.collection("meetings").add({agenda,date:time,agoraChannel:chan,status:"Upcoming",timestamp:Date.now(),hasCall:true});
+    toast("Meeting scheduled ✓"); logAudit("Scheduled Meeting",agenda);
+    D('m-agenda').value='';
+  } catch(e){ toast("Error: "+e.message,"err"); }
 }
 
 async function viewMinutes(id, agenda) {
-  try { const doc = await db.collection("meetings").doc(id).get(); D('min-agenda').textContent = agenda; D('min-content').textContent = doc.data().rawNotes || "No notes were scribed during this meeting."; D('minutes-modal').classList.add('open'); } catch(e) { toast("Error loading minutes", "err"); }
+  try {
+    const doc=await db.collection("meetings").doc(id).get();
+    D('min-agenda').textContent=agenda;
+    D('min-content').textContent=doc.data().rawNotes||"No notes were scribed during this meeting.";
+    D('minutes-panel').classList.add('open');
+    D('panel-bg').classList.add('visible');
+  } catch(e){ toast("Error loading minutes","err"); }
 }
 
+/* ════ POLLS & COMMS ════ */
 function addPollOpt() {
-  const cont = D('p-options'); const count = cont.querySelectorAll('.p-opt').length + 1;
-  const wrap = document.createElement('div'); wrap.className = 'form-group'; wrap.innerHTML = `<label>Option ${count}</label><input type="text" class="p-opt" placeholder="Enter option...">`; cont.appendChild(wrap);
+  const cont=D('p-options'), count=cont.querySelectorAll('.p-opt').length+1;
+  const wrap=document.createElement('div'); wrap.className='fg';
+  wrap.innerHTML=`<label>Option ${count}</label><input type="text" class="p-opt" placeholder="Enter option...">`; cont.appendChild(wrap);
 }
-
 async function launchPoll() {
-  const q = D('p-q').value.trim(); if (!q) return toast("Enter a question.", "err");
-  const opts = []; document.querySelectorAll('.p-opt').forEach(i => { if (i.value.trim()) opts.push({ id: Math.random().toString(36).substr(2,6), text: i.value.trim(), votes: [] }); });
-  if (opts.length < 2) return toast("Add at least 2 options.", "err");
-  try { await db.collection("polls").add({ question: q, choices: opts, status: "Active", createdAt: Date.now() }); D('p-q').value=''; document.querySelectorAll('.p-opt').forEach(i=>i.value=''); toast("Poll Launched ✓"); logAudit("Launched Poll", q); } catch(e) { toast("Error", "err"); }
+  const q=D('p-q').value.trim(); if (!q) return toast("Enter a question.","err");
+  const opts=[]; document.querySelectorAll('.p-opt').forEach(i=>{ if(i.value.trim()) opts.push({id:Math.random().toString(36).substr(2,6),text:i.value.trim(),votes:[]}); });
+  if (opts.length<2) return toast("Add at least 2 options.","err");
+  try {
+    await db.collection("polls").add({question:q,choices:opts,status:"Active",createdAt:Date.now()});
+    D('p-q').value=''; document.querySelectorAll('.p-opt').forEach(i=>i.value='');
+    toast("Poll launched ✓"); logAudit("Launched Poll",q);
+  } catch(e){ toast("Error","err"); }
 }
-
 async function sendBroadcast() {
-  const t = D('b-title').value.trim(), m = D('b-msg').value.trim();
-  if (!t || !m) return toast("Fill title and message", "err");
-  try { await db.collection("announcements").add({ title: t, message: m, timestamp: Date.now() }); D('b-title').value=''; D('b-msg').value=''; toast("Broadcast Sent ✓"); logAudit("Sent Broadcast", t); } catch(e) { toast("Error", "err"); }
+  const t=D('b-title').value.trim(), m=D('b-msg').value.trim();
+  if (!t||!m) return toast("Fill title and message","err");
+  try {
+    await db.collection("announcements").add({title:t,message:m,timestamp:Date.now()});
+    D('b-title').value=''; D('b-msg').value='';
+    toast("Broadcast sent ✓"); logAudit("Sent Broadcast",t);
+  } catch(e){ toast("Error","err"); }
 }
 
-// --- SYSTEM & MAINTENANCE CONFIG ---
+/* ════ CONFIG ════ */
 async function saveSystemConfig() {
-  await db.collection("group").doc("ngi_main").set({ 
-      settings: { 
-          weeklyTarget: Number(D('sys-target').value), 
-          lateFine: Number(D('sys-fine').value), 
-          interestRate: Number(D('sys-interest').value), 
-          loanMultiple: Number(D('sys-multiple').value),
-          regFee: Number(D('sys-regfee').value)
-      } 
-  }, { merge: true });
-  toast("Config Saved Globally"); logAudit("Updated Config", "Settings");
+  await db.collection("group").doc("ngi_main").set({
+    settings:{weeklyTarget:Number(D('sys-target').value),lateFine:Number(D('sys-fine').value),interestRate:Number(D('sys-interest').value),loanMultiple:Number(D('sys-multiple').value),regFee:Number(D('sys-regfee').value)}
+  },{merge:true});
+  toast("Config saved globally"); logAudit("Updated Config","Settings");
 }
-
 async function saveMaintenanceConfig() {
-    const isActive = D('maint-status').value === "true";
-    const reason = D('maint-reason').value.trim() || "System undergoing maintenance.";
-    const endStr = D('maint-end').value;
-    const endTime = endStr ? new Date(endStr).getTime() : Date.now() + (3600 * 1000);
-
-    await db.collection("group").doc("ngi_main").set({
-        maintenance: { isActive, reason, endTime }
-    }, { merge: true });
-    
-    toast("Maintenance Status Broadcasted!");
-    logAudit("Maintenance Mode", isActive ? "LOCKED App" : "UNLOCKED App");
+  const isActive=D('maint-status').value==="true";
+  const reason=D('maint-reason').value.trim()||"System undergoing maintenance.";
+  const endStr=D('maint-end').value;
+  const endTime=endStr?new Date(endStr).getTime():Date.now()+(3600*1000);
+  await db.collection("group").doc("ngi_main").set({maintenance:{isActive,reason,endTime}},{merge:true});
+  toast("Maintenance status updated!"); logAudit("Maintenance Mode",isActive?"LOCKED App":"UNLOCKED App");
 }
 
 function exportCSV() {
-  let csv = "NGI ID,Name,Total Saved,Wallet Balance,Strikes\n"; cache.users.forEach(u=>csv+=`${u.ngiId},${u.name},${u.totalContributed||0},${u.walletBalance||0},${u.strikes||0}\n`);
-  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download="NGI_Ledger.csv"; a.click(); logAudit("Exported CSV", "Ledger");
+  let csv="NGI ID,Name,Total Saved,Wallet Balance,Strikes\n";
+  cache.users.forEach(u=>csv+=`${u.ngiId},${u.name},${u.totalContributed||0},${u.walletBalance||0},${u.strikes||0}\n`);
+  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download="NGI_Ledger.csv"; a.click();
+  logAudit("Exported CSV","Ledger");
 }
 
 async function wipeDataEngine() {
-  const code = prompt("DANGER: This initiates a DEEP PURGE of the entire system.\n\nAll financial records, meetings, polls, and assets will be destroyed.\nYou will then be prompted to KEEP or DELETE each member one-by-one.\n\nType 'RESET' to begin:");
-  if (code !== "RESET") return toast("Wipe Aborted.", "info");
-
-  toast("Wiping system data... DO NOT CLOSE THIS PAGE.", "info");
+  const code=prompt("DANGER: Type 'RESET' to begin total system purge:");
+  if (code!=="RESET") return toast("Wipe aborted.");
+  toast("Wiping system data... DO NOT CLOSE.");
   try {
-    await db.collection("group").doc("ngi_main").set({ totalFund: 0, welfareFund: 0, retainedEarnings: 0 }, { merge: true });
-    
-    const cols = ["wallet_transactions", "contributions", "loans", "fines", "assets", "expenses", "audit_logs", "meetings", "polls", "announcements"];
+    await db.collection("group").doc("ngi_main").set({totalFund:0,welfareFund:0,retainedEarnings:0},{merge:true});
+    const cols=["wallet_transactions","contributions","loans","fines","assets","expenses","audit_logs","meetings","polls","announcements"];
     for (const col of cols) {
-      const snap = await db.collection(col).get();
-      const delPromises = []; snap.forEach(doc => delPromises.push(doc.ref.delete())); await Promise.all(delPromises);
+      const snap=await db.collection(col).get();
+      const del=[]; snap.forEach(doc=>del.push(doc.ref.delete())); await Promise.all(del);
     }
-
-    const users = await db.collection("users").get();
+    const users=await db.collection("users").get();
     for (const doc of users.docs) {
-      const u = doc.data();
-      if (doc.id === auth.currentUser.uid) {
-         await doc.ref.update({ walletBalance: 0, totalContributed: 0, totalFines: 0, strikes: 0, kyc: false }); continue;
-      }
-      const del = confirm(`DELETE member from NGI entirely?\n\nName: ${u.name}\nRole: ${u.role}\n\n[OK] = YES, Delete\n[Cancel] = NO, Retain (Reset balances to 0)`);
-      if (del) await doc.ref.delete(); else await doc.ref.update({ walletBalance: 0, totalContributed: 0, totalFines: 0, strikes: 0, kyc: false });
+      const u=doc.data();
+      if (doc.id===auth.currentUser.uid){ await doc.ref.update({walletBalance:0,totalContributed:0,totalFines:0,strikes:0,kyc:false}); continue; }
+      const del=confirm(`DELETE member?\n\nName: ${u.name}\nRole: ${u.role}\n\n[OK]=Delete  [Cancel]=Reset balances only`);
+      if (del) await doc.ref.delete(); else await doc.ref.update({walletBalance:0,totalContributed:0,totalFines:0,strikes:0,kyc:false});
     }
-    logAudit("DEEP SYSTEM PURGE", "All data wiped. Member roster audited.");
-    toast("SYSTEM PURGE COMPLETE. Reloading...", "ok");
-    setTimeout(() => window.location.reload(), 2000);
-  } catch(e) { toast("Error: " + e.message, "err"); }
+    logAudit("DEEP SYSTEM PURGE","All data wiped. Member roster audited.");
+    toast("System purge complete. Reloading...");
+    setTimeout(()=>window.location.reload(),2000);
+  } catch(e){ toast("Error: "+e.message,"err"); }
 }
 
-// --- UNIVERSAL GHOST EDITOR (Advanced Debugging & Raw Editing) ---
+/* ════ UNIVERSAL EDITOR ════ */
 async function openEditor(col, id) {
-  curCol = col; curId = id; 
-  const docSnap = await db.collection(col).doc(id).get(); 
-  edData = docSnap.data();
-  
-  D('ed-panel-id').textContent = `${col} / ${id}`; 
-  const cont = D('ed-fields'); 
-  cont.innerHTML = '';
-  
-  for (const k in edData) { 
-      let val = edData[k];
-      // Convert nested objects/arrays to JSON strings so they don't render as [object Object]
-      if (typeof val === 'object' && val !== null) {
-          val = JSON.stringify(val);
-      }
-      cont.innerHTML += `<div class="form-group"><label>${k}</label><input type="text" id="ed-${k}" value="${String(val).replace(/"/g,'&quot;')}"></div>`; 
+  curCol=col; curId=id;
+  const docSnap=await db.collection(col).doc(id).get();
+  edData=docSnap.data();
+  D('ed-panel-id').textContent=`${col} / ${id}`;
+  const cont=D('ed-fields'); cont.innerHTML='';
+  for (const k in edData) {
+    let val=edData[k];
+    if (typeof val==='object'&&val!==null) val=JSON.stringify(val);
+    cont.innerHTML+=`<div class="fg"><label>${k}</label><input type="text" id="ed-${k}" value="${String(val).replace(/"/g,'&quot;')}"></div>`;
   }
-  D('doc-editor').classList.add('open');
+  D('slide-editor').classList.add('open');
+  D('panel-bg').classList.add('visible');
 }
-
-function closeEditor() { D('doc-editor').classList.remove('open'); }
 
 async function saveDoc() {
-  const updates = {};
+  const updates={};
   for (const k in edData) {
-    const el = D(`ed-${k}`); 
-    if (!el) continue;
-    
-    let v = el.value; 
-    
-    // Type casting logic
-    if (v === 'true') v = true; 
-    else if (v === 'false') v = false; 
-    else if (!isNaN(v) && v !== '') v = Number(v);
-    else if (v.startsWith('{') || v.startsWith('[')) {
-        // Attempt to parse back into JSON objects/arrays if the admin edited nested data
-        try { v = JSON.parse(v); } catch(e) { console.error("JSON parse failed for", k); }
-    }
-    
-    updates[k] = v;
+    const el=D(`ed-${k}`); if (!el) continue;
+    let v=el.value;
+    if (v==='true') v=true;
+    else if (v==='false') v=false;
+    else if (!isNaN(v)&&v!=='') v=Number(v);
+    else if (v.startsWith('{')||v.startsWith('[')){ try { v=JSON.parse(v); } catch(e){} }
+    updates[k]=v;
   }
-  
   try {
-      await db.collection(curCol).doc(curId).update(updates); 
-      toast("Raw edits saved to database."); 
-      logAudit("Raw Document Edit", `${curCol}/${curId}`);
-      closeEditor();
-  } catch (e) {
-      toast("Error saving document", "err");
-  }
+    await db.collection(curCol).doc(curId).update(updates);
+    toast("Changes saved."); logAudit("Raw Document Edit",`${curCol}/${curId}`); closePanels();
+  } catch(e){ toast("Error saving: "+e.message,"err"); }
 }
-
-async function deleteDoc() { 
-    if(confirm("DANGER: Are you sure you want to permanently delete this database record?")){ 
-        await db.collection(curCol).doc(curId).delete(); 
-        toast("Document Deleted."); 
-        logAudit("Document Deletion", `${curCol}/${curId}`);
-        closeEditor(); 
-    } 
+async function deleteDoc() {
+  if (confirm("Permanently delete this record?")) {
+    await db.collection(curCol).doc(curId).delete();
+    toast("Record deleted."); logAudit("Document Deletion",`${curCol}/${curId}`); closePanels();
+  }
 }
 </script>
 </body>
