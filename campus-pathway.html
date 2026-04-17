@@ -3486,46 +3486,87 @@ async function sendAI() {
   startChatPolling();
 }
 
-async function pollDonationStatus(cid, attempts) {
-  // Increased from 12 to 24 attempts (Wait up to 120 seconds)
-  if (attempts > 24) { 
-    toast('Payment confirmation is taking too long. If money was deducted, we will update your account shortly.'); 
+async function pollDonationStatus(cid, attempts = 0, consecutiveErrors = 0) {
+  const MAX_ATTEMPTS = 24; // 24 * 5s = 120 seconds max wait
+  const MAX_ERRORS = 3;    // Abort if the network drops completely 3 times in a row
+
+  // 1. Update Progress Bar Dynamically
+  const pb = document.getElementById('progressBar') || document.getElementById('mpProgress');
+  if (pb) {
+    const pct = Math.min(((attempts + 1) / MAX_ATTEMPTS) * 100, 95); // Cap at 95% until success
+    pb.style.transition = 'width 1s ease-in-out';
+    pb.style.width = `${pct}%`;
+  }
+
+  // 2. Update Loading Text (if you have an element with ID 'waitTimer')
+  const waitText = document.getElementById('waitTimer');
+  if (waitText) {
+    waitText.textContent = `Awaiting confirmation... (Check ${attempts + 1}/${MAX_ATTEMPTS})`;
+  }
+
+  // 3. Timeout Failsafe
+  if (attempts >= MAX_ATTEMPTS) { 
+    toast('⏳ Taking longer than expected. If deducted, your account will update shortly.'); 
     showMpStep(1);
+    if (pb) pb.style.width = '0%';
     return; 
   }
+
+  // 4. Network Disconnect Failsafe
+  if (consecutiveErrors >= MAX_ERRORS) {
+    toast('❌ Lost connection to server. Please check your internet.');
+    showMpStep(1);
+    if (pb) pb.style.width = '0%';
+    return;
+  }
   
+  // Wait 5 seconds before pinging the server
   await new Promise(r => setTimeout(r, 5000));
   
   try {
     const res = await fetch(API_BASE + '/mpesa/status/' + cid);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     
-    // THIS LINE IS MAGIC: It lets us see exactly what the backend is saying in the browser console
-    console.log("M-Pesa Polling Status Update:", data); 
+    console.log(`🔍 Polling [${attempts + 1}/${MAX_ATTEMPTS}]:`, data); 
     
-    // Normalize the status to uppercase so we don't miss it due to a typo
     const currentStatus = (data.status || '').toUpperCase();
     
-    if (currentStatus === 'SUCCESS' || currentStatus === 'COMPLETED' || currentStatus === 'PAID') {
-      const rn = document.getElementById('receiptNo'); 
+    if (['SUCCESS', 'COMPLETED', 'PAID'].includes(currentStatus)) {
+      // ✅ SUCCESS PATH
+      if (pb) pb.style.width = '100%'; 
+      if (waitText) waitText.textContent = 'Confirmed!';
+
+      // Safely target the receipt span regardless of ID
+      const rn = document.getElementById('receiptNum') || document.getElementById('receiptNo'); 
       if (rn) rn.textContent = data.mpesa_receipt || 'CONFIRMED';
+      
       const ca = document.getElementById('confirmedAmt'); 
       if (ca) ca.textContent = selectedAmt;
       
-      showMpStep(4); // Show the green checkmark success screen!
+      showMpStep(4); 
       toast('🎉 Donation received! Asante sana! 💚');
+      return; // End polling loop
       
-    } else if (currentStatus === 'FAILED' || currentStatus === 'CANCELLED' || currentStatus === 'ERROR') {
+    } else if (['FAILED', 'CANCELLED', 'ERROR'].includes(currentStatus)) {
+      // ❌ FAILED PATH
       showMpStep(1); 
-      toast('❌ Payment was cancelled or failed.');
+      if (pb) pb.style.width = '0%';
+      
+      // Try to show the exact reason it failed, fallback to generic message
+      const failReason = data.result_desc || 'Payment was cancelled or failed.';
+      toast(`❌ ${failReason}`);
+      return; // End polling loop
       
     } else {
-      // It is still 'PENDING', so loop again
-      pollDonationStatus(cid, attempts + 1);
+      // ⏳ STILL PENDING: Loop again and reset consecutive errors
+      pollDonationStatus(cid, attempts + 1, 0); 
     }
+    
   } catch(e) {
     console.error("Polling Network Error:", e);
-    pollDonationStatus(cid, attempts + 1);
+    // Loop again, but increment the error count
+    pollDonationStatus(cid, attempts + 1, consecutiveErrors + 1);
   }
 }
 // Trigger modal after 3 course grade switches
