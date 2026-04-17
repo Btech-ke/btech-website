@@ -3481,33 +3481,46 @@ async function sendAI() {
   startChatPolling();
 }
 
-async function pollDonationStatus(checkoutId, attempts) {
-  attempts = attempts || 0;
-  if (attempts > 12) {
-    toast('Payment not confirmed yet. Check your M-Pesa messages.');
-    return;
+async function pollDonationStatus(cid, attempts) {
+  // Increased from 12 to 24 attempts (Wait up to 120 seconds)
+  if (attempts > 24) { 
+    toast('Payment confirmation is taking too long. If money was deducted, we will update your account shortly.'); 
+    showMpStep(1);
+    return; 
   }
-  await new Promise(function(r){ setTimeout(r, 5000); });
+  
+  await new Promise(r => setTimeout(r, 5000));
+  
   try {
-    const res  = await fetch(API_BASE + '/mpesa/status/' + checkoutId);
+    const res = await fetch(API + '/mpesa/status/' + cid);
     const data = await res.json();
-    if (data.status === 'SUCCESS') {
-      // Show step 4 success screen
-      var rn = document.getElementById('receiptNum');
+    
+    // THIS LINE IS MAGIC: It lets us see exactly what the backend is saying in the browser console
+    console.log("M-Pesa Polling Status Update:", data); 
+    
+    // Normalize the status to uppercase so we don't miss it due to a typo
+    const currentStatus = (data.status || '').toUpperCase();
+    
+    if (currentStatus === 'SUCCESS' || currentStatus === 'COMPLETED' || currentStatus === 'PAID') {
+      const rn = document.getElementById('receiptNo'); 
       if (rn) rn.textContent = data.mpesa_receipt || 'CONFIRMED';
-      var ca = document.getElementById('confirmedAmt');
+      const ca = document.getElementById('confirmedAmt'); 
       if (ca) ca.textContent = selectedAmt;
-      if (waitInterval) clearInterval(waitInterval);
-      showMpStep(4);
+      
+      showMpStep(4); // Show the green checkmark success screen!
       toast('🎉 Donation received! Asante sana! 💚');
-    } else if (data.status === 'FAILED') {
-      showMpStep(1);
-      toast('❌ Payment was cancelled. You can try again anytime.');
+      
+    } else if (currentStatus === 'FAILED' || currentStatus === 'CANCELLED' || currentStatus === 'ERROR') {
+      showMpStep(1); 
+      toast('❌ Payment was cancelled or failed.');
+      
     } else {
-      pollDonationStatus(checkoutId, attempts + 1);
+      // It is still 'PENDING', so loop again
+      pollDonationStatus(cid, attempts + 1);
     }
   } catch(e) {
-    pollDonationStatus(checkoutId, attempts + 1);
+    console.error("Polling Network Error:", e);
+    pollDonationStatus(cid, attempts + 1);
   }
 }
 // Trigger modal after 3 course grade switches
