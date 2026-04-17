@@ -2509,7 +2509,7 @@ body.has-ticker nav ~ * { --ticker-offset: 34px; }
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ═══ GLOBALS — declared first to avoid Temporal Dead Zone crashes ══════════ */
 var searchTriggerCount   = 0;
 var mpesaShownThisSession = false;
@@ -2568,9 +2568,14 @@ const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 /* ─ NAV ─ */
-function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+/* ─ NAV ─ */
+function toggleNav() { 
+  const el = document.getElementById('mobileNavOverlay');
+  if(el) el.classList.toggle('open'); 
+}
 document.addEventListener('click', e => {
-  if (!e.target.closest('nav') && !e.target.closest('.mobile-nav')) document.getElementById('mobileNav').classList.remove('open');
+  const el = document.getElementById('mobileNavOverlay');
+  if (el && !e.target.closest('nav') && !e.target.closest('.mobile-nav-overlay')) el.classList.remove('open');
 });
 
 /* ─ CALCULATOR ─ */
@@ -3492,7 +3497,7 @@ async function pollDonationStatus(cid, attempts) {
   await new Promise(r => setTimeout(r, 5000));
   
   try {
-    const res = await fetch(API + '/mpesa/status/' + cid);
+    const res = await fetch(API_BASE + '/mpesa/status/' + cid);
     const data = await res.json();
     
     // THIS LINE IS MAGIC: It lets us see exactly what the backend is saying in the browser console
@@ -5179,7 +5184,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <div>
         <div style="font-size:13px;font-weight:700;color:var(--lime);">Call / WhatsApp to Book</div>
         <div style="font-size:15px;font-weight:700;color:var(--white);">0113 996 609</div>
-        <div style="font-size:11px;color:var(--white3);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f193859492999a949f8890b1969c90989ddf929e9c">[email&#160;protected]</a></div>
+        <div style="font-size:11px;color:var(--white3);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f193859492999a949f8890b1969c90989ddf929e9c"><a href="mailto:btechkenya@gmail.com" style="color:var(--white2);text-decoration:none;font-size:13px;">btechkenya@gmail.com</a></a></div>
       </div>
     </div>
     <a href="https://btechplus.com/online-cyber.html" target="_blank" style="display:block;width:100%;padding:14px;background:var(--lime);color:var(--ink);border-radius:12px;font-weight:700;font-size:15px;text-align:center;text-decoration:none;box-sizing:border-box;">Visit Online Cyber →</a>
