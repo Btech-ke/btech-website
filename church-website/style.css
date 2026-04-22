@@ -1,0 +1,913 @@
+/* ================================
+   RESET & GLOBAL STYLES
+   ================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  background-color: #fff;
+  line-height: 1.6;
+}
+
+/* ================================
+   CONTAINERS & UTILITIES
+   ================================ */
+.container {
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* ================================
+   HEADER & NAVIGATION
+   ================================ */
+.site-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 1000;
+  padding: 1rem 0;
+}
+
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.site-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #222;
+  margin-left: 0.5rem;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #555;
+  position: relative;
+  padding: 0.4rem 0;
+  transition: all 0.3s ease;
+}
+
+/* Underline effect */
+.nav-list li a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #222;
+  left: 0;
+  bottom: -2px;
+  transition: width 0.3s ease;
+}
+
+.nav-list li a:hover::after,
+.nav-list li a.active::after {
+  width: 100%;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #222;
+}
+
+/* ================================
+   HERO SECTION
+   ================================ */
+.hero-section {
+  margin-top: 80px; /* offset header height */
+  background: url('images/hero-bg.jpg') center/cover no-repeat;
+  padding: 140px 0 100px;
+  text-align: left;
+  color: #fff;
+  position: relative;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(34, 34, 34, 0.55);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.hero-buttons .btn {
+  margin-right: 1rem;
+}
+
+/* ================================
+   QUICK INFO BAR
+   ================================ */
+.quick-info {
+  background: #f7f7f7;
+  padding: 1.5rem 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  text-align: center;
+}
+
+.info-item h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.info-item p {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* ================================
+   SECTION TITLES & SUBTITLES
+   ================================ */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  text-align: center;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #777;
+  margin-bottom: 2rem;
+}
+
+/* ================================
+   WELCOME / ABOUT SECTION
+   ================================ */
+.welcome-section {
+  padding: 4rem 0;
+}
+
+.welcome-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.welcome-text {
+  flex: 1;
+  min-width: 300px;
+  color: #444;
+  font-size: 1rem;
+}
+
+.welcome-text p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.welcome-text a {
+  margin-top: 1rem;
+}
+
+.welcome-image {
+  flex: 1;
+  min-width: 300px;
+}
+
+.welcome-image img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ================================
+   SERVICE TIMES & CARD STYLES
+   ================================ */
+.service-times {
+  padding: 4rem 0;
+  background-color: #fff;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.service-card {
+  background: #f8f8f8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.service-card h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.service-details .time {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.service-details .description {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* ================================
+   UPCOMING EVENTS
+   ================================ */
+.upcoming-events {
+  padding: 4rem 0;
+  background: #f5f5f5;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.event-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #eaeaea;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.event-date {
+  background: #222;
+  color: #fff;
+  padding: 0.75rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.event-date .month {
+  font-size: 0.9rem;
+}
+
+.event-date .day {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.event-details {
+  padding: 1rem;
+}
+
+.event-details h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-time {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.event-description {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* ================================
+   MINISTRIES PREVIEW
+   ================================ */
+.ministries-preview {
+  padding: 4rem 0;
+}
+
+.ministries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.ministry-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #eaeaea;
+}
+
+.ministry-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.ministry-icon img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ministry-card h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  padding: 1rem 1rem 0;
+  font-size: 1.2rem;
+}
+
+.ministry-card p {
+  color: #666;
+  font-size: 0.95rem;
+  padding: 0 1rem 1rem;
+}
+
+.ministry-link {
+  display: block;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  background: #222;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.ministry-link:hover {
+  background: #444;
+}
+
+/* ================================
+   LATEST NEWS
+   ================================ */
+.latest-news {
+  padding: 4rem 0;
+  background: #fff;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.news-card {
+  background: #f8f8f8;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #eaeaea;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.news-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.news-content {
+  padding: 1rem;
+}
+
+.news-date {
+  font-size: 0.85rem;
+  color: #999;
+  margin-bottom: 0.5rem;
+}
+
+.news-content h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-content p {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.read-more {
+  color: #222;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+
+/* ================================
+   SERMONS SECTION
+   ================================ */
+.sermons-section {
+  padding: 4rem 0;
+  background: #f5f5f5;
+}
+
+.sermons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.sermon-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #eaeaea;
+}
+
+.sermon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.sermon-image {
+  position: relative;
+}
+
+.sermon-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(34, 34, 34, 0.8);
+  color: #fff;
+  font-size: 2rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.play-button:hover {
+  background: rgba(34, 34, 34, 1);
+}
+
+.sermon-content {
+  padding: 1rem;
+}
+
+.sermon-speaker,
+.sermon-date,
+.sermon-verse {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.sermon-actions {
+  margin-top: 1rem;
+}
+
+.sermon-actions .btn {
+  margin-right: 0.5rem;
+}
+
+/* ================================
+   GET INVOLVED
+   ================================ */
+.get-involved {
+  padding: 4rem 0;
+  background: #fff;
+}
+
+.involvement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.involvement-card {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.involvement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.involvement-card h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.involvement-card p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.involvement-card .btn {
+  background: #222;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.involvement-card .btn:hover {
+  background: #444;
+}
+
+/* ================================
+   GIVING SECTION
+   ================================ */
+.donating-section {
+  padding: 4rem 0;
+  background: #f5f5f5;
+}
+
+.giving-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.giving-text {
+  flex: 1;
+  min-width: 300px;
+  color: #444;
+}
+
+.giving-text h2 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.giving-text p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.donate-methods {
+  margin: 1rem 0;
+}
+
+.donate-methods .btn {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+.bank-info {
+  background: #fff;
+  padding: 1rem;
+  border-left: 4px solid #222;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.giving-buttons {
+  margin-top: 1rem;
+}
+
+/* ================================
+   LOCATION & CONTACT
+   ================================ */
+.location-contact {
+  padding: 4rem 0;
+  background: #fff;
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.location-info h2 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.location-info h3 {
+  color: #222;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.location-info p {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.directions-link {
+  color: #222;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.directions-link:hover {
+  color: #555;
+}
+
+.map-container {
+  background: #f7f7f7;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.map-placeholder h3 {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.map-placeholder p {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+.site-footer {
+  background: #222;
+  color: #ccc;
+  padding: 3rem 0;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4,
+.footer-section h5 {
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.footer-section p,
+.footer-section li {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #fff;
+}
+
+.social-links a {
+  color: #fff;
+  margin-right: 1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #ddd;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.9rem;
+}
+
+.footer-links a {
+  color: #aaa;
+  text-decoration: none;
+  margin: 0 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+/* ================================
+   BACK TO TOP BUTTON
+   ================================ */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #222;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+  background: #222;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #444;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #222;
+  border: 2px solid #222;
+}
+
+.btn-outline:hover {
+  background: #222;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #777;
+  color: #fff;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background: #555;
+}
+
+.btn-danger {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #a93226;
+}
+
+.btn-small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ================================
+   RESPONSIVE STYLES
+   ================================ */
+@media (max-width: 768px) {
+  .header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .nav-list {
+    flex-direction: column;
+    width: 100%;
+    display: none;
+    margin-top: 1rem;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    align-self: flex-end;
+  }
+  
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+}

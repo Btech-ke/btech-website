@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God's Last Appeal Church - Mama Susana's Legacy</title>
+    <meta name="description" content="Experience the legacy of Mama Susana at God's Last Appeal Church. A place of healing, prayer, and spiritual renewal since 1963.">
+    <meta name="keywords" content="God's Last Appeal Church, Mama Susana, African Initiated Church, Sabbath, Prayer, Healing Ministry">
+    <meta name="author" content="God's Last Appeal Church">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F41;
+            --secondary-color: #8B4513;
+            --accent-color: #D4AF37;
+            --light-green: #E8F5E8;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --white: #ffffff;
+            --light-bg: #fafafa;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --gradient-primary: linear-gradient(135deg, #2C5F41 0%, #4A7C59 100%);
+            --gradient-accent: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .site-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(44, 95, 65, 0.1);
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(44, 95, 65, 0.2);
+        }
+
+        .site-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-list a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-list a:hover,
+        .nav-list a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-list a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-list a:hover::after,
+        .nav-list a.active::after {
+            width: 100%;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(44, 95, 65, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 95, 65, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-accent);
+            color: var(--text-dark);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #DC3545 0%, #C82333 100%);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                rgba(44, 95, 65, 0.9) 0%,
+                rgba(74, 124, 89, 0.8) 50%,
+                rgba(212, 175, 55, 0.9) 100%
+            ),
+            url('https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1920&h=1080&fit=crop') center/cover;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            animation: grain 8s linear infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            30% { transform: translate(3%, -3%); }
+            50% { transform: translate(-2%, 4%); }
+            70% { transform: translate(4%, 2%); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            padding: 2rem 0;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            margin-bottom: 2.5rem;
+            font-family: 'Crimson Text', serif;
+            font-style: italic;
+            opacity: 0.95;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        /* Legacy Section */
+        .legacy-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--light-green) 0%, #f8fffe 100%);
+            position: relative;
+        }
+
+        .legacy-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .legacy-text {
+            padding: 2rem 0;
+        }
+
+        .legacy-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .legacy-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .founder-highlight {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--accent-color);
+            margin: 2rem 0;
+        }
+
+        .founder-highlight h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .legacy-image {
+            position: relative;
+        }
+
+        .legacy-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Quick Info Bar */
+        .quick-info {
+            background: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-info::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 4px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .info-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        /* Service Times */
+        .service-times {
+            padding: 6rem 0;
+            background: var(--light-bg);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .time {
+            font-weight: 600;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Upcoming Events */
+        .upcoming-events {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #fff 0%, var(--light-green) 100%);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .event-date {
+            background: var(--gradient-primary);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .event-date .month {
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .event-date .day {
+            display: block;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .event-details {
+            padding: 2rem;
+        }
+
+        .event-details h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .event-time {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* History Timeline */
+        .history-section {
+            padding: 6rem 0;
+            background: var(--primary-color);
+            color: white;
+            position: relative;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-color);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-content {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 45%;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            margin-right: 5%;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+            margin-left: 5%;
+        }
+
+        .timeline-year {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: var(--text-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Ministries */
+        .ministries-preview {
+            padding: 6rem 0;
+            background: var(--light-bg);
+        }
+
+        .ministries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .ministry-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .ministry-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .ministry-icon {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ministry-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .ministry-card:hover .ministry-icon img {
+            transform: scale(1.1);
+        }
+
+        .ministry-card h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            padding: 1.5rem 2rem 1rem;
+            margin-bottom: 0;
+        }
+
+        .ministry-card p {
+            padding: 0 2rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .ministry-link {
+            display: block;
+            padding: 1rem 2rem 2rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .ministry-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Branches Section */
+        .branches-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--light-green) 0%, #fff 100%);
+        }
+
+        .branches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .branch-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .branch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .branch-card h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Giving Section */
+        .donating-section {
+            padding: 6rem 0;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .giving-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .giving-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+        }
+
+        .donate-methods {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .bank-info {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .bank-info h4 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Contact Section */
+        .location-contact {
+            padding: 6rem 0;
+            background: var(--light-bg);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .location-info h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-info h3 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .map-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .map-placeholder h3 {
+            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+        }
+
+        .directions-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .directions-link:hover {
+            color: var(--accent-color);
+        }
+
+        /* Footer */
+        .site-footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-list {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: var(--shadow);
+                padding: 2rem;
+                gap: 1rem;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .legacy-content,
+            .location-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
+                margin-right: 0 !important;
+            }
+
+            .timeline-year {
+                left: 20px;
+                transform: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ministries-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                text-align: center;
+                flex-direction: column;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Text Animations */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--accent-color);
+            white-space: nowrap;
+            animation: typewriter 3s steps(50, end);
+        }
+
+        /* Floating Elements */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-flex">
+                <div class="logo-container">
+                    <img src="https://images.unsplash.com/photo-1507692049790-de58290a4334?w=100&h=100&fit=crop&crop=center" alt="Church Logo" class="logo">
+                    <h1 class="site-title">God's Last Appeal</h1>
+                </div>
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#legacy">Legacy</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#ministries">Ministries</a></li>
+                        <li><a href="#branches">Branches</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#donate" class="btn btn-danger btn-small">Donate</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1 class="hero-title">Welcome to God's Last Appeal Church</h1>
+                <p class="hero-subtitle">"Mama Susana's Church" - Where divine healing meets unwavering faith. Experience the legacy of prophetic ministry, Sabbath worship, and God's transformative love since 1963.</p>
+                <div class="hero-buttons">
+                    <a href="#legacy" class="btn btn-primary">Discover Our Legacy</a>
+                    <a href="#services" class="btn btn-outline">Join Our Services</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Info Bar -->
+    <section class="quick-info">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-item floating">
+                    <h3>Sabbath Service</h3>
+                    <p>Saturday worship honoring our Sabbath tradition - 10:00 AM</p>
+                </div>
+                <div class="info-item floating">
+                    <h3>Prayer & Healing</h3>
+                    <p>Wednesday healing services following Mama Susana's legacy - 7:00 PM</p>
+                </div>
+                <div class="info-item floating">
+                    <h3>Bible Study</h3>
+                    <p>Thursday evening deep biblical teachings - 6:30 PM</p>
+                </div>
+                <div class="info-item floating">
+                    <h3>Youth Fellowship</h3>
+                    <p>Friday gatherings for young believers - 7:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legacy Section -->
+    <section id="legacy" class="legacy-section">
+        <div class="container">
+            <div class="legacy-content">
+                <div class="legacy-text fade-in">
+                    <h2>The Legacy of Mama Susana Nyabulwa</h2>
+                    <p>From deep sorrow came divine purpose. In 1963, after losing her daughter Hellena, Mama Susana received a heavenly visitation that would transform not only her life but countless others across Western Kenya and beyond.</p>
+                    
+                    <div class="founder-highlight">
+                        <h3>Divine Calling & Prophetic Ministry</h3>
+                        <p>When an angel of God appeared to comfort Mama Susana in her grief, declaring that God had "prepared something bigger for her," it marked the beginning of a powerful ministry. The Spirit of God rested upon her, filling her with compassion for the poor and sick, and strength to keep the Sabbath holy.</p>
+                    </div>
+
+                    <p>What began as "Duond Wach Mokor" (The Voice of Prophecy) in a small fellowship has grown into God's Last Appeal Church - a movement that spans from Homa Bay to Nairobi, touching lives through healing, prayer, and unwavering faith in God's word.</p>
+                    
+                    <p>Today, we continue Mama Susana's vision of a church that addresses both spiritual and practical needs, remaining inclusive while staying true to biblical principles and Sabbath observance.</p>
+                    
+                    <a href="#services" class="btn btn-primary">Experience Our Services</a>
+                </div>
+                <div class="legacy-image fade-in">
+                    <img src="https://images.unsplash.com/photo-1507692049790-de58290a4334?w=600&h=400&fit=crop&crop=center" alt="Church Heritage">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Timeline -->
+    <section class="history-section">
+        <div class="container">
+            <h2 class="section-title">Our Journey Through Time</h2>
+            <p class="section-subtitle">From divine calling to transformative ministry</p>
+
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-year">1959</div>
+                    <div class="timeline-content">
+                        <h3>The Beginning at Nyambare</h3>
+                        <p>Mama Susana and fellow believers established the Nyambare centre in Gem, Asumbi. In tents, they held powerful meetings, sharing the gospel and calling people to faith through the Spirit's leading.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-year">1963</div>
+                    <div class="timeline-content">
+                        <h3>Official Church Foundation</h3>
+                        <p>After her expulsion from SDA church due to her prophetic revelations, Mama Susana officially founded "Duond Wach Mokor" (The Voice of Prophecy) church in South Nyanza, marking the birth of what would become God's Last Appeal Church.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-year">1970s</div>
+                    <div class="timeline-content">
+                        <h3>Revival & Expansion</h3>
+                        <p>Great revival movements spread as testimonies of divine intervention, notably the healings of Mzee Zedekia Oduma and Mama Opiyo Matewa, drew attention to the ministry. The church expanded to Yimbo, Bondo, and other parts of South & Central Nyanza.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-year">1990s</div>
+                    <div class="timeline-content">
+                        <h3>Structural Organization</h3>
+                        <p>The movement developed into a structured faith community with growing membership, organized into local congregations and regional centers with headquarters in Homa Bay County.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-year">Present</div>
+                    <div class="timeline-content">
+                        <h3>Nationwide Ministry</h3>
+                        <p>Today, God's Last Appeal Church has branches in Awendo, Migori, Busia, Mombasa, and Nairobi, continuing to be a beacon of faith, healing, and inclusiveness while maintaining our core values of Sabbath observance and prophetic ministry.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Times -->
+    <section id="services" class="service-times">
+        <div class="container">
+            <h2 class="section-title">Service Times</h2>
+            <p class="section-subtitle">Join us for Sabbath worship, prayer, healing, and fellowship throughout the week</p>
+
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <h3>Saturday Sabbath Worship</h3>
+                    <div class="service-details">
+                        <div class="time">10:00 AM - 12:30 PM</div>
+                        <p class="description">Our main Sabbath service honoring God's holy day, featuring worship, prayer, communion, and inspiring sermons rooted in biblical truth. Experience the peace and blessing of Sabbath rest.</p>
+                    </div>
+                </div>
+
+                <div class="service-card fade-in">
+                    <h3>Wednesday Prayer & Healing</h3>
+                    <div class="service-details">
+                        <div class="time">7:00 PM - 8:30 PM</div>
+                        <p class="description">Following Mama Susana's legacy of healing ministry, join us for powerful prayer sessions where the sick find healing and hearts find comfort through God's miraculous power.</p>
+                    </div>
+                </div>
+
+                <div class="service-card fade-in">
+                    <h3>Thursday Bible Study</h3>
+                    <div class="service-details">
+                        <div class="time">6:30 PM - 8:00 PM</div>
+                        <p class="description">Deep dive into God's Word with interactive discussions, prophecy studies, and practical applications for daily Christian living. Grow in knowledge and faith.</p>
+                    </div>
+                </div>
+
+                <div class="service-card fade-in">
+                    <h3>Friday Youth Fellowship</h3>
+                    <div class="service-details">
+                        <div class="time">7:00 PM - 9:00 PM</div>
+                        <p class="description">Dynamic gatherings for young people featuring worship, biblical teachings relevant to youth, and fellowship activities that build lasting Christian friendships.</p>
+                    </div>
+                </div>
+
+                <div class="service-card fade-in">
+                    <h3>Sunday Community Outreach</h3>
+                    <div class="service-details">
+                        <div class="time">10:00 AM - 3:00 PM</div>
+                        <p class="description">Extending God's love beyond our walls through community service, caring for the sick, supporting the bereaved, and mobilizing resources for those in need.</p>
+                    </div>
+                </div>
+
+                <div class="service-card fade-in">
+                    <h3>Morning Prayer Sessions</h3>
+                    <div class="service-details">
+                        <div class="time">Daily - 6:00 AM - 7:00 AM</div>
+                        <p class="description">Start your day with God through early morning prayer and meditation. Join fellow believers in seeking God's guidance and blessing for the day ahead.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="#contact" class="btn btn-primary">Plan Your Visit</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Church Branches -->
+    <section id="branches" class="branches-section">
+        <div class="container">
+            <h2 class="section-title">Our Church Branches</h2>
+            <p class="section-subtitle">God's Last Appeal Church serves communities across Kenya with the same spirit of love and healing</p>
+
+            <div class="branches-grid">
+                <div class="branch-card fade-in">
+                    <h3>Homa Bay (Headquarters)</h3>
+                    <p>Main church headquarters in Homa Bay County, where our legacy began and continues to flourish.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Nairobi Branch</h3>
+                    <p>Serving the capital city with urban ministry, reaching professionals and families with God's love.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Awendo Branch</h3>
+                    <p>Community-centered ministry in Awendo, continuing our tradition of healing and Sabbath worship.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Migori Branch</h3>
+                    <p>Border town ministry reaching diverse communities with the gospel message and healing prayer.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Busia Branch</h3>
+                    <p>Cross-border ministry serving both Kenyan and Ugandan communities with prophetic ministry.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Mombasa Branch</h3>
+                    <p>Coastal ministry bringing Sabbath worship and healing prayer to Kenya's port city.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Yimbo Branch</h3>
+                    <p>One of our earliest expansion locations, maintaining strong roots in traditional ministry.</p>
+                </div>
+
+                <div class="branch-card fade-in">
+                    <h3>Bondo Branch</h3>
+                    <p>Regional center serving the greater Bondo area with comprehensive church ministries.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section id="events" class="upcoming-events">
+        <div class="container">
+            <h2 class="section-title">Upcoming Events</h2>
+            <p class="section-subtitle">Join us for special services, healing campaigns, and fellowship opportunities</p>
+
+            <div class="events-grid">
+                <div class="event-card fade-in">
+                    <div class="event-date">
+                        <span class="month">SEP</span>
+                        <span class="day">21</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>Sabbath Revival Weekend</h3>
+                        <div class="event-time">Friday 7PM - Sunday 4PM</div>
+                        <p class="event-description">Three days of intensive worship, prayer, and healing ministry. Experience the power of God as in the days of Mama Susana's early ministry.</p>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-date">
+                        <span class="month">OCT</span>
+                        <span class="day">12</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>Annual Healing Campaign</h3>
+                        <div class="event-time">10:00 AM - 6:00 PM</div>
+                        <p class="event-description">Special healing service remembering Mama Susana's miraculous ministry. Come expecting God's healing touch in your life and family.</p>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-date">
+                        <span class="month">OCT</span>
+                        <span class="day">26</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>Youth Prophecy Conference</h3>
+                        <div class="event-time">All Day Event</div>
+                        <p class="event-description">Special conference for young people focusing on prophetic gifts, biblical prophecy, and preparing the next generation for ministry.</p>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-date">
+                        <span class="month">NOV</span>
+                        <span class="day">16</span>
+                    </div>
+                    <div class="event-details">
+                        <h3>Community Outreach Day</h3>
+                        <div class="event-time">8:00 AM - 4:00 PM</div>
+                        <p class="event-description">Following our tradition of caring for the needy, join us for medical camps, food distribution, and community support programs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="events-cta">
+                <a href="#contact" class="btn btn-primary">View All Events</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ministries Preview -->
+    <section id="ministries" class="ministries-preview">
+        <div class="container">
+            <h2 class="section-title">Our Ministries</h2>
+            <p class="section-subtitle">Continuing Mama Susana's holistic approach to ministry - addressing spiritual, physical, and social needs</p>
+
+            <div class="ministries-grid">
+                <div class="ministry-card fade-in">
+                    <div class="ministry-icon">
+                        <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=200&fit=crop&crop=center" alt="Healing Ministry">
+                    </div>
+                    <h3>Healing & Prayer Ministry</h3>
+                    <p>Continuing Mama Susana's legacy of divine healing through prayer, laying on of hands, and faith. Witness God's miraculous power as in the early days of our church.</p>
+                    <a href="#contact" class="ministry-link">Experience Healing →</a>
+                </div>
+
+                <div class="ministry-card fade-in">
+                    <div class="ministry-icon">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=200&fit=crop&crop=center" alt="Children's Ministry">
+                    </div>
+                    <h3>Children & Family Ministry</h3>
+                    <p>Nurturing the next generation with biblical foundation, Sabbath values, and Christian character. Building strong families rooted in faith and traditional values.</p>
+                    <a href="#contact" class="ministry-link">Join Our Family →</a>
+                </div>
+
+                <div class="ministry-card fade-in">
+                    <div class="ministry-icon">
+                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=200&fit=crop&crop=center" alt="Youth Ministry">
+                    </div>
+                    <h3>Prophetic Youth Ministry</h3>
+                    <p>Empowering young people with prophetic gifts and biblical knowledge. Training the next generation of church leaders in the spirit of prophecy and service.</p>
+                    <a href="#contact" class="ministry-link">Join Youth Ministry →</a>
+                </div>
+
+                <div class="ministry-card fade-in">
+                    <div class="ministry-icon">
+                        <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=400&h=200&fit=crop&crop=center" alt="Worship Ministry">
+                    </div>
+                    <h3>Sabbath Worship Ministry</h3>
+                    <p>Leading Sabbath worship with reverence and joy, maintaining our tradition of holy day observance through music, prayer, and celebration.</p>
+                    <a href="#contact" class="ministry-link">Join Worship →</a>
+                </div>
+
+                <div class="ministry-card fade-in">
+                    <div class="ministry-icon">
+                        <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&h=200&fit=crop&crop=center" alt="Women's Ministry">
+                    </div>
+                    <h3>Women's Fellowship Ministry</h3>
+                    <p>Supporting women in their spiritual journey, family roles, and community service. Building sisterhood through prayer, study, and mutual support.</p>
+                    <a href="#contact" class="ministry-link">Join Sisters →</a>
+                </div>
+
+                <div class="ministry-card fade-in">
+                    <div class="ministry-icon">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=center" alt="Community Outreach">
+                    </div>
+                    <h3>Community Care Ministry</h3>
+                    <p>Following our founder's compassion for the poor and sick, we serve our communities through welfare activities, medical camps, and social support programs.</p>
+                    <a href="#contact" class="ministry-link">Serve Together →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Giving Section -->
+    <section id="donate" class="donating-section">
+        <div class="container">
+            <div class="giving-content">
+                <h2>Support God's Last Appeal Ministry</h2>
+                <p>Your generous giving helps us continue Mama Susana's legacy of healing, community care, and spreading God's love. Every contribution advances the kingdom work and supports our various branches and ministries.</p>
+                <p class="scripture">"Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver." - 2 Corinthians 9:7</p>
+
+                <div class="donate-methods">
+                    <a href="https://www.paypal.com/donate?business=godsappealchurch@gmail.com" target="_blank" class="btn btn-primary btn-small">Donate via PayPal</a>
+                    <a href="#bank-details" class="btn btn-secondary btn-small">M-Pesa Donation</a>
+                    <a href="#bank-details" class="btn btn-outline btn-small">Bank Transfer</a>
+                </div>
+
+                <div id="bank-details" class="bank-info">
+                    <h4>Donation Details</h4>
+                    <p><strong>M-Pesa Paybill:</strong> 567890</p>
+                    <p><strong>Account:</strong> God's Last Appeal Church</p>
+                    <br>
+                    <p><strong>Bank Name:</strong> Equity Bank Kenya</p>
+                    <p><strong>Account Name:</strong> God's Last Appeal Church</p>
+                    <p><strong>Account Number:</strong> 0123456789</p>
+                    <p><strong>Branch:</strong> Homa Bay</p>
+                    <p><strong>SWIFT Code:</strong> EQBLKENA</p>
+                </div>
+
+                <div class="giving-buttons">
+                    <a href="#contact" class="btn btn-outline">Learn About Our Mission</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Contact -->
+    <section id="contact" class="location-contact">
+        <div class="container">
+            <div class="location-grid">
+                <div class="location-info fade-in">
+                    <h2>Visit Us & Get Connected</h2>
+                    <p>Whether you're seeking healing, spiritual growth, or a church family, you'll find a warm welcome at God's Last Appeal Church. Experience the continuing legacy of Mama Susana's ministry.</p>
+
+                    <h3>Headquarters Address</h3>
+                    <p>God's Last Appeal Church<br>
+                    P.O. Box 12345-40100<br>
+                    Homa Bay, Kenya<br>
+                    Near Homa Bay County Government Offices</p>
+
+                    <h3>Contact Information</h3>
+                    <p><strong>Phone:</strong> +254 712 345 678<br>
+                    <strong>WhatsApp:</strong> +254 723 456 789<br>
+                    <strong>Email:</strong> info@godsappealchurch.org<br>
+                    <strong>Website:</strong> www.godsappealchurch.org</p>
+
+                    <h3>Office Hours</h3>
+                    <p>Monday - Friday: 8:00 AM - 5:00 PM<br>
+                    Saturday: Sabbath Services<br>
+                    Sunday: Community Outreach<br>
+                    Wednesday: Evening Prayer Services</p>
+
+                    <h3>What to Expect</h3>
+                    <p>Come as you are! Our Sabbath services combine traditional reverence with joyful worship. We welcome visitors with open arms and are happy to explain our Sabbath traditions and healing ministry practices.</p>
+
+                    <a href="https://maps.google.com/search/Homa+Bay+Kenya" class="directions-link" target="_blank">Get Directions →</a>
+                </div>
+                
+                <div class="map-container fade-in">
+                    <div class="map-placeholder">
+                        <h3>Find Us in Homa Bay</h3>
+                        <p>Located in the heart of Homa Bay County, easily accessible from major roads and transport routes.</p>
+                        <p><strong>God's Last Appeal Church</strong><br>Homa Bay County, Kenya</p>
+                        <br>
+                        <p><strong>Branch Locations:</strong></p>
+                        <p>• Nairobi - Eastleigh Area<br>
+                        • Awendo - Town Center<br>
+                        • Migori - Near Bus Station<br>
+                        • Busia - Border Area<br>
+                        • Mombasa - Changamwe<br>
+                        • Yimbo - Market Area<br>
+                        • Bondo - Township</p>
+                        <a href="https://maps.google.com/search/Homa+Bay+Kenya" class="directions-link" target="_blank">Open in Google Maps</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="https://images.unsplash.com/photo-1507692049790-de58290a4334?w=100&h=100&fit=crop&crop=center" alt="Church Logo" class="footer-logo">
+                    <h3>God's Last Appeal Church</h3>
+                    <p>Continuing Mama Susana's legacy since 1963 - A community of faith dedicated to healing, Sabbath worship, and preparing hearts for Christ's return.</p>
+                    <div class="social-links">
+                        <a href="#" target="_blank">Facebook</a>
+                        <a href="#" target="_blank">WhatsApp</a>
+                        <a href="#" target="_blank">YouTube</a>
+                        <a href="#" target="_blank">Instagram</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#legacy">Our Legacy</a></li>
+                        <li><a href="#services">Service Times</a></li>
+                        <li><a href="#ministries">Ministries</a></li>
+                        <li><a href="#branches">Church Branches</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Our Ministries</h4>
+                    <ul>
+                        <li><a href="#">Healing & Prayer</a></li>
+                        <li><a href="#">Sabbath Worship</a></li>
+                        <li><a href="#">Youth Ministry</a></li>
+                        <li><a href="#">Women's Fellowship</a></li>
+                        <li><a href="#">Community Care</a></li>
+                        <li><a href="#">Family Ministry</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Main Contact</h4>
+                    <p>P.O. Box 12345-40100<br>Homa Bay, Kenya</p>
+                    <p>Phone: +254 712 345 678<br>Email: info@godsappealchurch.org</p>
+
+                    <h4>Service Times</h4>
+                    <p>Saturday: 10AM (Sabbath)<br>Wednesday: 7PM (Prayer)<br>Thursday: 6:30PM (Bible Study)<br>Friday: 7PM (Youth)</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 God's Last Appeal Church. All rights reserved. Continuing Mama Susana's Legacy.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Church Constitution</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#home" class="back-to-top" id="backToTop">↑</a>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top button functionality
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Active navigation highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-list a[href^="#"]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+        const navList = document.querySelector('.nav-list');
+
+        mobileToggle.addEventListener('click', () => {
+            const isVisible = navList.style.display === 'flex';
+            navList.style.display = isVisible ? 'none' : 'flex';
+            
+            // Animate hamburger menu
+            mobileToggle.classList.toggle('active');
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover effects for cards
+        document.querySelectorAll('.service-card, .event-card, .ministry-card, .branch-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+                this.style.transition = 'all 0.3s ease';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Header background change on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.site-header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.backdropFilter = 'blur(20px)';
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.backdropFilter = 'blur(15px)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Typing effect for hero subtitle
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect when hero comes into view
+        const heroSubtitle = document.querySelector('.hero-subtitle');
+        const originalText = heroSubtitle.textContent;
+        
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        typeWriter(heroSubtitle, originalText, 30);
+                    }, 1000);
+                    heroObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        heroObserver.observe(document.querySelector('.hero-content'));
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-section');
+            const rate = scrolled * -0.5;
+            hero.style.transform = `translateY(${rate}px)`;
+        });
+
+        // Counter animation for statistics (if needed)
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+
+        // Enhanced card interactions
+        document.querySelectorAll('.ministry-card, .branch-card').forEach((card, index) => {
+            // Staggered animation delay
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            // Add ripple effect on click
+            card.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(44, 95, 65, 0.3);
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add ripple animation to CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 0;
+                }
+            }
+            
+            .ministry-card, .branch-card {
+                position: relative;
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Enhanced timeline animation
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateX(0)';
+                }
+            });
+        }, { threshold: 0.3 });
+
+        timelineItems.forEach((item, index) => {
+            item.style.opacity = '0';
+            item.style.transition = 'all 0.8s ease';
+            
+            if (index % 2 === 0) {
+                item.style.transform = 'translateX(-50px)';
+            } else {
+                item.style.transform = 'translateX(50px)';
+            }
+            
+            timelineObserver.observe(item);
+        });
+
+        // Floating animation for quick info items
+        document.querySelectorAll('.floating').forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.5}s`;
+        });
+
+        // Enhanced mobile menu animation
+        mobileToggle.addEventListener('click', () => {
+            const spans = mobileToggle.querySelectorAll('span');
+            spans.forEach((span, index) => {
+                span.style.transition = 'all 0.3s ease';
+                if (navList.style.display === 'flex') {
+                    // Close animation
+                    span.style.transform = 'rotate(0deg)';
+                    span.style.opacity = '1';
+                } else {
+                    // Open animation
+                    if (index === 0) span.style.transform = 'rotate(45deg) translate(5px, 5px)';
+                    if (index === 1) span.style.opacity = '0';
+                    if (index === 2) span.style.transform = 'rotate(-45deg) translate(7px, -6px)';
+                }
+            });
+        });
+
+        // Smooth reveal for sections
+        const revealSections = document.querySelectorAll('section');
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealSections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.8s ease';
+            sectionObserver.observe(section);
+        });
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Enhanced scroll-triggered animations
+        const animatedElements = document.querySelectorAll('.service-card, .event-card, .ministry-card');
+        const elementObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        animatedElements.forEach((element, index) => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px) scale(0.95)';
+            element.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            elementObserver.observe(element);
+        });
+
+        // Initialize all animations when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('God\'s Last Appeal Church website loaded successfully');
+            
+            // Add subtle breathing animation to logo
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.style.animation = 'pulse 3s ease-in-out infinite';
+            }
+            
+            // Add pulse animation to CSS
+            const pulseStyle = document.createElement('style');
+            pulseStyle.textContent = `
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+            `;
+            document.head.appendChild(pulseStyle);
+        });
+
+        // Add error handling for images
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+                const placeholder = document.createElement('div');
+                placeholder.style.cssText = `
+                    width: ${this.width || 100}px;
+                    height: ${this.height || 100}px;
+                    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    border-radius: ${this.classList.contains('logo') ? '50%' : '10px'};
+                `;
+                placeholder.textContent = 'GLA';
+                this.parentNode.insertBefore(placeholder, this);
+            });
+        });
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navList.style.display === 'flex') {
+                navList.style.display = 'none';
+                mobileToggle.click();
+            }
+        });
+
+        // Performance optimization - lazy load images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src || img.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    </script>
+</body>
+</html>
