@@ -194,7 +194,7 @@
             }
         }
 
-        // Load Active Tasks
+       // Load Active Tasks
         async function loadTasks() {
             const container = document.getElementById('tasksListContainer');
             container.innerHTML = '<p class="text-sm text-gray-400">Loading tasks...</p>';
@@ -209,9 +209,10 @@
                 }
 
                 container.innerHTML = "";
-                querySnapshot.forEach((document) => {
-                    const gig = document.data();
-                    const card = document.createElement('div');
+                // 🔥 Changed parameter name from 'document' to 'docItem' to fix shadowing error
+                querySnapshot.forEach((docItem) => {
+                    const gig = docItem.data();
+                    const card = document.createElement('div'); // Now correctly references the browser document!
                     card.className = "bg-surfaceElevated border border-white/10 rounded-xl p-4 flex justify-between items-center";
                     card.innerHTML = `
                         <div>
@@ -221,12 +222,11 @@
                             </div>
                             <p class="text-xs text-gray-400 mt-1 line-clamp-1">${gig.description}</p>
                         </div>
-                        <button onclick="deleteGig('${document.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Delete</button>
+                        <button onclick="deleteGig('${docItem.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Delete</button>
                     `;
                     container.appendChild(card);
                 });
             } catch (e) {
-                // 🔥 PRINT THE ACTUAL ERROR TO THE UI AND CONSOLE FOR DEBUGGING
                 console.error("Firestore Load Error:", e);
                 container.innerHTML = `<p class="text-sm text-red-400">Failed to load tasks: ${e.message}</p>`;
             }
