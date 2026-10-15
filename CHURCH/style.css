@@ -911,3 +911,140 @@ main>section.sec:not(.give):nth-of-type(even){background-color:#0c0d12}
 .live{background:linear-gradient(90deg,rgba(212,175,55,.14),rgba(255,255,255,.04))}
 .chip{background:rgba(255,255,255,.05)}
 }
+
+
+/* =====================================================================
+   v6: BLACK GLASS THEME FOR EVERY SCREEN + FLOATING GLASS CARDS
+   (desktop, tablet and phone: no green anywhere)
+   ===================================================================== */
+:root{--p:#14161d;--p2:#232634;--lg:#1a1c24;--bg:#0b0c10;
+ --glass:linear-gradient(150deg,rgba(255,255,255,.13),rgba(255,255,255,.04) 55%,rgba(255,255,255,.07));
+ --gline:rgba(255,255,255,.16);
+ --float:0 22px 50px rgba(0,0,0,.55),0 4px 14px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.03);
+ --txt:rgba(255,255,255,.86);--txt2:rgba(255,255,255,.72)}
+body{background:#07080b;color:var(--txt)}
+
+/* header + menu */
+.site-header,.site-header.scrolled{background:rgba(9,10,14,.72);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.09);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.site-title{color:#fff}
+.nav-list a{color:rgba(255,255,255,.82)}
+.nav-list a:hover,.nav-list a.active{color:var(--a2)}
+.burger span{background:#fff}
+.logo{border-color:var(--a);box-shadow:0 0 0 3px rgba(212,175,55,.18)}
+.menu{background:linear-gradient(175deg,rgba(26,27,35,.97),rgba(8,9,12,.985))}
+body.mo .site-header,body.mo .site-header.scrolled{background:transparent;border-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.ann{background:linear-gradient(135deg,#14161d,#242733)}
+
+/* section backgrounds: black with warm gold + cool slate light */
+body .sec:not(.give){background:radial-gradient(620px 420px at 100% 0,rgba(212,175,55,.14),transparent 70%),radial-gradient(640px 520px at 0 100%,rgba(88,104,170,.18),transparent 70%),#08090c;color:var(--txt)}
+main>section.sec:not(.give):nth-of-type(even){background-color:#0c0d12}
+#leaders,#involved{background:radial-gradient(620px 420px at 100% 0,rgba(212,175,55,.14),transparent 70%),radial-gradient(640px 520px at 0 100%,rgba(88,104,170,.18),transparent 70%),#0a0b0f}
+#sermons{background:radial-gradient(640px 420px at 6% -4%,rgba(212,175,55,.16),transparent 62%),radial-gradient(680px 520px at 105% 100%,rgba(88,104,170,.22),transparent 65%),linear-gradient(180deg,#0d0e13,#07080b)}
+.give{background:radial-gradient(620px 420px at 0 0,rgba(212,175,55,.2),transparent 70%),radial-gradient(560px 460px at 110% 100%,rgba(88,104,170,.22),transparent 70%),linear-gradient(135deg,#12131a,#08090c)}
+.foot{background:#050608;border-top:1px solid rgba(255,255,255,.06)}
+
+/* headings + copy: crisp and clear */
+.st{color:#fff}
+.ss{color:var(--txt2)}
+.legacy h2,.cinfo h2{color:#fff}
+.legacy p,.cinfo p,.founder p{color:var(--txt)}
+.cinfo h3,.mapbox h3,.cform h3,.founder h3{color:var(--a2)}
+.cinfo a.dl{color:var(--a2)}
+.mapbox li{color:var(--txt)}
+
+/* hero */
+.hero::after{background:#5b6fb8}
+.quick{background:transparent;position:relative;z-index:3}
+
+/* FLOATING GLASS CARDS */
+.qitem,.card,.lead,.tc,.founder,.mapbox,.cform,.faq details,.qa a,.vid,.feat,.live{background:var(--glass);border:1px solid var(--gline);box-shadow:var(--float);color:#fff}
+.qitem{border-radius:20px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.qitem h3{color:var(--a2)}
+.qitem p{color:var(--txt)}
+.card{border-radius:22px}
+.card h3,.lead h3{color:#fff}
+.card p{color:var(--txt2)}
+.more{color:var(--a2)}
+.svc{border-top:1px solid var(--gline);position:relative}
+.svc::before{content:'';position:absolute;left:22px;right:22px;top:0;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--a),transparent)}
+.time,.ev .t{color:var(--a2)}
+.ev .date{background:linear-gradient(135deg,rgba(212,175,55,.32),rgba(120,135,200,.24));color:#fff}
+.ev .date span{color:var(--a2)}
+.tag{background:rgba(212,175,55,.16);color:var(--a2)}
+.card.inv{border:1px solid var(--gline)}
+.card.inv .num{color:rgba(255,255,255,.32)}
+.ico2{background:rgba(212,175,55,.13);box-shadow:inset 0 0 0 1px rgba(212,175,55,.38)}
+.bra{border-left:1px solid var(--gline);border-top:2px solid var(--a)}
+.founder{border-left:4px solid var(--a)}
+.lead small{color:var(--a2)}
+.lead h3.tba{color:rgba(255,255,255,.45)}
+.lead p{color:var(--txt2)}
+.faq summary{color:#fff}
+.faq details p{color:var(--txt)}
+.qa a{color:var(--a2)}
+.card:hover,.js .card.rv.in:hover{box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 1px rgba(212,175,55,.4),inset 0 1px 0 rgba(255,255,255,.25)}
+.lead:hover{box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 1px rgba(212,175,55,.4)}
+.vid:hover{border-color:rgba(212,175,55,.55)}
+
+/* placeholders until photos load: graphite */
+.card .img,.gi{background:linear-gradient(135deg,#2a2d3a,#12131a)}
+.lead .av{background:radial-gradient(90% 70% at 30% 0,rgba(212,175,55,.3),transparent 60%),linear-gradient(145deg,#2c2f3d,#101118)}
+.fth,.vid .th{background:#0b0c10}
+.poster{background:radial-gradient(120% 90% at 20% 0,rgba(212,175,55,.32),transparent 55%),linear-gradient(135deg,#222534,#0b0c10)}
+.poster.p1{background:radial-gradient(120% 90% at 80% 0,rgba(244,208,63,.26),transparent 55%),linear-gradient(135deg,#2a2d3d,#0b0c10)}
+.poster.p2{background:radial-gradient(120% 90% at 50% 110%,rgba(212,175,55,.28),transparent 55%),linear-gradient(160deg,#1d2030,#08090c)}
+.poster.p3{background:radial-gradient(120% 90% at 0 100%,rgba(130,145,210,.25),transparent 55%),linear-gradient(135deg,#252839,#090a0e)}
+.soon{background:linear-gradient(135deg,#1b1d28,#0b0c10)}
+.live{background:linear-gradient(90deg,rgba(212,175,55,.16),rgba(255,255,255,.05))}
+.chip{background:rgba(255,255,255,.06)}
+
+/* form */
+.cform input,.cform textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);color:#fff}
+.cform input::placeholder,.cform textarea::placeholder{color:rgba(255,255,255,.5)}
+.cform input:focus,.cform textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(212,175,55,.22)}
+
+/* buttons */
+.btn-primary{background:linear-gradient(135deg,var(--a),var(--a2));color:#17130a;box-shadow:0 8px 22px rgba(212,175,55,.32)}
+.btn-primary:hover{box-shadow:0 12px 30px rgba(212,175,55,.5)}
+.btn-outline,.btn-outline.light{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.32);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.btn-outline:hover,.btn-outline.light:hover{background:#fff;color:#111}
+.rm{color:var(--a2);border-color:rgba(212,175,55,.55)}
+.xbtn{background:var(--glass);box-shadow:var(--float)}
+.cprog,.quick .cprog,#sermons .cprog{background:rgba(255,255,255,.14)}
+.cprog i,.quick .cprog i,#sermons .cprog i{background:var(--a)}
+
+/* pop-ups: black glass */
+.dlg{background:linear-gradient(165deg,rgba(30,31,41,.97),rgba(9,10,14,.985));-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.13);color:#fff;box-shadow:0 30px 80px rgba(0,0,0,.65)}
+.dlg h2{color:#fff}
+.dlg p{color:var(--txt)}
+.dlg .time{color:var(--a2)}
+.dlg::before{background:rgba(255,255,255,.28)}
+.x{background:rgba(255,255,255,.12);color:#fff}
+.x:hover{background:var(--a);color:#111}
+.row{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)}
+.row small{color:rgba(255,255,255,.58)}
+.row strong{color:#fff}
+.tabs{background:rgba(255,255,255,.07)}
+.tabs button{color:rgba(255,255,255,.78)}
+.tabs button[aria-selected=true]{background:linear-gradient(135deg,var(--a),var(--a2));color:#1a1400;box-shadow:0 3px 12px rgba(212,175,55,.35)}
+.note{color:rgba(255,255,255,.6)}
+.cp{background:rgba(255,255,255,.14)}
+.dlg .btn-outline{color:#fff;border-color:rgba(255,255,255,.4)}
+
+/* desktop & tablet: black hero, cards float over its bottom edge */
+@media(min-width:700px){
+.hero{background:linear-gradient(180deg,rgba(7,8,11,.45) 0%,rgba(7,8,11,.9) 100%),radial-gradient(900px 600px at 90% 0,rgba(212,175,55,.34),transparent 65%),radial-gradient(800px 600px at 0 100%,rgba(88,104,170,.28),transparent 65%),linear-gradient(135deg,rgba(24,26,36,.7),rgba(7,8,11,.6)),url('https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1920&h=1080&fit=crop') center/cover fixed}
+.hero-in{padding-bottom:130px}
+.quick{margin-top:-80px;padding:0 0 3.5rem}
+.sec{padding:clamp(4.5rem,8vw,6.5rem) 0}
+}
+@media(max-width:699px){
+.quick{margin-top:-40px;padding:0 0 1.6rem}
+.quick .container{padding-top:0}
+}
+
+/* v6 fixes: neutral overlays, no scroll cue behind floating cards */
+.ov{background:rgba(3,4,7,.68)}
+.lb{background:rgba(3,4,7,.95)}
+.scroll-cue{display:none}
+.scrim{background:rgba(2,3,6,.66)}
