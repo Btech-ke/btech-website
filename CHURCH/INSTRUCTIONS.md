@@ -96,3 +96,23 @@ The home page is long. A good next step is to keep the home page short and give 
 - Photo missing: check the name is exactly `imageN.jpg` and is inside the `images` folder.
 - Page looks unstyled: `css/style.css` is missing or in the wrong folder.
 - Sections empty or nothing opens: a comma or quote was deleted in `js/data.js`. Undo your last commit on GitHub (History → Revert) and redo the edit carefully.
+
+
+---
+
+## Mobile layout (v3)
+Phones (under 700px wide) now get their own layout. Desktop and tablet are unchanged.
+
+- **Bottom bar:** Home, Services, Give, Sermons, Visit. The Give button is always one tap away.
+- **Swipe carousels:** Quick info, Services, Ministries, Events, News, Leadership, Get Involved and Sermons slide sideways instead of stacking. A small progress line under each shows position.
+- **Legacy text** is collapsed behind a "Read more" button.
+- **Contact** starts with Call / WhatsApp / Directions buttons.
+- **Menu:** the close (X) button now stays on top of the menu.
+
+All mobile styling lives in the last section of `css/style.css` (headed "MOBILE EXPERIENCE"). To change the carousel card width, edit `flex:0 0 78%`.
+
+## Mobile v4 (dark glass)
+- Phones get a dark glass theme (translucent cards, gold accents). Desktop is unchanged.
+- **Menu** is now a slide-in side drawer. Tap the dark area or swipe right to close it.
+- **Ministries** are tap-to-expand on phones. **Leadership** shows 6 people two-across with a "Show all" button; **Branches** and **Journey** also collapse; **Sermons** show 3 compact rows with "Show more".
+- To change how many show before "Show all": edit the numbers in `js/main.js` next to `['#lead',6,'leaders']`, `['#bra',4,...]`, `['#tl',3,...]`. Sermons use `STEP` (3 on phones).

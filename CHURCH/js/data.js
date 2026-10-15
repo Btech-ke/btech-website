@@ -10,7 +10,7 @@
    VIDEO can be: a YouTube ID (the 11 letters after v= ), a Facebook video link,
    or a file like 'videos/sermon1.mp4'. Leave '' if there is no video yet. */
 /* ---------- ADMIN SYSTEM (Firebase) ---------- fill these 4 values once, see ADMIN-SETUP.md. Leave empty to keep using the content below. */
-var FIREBASE_CONFIG={apiKey:'AIzaSyBKmlgE0pbulfP4ean3aKOz3g2hZozRhMg',authDomain:'god-s-last-appeal-church.firebaseapp.com',projectId:'god-s-last-appeal-church',appId:'1:636180415800:web:f3edb0dc0b16d6dbb9adcd'};
+var FIREBASE_CONFIG={apiKey:'',authDomain:'',projectId:'',appId:''};
 
 var YT='#';/* paste your YouTube channel link between the quotes */
 var SER=[
