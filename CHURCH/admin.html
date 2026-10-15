@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#143324">
+<title>Church Admin | God's Last Appeal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2C5F41;--p2:#4A7C59;--d:#143324;--d2:#1d4430;--a:#D4AF37;--a2:#F4D03F;--bg:#f2f7f3;--ink:#17231c;--mut:#667a6d;--line:#e1eae3;--red:#c62828;--ok:#1e8e3e;--sh:0 10px 30px rgba(20,51,36,.08);--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{font:15px/1.55 'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh}
+h1,h2,h3{font-family:'Playfair Display',serif;color:var(--d);letter-spacing:-.01em}
+button{font:inherit;cursor:pointer;color:inherit}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+:focus-visible{outline:3px solid rgba(212,175,55,.7);outline-offset:2px}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:50px;padding:11px 22px;font-weight:600;font-size:.94rem;text-decoration:none;transition:transform .25s var(--ease),box-shadow .25s,background .25s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(.97)}.btn[disabled]{opacity:.55;pointer-events:none}
+.btn.pri{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;box-shadow:0 6px 18px rgba(44,95,65,.3)}
+.btn.gold{background:linear-gradient(135deg,var(--a),var(--a2));color:#241c00;box-shadow:0 6px 18px rgba(212,175,55,.35)}
+.btn.ghost{background:#fff;color:var(--p);border:1.5px solid var(--line)}.btn.ghost:hover{border-color:var(--p)}
+.btn.dng{background:var(--red);color:#fff}
+.btn.sm{padding:7px 14px;font-size:.84rem}
+.ib{width:36px;height:36px;border-radius:12px;border:1.5px solid var(--line);background:#fff;display:inline-grid;place-items:center;color:var(--p);transition:all .2s}
+.ib:hover{border-color:var(--p);background:#f2f7f3}.ib.red{color:var(--red)}.ib.red:hover{border-color:var(--red);background:#fdecea}.ib[disabled]{opacity:.35;pointer-events:none}
+
+/* ---------- login ---------- */
+#login{min-height:100vh;display:grid;grid-template-columns:1fr}
+.lbrand{position:relative;overflow:hidden;color:#fff;padding:2.2rem 1.6rem 2.6rem;background:radial-gradient(90% 70% at 20% 0,rgba(212,175,55,.35),transparent 60%),linear-gradient(150deg,var(--d2),var(--d))}
+.lbrand::before{content:'';position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 130%,rgba(255,255,255,.05) 0 3deg,transparent 3deg 9deg)}
+.lbrand>*{position:relative}
+.lbrand .lg{display:flex;align-items:center;gap:12px;font:700 1.15rem 'Playfair Display',serif}
+.mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.mark svg{width:22px;height:22px;fill:#143324}
+.lbrand h1{color:#fff;font-size:clamp(1.8rem,4.5vw,2.8rem);line-height:1.15;margin:2.2rem 0 .8rem;max-width:14ch}
+.lbrand p{color:rgba(255,255,255,.78);max-width:38ch}
+.lbrand ul{list-style:none;margin-top:1.6rem;display:grid;gap:.6rem;color:rgba(255,255,255,.88);font-size:.92rem}
+.lbrand li{display:flex;gap:10px;align-items:center}.lbrand li svg{color:var(--a2)}
+.lform{display:grid;place-items:center;padding:2rem 1.4rem}
+.lcard{width:100%;max-width:410px}
+.lcard h2{font-size:1.7rem;margin-bottom:.3rem}.lcard>p{color:var(--mut);margin-bottom:1.6rem}
+.gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:1.5px solid #dadce0;border-radius:50px;padding:13px 18px;font-weight:600;color:#3c4043;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:box-shadow .25s,transform .25s var(--ease)}
+.gbtn:hover{box-shadow:0 8px 22px rgba(0,0,0,.12);transform:translateY(-2px)}
+.gbtn svg{width:22px;height:22px}
+.or{display:flex;align-items:center;gap:12px;color:var(--mut);font-size:.8rem;margin:1.4rem 0;text-transform:uppercase;letter-spacing:.14em}
+.or::before,.or::after{content:'';height:1px;flex:1;background:var(--line)}
+.lerr{background:#fdecea;color:#8e1b1b;border-radius:12px;padding:11px 14px;font-size:.9rem;margin-top:1rem}
+.lnote{margin-top:1.4rem;font-size:.82rem;color:var(--mut);text-align:center}
+.linkb{background:none;border:0;color:var(--p);font-weight:600;font-size:.86rem;margin-top:.7rem;text-decoration:underline}
+@media(min-width:900px){#login{grid-template-columns:1.05fr 1fr}.lbrand{padding:3rem 3.4rem;display:flex;flex-direction:column;justify-content:space-between}.lform{padding:3rem}}
+
+/* ---------- fields ---------- */
+.fld{margin-bottom:1.05rem}
+label,.lab{display:block;font-weight:600;font-size:.86rem;margin-bottom:6px;color:var(--d)}label i{color:var(--red);font-style:normal}
+input[type=text],input[type=email],input[type=password],input[type=url],input[type=date],input[type=tel],select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;background:#fff;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+textarea{resize:vertical;min-height:90px}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--p);box-shadow:0 0 0 4px rgba(44,95,65,.12)}
+.hint{display:block;color:var(--mut);font-size:.8rem;margin-top:5px}
+.sw{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}
+.sw input{width:42px;height:24px;appearance:none;-webkit-appearance:none;border-radius:50px;background:#ccd6ce;position:relative;transition:background .25s;cursor:pointer;flex-shrink:0}
+.sw input::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:transform .25s var(--ease)}
+.sw input:checked{background:var(--p)}.sw input:checked::after{transform:translateX(18px)}
+.imgf .pv{aspect-ratio:16/10;border-radius:14px;border:1.5px dashed #c7d6ca;background:#f6faf7 center/cover no-repeat;display:grid;place-items:center;color:var(--mut);font-size:.86rem;margin-bottom:10px;overflow:hidden}
+.imgf .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.imgf input[type=file]{display:none}
+.two{display:grid;gap:0 14px}@media(min-width:600px){.two{grid-template-columns:1fr 1fr}}
+
+/* ---------- app shell ---------- */
+#app{display:flex;min-height:100vh}
+#side{position:fixed;inset:0 auto 0 0;width:276px;background:linear-gradient(180deg,var(--d2),var(--d));color:#fff;display:flex;flex-direction:column;z-index:60;transform:translateX(-100%);transition:transform .45s var(--ease);overflow:hidden}
+#side::before{content:'';position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 140%,rgba(255,255,255,.035) 0 3deg,transparent 3deg 9deg);pointer-events:none}
+#side.open{transform:none;box-shadow:0 0 60px rgba(0,0,0,.4)}
+#side>*{position:relative}
+.sb{padding:1.3rem 1.3rem 1rem;display:flex;align-items:center;gap:12px}
+.sb b{font:700 1.05rem 'Playfair Display',serif;line-height:1.2}.sb small{display:block;color:rgba(255,255,255,.6);font-size:.74rem;font-weight:500;letter-spacing:.06em}
+nav{flex:1;overflow-y:auto;padding:.4rem .8rem 1rem}
+.ng{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:1.1rem .7rem .4rem}
+nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;color:rgba(255,255,255,.82);text-decoration:none;font-weight:500;font-size:.92rem;transition:background .2s,color .2s;margin-bottom:2px}
+nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+nav a.on{background:linear-gradient(135deg,rgba(212,175,55,.95),rgba(244,208,63,.95));color:#241c00;font-weight:700}
+nav a .n{margin-left:auto;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.14);padding:2px 9px;border-radius:50px}
+nav a.on .n{background:rgba(36,28,0,.14)}
+.me{padding:1rem 1.1rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:11px;font-size:.84rem}
+.av{width:38px;height:38px;border-radius:50%;background:var(--a) center/cover;color:#241c00;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.me>div:not(.av){min-width:0;flex:1}.av{flex:none}.me b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.me small{display:block;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me button{background:rgba(255,255,255,.1);border:0;color:#fff;width:36px;height:36px;border-radius:10px;display:grid;place-items:center}.me button:hover{background:rgba(255,255,255,.2)}
+#scrim{position:fixed;inset:0;background:rgba(8,20,14,.55);backdrop-filter:blur(3px);z-index:55;opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+#scrim.on{opacity:1;visibility:visible;transition:opacity .3s}
+#main{flex:1;min-width:0}
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;padding:12px 18px;background:rgba(242,247,243,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top h2{font-size:1.2rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bur{border:0;background:#fff;border:1.5px solid var(--line);width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--p)}
+.wrap{padding:22px 18px 90px;max-width:1040px;margin:0 auto}
+@media(min-width:1000px){#side{transform:none}#main{margin-left:276px}#bur,#scrim{display:none}.wrap{padding:34px 36px 90px}.top{padding:14px 36px}}
+
+/* ---------- cards / dashboard ---------- */
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--sh);margin-bottom:18px}
+.card h3{font-size:1.15rem;margin-bottom:4px}.card .sub{color:var(--mut);font-size:.88rem;margin-bottom:1.1rem}
+.hero{position:relative;overflow:hidden;border-radius:26px;padding:28px 26px;color:#fff;margin-bottom:22px;background:radial-gradient(90% 120% at 100% 0,rgba(212,175,55,.45),transparent 55%),linear-gradient(135deg,var(--d2),var(--d))}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 85% 130%,rgba(255,255,255,.05) 0 3deg,transparent 3deg 9deg)}
+.hero>*{position:relative}.hero h1{color:#fff;font-size:clamp(1.5rem,3.6vw,2.1rem);margin-bottom:.4rem}.hero p{color:rgba(255,255,255,.8);max-width:52ch}
+.hero .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.3rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;text-align:left;box-shadow:var(--sh);transition:transform .35s var(--ease),border-color .25s;display:block;text-decoration:none;color:inherit}
+.stat:hover{transform:translateY(-4px);border-color:var(--a)}
+.stat .ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(140deg,#e9f4ec,#fbf1cc);color:var(--p);margin-bottom:12px}
+.stat b{display:block;font:800 1.8rem/1 'Playfair Display',serif;color:var(--d)}.stat span{color:var(--mut);font-size:.84rem}
+.steps{display:grid;gap:12px;counter-reset:s}
+.steps div{display:flex;gap:14px;align-items:flex-start}
+.steps div::before{counter-increment:s;content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--p);color:#fff;font-weight:700;font-size:.82rem;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+.warn{background:#fff7e0;border:1px solid #f0d98a;color:#6a5208;border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:.9rem}
+
+/* ---------- list ---------- */
+.ph{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+.ph h1{font-size:clamp(1.5rem,3vw,2rem)}.ph p{color:var(--mut);max-width:58ch;margin-top:4px;font-size:.92rem}
+.tool{display:flex;gap:10px;margin-bottom:14px}
+.sr{position:relative;flex:1}.sr svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut)}.sr input{padding-left:42px;border-radius:50px}
+.list{display:grid;gap:12px}
+.it{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px 12px 12px;box-shadow:0 4px 14px rgba(20,51,36,.05);transition:transform .3s var(--ease),box-shadow .3s;animation:up .5s var(--ease) both}
+.it:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.th{width:64px;height:64px;border-radius:14px;background:linear-gradient(140deg,#e9f4ec,#fbf1cc) center/cover no-repeat;display:grid;place-items:center;font-size:1.7rem;flex-shrink:0;color:var(--p);font-weight:800;font-family:'Playfair Display',serif;overflow:hidden}
+.th.dt{flex-direction:column;line-height:1.1;font:700 .7rem 'Inter',sans-serif;color:#fff;background:linear-gradient(135deg,var(--p),var(--p2));letter-spacing:.1em}.th.dt b{font:800 1.4rem 'Playfair Display',serif}
+.tx{flex:1;min-width:0}.tx h4{font-size:1rem;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tx p{color:var(--mut);font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 9px;border-radius:50px;background:#eef5ef;color:var(--p);margin-top:5px}.tag.old{background:#f1f1f1;color:#777}.tag.gd{background:#fbf1cc;color:#7a5f00}
+.ac{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.empty{text-align:center;padding:2.6rem 1.2rem;background:#fff;border:2px dashed #cfdcd2;border-radius:22px;color:var(--mut)}
+.empty h3{margin-bottom:.4rem}.empty .btn{margin-top:1rem}
+@media(max-width:560px){.it{flex-wrap:wrap}.ac{width:100%;justify-content:flex-start;padding-top:4px;border-top:1px solid var(--line)}}
+
+/* ---------- drawer / dialog ---------- */
+#dr{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:#fff;z-index:90;display:flex;flex-direction:column;transform:translateX(105%)}
+#dr{visibility:hidden;box-shadow:none;transition:transform .5s var(--ease),visibility 0s .5s,box-shadow .5s}
+#dr.on{transform:none;visibility:visible;box-shadow:-30px 0 80px rgba(0,0,0,.25);transition:transform .5s var(--ease),box-shadow .5s}
+#dr header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line)}
+#dr header h3{font-size:1.3rem}
+#df{flex:1;display:flex;flex-direction:column;min-height:0}
+#dfb{flex:1;overflow-y:auto;padding:20px 22px}
+#df footer{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;background:#fafcfa}
+#dsc{position:fixed;inset:0;background:rgba(8,20,14,.55);backdrop-filter:blur(3px);z-index:80;opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+#dsc.on{opacity:1;visibility:visible;transition:opacity .3s}
+#cf{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:rgba(8,20,14,.6);backdrop-filter:blur(4px)}
+#cf .bx{background:#fff;border-radius:24px;padding:26px;max-width:420px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:up .4s var(--ease)}
+#cf h3{margin-bottom:.4rem}#cf p{color:var(--mut);margin-bottom:1.3rem}#cf .r{display:flex;gap:10px;justify-content:flex-end}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,30px);z-index:200;background:var(--d);color:#fff;padding:13px 22px;border-radius:50px;font-weight:600;font-size:.92rem;box-shadow:0 14px 40px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .3s,transform .45s var(--ease);max-width:92vw;display:flex;gap:10px;align-items:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}#toast.bad{background:var(--red)}
+#boot{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px;color:var(--mut)}
+.spin{width:34px;height:34px;border:3px solid #cfe0d3;border-top-color:var(--p);border-radius:50%;animation:rot .8s linear infinite;margin:0 auto 14px}@keyframes rot{to{transform:rotate(360deg)}}
+details{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font-weight:600;color:var(--d);list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}summary::after{content:'+';font-size:1.3rem;line-height:1;color:var(--p);transition:transform .3s}details[open] summary::after{transform:rotate(45deg)}
+details>div{padding:0 18px 16px;color:#43574a}details ol,details ul{margin:.4rem 0 0 1.2rem}
+pre{background:#10261a;color:#d7efe0;border-radius:14px;padding:14px;overflow:auto;font-size:.78rem;line-height:1.5;margin:10px 0}
+.savebar{position:sticky;bottom:14px;display:flex;justify-content:flex-end;margin-top:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+</style></head>
+<body>
+<div id="boot"><div><div class="spin"></div>Loading admin…</div></div>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" hidden>
+ <div class="lbrand">
+  <div class="lg"><span class="mark"><svg viewBox="0 0 24 24"><path d="M10 2h4v7h7v4h-7v9h-4v-9H3V9h7z"/></svg></span>God's Last Appeal</div>
+  <div><h1>Church admin, made simple.</h1><p>Update your website in seconds. No developer needed.</p>
+  <ul><li id="lb1"></li><li id="lb2"></li><li id="lb3"></li></ul></div>
+  <small style="color:rgba(255,255,255,.55)">Authorised church staff only</small>
+ </div>
+ <div class="lform"><div class="lcard">
+  <h2>Welcome back</h2><p>Sign in to manage your church website.</p>
+  <button class="gbtn" id="gbtn" type="button"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
+  <div class="or">or use email</div>
+  <form id="lf"><div class="fld"><label for="em">Email</label><input id="em" type="email" required autocomplete="username" placeholder="you@gmail.com"></div>
+  <div class="fld"><label for="pw">Password</label><input id="pw" type="password" required autocomplete="current-password" placeholder="Your password"></div>
+  <button class="btn pri" type="submit" style="width:100%">Sign in</button></form>
+  <div style="text-align:center"><button class="linkb" id="fp" type="button">Forgot password?</button></div>
+  <div class="lerr" id="lerr" hidden></div>
+  <p class="lnote">Only email addresses approved by the main administrator can publish changes.</p>
+ </div></div>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+ <aside id="side"><div class="sb"><span class="mark"><svg viewBox="0 0 24 24"><path d="M10 2h4v7h7v4h-7v9h-4v-9H3V9h7z"/></svg></span><div><b>God's Last Appeal</b><small>CHURCH ADMIN</small></div></div>
+  <nav id="nav"></nav>
+  <div class="me"><div class="av" id="av"></div><div><b id="mn"></b><small id="me"></small></div><button id="out" title="Sign out" aria-label="Sign out"></button></div>
+ </aside>
+ <div id="scrim"></div>
+ <div id="main"><div class="top"><button id="bur" aria-label="Menu"></button><h2 id="ttl"></h2><a class="btn ghost sm" id="live" href="index.html" target="_blank" rel="noopener"></a></div>
+  <div class="wrap" id="view"></div></div>
+</div>
+
+<div id="dsc"></div>
+<aside id="dr" aria-hidden="true"><header><h3 id="dt"></h3><button class="ib" id="dx" type="button" aria-label="Close"></button></header>
+ <form id="df"><div id="dfb"></div><footer><button class="btn ghost" type="button" id="dc">Cancel</button><button class="btn pri" type="submit" id="ds">Publish</button></footer></form></aside>
+<div id="cf" hidden><div class="bx"><h3 id="cft"></h3><p id="cfp"></p><div class="r"><button class="btn ghost" id="cfn">Cancel</button><button class="btn dng" id="cfy">Delete</button></div></div></div>
+<div id="toast" role="status"></div>
+
+<script src="js/data.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+'use strict';
+var W=window,$=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+
+/* ---------- icons ---------- */
+var IC={home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',news:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',play:'<circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/>',users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/>',userplus:'<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/>',help:'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>',sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',ext:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>',plus:'<path d="M12 5v14M5 12h14"/>',edit:'<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>',trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',up:'<path d="M18 15l-6-6-6 6"/>',down:'<path d="M6 9l6 6 6-6"/>',search:'<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>',menu:'<path d="M3 12h18M3 6h18M3 18h18"/>',x:'<path d="M18 6L6 18M6 6l12 12"/>',out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',check:'<path d="M20 6L9 17l-5-5"/>',shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',zap:'<path d="M13 2L3 14h9l-1 8 10-12h-9z"/>',phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>'};
+function ic(n){return'<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+(IC[n]||'')+'</svg>'}
+
+/* ---------- toast + confirm ---------- */
+var tt;function say(m,bad){var t=$('#toast');t.innerHTML=(bad?'':ic('check'))+esc(m);t.className='on'+(bad?' bad':'');clearTimeout(tt);tt=setTimeout(function(){t.className=''},bad?6000:2800)}
+function ask(title,text,yes){return new Promise(function(res){$('#cft').textContent=title;$('#cfp').textContent=text;$('#cfy').textContent=yes||'Delete';$('#cf').hidden=false;
+function done(v){$('#cf').hidden=true;$('#cfy').onclick=$('#cfn').onclick=null;res(v)}$('#cfy').onclick=function(){done(true)};$('#cfn').onclick=function(){done(false)}})}
+function errMsg(e){var c=e&&e.code||'';if(c==='permission-denied')return'Not allowed: this account is not on the admin list (see Help).';if(c==='unavailable')return'No internet connection. Please try again.';return(e&&e.message)||'Something went wrong.'}
+
+/* ---------- boot guard ---------- */
+var cfg=W.FIREBASE_CONFIG||{};
+if(!W.firebase||!cfg.apiKey){$('#boot').innerHTML='<div class="card" style="max-width:520px;text-align:left"><h3>Setup not finished</h3><p class="sub">The Firebase details are still empty in <b>js/data.js</b>. Follow <b>ADMIN-SETUP.md</b> first, then reload this page.</p></div>';return}
+firebase.initializeApp(cfg);
+var auth=firebase.auth(),db=firebase.firestore(),TS=function(){return firebase.firestore.FieldValue.serverTimestamp()};
+var today=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+
+/* ---------- content definitions ---------- */
+var CATS=['Sabbath','Healing','Bible Study','Youth','Prayer','Special','Other'];
+var ytId=function(v){var m=String(v||'').match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(v||'')?v:'')};
+var arr=function(n){return Array.isArray(W[n])?W[n]:[]};
+var imgSrc=function(p){return!p?'':/^(https?:|data:)/.test(p)?p:'images/'+p+'.jpg'};
+var fmt=function(d){return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):''};
+var TYPES={
+ events:{n:'Events',one:'event',ic:'calendar',g:'Content',blurb:'Special services, campaigns and gatherings. Events hide themselves automatically after their date.',
+  f:[{k:'date',t:'date',l:'Event date',req:1},{k:'title',t:'text',l:'Event title',req:1,ph:'e.g. Annual Healing Campaign'},{k:'time',t:'text',l:'Time',ph:'e.g. 10:00 AM - 4:00 PM'},{k:'desc',t:'textarea',l:'Short description',ph:'What will happen, who should come…'}],
+  sort:function(a,b){var pa=a.d.date<today,pb=b.d.date<today;return pa!==pb?(pa?1:-1):(pa?(a.d.date<b.d.date?1:-1):(a.d.date<b.d.date?-1:1))},
+  th:function(x){var d=new Date(x.date+'T00:00:00');return'<div class="th dt">'+d.toLocaleString('en',{month:'short'}).toUpperCase()+'<b>'+d.getDate()+'</b></div>'},
+  title:function(x){return x.title},sub:function(x){return fmt(x.date)+(x.time?' · '+x.time:'')},tags:function(x){return x.date<today?'<span class="tag old">Past – hidden on website</span>':'<span class="tag">Live on website</span>'}},
+ news:{n:'News',one:'news post',ic:'news',g:'Content',blurb:'Announcements and stories for the congregation. Newest appear first.',
+  f:[{k:'date',t:'date',l:'Date',req:1},{k:'tag',t:'text',l:'Label',ph:'e.g. Prayer, Outreach, Event'},{k:'title',t:'text',l:'Headline',req:1},{k:'text',t:'textarea',l:'Full story',req:1,r:6}],
+  sort:function(a,b){return a.d.date<b.d.date?1:-1},th:function(x){return'<div class="th">'+ic('news')+'</div>'},title:function(x){return x.title},sub:function(x){return fmt(x.date)},tags:function(x){return x.tag?'<span class="tag">'+esc(x.tag)+'</span>':''}},
+ sermons:{n:'Sermons',one:'sermon',ic:'play',g:'Content',blurb:'Paste a YouTube or Facebook link and the website builds the video player for you.',
+  f:[{k:'date',t:'date',l:'Date preached',req:1},{k:'title',t:'text',l:'Sermon title',req:1},{k:'cat',t:'select',l:'Category',o:CATS},{k:'video',t:'url',l:'Video link',ph:'https://www.youtube.com/watch?v=…',hint:'YouTube, Facebook video, or direct .mp4 link. Leave empty if there is no video yet.'}],
+  sort:function(a,b){return a.d.date<b.d.date?1:-1},th:function(x){var i=ytId(x.video);return i?'<div class="th" style="background-image:url(https://img.youtube.com/vi/'+i+'/mqdefault.jpg),linear-gradient(140deg,#e9f4ec,#fbf1cc)"></div>':'<div class="th">'+ic('play')+'</div>'},
+  title:function(x){return x.title},sub:function(x){return fmt(x.date)},tags:function(x){return'<span class="tag">'+esc(x.cat||'Sermon')+'</span>'+(x.video?'':' <span class="tag old">No video yet</span>')}},
+ leaders:{n:'Leadership',one:'leader',ic:'users',g:'Church',ord:1,blurb:'Church leaders shown on the website. Use the arrows to change the order.',
+  f:[{k:'role',t:'text',l:'Position / title',req:1,ph:'e.g. Hon. Treasurer'},{k:'name',t:'text',l:'Full name',ph:'Leave empty to show "To be announced"'},{k:'bio',t:'textarea',l:'Short bio (optional)',r:3},{k:'photo',t:'image',l:'Photo',max:900}],
+  th:function(x){return x.photo?'<div class="th" style="background-image:url(\''+esc(imgSrc(x.photo))+'\'),linear-gradient(140deg,#e9f4ec,#fbf1cc)"></div>':'<div class="th">'+esc((x.name||x.role||'?').charAt(0))+'</div>'},title:function(x){return x.name||'To be announced'},sub:function(x){return x.role},
+  seed:function(){return arr('LD').map(function(a){return{role:a[0]||'',name:a[1]||'',bio:a[2]||'',photo:a[3]||''}})}},
+ gallery:{n:'Photo Gallery',one:'photo',ic:'image',g:'Church',ord:1,blurb:'Photos from services and events. Large photos are shrunk automatically so the website stays fast.',
+  f:[{k:'photo',t:'image',l:'Photo',req:1,max:1400},{k:'caption',t:'text',l:'Caption',req:1,ph:'e.g. Sabbath worship, Homa Bay'},{k:'size',t:'select',l:'Display size',o:[['','Normal'],['w','Wide'],['t','Tall'],['w t','Large (wide + tall)']]}],
+  th:function(x){return'<div class="th" style="background-image:url(\''+esc(imgSrc(x.photo))+'\'),linear-gradient(140deg,#e9f4ec,#fbf1cc)"></div>'},title:function(x){return x.caption},sub:function(){return''},
+  seed:function(){return arr('GAL').map(function(a){return{photo:a[0]||'',caption:a[1]||'',size:a[2]||''}})}},
+ ministries:{n:'Ministries',one:'ministry',ic:'heart',g:'Church',ord:1,blurb:'The ministries shown in the "Our Ministries" section.',
+  f:[{k:'title',t:'text',l:'Ministry name',req:1},{k:'desc',t:'textarea',l:'Description',req:1},{k:'photo',t:'image',l:'Photo',max:1000},{k:'btn',t:'text',l:'Button text',ph:'e.g. Join Youth Ministry'}],
+  th:function(x){return x.photo?'<div class="th" style="background-image:url(\''+esc(imgSrc(x.photo))+'\'),linear-gradient(140deg,#e9f4ec,#fbf1cc)"></div>':'<div class="th">'+ic('heart')+'</div>'},title:function(x){return x.title},sub:function(x){return x.desc},
+  seed:function(){return arr('M').map(function(a){return{photo:a[0]||'',title:a[1]||'',desc:a[2]||'',btn:a[3]||''}})}},
+ services:{n:'Service Times',one:'service',ic:'clock',g:'Church',ord:1,blurb:'Weekly gatherings. The first four also appear in the highlighted strip near the top of the website.',
+  f:[{k:'icon',t:'text',l:'Icon (an emoji)',ph:'🕊️',hint:'Tip: copy any emoji and paste it here.'},{k:'title',t:'text',l:'Service name',req:1},{k:'time',t:'text',l:'Day & time',req:1,ph:'e.g. 10:00 AM - 12:30 PM'},{k:'desc',t:'textarea',l:'Description'}],
+  th:function(x){return'<div class="th">'+esc(x.icon||'🕊️')+'</div>'},title:function(x){return x.title},sub:function(x){return x.time},
+  seed:function(){return arr('S').map(function(a){return{icon:a[0]||'',title:a[1]||'',time:a[2]||'',desc:a[3]||''}})}},
+ branches:{n:'Branches',one:'branch',ic:'pin',g:'Church',ord:1,blurb:'Church branches across Kenya and beyond.',
+  f:[{k:'name',t:'text',l:'Branch name',req:1,ph:'e.g. Kisumu Branch'},{k:'desc',t:'textarea',l:'Description',req:1}],
+  th:function(){return'<div class="th">'+ic('pin')+'</div>'},title:function(x){return x.name},sub:function(x){return x.desc},
+  seed:function(){return arr('B').map(function(a){return{name:a[0]||'',desc:a[1]||''}})}},
+ timeline:{n:'Our History',one:'milestone',ic:'flag',g:'Church',ord:1,blurb:'The "Our Journey Through Time" timeline, in order from oldest to newest.',
+  f:[{k:'when',t:'text',l:'Year / era (short)',req:1,ph:'e.g. 1963 or 1970s'},{k:'label',t:'text',l:'Label',ph:'e.g. 1963'},{k:'title',t:'text',l:'Title',req:1},{k:'text',t:'textarea',l:'What happened',req:1,r:5}],
+  th:function(x){return'<div class="th dt"><b style="font-size:.95rem">'+esc(x.when)+'</b></div>'},title:function(x){return x.title},sub:function(x){return x.text},
+  seed:function(){return arr('T').map(function(a){return{when:a[0]||'',label:a[1]||'',title:a[2]||'',text:a[3]||''}})}},
+ involve:{n:'Get Involved',one:'card',ic:'userplus',g:'Church',ord:1,blurb:'Ways people can join in. Each card opens WhatsApp with the message you write here.',
+  f:[{k:'icon',t:'text',l:'Icon (an emoji)',ph:'🙋'},{k:'title',t:'text',l:'Title',req:1},{k:'desc',t:'textarea',l:'Description',req:1},{k:'msg',t:'text',l:'WhatsApp message',ph:'I would like to volunteer',hint:'The message people send to the church when they tap the card.'}],
+  th:function(x){return'<div class="th">'+esc(x.icon||'🙋')+'</div>'},title:function(x){return x.title},sub:function(x){return x.desc},
+  seed:function(){return arr('IV').map(function(a){return{icon:a[0]||'',title:a[1]||'',desc:a[2]||'',msg:a[3]||''}})}},
+ faq:{n:'FAQ',one:'question',ic:'help',g:'Church',ord:1,blurb:'Frequently asked questions shown near the bottom of the website.',
+  f:[{k:'q',t:'text',l:'Question',req:1},{k:'a',t:'textarea',l:'Answer',req:1,r:5}],
+  th:function(){return'<div class="th">'+ic('help')+'</div>'},title:function(x){return x.q},sub:function(x){return x.a},
+  seed:function(){return arr('FQ').map(function(a){return{q:a[0]||'',a:a[1]||''}})}}
+};
+var ORDER=['events','news','sermons','leaders','gallery','ministries','services','branches','timeline','involve','faq'];
+
+/* ---------- site settings ---------- */
+var P0=W.PAY||{};
+var SET_DEFAULTS={annOn:false,annText:'',annLink:'',annBtn:'Learn more',phone:'+254 712 345 678',whatsapp:String((W.WA||'').replace(/^.*wa\.me\//,'').replace(/\?.*$/,'')||'254723456789'),email:'info@godsappealchurch.org',address:"God's Last Appeal Church\nP.O. Box 12345-40100\nHoma Bay, Kenya\nNear Homa Bay County Government Offices",yt:(W.YT&&W.YT!=='#')?W.YT:'',facebook:'',instagram:'',paybill:P0.paybill||'',accName:P0.acc||'',bank:P0.bank||'',accNum:P0.num||'',bankBranch:P0.br||'',swift:P0.swift||'',paypal:P0.pp||''};
+var SETG=[
+ {t:'Announcement banner',s:'A floating notice at the top of every page, perfect for special events or urgent news.',f:[{k:'annOn',t:'toggle',l:'Show the banner on the website'},{k:'annText',t:'text',l:'Message',ph:'e.g. Annual Healing Campaign this Saturday!'},{k:'annLink',t:'url',l:'Link (optional)',ph:'https://…'},{k:'annBtn',t:'text',l:'Button text',ph:'Learn more'}]},
+ {t:'Contact details',s:'Shown in the contact section, footer and on every WhatsApp button.',f:[{k:'phone',t:'tel',l:'Phone number'},{k:'whatsapp',t:'tel',l:'WhatsApp number',hint:'Country code first, e.g. 254723456789'},{k:'email',t:'email',l:'Email address'},{k:'address',t:'textarea',l:'Address',r:4}]},
+ {t:'Online presence',s:'Links to your channels. Empty ones are hidden on the website.',f:[{k:'yt',t:'url',l:'YouTube channel link',ph:'https://www.youtube.com/@yourchannel'},{k:'facebook',t:'url',l:'Facebook page link'},{k:'instagram',t:'url',l:'Instagram link'}]},
+ {t:'Giving details',s:'Shown when someone taps Give or Donate.',f:[{k:'paybill',t:'text',l:'M-Pesa Paybill number'},{k:'accName',t:'text',l:'Account name'},{k:'bank',t:'text',l:'Bank name'},{k:'accNum',t:'text',l:'Bank account number'},{k:'bankBranch',t:'text',l:'Bank branch'},{k:'swift',t:'text',l:'SWIFT code'},{k:'paypal',t:'url',l:'PayPal donate link'}]}
+];
+
+/* ---------- state ---------- */
+var store={},me=null,isAdmin=true,settings=null,view='home',draft={},editing=null;
+function ts(x){return x.d.created&&x.d.created.seconds||0}
+function sortItems(t,a){var T=TYPES[t];if(T.ord)return a.sort(function(x,y){var o=(x.d.order==null?1e9:x.d.order)-(y.d.order==null?1e9:y.d.order);return o||ts(x)-ts(y)});return a.sort(T.sort)}
+function load(t){return db.collection(t).get().then(function(s){store[t]=sortItems(t,s.docs.map(function(d){return{id:d.id,d:d.data()}}));count(t);return store[t]})}
+function loadSettings(){return db.collection('settings').doc('site').get().then(function(d){settings=Object.assign({},SET_DEFAULTS,d.exists?d.data():{});return settings})}
+
+/* ---------- field builders ---------- */
+function fieldHTML(f,v,pre){var id=pre+f.k,req=f.req?' required':'',l='<label for="'+id+'">'+esc(f.l)+(f.req?' <i>*</i>':'')+'</label>',h=f.hint?'<small class="hint">'+esc(f.hint)+'</small>':'',ph=f.ph?' placeholder="'+esc(f.ph)+'"':'';
+ if(f.t==='toggle')return'<div class="fld"><label class="sw" for="'+id+'"><input type="checkbox" id="'+id+'"'+(v?' checked':'')+'><span>'+esc(f.l)+'</span></label></div>';
+ if(f.t==='textarea')return'<div class="fld">'+l+'<textarea id="'+id+'" rows="'+(f.r||4)+'"'+req+ph+'>'+esc(v)+'</textarea>'+h+'</div>';
+ if(f.t==='select')return'<div class="fld">'+l+'<select id="'+id+'">'+f.o.map(function(o){var a=Array.isArray(o)?o:[o,o];return'<option value="'+esc(a[0])+'"'+(String(v)===String(a[0])?' selected':'')+'>'+esc(a[1])+'</option>'}).join('')+'</select>'+h+'</div>';
+ if(f.t==='image')return'<div class="fld imgf" data-k="'+f.k+'" data-max="'+(f.max||1000)+'"><span class="lab">'+esc(f.l)+(f.req?' <i>*</i>':'')+'</span><div class="pv"></div><div class="row"><label class="btn ghost sm" style="margin:0"><input type="file" accept="image/*">'+ic('upload')+' Upload photo</label><button type="button" class="btn ghost sm" data-rm>'+ic('trash')+' Remove</button></div><input type="text" class="imgurl" placeholder="…or paste an image link / file name"><small class="hint">Photos are resized automatically. Max 10 MB.</small></div>';
+ return'<div class="fld">'+l+'<input id="'+id+'" type="'+f.t+'" value="'+esc(v)+'"'+req+ph+'>'+h+'</div>'}
+function paintImg(box){var k=box.dataset.k,v=draft[k]||'',pv=$('.pv',box),u=$('.imgurl',box);
+ if(v){pv.style.backgroundImage='url("'+imgSrc(v).replace(/"/g,'%22')+'"),linear-gradient(140deg,#e9f4ec,#fbf1cc)';pv.textContent=''}else{pv.style.backgroundImage='';pv.textContent='No photo yet'}
+ u.value=/^data:/.test(v)?'':v;u.placeholder=/^data:/.test(v)?'Uploaded photo':'…or paste an image link / file name';$('[data-rm]',box).hidden=!v}
+function collect(fields,pre){var o={};fields.forEach(function(f){var el=$('#'+pre+f.k);if(f.t==='image')o[f.k]=draft[f.k]||'';else if(f.t==='toggle')o[f.k]=el.checked;else o[f.k]=el.value.trim()});return o}
+function shrink(file,max){return new Promise(function(ok,no){if(file.size>10*1048576)return no(new Error('That photo is larger than 10 MB.'));var r=new FileReader();r.onerror=no;r.onload=function(){var im=new Image();im.onerror=function(){no(new Error('That file is not a readable image.'))};im.onload=function(){var s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);var q=.82,d=c.toDataURL('image/jpeg',q);while(d.length>850000&&q>.35){q-=.1;d=c.toDataURL('image/jpeg',q)}if(d.length>950000)return no(new Error('Photo is still too large. Try a smaller one.'));ok(d)};im.src=r.result};r.readAsDataURL(file)})}
+document.addEventListener('change',function(e){var inp=e.target;if(inp.type==='file'&&inp.closest('.imgf')){var box=inp.closest('.imgf'),f=inp.files[0];if(!f)return;say('Preparing photo…');shrink(f,+box.dataset.max).then(function(d){draft[box.dataset.k]=d;paintImg(box);say('Photo ready')}).catch(function(er){say(er.message,1)});inp.value=''}
+ if(inp.classList.contains('imgurl')){var b=inp.closest('.imgf');draft[b.dataset.k]=inp.value.trim();paintImg(b)}});
+document.addEventListener('click',function(e){var r=e.target.closest('[data-rm]');if(r){var b=r.closest('.imgf');draft[b.dataset.k]='';paintImg(b)}});
+
+/* ---------- drawer ---------- */
+function openDrawer(t,item){var T=TYPES[t];editing={t:t,id:item&&item.id};draft=Object.assign({},item&&item.d||{});
+ $('#dt').textContent=(item?'Edit ':'Add ')+T.one;$('#ds').textContent=item?'Save changes':'Publish';
+ $('#dfb').innerHTML=T.f.map(function(f){var v=draft[f.k];if(v==null)v=(f.t==='select'&&f.o)?(Array.isArray(f.o[0])?f.o[0][0]:f.o[0]):(f.k==='date'?today:'');return fieldHTML(f,v,'f_')}).join('');
+ $$('.imgf',$('#dfb')).forEach(paintImg);$('#dr').classList.add('on');$('#dr').setAttribute('aria-hidden','false');$('#dsc').classList.add('on');setTimeout(function(){var i=$('#dfb input:not([type=file]),#dfb textarea');i&&i.focus()},350)}
+function closeDrawer(){$('#dr').classList.remove('on');$('#dr').setAttribute('aria-hidden','true');$('#dsc').classList.remove('on');editing=null}
+$('#dx').innerHTML=ic('x');$('#dx').onclick=$('#dc').onclick=$('#dsc').onclick=closeDrawer;
+$('#df').addEventListener('submit',function(e){e.preventDefault();if(!editing)return;var t=editing.t,T=TYPES[t],o=collect(T.f,'f_'),miss=T.f.filter(function(f){return f.req&&f.t==='image'&&!o[f.k]})[0];if(miss)return say('Please add a photo first.',1);
+ var btn=$('#ds');btn.disabled=true;var p;
+ if(editing.id){o.updated=TS();p=db.collection(t).doc(editing.id).update(o)}else{o.created=TS();if(T.ord){var m=(store[t]||[]).reduce(function(a,x){return Math.max(a,x.d.order==null?-1:x.d.order)},-1);o.order=m+1}p=db.collection(t).add(o)}
+ p.then(function(){say(editing.id?'Changes saved':'Published. It is now live on the website.');closeDrawer();return load(t)}).then(function(){render()}).catch(function(er){say(errMsg(er),1)}).then(function(){btn.disabled=false})});
+
+/* ---------- views ---------- */
+function setTitle(t){$('#ttl').textContent=t;document.title=t+' · Church Admin'}
+function drawNav(){var g='',h='<a href="#home" data-v="home">'+ic('home')+'Overview</a>';
+ ORDER.forEach(function(k){var T=TYPES[k];if(T.g!==g){g=T.g;h+='<div class="ng">'+g+'</div>'}h+='<a href="#'+k+'" data-v="'+k+'">'+ic(T.ic)+T.n+'<span class="n" id="n_'+k+'">'+(store[k]?store[k].length:'')+'</span></a>'});
+ h+='<div class="ng">Website</div><a href="#site" data-v="site">'+ic('sliders')+'Site settings</a><a href="#help" data-v="help">'+ic('help')+'Help &amp; admins</a>';
+ $('#nav').innerHTML=h;mark()}
+function mark(){$$('#nav a').forEach(function(a){a.classList.toggle('on',a.dataset.v===view)})}
+function count(k){var n=$('#n_'+k);if(n)n.textContent=store[k]?store[k].length:''}
+function route(){var h=(location.hash||'#home').slice(1);view=(h==='home'||h==='site'||h==='help'||TYPES[h])?h:'home';mark();closeNav();render();window.scrollTo(0,0)}
+function render(){if(!me)return;var v=$('#view');
+ if(view==='home')return home(v);if(view==='site')return siteView(v);if(view==='help')return helpView(v);
+ var T=TYPES[view];setTitle(T.n);
+ if(!store[view]){v.innerHTML='<div class="empty"><div class="spin"></div>Loading…</div>';return load(view).then(function(){count(view);if(location.hash.slice(1)===view||view===view)render()}).catch(function(e){v.innerHTML='<div class="empty"><h3>Could not load</h3><p>'+esc(errMsg(e))+'</p></div>'})}
+ listView(v,view)}
+function adminWarn(){return isAdmin?'':'<div class="warn"><b>View-only account.</b> You are signed in as '+esc(me.email)+', but this address is not on the admin list, so saving will be refused. Ask the main administrator to add it (see <a href="#help">Help</a>).</div>'}
+function home(v){setTitle('Overview');var first=(me.displayName||me.email||'friend').split(/[ @]/)[0];
+ v.innerHTML=adminWarn()+'<div class="hero"><h1>Welcome, '+esc(first)+' 👋</h1><p>Everything on your church website can be changed from here. No developer needed. Changes go live the moment you press Publish.</p><div class="acts"><a class="btn gold" href="#events" id="qa1">'+ic('plus')+' Add an event</a><a class="btn ghost" href="#sermons">'+ic('play')+' Add a sermon</a><a class="btn ghost" href="index.html" target="_blank" rel="noopener">'+ic('ext')+' View website</a></div></div>'+
+ '<div class="stats">'+ORDER.map(function(k){var T=TYPES[k];return'<a class="stat" href="#'+k+'"><div class="ico">'+ic(T.ic)+'</div><b id="s_'+k+'">–</b><span>'+T.n+'</span></a>'}).join('')+'</div>'+
+ '<div class="card"><h3>Quick guide</h3><p class="sub">Three things to know</p><div class="steps"><div><span><b>Pick a section</b> from the menu (Events, News, Sermons, Leadership…).</span></div><div><span>Press <b>Add</b>, fill the form and press <b>Publish</b>. To change or remove something, use the pencil or bin on its card.</span></div><div><span><b>Photos:</b> tap Upload photo inside any form. They are resized automatically.</span></div></div></div>';
+ ORDER.forEach(function(k){(store[k]?Promise.resolve():load(k)).then(function(){var e=$('#s_'+k);if(e)e.textContent=store[k].length;count(k)}).catch(function(){})})}
+function listView(v,t){var T=TYPES[t],a=store[t],q=($('#q')&&$('#q').value||'').toLowerCase();
+ var head=adminWarn()+'<div class="ph"><div><h1>'+T.n+'</h1><p>'+T.blurb+'</p></div><button class="btn pri" id="add">'+ic('plus')+' Add '+T.one+'</button></div>';
+ if(!a.length){var can=T.seed&&T.seed().length;v.innerHTML=head+'<div class="empty"><h3>Nothing here yet</h3><p>'+(can?'Your website is currently showing its built-in '+T.n.toLowerCase()+'. Import them here to start editing, re-ordering or deleting them.':'Add your first '+T.one+' and it will appear on the website straight away.')+'</p>'+(can?'<button class="btn pri" id="seed">'+ic('download')+'Import current website content</button> ':'')+'<button class="btn '+(can?'ghost':'pri')+'" id="add2">'+ic('plus')+' Add '+T.one+'</button></div>';wire(t);return}
+ var shown=a.filter(function(x){return!q||JSON.stringify(x.d).toLowerCase().indexOf(q)>-1});
+ v.innerHTML=head+'<div class="tool"><div class="sr">'+ic('search')+'<input id="q" type="text" placeholder="Search '+T.n.toLowerCase()+'…" value="'+esc(q)+'"></div></div><div class="list">'+(shown.map(function(x,i){var idx=a.indexOf(x);return'<article class="it" style="animation-delay:'+Math.min(i,12)*30+'ms">'+T.th(x.d)+'<div class="tx"><h4>'+esc(T.title(x.d))+'</h4><p>'+esc(T.sub(x.d))+'</p>'+(T.tags?T.tags(x.d):'')+'</div><div class="ac">'+(T.ord&&!q?'<button class="ib" data-mv="-1" data-id="'+x.id+'" aria-label="Move up"'+(idx===0?' disabled':'')+'>'+ic('up')+'</button><button class="ib" data-mv="1" data-id="'+x.id+'" aria-label="Move down"'+(idx===a.length-1?' disabled':'')+'>'+ic('down')+'</button>':'')+'<button class="ib" data-ed="'+x.id+'" aria-label="Edit">'+ic('edit')+'</button><button class="ib red" data-dl="'+x.id+'" aria-label="Delete">'+ic('trash')+'</button></div></article>'}).join('')||'<div class="empty">No matches for “'+esc(q)+'”.</div>')+'</div>';
+ wire(t);var qi=$('#q');if(qi){qi.oninput=function(){var p=qi.selectionStart;listView(v,t);var n=$('#q');n.focus();n.setSelectionRange(p,p)}}}
+IC.download='<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>';
+function wire(t){var T=TYPES[t];$$('#add,#add2').forEach(function(b){b.onclick=function(){openDrawer(t)}});
+ var sd=$('#seed');if(sd)sd.onclick=function(){sd.disabled=true;var rows=T.seed(),b=db.batch();rows.forEach(function(r,i){b.set(db.collection(t).doc(),Object.assign({},r,{order:i,created:TS()}))});b.commit().then(function(){say('Imported '+rows.length+' items. You can now edit them.');return load(t)}).then(function(){count(t);render()}).catch(function(e){say(errMsg(e),1);sd.disabled=false})};
+ $$('[data-ed]').forEach(function(b){b.onclick=function(){openDrawer(t,store[t].filter(function(x){return x.id===b.dataset.ed})[0])}});
+ $$('[data-dl]').forEach(function(b){b.onclick=function(){var it=store[t].filter(function(x){return x.id===b.dataset.dl})[0];ask('Delete this '+T.one+'?','“'+T.title(it.d)+'” will be removed from the website permanently.').then(function(y){if(!y)return;db.collection(t).doc(it.id).delete().then(function(){say('Deleted');return load(t)}).then(function(){count(t);render()}).catch(function(e){say(errMsg(e),1)})})}});
+ $$('[data-mv]').forEach(function(b){b.onclick=function(){var a=store[t],i=a.findIndex(function(x){return x.id===b.dataset.id}),j=i+(+b.dataset.mv);if(j<0||j>=a.length)return;var tmp=a[i];a[i]=a[j];a[j]=tmp;var bt=db.batch();a.forEach(function(x,k){if(x.d.order!==k){x.d.order=k;bt.update(db.collection(t).doc(x.id),{order:k})}});render();bt.commit().then(function(){say('Order saved')}).catch(function(e){say(errMsg(e),1);load(t).then(render)})}})}
+
+function siteView(v){setTitle('Site settings');
+ if(!settings){v.innerHTML='<div class="empty"><div class="spin"></div>Loading…</div>';return loadSettings().then(function(){if(view==='site')siteView(v)}).catch(function(e){v.innerHTML='<div class="empty"><h3>Could not load</h3><p>'+esc(errMsg(e))+'</p></div>'})}
+ v.innerHTML=adminWarn()+'<div class="ph"><div><h1>Site settings</h1><p>Contact details, social links, giving information and the announcement banner.</p></div></div><form id="sf">'+SETG.map(function(g,i){return'<div class="card"><h3>'+g.t+'</h3><p class="sub">'+g.s+'</p>'+g.f.map(function(f){return fieldHTML(f,settings[f.k],'s_')}).join('')+'</div>'}).join('')+'<div class="savebar"><button class="btn pri" type="submit">'+ic('check')+' Save all settings</button></div></form>';
+ $('#sf').onsubmit=function(e){e.preventDefault();var o={};SETG.forEach(function(g){Object.assign(o,collect(g.f,'s_'))});var d=String(o.whatsapp||'').replace(/\D/g,'');if(d.charAt(0)==='0')d='254'+d.slice(1);o.whatsapp=d;o.updated=TS();var b=$('#sf [type=submit]');b.disabled=true;
+  db.collection('settings').doc('site').set(o,{merge:true}).then(function(){settings=Object.assign({},settings,o);say('Settings saved. Live on the website now.')}).catch(function(er){say(errMsg(er),1)}).then(function(){b.disabled=false})}}
+function helpView(v){setTitle('Help & admins');var em=esc(me.email||'ADMIN@gmail.com');
+ var rules="rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{col}/{id} {\n      allow read: if col in "+JSON.stringify(Object.keys(TYPES).concat(['settings'])).replace(/"/g,"'")+";\n      allow write: if col in "+JSON.stringify(Object.keys(TYPES).concat(['settings'])).replace(/"/g,"'")+"\n        && request.auth != null\n        && request.auth.token.email_verified == true\n        && request.auth.token.email in ['"+(me.email||'ADMIN@gmail.com')+"'];\n    }\n  }\n}";
+ v.innerHTML=adminWarn()+'<div class="ph"><div><h1>Help &amp; admins</h1><p>Short answers to the common questions.</p></div></div>'+
+ '<details open><summary>How do I add or remove an event?</summary><div><ol><li>Open <b>Events</b> in the menu.</li><li>Press <b>Add event</b>, fill in the date, title and time, then <b>Publish</b>.</li><li>To remove one, press the bin icon and confirm. Past events hide themselves automatically.</li></ol></div></details>'+
+ '<details><summary>How do I add a sermon video?</summary><div>Open <b>Sermons → Add sermon</b> and paste the YouTube or Facebook link. The website creates the thumbnail and player by itself.</div></details>'+
+ '<details><summary>My leaders / ministries / FAQ already exist on the website. How do I edit them?</summary><div>Open that section and press <b>Import current website content</b> once. After that every item can be edited, reordered, deleted, or added to.</div></details>'+
+ '<details><summary>How do photos work?</summary><div>Press <b>Upload photo</b> in any form. The photo is resized automatically and saved with your content. You can also paste an image link.</div></details>'+
+ '<details><summary>How do I add another administrator?</summary><div><ol><li>Open the <a href="https://console.firebase.google.com" target="_blank" rel="noopener">Firebase console</a> → your project → <b>Firestore Database → Rules</b>.</li><li>Add the new person’s Google email inside the list in brackets, separated by commas, e.g. <code>[\'a@gmail.com\',\'b@gmail.com\']</code>.</li><li>Press <b>Publish</b>. They can now sign in here with Google.</li></ol><p style="margin-top:10px">Complete rules to paste (your email is already filled in):</p><pre id="rules">'+esc(rules)+'</pre><button class="btn ghost sm" id="cprules">Copy rules</button></div></details>'+
+ '<details><summary>Someone left the team. How do I remove their access?</summary><div>Delete their email from the same rules list and press <b>Publish</b>. Their access stops immediately.</div></details>'+
+ '<details><summary>Google sign-in does not work</summary><div><ul><li>In Firebase: <b>Authentication → Sign-in method → Google → Enable</b>.</li><li>Then <b>Authentication → Settings → Authorized domains</b> and add your website domain (e.g. <code>yourname.github.io</code>).</li><li>Allow pop-ups for this page in your browser.</li></ul></div></details>'+
+ '<details><summary>I forgot my password</summary><div>On the sign-in screen press <b>Forgot password?</b> or simply use <b>Continue with Google</b>.</div></details>';
+ var c=$('#cprules');if(c)c.onclick=function(){var t=$('#rules').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){say('Rules copied')}).catch(function(){var r=document.createRange();r.selectNodeContents($('#rules'));var s=getSelection();s.removeAllRanges();s.addRange(r);say('Selected. Press Ctrl+C to copy.')})}}
+
+/* ---------- nav drawer (mobile) ---------- */
+function closeNav(){$('#side').classList.remove('open');$('#scrim').classList.remove('on')}
+$('#bur').innerHTML=ic('menu');$('#out').innerHTML=ic('out');$('#live').innerHTML=ic('ext')+' View website';
+$('#bur').onclick=function(){$('#side').classList.add('open');$('#scrim').classList.add('on')};$('#scrim').onclick=closeNav;
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('#cf').hidden)$('#cfn').click();else if($('#dr').classList.contains('on'))closeDrawer();else closeNav()}});
+window.addEventListener('hashchange',route);
+
+/* ---------- login ---------- */
+$('#lb1').innerHTML=ic('zap')+'Changes go live instantly';$('#lb2').innerHTML=ic('image')+'Upload photos straight from your phone';$('#lb3').innerHTML=ic('shield')+'Secure Google sign-in';
+function lerr(m){var e=$('#lerr');e.textContent=m||'';e.hidden=!m}
+function authMsg(e){var c=e&&e.code||'';return({'auth/unauthorized-domain':'This website address is not authorised yet. In Firebase: Authentication → Settings → Authorized domains → add this domain.','auth/operation-not-allowed':'This sign-in method is not enabled yet in Firebase (Authentication → Sign-in method).','auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'Wrong email or password.','auth/invalid-email':'That email address does not look right.','auth/too-many-requests':'Too many attempts. Please wait a few minutes or reset your password.','auth/network-request-failed':'No internet connection.','auth/user-disabled':'This account has been disabled.'})[c]||(e&&e.message)||'Sign-in failed.'}
+var gp=new firebase.auth.GoogleAuthProvider();gp.setCustomParameters({prompt:'select_account'});
+$('#gbtn').onclick=function(){lerr();auth.signInWithPopup(gp).catch(function(e){if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request')return;if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')return auth.signInWithRedirect(gp);lerr(authMsg(e))})};
+auth.getRedirectResult&&auth.getRedirectResult().catch(function(e){lerr(authMsg(e))});
+$('#lf').onsubmit=function(e){e.preventDefault();lerr();auth.signInWithEmailAndPassword($('#em').value.trim(),$('#pw').value).catch(function(er){lerr(authMsg(er))})};
+$('#fp').onclick=function(){var m=$('#em').value.trim();if(!m)return lerr('Type your email above first, then press Forgot password.');auth.sendPasswordResetEmail(m).then(function(){lerr();say('Password reset email sent. Check your inbox.')}).catch(function(er){lerr(authMsg(er))})};
+$('#out').onclick=function(){auth.signOut()};
+
+auth.onAuthStateChanged(function(u){$('#boot').hidden=true;me=u;
+ if(!u){$('#app').hidden=true;$('#login').hidden=false;store={};settings=null;document.title="Church Admin | God's Last Appeal";return}
+ $('#login').hidden=true;$('#app').hidden=false;
+ var av=$('#av');if(u.photoURL){av.style.backgroundImage='url("'+u.photoURL+'")';av.textContent=''}else{av.style.backgroundImage='';av.textContent=(u.displayName||u.email||'A').charAt(0).toUpperCase()}
+ $('#mn').textContent=u.displayName||'Administrator';$('#me').textContent=u.email||'';
+ isAdmin=true;drawNav();route();
+ /* is this account on the admin list? deleting a non-existent doc is a harmless write test */
+ db.collection('settings').doc('_probe').delete().then(function(){isAdmin=true}).catch(function(e){if(e&&e.code==='permission-denied'){isAdmin=false;render()}})});
+})();
+</script>
+</body></html>
