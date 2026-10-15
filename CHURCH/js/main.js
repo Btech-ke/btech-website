@@ -54,13 +54,14 @@ function copy(v,btn){
 
 /* menu */
 var burger=$('#burger'),menu=$('#menu');
-function menuToggle(f){var o=typeof f==='boolean'?f:!menu.classList.contains('open');menu.classList.toggle('open',o);menu.setAttribute('aria-hidden',!o);burger.setAttribute('aria-expanded',o);burger.setAttribute('aria-label',o?'Close menu':'Open menu');document.body.classList.toggle('lock',o)}
+function menuToggle(f){var o=typeof f==='boolean'?f:!menu.classList.contains('open');menu.classList.toggle('open',o);menu.setAttribute('aria-hidden',!o);burger.setAttribute('aria-expanded',o);burger.setAttribute('aria-label',o?'Close menu':'Open menu');document.body.classList.toggle('lock',o);document.body.classList.toggle('mo',o)}
 burger.addEventListener('click',function(){menuToggle()});
 
 /* delegated clicks */
 document.addEventListener('click',function(e){
  var t=e.target;
  var g=t.closest('[data-give]');if(g){e.preventDefault();menuToggle(false);giveOv(g.dataset.give);return}
+ if(t.closest('#scrim')){menuToggle(false);return}
  var cp=t.closest('[data-copy]');if(cp){copy(cp.dataset.copy,cp);return}
  var tb=t.closest('[data-tab]');if(tb){setTab(tb.dataset.tab);return}
  var s=t.closest('[data-svc]');if(s){var v=S[+s.dataset.svc];if(!v)return;openOv(head('Weekly gathering',v[1])+'<div class="time" style="font-size:1.15rem">'+v[2]+'</div><p>'+v[3]+'</p><p class="note">Everyone is welcome. Come as you are.</p>'+visitBtns());return}
@@ -88,7 +89,7 @@ var hdr=$('#hdr'),bar=$('#bar'),top=$('#top'),secs=$$('main section[id]'),links=
 function onScroll(){tick=false;var y=window.pageYOffset,h=document.documentElement.scrollHeight-innerHeight;
  revealPass();hdr.classList.toggle('scrolled',y>40);bar.style.width=(h>0?y/h*100:0)+'%';top.classList.toggle('on',y>500);
  var cur='home';secs.forEach(function(s){if(y>=s.offsetTop-120)cur=s.id});
- links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+cur)})}
+ links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+cur)});bnavActive(y)}
 window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(onScroll)}},{passive:true});onScroll();
 
 /* reveal on scroll (re-callable: runs after every render) */
@@ -110,7 +111,7 @@ if(/\.(mp4|webm)$/i.test(v))return'<video controls autoplay playsinline src="'+e
 if(ytId(v))return'<iframe src="https://www.youtube-nocookie.com/embed/'+ytFrom(v)+'?autoplay=1&rel=0" allow="autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe>';
 return'<div class="poster p0" aria-hidden="true"><i></i></div><div class="soon"><div><h3 style="margin-bottom:.4rem">Video coming soon</h3><p style="color:rgba(255,255,255,.85)">This message will be uploaded shortly. Meanwhile, watch our latest services on YouTube.</p></div></div>'}
 var ytOK=function(){return YT&&YT!=='#'};
-var SERLIM=6,SERCAT='All';
+var STEP=window.matchMedia&&matchMedia('(max-width:699px)').matches?3:6,SERLIM=STEP,SERCAT='All';
 function applyF(){var n=0;$$('.vid').forEach(function(v){var ok=SERCAT==='All'||v.dataset.cat===SERCAT;if(ok){n++;v.classList.toggle('hide',n>SERLIM)}else v.classList.add('hide')});
 var m=$('#more');if(m){m.hidden=n<=SERLIM;m.textContent='Show more sermons ('+(n-SERLIM)+')'}observeRV();revealPass()}
 function rSer(){var f=SER[0];
@@ -129,8 +130,8 @@ function rFaq(){$('#faqList').innerHTML=FQ.map(function(q){return'<details><summ
 /* sermon filter, player, news, involve */
 document.addEventListener('click',function(e){
  var t=e.target,c=t.closest('[data-f]');
- if(c){SERCAT=c.dataset.f;SERLIM=6;$$('.chip').forEach(function(x){x.classList.toggle('on',x===c)});applyF();return}
- if(t.closest('#more')){SERLIM+=6;applyF();return}
+ if(c){SERCAT=c.dataset.f;SERLIM=STEP;$$('.chip').forEach(function(x){x.classList.toggle('on',x===c)});applyF();return}
+ if(t.closest('#more')){SERLIM+=STEP;applyF();return}
  var p=t.closest('[data-play]');
  if(p){var s=SER[+p.dataset.play];openOv(head(s[1],s[0])+'<div class="player">'+media(s)+'</div><div class="acts">'+(ytOK()?'<a class="btn btn-primary" href="'+YT+'" target="_blank" rel="noopener">More on YouTube</a>':'')+'<button class="btn btn-outline" data-give>♥ Give</button></div>');return}
  var n=t.closest('[data-news]');
@@ -187,7 +188,7 @@ var t=new Date(),today=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+
 /* dated content: shows exactly what the admin published */
 get('events').then(function(a){E=a.filter(function(x){return x.date>=today}).sort(function(x,y){return x.date<y.date?-1:1}).map(function(x){var d=new Date(x.date+'T00:00:00');return[d.toLocaleString('en',{month:'short'}).toUpperCase(),''+d.getDate(),esc(x.title),esc(x.time),esc(x.desc)]});rEvt()}).catch(function(){});
 get('news').then(function(a){NW=a.sort(function(x,y){return x.date<y.date?1:-1}).map(function(x){return[esc(x.tag||'News'),esc(x.title),esc(x.text),nice(x.date)]});rNews()}).catch(function(){});
-get('sermons').then(function(a){SER=a.sort(function(x,y){return(x.date||'')<(y.date||'')?1:-1}).map(function(x){return[esc(x.title),esc(x.cat||'Sermon'),ytFrom(x.video),'',nice(x.date)]});SERCAT='All';SERLIM=6;rSer()}).catch(function(){});
+get('sermons').then(function(a){SER=a.sort(function(x,y){return(x.date||'')<(y.date||'')?1:-1}).map(function(x){return[esc(x.title),esc(x.cat||'Sermon'),ytFrom(x.video),'',nice(x.date)]});SERCAT='All';SERLIM=STEP;rSer()}).catch(function(){});
 /* list content: once the admin has published at least one item, the admin's list replaces the built-in one */
 function list(col,fn){get(col).then(function(a){if(!a.length)return;fn(ord(a));done()}).catch(function(){})}
 list('leaders',function(a){LD=a.map(function(x){return[esc(x.role),esc(x.name),esc(x.bio),esc(x.photo)]});rLead()});
@@ -205,4 +206,33 @@ observeRV();
 window.addEventListener('resize',function(){revealPass()});
 /* last-resort: never leave anything hidden */
 setTimeout(function(){$$('.rv:not(.in)').forEach(function(el){el.classList.add('in')})},4500);
+
+/* ===== Mobile experience ===== */
+function bnavActive(y){var cs='home';secs.forEach(function(s){if(y>=s.offsetTop-120)cs=s.id});$$('#menuLinks a').forEach(function(l){l.classList.toggle('act',l.getAttribute('href')==='#'+cs)});var a=$$('#bnav a[data-s]'),cur=null;a.forEach(function(l){var s=document.getElementById(l.dataset.s),k=innerHeight*.45;if(s&&y>=s.offsetTop-k&&y<s.offsetTop+s.offsetHeight-k)cur=l});a.forEach(function(l){l.classList.toggle('on',l===cur)})}
+/* swipe carousels get a slim progress indicator */
+['#quick','#svc','#min','#evt','#newsGrid','#lead','#inv','#serm'].forEach(function(sel){safe(function(){var el=$(sel);if(!el)return;var p=document.createElement('div');p.className='cprog';p.innerHTML='<i></i>';el.parentNode.insertBefore(p,el.nextSibling);var th=p.firstChild;
+ function up(){var max=el.scrollWidth-el.clientWidth;if(max<=4){p.style.visibility='hidden';return}p.style.visibility='visible';var w=Math.max(el.clientWidth/el.scrollWidth*100,14);th.style.width=w+'%';th.style.left=(el.scrollLeft/max)*(100-w)+'%'}
+ el.addEventListener('scroll',up,{passive:true});window.addEventListener('resize',up);if(window.MutationObserver)new MutationObserver(up).observe(el,{childList:true});setTimeout(up,300);up()})});
+/* legacy: read more */
+safe(function(){var rm=$('#rm'),x=$('#xtra');if(!rm||!x)return;rm.addEventListener('click',function(){var o=x.classList.toggle('open');rm.setAttribute('aria-expanded',o);rm.textContent=o?'Show less':'Read more'})});
+
+
+/* ministries: tap-to-expand accordion on phones (desktop keeps the pop-up) */
+var MQ=window.matchMedia?matchMedia('(max-width:699px)'):{matches:false};
+document.addEventListener('click',function(e){
+ if(!MQ.matches)return;var c=e.target.closest('#min .card');if(!c)return;
+ if(c.classList.contains('open')&&e.target.closest('.more'))return;
+ e.stopPropagation();var o=!c.classList.contains('open');
+ $$('#min .card.open').forEach(function(x){x.classList.remove('open');x.setAttribute('aria-expanded','false')});
+ c.classList.toggle('open',o);c.setAttribute('aria-expanded',o);
+ if(o)setTimeout(function(){var r=c.getBoundingClientRect();if(r.top<80||r.bottom>innerHeight-90)window.scrollTo({top:window.pageYOffset+r.top-90,behavior:'smooth'})},60)
+},true);
+/* "show all" buttons for long lists (phones only; CSS does the hiding) */
+[['#lead',6,'leaders'],['#bra',4,'branches'],['#tl',3,'milestones']].forEach(function(c){safe(function(){var el=$(c[0]);if(!el)return;var b=document.createElement('button');b.type='button';b.className='xbtn';el.parentNode.insertBefore(b,el.nextSibling);var open=false;
+ function up(){var n=el.children.length;b.hidden=n<=c[1];el.classList.toggle('clip',!open);b.textContent=open?'Show less':'Show all '+n+' '+c[2];b.setAttribute('aria-expanded',open)}
+ b.addEventListener('click',function(){open=!open;up();if(!open){var s=el.closest('section');if(s)s.scrollIntoView({behavior:'smooth',block:'start'})}});
+ if(window.MutationObserver)new MutationObserver(up).observe(el,{childList:true});up()})});
+/* drawer: swipe right to close */
+safe(function(){var sx=null;menu.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});menu.addEventListener('touchend',function(e){if(sx!==null&&e.changedTouches[0].clientX-sx>70)menuToggle(false);sx=null},{passive:true})});
+
 })();
