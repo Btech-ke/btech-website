@@ -1,1119 +1,664 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECHPLUS — Campus Pathway | Kenya's #1 KCSE Guide</title>
-<meta name="description" content="Find your course, college and career path after KCSE. Free cluster calculator, 1000+ programmes, KUCCPS tracker, KMTC & TVET guides for every Kenyan student.">
-<meta name="theme-color" content="#0a0a0f">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --ink: #0a0a0f; --ink2: #14141f; --ink3: #1e1e2e;
-  --surface: #1a1a28; --surface2: #22223a;
-  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.14);
-  --lime: #c8f135; --lime-dim: rgba(200,241,53,0.12); --lime-mid: rgba(200,241,53,0.25);
-  --white: #f4f4f2; --white2: rgba(244,244,242,0.6); --white3: rgba(244,244,242,0.35);
-  --teal: #00e5cc; --coral: #ff6b52; --violet: #a78bfa;
-  --r: 16px; --r-sm: 10px; --r-lg: 24px;
-}
-html { scroll-behavior: smooth; font-size: 16px; }
-body { font-family: 'Outfit', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; line-height: 1.65; -webkit-font-smoothing: antialiased; }
-::selection { background: var(--lime); color: var(--ink); }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--ink); }
-::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 2px; }
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-}
-/* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background: rgba(8,8,14,0.96); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); border-bottom: 1px solid rgba(200,241,53,0.12); box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4); }
-.nav-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 17px; letter-spacing: -0.3px; color: var(--white); display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-pill { background: var(--lime); color: var(--ink); font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; box-shadow: 0 2px 8px rgba(200,241,53,0.35); }
-.nav-links { list-style: none; display: flex; gap: 2px; align-items: center; }
-.nav-links a { text-decoration: none; color: rgba(244,244,242,0.75); font-size: 13px; font-weight: 600; padding: 7px 13px; border-radius: 8px; transition: color 0.18s, background 0.18s; letter-spacing: 0.1px; }
-.nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.07); }
-.nav-links .nav-cta { background: var(--lime); color: var(--ink); font-weight: 800; margin-left: 6px; border-radius: 8px; letter-spacing: 0.2px; }
-.nav-links .nav-cta:hover { background: #d4f840; color: var(--ink); }
-.hamburger { display: none; flex-direction: column; gap: 4.5px; cursor: pointer; padding: 4px; }
-.hamburger span { width: 20px; height: 1.5px; background: var(--white); border-radius: 2px; display: block; transition: 0.3s; }
-.mobile-nav { display: none; position: fixed; inset: 0; top: 64px; z-index: 490; background: rgba(10,10,15,0.97); backdrop-filter: blur(40px); flex-direction: column; padding: 32px 24px; gap: 4px; }
-.mobile-nav.open { display: flex; }
-.mobile-nav a { text-decoration: none; color: var(--white2); font-size: 18px; font-weight: 500; padding: 14px 20px; border-radius: var(--r-sm); border: 1px solid var(--border); transition: 0.2s; }
-.mobile-nav a:hover { border-color: var(--lime); color: var(--white); }
-/* HERO */
-.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 128px 24px 100px; text-align: center; position: relative; overflow: hidden; }
-@keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
-@keyframes riseIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-/* TOOLS GRID */
-.home-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-@media(max-width:600px) { .home-grid { grid-template-columns: repeat(2, 1fr); } }
-.home-card { background: var(--ink2); border: 1px solid var(--border); border-radius: 18px; padding: 20px 16px 16px; text-align: left; cursor: pointer; font-family: inherit; transition: transform 0.2s cubic-bezier(0.34,1.2,0.64,1), border-color 0.18s, background 0.18s, box-shadow 0.2s; position: relative; overflow: hidden; }
-.home-card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0,0,0,0.35); }
-.hc-svg { width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:13px;flex-shrink:0; }
-.hc-svg-lime { background:rgba(200,241,53,0.15); color:var(--lime); }
-.hc-svg-teal { background:rgba(0,229,204,0.13); color:var(--teal); }
-.hc-svg-coral { background:rgba(255,107,82,0.13); color:var(--coral); }
-.hc-svg-violet { background:rgba(167,139,250,0.13); color:var(--violet); }
-.hc-label { font-size: 13.5px; font-weight: 800; color: var(--white); margin-bottom: 4px; letter-spacing: -0.2px; }
-.hc-sub { font-size: 11.5px; color: var(--white3); line-height: 1.4; }
-.hc-arrow { position: absolute; top: 14px; right: 16px; font-size: 15px; opacity: 0; transition: opacity 0.2s, right 0.2s; color: var(--white3); }
-.home-card:hover .hc-arrow { opacity: 0.7; right: 13px; }
-.hc-lime:hover { border-color: rgba(200,241,53,0.55); background: rgba(200,241,53,0.04); }
-.hc-teal:hover { border-color: rgba(0,229,204,0.5); background: rgba(0,229,204,0.04); }
-.hc-coral:hover { border-color: rgba(255,107,82,0.5); background: rgba(255,107,82,0.04); }
-.hc-violet:hover { border-color: rgba(167,139,250,0.5); background: rgba(167,139,250,0.04); }
-.gp-btn { padding:10px 16px; background:rgba(255,255,255,0.04); border:1px solid var(--border2); border-radius:10px; color:var(--white2); font-family:'Fraunces',serif; font-size:16px; font-weight:700; cursor:pointer; transition:all 0.15s; min-width:52px; }
-.gp-btn:hover, .gp-btn.active { background:rgba(200,241,53,0.12);border-color:var(--lime);color:var(--lime); }
-/* OVERLAYS */
-.bp-overlay { display: none; position: fixed; inset: 0; z-index: 8500; background: rgba(0,0,0,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; }
-.bp-overlay.active { display: flex; align-items: flex-start; justify-content: center; animation: bpFadeIn 0.2s ease; }
-@keyframes bpFadeIn { from { opacity:0; } to { opacity:1; } }
-.bp-sheet { background: linear-gradient(160deg, #16162a 0%, #12121e 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; max-width: 760px; width: 100%; margin: auto; position: relative; overflow: hidden; animation: bpSlideUp 0.3s cubic-bezier(0.34,1.4,0.64,1); box-shadow: 0 32px 80px rgba(0,0,0,0.6); flex-shrink: 0; }
-@keyframes bpSlideUp { from { transform: translateY(40px); opacity:0; } to { transform: translateY(0); opacity:1; } }
-.bp-sheet-wide { max-width: 1000px; }
-.bp-sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; background: linear-gradient(160deg, #16162a 0%, #12121e 100%); z-index: 2; }
-.bp-sheet-title { font-size: 15px; font-weight: 800; color: var(--white); letter-spacing: -0.2px; display: flex; align-items: center; gap: 8px; }
-.bp-sheet-sub { font-size: 11.5px; color: var(--white3); margin-top: 3px; }
-.bp-close { width: 34px; height: 34px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; color: var(--white3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.bp-close:hover { background: rgba(255,107,82,0.18); border-color: rgba(255,107,82,0.3); color: var(--coral); transform: scale(1.05); }
-.bp-body { padding: 22px; }
-@media(max-width:600px) {
-  .bp-overlay { padding: 0; }
-  .bp-overlay.active { align-items: flex-end; }
-  .bp-sheet { border-radius: 24px 24px 0 0; margin: 0; max-width: 100%; width: 100%; max-height:92vh; overflow-y:auto; }
-  .bp-body { padding: 18px; }
-}
-/* MISC */
-.toast { position: fixed; bottom: 28px; right: 28px; z-index: 9000; background: var(--surface); border: 1px solid var(--lime); border-radius: var(--r-sm); padding: 15px 22px; font-size: 14px; color: var(--lime); font-weight: 600; transform: translateY(80px); opacity: 0; transition: 0.3s; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
-.toast.show { transform: translateY(0); opacity: 1; }
-.btn-primary { width: 100%; padding: 15px; background: var(--lime); color: var(--ink); border: none; border-radius: var(--r-sm); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.18s, transform 0.18s; box-shadow: 0 4px 16px rgba(200,241,53,0.2); }
-.btn-primary:hover { background: #d4f840; transform: translateY(-2px); }
-.course-block { background: linear-gradient(160deg,#14141f,#111119); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-lg); overflow: hidden; transition: border-color 0.2s; margin-bottom:12px; }
-.course-block:hover { border-color: rgba(255,255,255,0.12); }
-.course-block-head { padding: 18px 24px; background: rgba(255,255,255,0.025); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.course-block-head h4 { font-size: 14.5px; font-weight: 700; color: var(--white); margin-bottom: 2px;}
-.course-block-body { padding: 16px 24px; display: grid; gap: 6px; }
-.course-entry { display: flex; align-items: center; gap: 11px; font-size: 13.5px; color: var(--white2); padding: 9px 12px; border-radius: 9px; background: rgba(255,255,255,0.02); transition: 0.15s; }
-.course-entry:hover { background: rgba(200,241,53,0.06); color: var(--white); transform: translateX(3px); }
-.badge-lime { background: rgba(200,241,53,0.14); color: var(--lime); border: 1px solid rgba(200,241,53,0.2); padding: 4px 11px; border-radius: 100px; font-size: 10px; font-weight: 800; }
-.badge-teal { background: rgba(0,229,204,0.1); color: var(--teal); border: 1px solid rgba(0,229,204,0.15); padding: 4px 11px; border-radius: 100px; font-size: 10px; font-weight: 800; }
-.badge-coral { background: rgba(255,107,82,0.1); color: var(--coral); border: 1px solid rgba(255,107,82,0.15); padding: 4px 11px; border-radius: 100px; font-size: 10px; font-weight: 800; }
-.badge-violet { background: rgba(167,139,250,0.1); color: var(--violet); border: 1px solid rgba(167,139,250,0.15); padding: 4px 11px; border-radius: 100px; font-size: 10px; font-weight: 800; }
-.grade-pill { display: flex; align-items: center; justify-content: space-between; padding: 11px 15px; border-radius: var(--r-sm); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--white2); font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.18s; text-align: left; width: 100%; font-family: 'Fraunces', serif; }
-.grade-pill.active { background: var(--lime-dim); border-color: rgba(200,241,53,0.4); color: var(--lime); font-weight: 700; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BTECH Computer Learning Hub - Master cutting-edge technology skills.">
+    <title>Computer Learning Hub - BTECH</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CORE THEME VARIABLES --- */
+        :root {
+            --neon-blue: #00F5FF;
+            --neon-green: #00FF88;
+            --neon-gold: #FFD700;
+            --neon-purple: #BC13FE;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* CANVAS BACKGROUND */
+        canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
+        }
+
+        .nav-menu { display: flex; gap: 30px; list-style: none; }
+        .nav-menu a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+
+        .cta-btn {
+            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 8px 25px; font-weight: 700; text-transform: uppercase; cursor: pointer;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: 0.3s; text-decoration: none; font-size: 0.85rem;
+        }
+        .cta-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+
+        /* --- HERO --- */
+        .hero { padding: 100px 20px 60px; text-align: center; position: relative; }
+        
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 5px 15px; border: 1px solid var(--neon-gold); 
+            color: var(--neon-gold); border-radius: 50px; font-size: 0.8rem;
+            background: rgba(255, 215, 0, 0.05); margin-bottom: 20px;
+        }
+
+        .typing-text {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
+            color: var(--neon-green); min-height: 1.5em; margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700;
+            line-height: 1.1; margin-bottom: 20px; color: white;
+            background: linear-gradient(90deg, #fff, var(--neon-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px;
+        }
+
+        .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: #fff; padding: 15px 35px; font-weight: 700; border: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); cursor: pointer;
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); }
+
+        .btn-secondary {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
+            padding: 15px 35px; font-weight: 700; text-decoration: none;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-secondary:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+        /* --- STATS --- */
+        .stats-section {
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.02);
+            padding: 50px 0; margin: 60px 0;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--neon-blue); display: block; }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- COURSES GRID --- */
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; color: white; }
+        
+        .courses-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;
+        }
+
+        .course-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; overflow: hidden; transition: 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .course-card:hover {
+            transform: translateY(-10px); border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.15);
+        }
+
+        .course-image { height: 200px; width: 100%; overflow: hidden; position: relative; }
+        .course-image img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .course-card:hover .course-image img { transform: scale(1.1); }
+
+        .course-category {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(0,0,0,0.8); color: var(--neon-blue);
+            padding: 5px 15px; border-radius: 50px; font-size: 0.75rem;
+            border: 1px solid var(--neon-blue); text-transform: uppercase;
+        }
+
+        .course-content { padding: 25px; flex: 1; }
+        .course-content h3 { font-size: 1.4rem; color: white; margin-bottom: 15px; }
+        .course-content p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+
+        .course-features { list-style: none; margin-bottom: 20px; }
+        .course-features li {
+            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .course-features li i { color: var(--neon-green); }
+
+        .course-footer {
+            padding: 20px 25px; border-top: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2);
+        }
+        .course-meta { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 15px; }
+        .course-meta span { display: flex; align-items: center; gap: 5px; }
+        .course-meta i { color: var(--neon-blue); }
+
+        .enroll-link {
+            color: var(--neon-purple); text-decoration: none; font-weight: 700;
+            font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 5px;
+        }
+        .enroll-link:hover { color: white; gap: 10px; }
+
+        /* --- TESTIMONIAL --- */
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,0,0,0.5));
+            border: 1px solid var(--neon-gold); border-radius: 20px; padding: 40px;
+            text-align: center; max-width: 900px; margin: 60px auto; position: relative;
+        }
+        .quote-icon { font-size: 3rem; color: var(--neon-gold); opacity: 0.3; margin-bottom: 20px; }
+        .testimonial-text { font-size: 1.1rem; font-style: italic; margin-bottom: 30px; color: #eee; }
+        
+        .author-box { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .author-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--neon-gold); object-fit: cover; }
+        .author-info h4 { color: var(--neon-gold); margin-bottom: 5px; }
+        .author-info p { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            padding: 60px 0 20px; margin-top: 80px;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+        .footer-section h4 { color: var(--neon-blue); margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-section p, .footer-section a { color: var(--text-muted); display: block; margin-bottom: 10px; text-decoration: none; transition: 0.3s; }
+        .footer-section a:hover { color: white; padding-left: 5px; }
+        
+        /* Mobile Menu */
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; }
+        .mobile-nav { position: fixed; top: 70px; left: 0; width: 100%; background: black; border-bottom: 1px solid var(--neon-blue); padding: 20px; display: none; flex-direction: column; gap: 15px; z-index: 999; }
+        .mobile-nav.active { display: flex; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero h1 { font-size: 3rem; }
+            .course-footer { flex-direction: column; gap: 15px; align-items: flex-start; }
+        }
+    </style>
 </head>
+
 <body>
-
-<nav>
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-pill">BP</div>
-    Campus Pathway
-  </a>
-  <ul class="nav-links">
-    <li><a href="#tools">Tools</a></li>
-    <li><a href="#trending">Courses</a></li>
-    <li><a href="#" onclick="openOverlay('deadlinesOverlay');return false;">Apply</a></li>
-    <li><a href="#" onclick="openOverlay('calcOverlay');return false;">Calculator</a></li>
-    <li><a href="#" onclick="openOverlay('forumOverlay');return false;">Forum</a></li>
-    <li><a href="#" onclick="openOverlay('supportOverlay');return false;">Support</a></li>
-    <li><a href="#donate-section" style="color:rgba(200,241,53,0.8);">Support Us</a></li>
-    <li><a href="#" onclick="openOverlay('authOverlay');return false;" class="nav-cta" id="navLoginBtn">My Account</a></li>
-    <li id="navLogoutLi" style="display:none;"><a href="#" id="navLogoutBtn" onclick="logoutUser();return false;" style="display:block;padding:7px 14px;background:rgba(255,107,82,0.12);color:var(--coral);border:1px solid rgba(255,107,82,0.25);border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">Sign Out</a></li>
-  </ul>
-</nav>
-
-<div id="topAnnouncementBar" style="display:none;position:fixed;top:64px;left:0;right:0;z-index:490;background:linear-gradient(90deg,rgba(200,241,53,0.08),rgba(0,229,204,0.06));border-bottom:1px solid rgba(200,241,53,0.15);overflow:hidden;height:34px;">
-  <div id="topTickerInner" style="display:inline-flex;align-items:center;gap:48px;animation:tickerScroll 30s linear infinite;white-space:nowrap;height:34px;padding:0 16px;"></div>
-</div>
-
-<section id="heroSection" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:140px 20px 60px;text-align:center;position:relative;overflow:hidden;min-height:min(100svh,700px);">
-  <div style="position:absolute;inset:0;z-index:0;">
-    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=85&auto=format&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.22;" loading="eager">
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,15,0.3) 0%,rgba(10,10,15,0.7) 60%,rgba(10,10,15,0.95) 100%);"></div>
-  </div>
-  <div style="position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(200,241,53,0.12) 0%,transparent 70%);pointer-events:none;z-index:0;"></div>
-
-  <div style="position:relative;z-index:1;max-width:600px;width:100%;">
-    <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);padding:5px 14px;border-radius:100px;font-size:11px;font-weight:700;color:var(--lime);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;">
-      <span style="width:6px;height:6px;background:var(--lime);border-radius:50%;animation:blink 2s infinite;"></span>
-      Campus Pathway &middot; 100% Free
-    </div>
-    <h1 style="font-size:clamp(34px,7vw,72px);font-family:'Fraunces',serif;font-weight:700;line-height:1.05;letter-spacing:-1.5px;margin:0 0 14px;">KCSE Results?<br><em style="color:var(--lime);">Find Your Path.</em></h1>
-    <p style="font-size:clamp(14px,2.5vw,17px);color:var(--white2);margin:0 0 28px;line-height:1.5;">Enter your mean grade below to discover available courses, application portals, and your complete path to higher education.</p>
-
-    <div>
-      <div style="font-size:11px;color:var(--white3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-weight:700;">Select Your KCSE Mean Grade</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px;" id="heroGradePicker">
-        <button class="gp-btn" onclick="heroPath('A')">A</button>
-        <button class="gp-btn" onclick="heroPath('A-')">A&minus;</button>
-        <button class="gp-btn" onclick="heroPath('B+')">B+</button>
-        <button class="gp-btn" onclick="heroPath('B')">B</button>
-        <button class="gp-btn" onclick="heroPath('B-')">B&minus;</button>
-        <button class="gp-btn" onclick="heroPath('C+')">C+</button>
-        <button class="gp-btn" onclick="heroPath('C')">C</button>
-        <button class="gp-btn" onclick="heroPath('C-')">C&minus;</button>
-        <button class="gp-btn" onclick="heroPath('D+')">D+</button>
-        <button class="gp-btn" onclick="heroPath('D')">D</button>
-        <button class="gp-btn" onclick="heroPath('D-')">D&minus;</button>
-        <button class="gp-btn" onclick="heroPath('E')" style="background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.25);color:var(--violet);">E</button>
-      </div>
-      <div id="heroResult" style="display:none;text-align:left;background:rgba(10,10,15,0.85);border:1px solid var(--border2);border-radius:16px;padding:18px 20px;backdrop-filter:blur(10px);margin-bottom:16px;animation:fadeUp 0.3s ease;"></div>
-    </div>
-
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
-      <button onclick="openOverlay('wizOverlay')" style="display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:var(--ink);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;">
-        🗺️ Personalised Pathway Guide
-      </button>
-      <a href="https://chat.whatsapp.com/EsXNHETaqLxEn61IgBcm6t" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25d366;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">
-        💬 KUCCPS Group
-      </a>
-      <button onclick="openOverlay('calcOverlay')" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:var(--white2);padding:12px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">
-        Calculator
-      </button>
-    </div>
-  </div>
-</section>
-
-<section id="tools" style="padding:60px 20px; max-width:1280px; margin:0 auto;">
-  <div id="guestHome">
-    <div style="text-align:center;margin-bottom:30px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--lime);margin-bottom:14px;">All Tools</div>
-      <h2 style="font-family:'Fraunces',serif;font-size:clamp(24px,4vw,36px);">Everything in one place</h2>
-    </div>
-    <div class="home-grid">
-      <button class="home-card hc-lime" onclick="openOverlay('calcOverlay')"><div class="hc-svg hc-svg-lime">🧮</div><div class="hc-label">Cluster Calculator</div><div class="hc-sub">Calculate your exact cluster points</div></button>
-      <button class="home-card hc-teal" onclick="openOverlay('coursesOverlay')"><div class="hc-svg hc-svg-teal">📚</div><div class="hc-label">Course Finder</div><div class="hc-sub">Browse 1,000+ programmes by grade</div></button>
-      <button class="home-card hc-coral" onclick="openOverlay('deadlinesOverlay')"><div class="hc-svg hc-svg-coral">📅</div><div class="hc-label">Live Deadlines</div><div class="hc-sub">KUCCPS, KMTC & HELB portals</div></button>
-      <button class="home-card hc-violet" onclick="openOverlay('forumOverlay')"><div class="hc-svg hc-svg-violet">💬</div><div class="hc-label">Student Forum</div><div class="hc-sub">Ask peers from all 47 counties</div></button>
-      <button class="home-card hc-teal" onclick="openOverlay('supportOverlay')"><div class="hc-svg hc-svg-teal">🤝</div><div class="hc-label">Get Support</div><div class="hc-sub">Chat with the BTECHPLUS team</div></button>
-      <button class="home-card hc-lime" onclick="openOverlay('authOverlay')"><div class="hc-svg hc-svg-lime">👤</div><div class="hc-label">My Account</div><div class="hc-sub">Save results & track progress</div></button>
-      <button class="home-card" style="border-color:rgba(37,211,102,.3);" onclick="openOverlay('trackerOverlay')"><div class="hc-svg" style="background:rgba(37,211,102,.15);color:#25d366;">📋</div><div class="hc-label">KUCCPS Tracker</div><div class="hc-sub">Track your application status</div></button>
-      <button class="home-card" style="border-color:rgba(200,241,53,.3);" onclick="openOverlay('profileOverlay')"><div class="hc-svg" style="background:rgba(200,241,53,.15);color:var(--lime);">👤</div><div class="hc-label">My Profile</div><div class="hc-sub">Save grades locally</div></button>
-    </div>
-  </div>
-
-  <div id="dashPanel" style="display:none;max-width:680px;margin:0 auto;">
-    <div style="background:linear-gradient(135deg,var(--ink2),var(--ink3));border:1px solid var(--border2);border-radius:20px;padding:22px;margin-bottom:14px;">
-      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-        <div id="dashAvatar" style="width:52px;height:52px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:'Fraunces',serif;"></div>
-        <div style="flex:1;">
-          <div style="font-size:11px;color:var(--white3);margin-bottom:2px;">Welcome back 👋</div>
-          <h3 id="dashName" style="font-size:18px;margin:0;color:#fff;font-family:'Fraunces',serif;"></h3>
-          <p id="dashEmail" style="font-size:11px;color:var(--white3);margin:0;"></p>
+    <header>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-graduation-cap" style="color: var(--neon-purple);"></i> BTECH LEARNING
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="enroll-form.html" class="cta-btn">Enroll Now</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            </div>
         </div>
-        <button onclick="logoutUser()" style="padding:6px 12px;background:rgba(255,107,82,0.12);border:1px solid rgba(255,107,82,0.25);border-radius:8px;color:var(--coral);cursor:pointer;font-family:inherit;font-size:11px;">Sign Out</button>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-        <div style="font-size:24px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;" id="dashCluster">—</div><div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;">Cluster Pts</div>
-      </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-        <div style="font-size:24px;font-weight:800;color:var(--teal);font-family:'Fraunces',serif;" id="dashGrade">—</div><div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;">Mean Grade</div>
-      </div>
-      <div style="background:var(--ink2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-        <div style="font-size:14px;font-weight:800;color:var(--lime);font-family:'Fraunces',serif;">FREE ✓</div><div style="font-size:10px;color:var(--white3);margin-top:3px;text-transform:uppercase;">Account</div>
-      </div>
-    </div>
-    <div class="home-grid">
-      <button class="home-card hc-lime" onclick="openOverlay('calcOverlay')"><div class="hc-label">🧮 Calculator</div><div class="hc-sub">Calculate points</div></button>
-      <button class="home-card hc-teal" onclick="openOverlay('coursesOverlay')"><div class="hc-label">📚 Courses</div><div class="hc-sub">Find your path</div></button>
-      <button class="home-card hc-coral" onclick="openOverlay('deadlinesOverlay')"><div class="hc-label">📅 Deadlines</div><div class="hc-sub">Live portals</div></button>
-      <button class="home-card hc-violet" onclick="openOverlay('forumOverlay')"><div class="hc-label">💬 Forum</div><div class="hc-sub">Ask students</div></button>
-      <button class="home-card" style="border-color:rgba(37,211,102,.3);" onclick="openOverlay('trackerOverlay')"><div class="hc-label" style="color:#25d366">📋 Tracker</div><div class="hc-sub">KUCCPS status</div></button>
-      <button class="home-card hc-teal" onclick="openOverlay('supportOverlay')"><div class="hc-label">🤝 Support</div><div class="hc-sub">Chat with us</div></button>
-    </div>
-    
-    <div id="adminPanelBtn" style="display:none;margin-top:16px;">
-      <button onclick="openAdmin()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--lime),#a0cc00);color:var(--ink);border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">⚙️ Open Admin Panel</button>
-    </div>
-  </div>
-</section>
-
-<div id="calcOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'calcOverlay')">
-  <div class="bp-sheet" style="max-width:520px;">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">🧮 Cluster Calculator</div><div class="bp-sheet-sub">KCSE grades → score out of 48</div></div>
-      <button class="bp-close" onclick="closeOverlay('calcOverlay')">✕</button>
-    </div>
-    <div class="bp-body">
-      <div style="background:rgba(200,241,53,0.06);border-left:3px solid var(--lime);padding:12px;margin-bottom:18px;font-size:12px;color:var(--white3);">
-        Maths + (English or Kiswahili) + your 2 best other subjects. Just enter your grades!
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-        <div>
-          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;">Mathematics</label>
-          <select id="m1" style="width:100%;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
+        
+        <div class="mobile-nav" id="mobileNav">
+            <a href="../index.html" style="color:white;">Home</a>
+            <a href="#courses" style="color:white;">Courses</a>
+            <a href="#about" style="color:white;">About</a>
+            <a href="#contact" style="color:white;">Contact</a>
         </div>
-        <div>
-          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;">Eng / Kis <span style="color:var(--lime);">(higher)</span></label>
-          <select id="m2" style="width:100%;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
+    </header>
+
+    <canvas id="canvas"></canvas>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-badge"><i class="fas fa-award"></i> INDUSTRY-LEADING EDUCATION</div>
+            <div class="typing-text" id="typingText"></div>
+            <h1>MASTER TOMORROW'S TECH TODAY</h1>
+            <p>Transform your career with cutting-edge courses in programming, cybersecurity, web development, and emerging technologies.</p>
+            <div class="hero-buttons">
+                <a href="#courses" class="btn-primary"><i class="fas fa-play"></i> Explore Courses</a>
+                <a href="#contact" class="btn-secondary"><i class="fas fa-phone"></i> Get Started</a>
+            </div>
         </div>
-        <div style="grid-column:1/-1;">
-          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;">3rd Best Subject</label>
-          <div style="display:flex;gap:8px;">
-            <select style="flex:1;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option>Biology</option><option>Chemistry</option><option>Physics</option><option>Geography</option><option>History</option><option>CRE</option><option>Agriculture</option><option>Business</option><option>Computer</option></select>
-            <select id="m3g" style="width:80px;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
-          </div>
+    </section>
+
+    <section class="stats-section" id="about">
+        <div class="container stats-grid">
+            <div>
+                <i class="fas fa-users" style="color: var(--neon-blue); font-size: 2rem; margin-bottom: 10px;"></i>
+                <span class="stat-number">1,500+</span>
+                <span class="stat-label">Students Trained</span>
+            </div>
+            <div>
+                <i class="fas fa-laptop-code" style="color: var(--neon-purple); font-size: 2rem; margin-bottom: 10px;"></i>
+                <span class="stat-number">12+</span>
+                <span class="stat-label">Professional Courses</span>
+            </div>
+            <div>
+                <i class="fas fa-briefcase" style="color: var(--neon-green); font-size: 2rem; margin-bottom: 10px;"></i>
+                <span class="stat-number">25+</span>
+                <span class="stat-label">Industry Partners</span>
+            </div>
+            <div>
+                <i class="fas fa-clock" style="color: var(--neon-gold); font-size: 2rem; margin-bottom: 10px;"></i>
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Learning Support</span>
+            </div>
         </div>
-        <div style="grid-column:1/-1;">
-          <label style="font-size:11px;color:var(--white3);display:block;margin-bottom:6px;">4th Best Subject</label>
-          <div style="display:flex;gap:8px;">
-            <select style="flex:1;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option>Chemistry</option><option>Physics</option><option>Geography</option><option>History</option><option>CRE</option><option>Agriculture</option><option>Business</option><option>Computer</option><option>Biology</option></select>
-            <select id="m4g" style="width:80px;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="12">A</option><option value="11">A−</option><option value="10">B+</option><option value="9">B</option><option value="8">B−</option><option value="7">C+</option><option value="6">C</option><option value="5">C−</option><option value="4">D+</option><option value="3">D</option><option value="2">D−</option><option value="1">E</option></select>
-          </div>
+    </section>
+
+    <section class="container" id="courses" style="padding-bottom: 80px;">
+        <div class="section-header">
+            <h2>PROFESSIONAL COURSES</h2>
+            <p style="color: var(--text-muted);">Hands-on training and real-world projects.</p>
         </div>
-      </div>
-      <button class="btn-primary" onclick="calcCluster()">Calculate Points</button>
-      <div id="calcResult" style="margin-top:16px;"></div>
-    </div>
-  </div>
-</div>
 
-<div id="coursesOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'coursesOverlay')">
-  <div class="bp-sheet bp-sheet-wide">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">📚 Course Finder</div><div class="bp-sheet-sub">Browse 1,000+ programmes</div></div>
-      <button class="bp-close" onclick="closeOverlay('coursesOverlay')">✕</button>
-    </div>
-    <div class="bp-body">
-      <input id="courseSearch" type="text" placeholder="🔍 Search courses..." oninput="courseQ=this.value;renderCourses()" style="width:100%;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);margin-bottom:12px;">
-      <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:6px;margin-bottom:16px;">
-        <button class="grade-pill active" onclick="pickGrade(this,'A')">A</button><button class="grade-pill" onclick="pickGrade(this,'A-')">A−</button>
-        <button class="grade-pill" onclick="pickGrade(this,'B+')">B+</button><button class="grade-pill" onclick="pickGrade(this,'B')">B</button>
-        <button class="grade-pill" onclick="pickGrade(this,'B-')">B−</button><button class="grade-pill" onclick="pickGrade(this,'C+')">C+</button>
-        <button class="grade-pill" onclick="pickGrade(this,'C')">C</button><button class="grade-pill" onclick="pickGrade(this,'C-')">C−</button>
-        <button class="grade-pill" onclick="pickGrade(this,'D+')">D+</button><button class="grade-pill" onclick="pickGrade(this,'D')">D</button>
-        <button class="grade-pill" onclick="pickGrade(this,'D-')">D−</button><button class="grade-pill" onclick="pickGrade(this,'E')">E</button>
-      </div>
-      <div id="courseOut"></div>
-    </div>
-  </div>
-</div>
+        <div class="courses-grid">
+            
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="computer_packages.png" alt="Computer Packages">
+                    <div class="course-category">Essentials</div>
+                </div>
+                <div class="course-content">
+                    <h3>Computer Packages</h3>
+                    <p>Master Microsoft Office Suite, Windows administration, and essential productivity tools.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> MS Word, Excel, PowerPoint</li>
+                        <li><i class="fas fa-check"></i> Windows Administration</li>
+                        <li><i class="fas fa-check"></i> File Management & Security</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 4 Weeks</span>
+                        <span><i class="far fa-user"></i> Beginner</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
 
-<div id="deadlinesOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'deadlinesOverlay')">
-  <div class="bp-sheet bp-sheet-wide">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">📅 Live Deadlines</div><div class="bp-sheet-sub">Portals & Applications</div></div>
-      <button class="bp-close" onclick="closeOverlay('deadlinesOverlay')">✕</button>
-    </div>
-    <div class="bp-body">
-      <div id="publicDeadlinesGrid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:12px;"></div>
-      <div id="noDeadlinesMsg" style="display:none;text-align:center;padding:40px;color:var(--white3);">No active deadlines.</div>
-    </div>
-  </div>
-</div>
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="business.png" alt="Business Apps">
+                    <div class="course-category">Business</div>
+                </div>
+                <div class="course-content">
+                    <h3>Business Applications</h3>
+                    <p>Learn advanced business software, data analysis tools, and cloud platforms.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> Advanced Excel & Data</li>
+                        <li><i class="fas fa-check"></i> Business Intelligence Tools</li>
+                        <li><i class="fas fa-check"></i> Cloud Suites</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 6 Weeks</span>
+                        <span><i class="far fa-user"></i> Intermediate</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
 
-<div id="forumOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'forumOverlay')">
-  <div class="bp-sheet bp-sheet-wide">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">💬 Student Forum</div><div class="bp-sheet-sub">Ask peers & experts</div></div>
-      <button class="bp-close" onclick="closeOverlay('forumOverlay')">✕</button>
-    </div>
-    <div class="bp-body">
-      <div style="background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;">
-        <textarea id="qText" placeholder="Ask a question..." style="width:100%;padding:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);min-height:80px;margin-bottom:8px;resize:vertical;"></textarea>
-        <div style="display:flex;gap:10px;">
-          <input id="qName" type="text" placeholder="Your name (optional)" style="flex:1;padding:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-          <button onclick="postQWithUser()" class="btn-primary" style="width:auto;padding:10px 20px;">Post</button>
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="programming.png" alt="Programming">
+                    <div class="course-category">Development</div>
+                </div>
+                <div class="course-content">
+                    <h3>Modern Programming</h3>
+                    <p>Build solid programming foundations with Python, JavaScript, and modern practices.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> Python & JavaScript</li>
+                        <li><i class="fas fa-check"></i> Object-Oriented Programming</li>
+                        <li><i class="fas fa-check"></i> Version Control (Git)</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 10 Weeks</span>
+                        <span><i class="far fa-user"></i> Beginner</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="web-development.png" alt="Web Dev">
+                    <div class="course-category">Development</div>
+                </div>
+                <div class="course-content">
+                    <h3>Full-Stack Web Dev</h3>
+                    <p>Create responsive, dynamic web applications using React, Node.js, and modern tools.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> HTML5, CSS3, JS ES6+</li>
+                        <li><i class="fas fa-check"></i> React & Node.js</li>
+                        <li><i class="fas fa-check"></i> Databases & Hosting</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 14 Weeks</span>
+                        <span><i class="far fa-user"></i> Intermediate</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="app.png" alt="Mobile App">
+                    <div class="course-category">Development</div>
+                </div>
+                <div class="course-content">
+                    <h3>Mobile Development</h3>
+                    <p>Design and build native mobile applications for iOS and Android using Flutter.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> Flutter & React Native</li>
+                        <li><i class="fas fa-check"></i> UI/UX Design</li>
+                        <li><i class="fas fa-check"></i> App Store Deployment</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 16 Weeks</span>
+                        <span><i class="far fa-user"></i> Advanced</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="ethical_hacking.png" alt="Ethical Hacking">
+                    <div class="course-category" style="border-color: var(--neon-red); color: var(--neon-red);">Security</div>
+                </div>
+                <div class="course-content">
+                    <h3>Ethical Hacking</h3>
+                    <p>Learn advanced cybersecurity techniques and penetration testing methodologies.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> Penetration Testing</li>
+                        <li><i class="fas fa-check"></i> Vulnerability Research</li>
+                        <li><i class="fas fa-check"></i> Security Tools</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 14 Weeks</span>
+                        <span><i class="far fa-user"></i> Advanced</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="graphic.png" alt="Graphic Design">
+                    <div class="course-category">Design</div>
+                </div>
+                <div class="course-content">
+                    <h3>Graphic Design</h3>
+                    <p>Master Adobe Creative Suite to create stunning visual content for digital and print.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> Photoshop, Illustrator</li>
+                        <li><i class="fas fa-check"></i> Branding Identity</li>
+                        <li><i class="fas fa-check"></i> Print & Digital Media</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 10 Weeks</span>
+                        <span><i class="far fa-user"></i> All Levels</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="marketing.png" alt="Marketing">
+                    <div class="course-category">Marketing</div>
+                </div>
+                <div class="course-content">
+                    <h3>Digital Marketing</h3>
+                    <p>Develop comprehensive digital marketing campaigns using SEO, social media, and analytics.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> SEO & Content</li>
+                        <li><i class="fas fa-check"></i> Social Media Ads</li>
+                        <li><i class="fas fa-check"></i> Google Analytics</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 8 Weeks</span>
+                        <span><i class="far fa-user"></i> All Levels</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="cybersecurity.png" alt="Cybersecurity">
+                    <div class="course-category" style="border-color: var(--neon-red); color: var(--neon-red);">Security</div>
+                </div>
+                <div class="course-content">
+                    <h3>Advanced Cybersecurity</h3>
+                    <p>Implement enterprise-grade security solutions and incident response strategies.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> Security Architecture</li>
+                        <li><i class="fas fa-check"></i> Incident Response</li>
+                        <li><i class="fas fa-check"></i> Threat Detection</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 18 Weeks</span>
+                        <span><i class="far fa-user"></i> Advanced</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="networking.png" alt="Networking">
+                    <div class="course-category">Infrastructure</div>
+                </div>
+                <div class="course-content">
+                    <h3>Network Engineering</h3>
+                    <p>Design, configure, and manage enterprise networks with Cisco protocols.</p>
+                    <ul class="course-features">
+                        <li><i class="fas fa-check"></i> CCNA & CCNP Prep</li>
+                        <li><i class="fas fa-check"></i> Routing & Switching</li>
+                        <li><i class="fas fa-check"></i> Network Security</li>
+                    </ul>
+                </div>
+                <div class="course-footer">
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 14 Weeks</span>
+                        <span><i class="far fa-user"></i> Advanced</span>
+                    </div>
+                    <a href="enroll-form.html" class="enroll-link">Enroll Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
         </div>
-      </div>
-      <div id="qFeed" style="display:flex;flex-direction:column;gap:12px;"></div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<div id="supportOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'supportOverlay')">
-  <div class="bp-sheet" style="max-width:560px;">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">🤝 BTECHPLUS Support</div><div class="bp-sheet-sub">Live human help</div></div>
-      <button class="bp-close" onclick="closeOverlay('supportOverlay')">✕</button>
-    </div>
-    <div style="display:flex;flex-direction:column;height:60vh;">
-      <div id="chatMsgs" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
-        <div class="msg ai"><div class="msg-av">🤖</div><div class="msg-bub">Hi! Welcome to support. Ask us anything about applications or courses.</div></div>
-      </div>
-      <div style="padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;">
-        <input type="text" id="aiQ" placeholder="Type your message..." style="flex:1;padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:20px;color:var(--white);" onkeydown="if(event.key==='Enter')sendAI()">
-        <button onclick="sendAI()" style="padding:10px 20px;background:var(--lime);color:var(--ink);border:none;border-radius:20px;font-weight:800;cursor:pointer;">Send</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="authOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'authOverlay')">
-  <div class="bp-sheet" style="max-width:480px;">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">👤 My Account</div><div class="bp-sheet-sub">Save your progress</div></div>
-      <button class="bp-close" onclick="closeOverlay('authOverlay')">✕</button>
-    </div>
-    <div class="bp-body" id="authForms">
-      <div style="background:var(--ink3);padding:20px;border-radius:12px;margin-bottom:16px;">
-        <h3 style="margin:0 0 16px;font-family:'Fraunces',serif;">Sign In</h3>
-        <input id="liEmail" type="email" placeholder="Email" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-        <input id="liPw" type="password" placeholder="Password" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-        <button id="loginBtn" onclick="loginUser()" class="btn-primary">Login</button>
-        <div id="liMsg" style="margin-top:10px;font-size:13px;text-align:center;"></div>
-      </div>
-      <div style="background:var(--ink3);padding:20px;border-radius:12px;">
-        <h3 style="margin:0 0 16px;font-family:'Fraunces',serif;">Create Account</h3>
-        <input id="regName" type="text" placeholder="Full Name" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-        <input id="regEmail" type="email" placeholder="Email" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-        <input id="regPw" type="password" placeholder="Password (Min 6)" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-        <button id="registerBtn" onclick="registerUser()" class="btn-primary">Register</button>
-        <div id="regMsg" style="margin-top:10px;font-size:13px;text-align:center;"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="trackerOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'trackerOverlay')">
-  <div class="bp-sheet" style="max-width:540px;">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">📋 KUCCPS Tracker</div><div class="bp-sheet-sub">Track application progress</div></div>
-      <button class="bp-close" onclick="closeOverlay('trackerOverlay')">✕</button>
-    </div>
-    <div class="bp-body">
-      <div style="background:var(--ink3);padding:16px;border-radius:12px;margin-bottom:20px;">
-        <h4 style="margin:0 0 10px;">Check Placement Status</h4>
-        <input id="trackerIdx" type="text" placeholder="11-digit Index Number" maxlength="11" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-        <select id="trackerYear" style="width:100%;padding:10px;margin-bottom:10px;background:var(--ink);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option>2025</option><option>2024</option><option>2023</option></select>
-        <button onclick="checkPlacement()" class="btn-primary">Check Status →</button>
-        <div id="trackerResult" style="margin-top:10px;"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-        <div style="font-weight:700;">Your Journey</div>
-        <button onclick="resetTracker()" style="background:none;border:none;color:var(--white3);cursor:pointer;">Reset ↺</button>
-      </div>
-      <div id="trackerSteps" style="display:flex;flex-direction:column;gap:10px;"></div>
-    </div>
-  </div>
-</div>
-
-<div id="profileOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'profileOverlay')">
-  <div class="bp-sheet" style="max-width:500px;">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">👤 My Profile</div><div class="bp-sheet-sub">Save local grades</div></div>
-      <button class="bp-close" onclick="closeOverlay('profileOverlay')">✕</button>
-    </div>
-    <div class="bp-body">
-      <input id="profName" type="text" placeholder="Your Name" style="width:100%;padding:10px;margin-bottom:12px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-      <div style="margin-bottom:12px;">
-        <label style="font-size:12px;color:var(--white3);">Mean Grade</label>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
-          <button class="prof-g gp-btn" onclick="profPick(this,'A')">A</button><button class="prof-g gp-btn" onclick="profPick(this,'A-')">A−</button>
-          <button class="prof-g gp-btn" onclick="profPick(this,'B+')">B+</button><button class="prof-g gp-btn" onclick="profPick(this,'B')">B</button>
-          <button class="prof-g gp-btn" onclick="profPick(this,'C+')">C+</button><button class="prof-g gp-btn" onclick="profPick(this,'C')">C</button>
+    <section class="container" id="testimonials">
+        <div class="testimonial-card">
+            <div class="quote-icon">“</div>
+            <p class="testimonial-text">The Full-Stack Web Development course at BTECH completely transformed my career. The comprehensive curriculum and hands-on projects gave me the confidence to land my dream job.</p>
+            <div class="author-box">
+                <img src="sarah.png" alt="Sarah" class="author-img">
+                <div class="author-info">
+                    <h4>Sarah Johnson</h4>
+                    <p>Senior Web Developer, TechCorp</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-        <select id="profEng" style="padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="">Eng Grade</option><option>A</option><option>B</option><option>C</option></select>
-        <select id="profMath" style="padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="">Math Grade</option><option>A</option><option>B</option><option>C</option></select>
-        <select id="profYear" style="padding:10px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);"><option value="">KCSE Year</option><option>2025</option><option>2024</option></select>
-      </div>
-      <button onclick="saveProfile()" class="btn-primary">Save Profile</button>
-      
-      <div id="savedProfile" style="display:none;margin-top:20px;padding:16px;background:rgba(200,241,53,.05);border:1px solid rgba(200,241,53,.2);border-radius:12px;">
-        <div id="savedProfileContent" style="font-size:13px;line-height:1.6;margin-bottom:10px;"></div>
-        <div style="display:flex;gap:10px;">
-          <button onclick="loadGradeFromProfile()" class="btn-primary" style="padding:8px 12px;font-size:12px;">Use Grade →</button>
-          <button onclick="clearProfile()" style="padding:8px 12px;background:transparent;border:1px solid var(--coral);color:var(--coral);border-radius:8px;cursor:pointer;">Clear</button>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>BTECH Learning Hub</h4>
+                    <p style="color: var(--text-muted);">Kenya's premier technology education center, dedicated to providing world-class training.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="../index.html">Home</a>
+                    <a href="#courses">Courses</a>
+                    <a href="#about">About</a>
+                    <a href="enroll-form.html">Enrollment</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Popular Courses</h4>
+                    <a href="#">Web Development</a>
+                    <a href="#">Cybersecurity</a>
+                    <a href="#">Graphic Design</a>
+                    <a href="#">Networking</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="mailto:btechkenya@gmail.com">btechkenya@gmail.com</a>
+                    <a href="tel:+254113996609">+254 113 996 609</a>
+                    <a href="tel:+254734644917">+254 734 644 917</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted);">
+                © 2025 BTECH Computer Learning Hub. All rights reserved.
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+    </footer>
 
-<div id="wizOverlay" class="bp-overlay" onclick="overlayBgClose(event, 'wizOverlay')">
-  <div class="bp-sheet" style="max-width:500px;">
-    <div class="bp-sheet-head">
-      <div><div class="bp-sheet-title">🗺️ Pathway Guide</div><div class="bp-sheet-sub">Find your next step</div></div>
-      <button class="bp-close" onclick="closeOverlay('wizOverlay')">✕</button>
-    </div>
-    <div style="height:3px;background:rgba(255,255,255,.05);"><div id="wizProgress" style="height:100%;width:25%;background:var(--lime);transition:0.3s;"></div></div>
-    
-    <div id="wizS1" class="bp-body">
-      <h3 style="margin:0 0 16px;">What is your status?</h3>
-      <div style="display:grid;gap:10px;">
-        <button class="btn-outline" style="text-align:left;padding:16px;" onclick="wizSet('status','form4');wizGo(2)">🎓 Form 4 Leaver (Have Results)</button>
-        <button class="btn-outline" style="text-align:left;padding:16px;" onclick="wizSet('status','waiting');wizGo(2)">⏳ Waiting for Results</button>
-        <button class="btn-outline" style="text-align:left;padding:16px;" onclick="wizSet('status','college');wizGo(4)">🏛️ Already in College</button>
-      </div>
-    </div>
-    
-    <div id="wizS2" class="bp-body" style="display:none;">
-      <h3 style="margin:0 0 16px;">Select Mean Grade</h3>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;">
-        <button class="wiz-grade-btn gp-btn" onclick="wizGrade('A')">A</button><button class="wiz-grade-btn gp-btn" onclick="wizGrade('A-')">A-</button>
-        <button class="wiz-grade-btn gp-btn" onclick="wizGrade('B+')">B+</button><button class="wiz-grade-btn gp-btn" onclick="wizGrade('B')">B</button>
-        <button class="wiz-grade-btn gp-btn" onclick="wizGrade('C+')">C+</button><button class="wiz-grade-btn gp-btn" onclick="wizGrade('C')">C</button>
-        <button class="wiz-grade-btn gp-btn" onclick="wizGrade('D+')">D+</button><button class="wiz-grade-btn gp-btn" onclick="wizGrade('D')">D</button>
-      </div>
-      <button onclick="wizGo(1)" style="background:none;border:none;color:var(--white3);cursor:pointer;">← Back</button>
-    </div>
-    
-    <div id="wizS3" class="bp-body" style="display:none;">
-      <h3 style="margin:0 0 16px;">What field interests you?</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-        <button class="btn-outline" onclick="wizField('health')">🏥 Health</button>
-        <button class="btn-outline" onclick="wizField('tech')">💻 Tech</button>
-        <button class="btn-outline" onclick="wizField('business')">💼 Business</button>
-        <button class="btn-outline" onclick="wizField('tvet')">🔧 TVET</button>
-      </div>
-      <button onclick="wizGo(2)" style="background:none;border:none;color:var(--white3);cursor:pointer;">← Back</button>
-    </div>
-    
-    <div id="wizS4" class="bp-body" style="display:none;">
-      <h3 style="margin:0 0 16px;color:var(--lime);">✅ Your Plan</h3>
-      <div id="wizResult" style="margin-bottom:16px;"></div>
-      <div id="wizActions" style="display:grid;gap:10px;margin-bottom:20px;"></div>
-      <button onclick="wizReset()" style="background:none;border:none;color:var(--white3);cursor:pointer;">↺ Start Over</button>
-    </div>
-  </div>
-</div>
+    <script>
+        // --- PARTICLE ENGINE ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = 'rgba(0, 245, 255, 0.3)'; ctx.fill(); }
+        }
+        function init() { particles = []; for(let i=0; i<60; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach((a, i) => {
+                particles.slice(i+1).forEach(b => {
+                    let d = Math.hypot(a.x-b.x, a.y-b.y);
+                    if(d<150) {
+                        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+                        ctx.strokeStyle = `rgba(0,245,255,${1-d/150})`; ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => { resize(); init(); });
+        resize(); init(); animate();
 
-<div id="adminOverlay" class="bp-overlay" style="background:var(--ink);padding:0;">
-  <div style="width:100%;height:100vh;display:flex;flex-direction:column;">
-    <div style="padding:16px;background:var(--ink2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-weight:700;color:var(--lime);">⚙️ Admin Panel</div>
-      <button onclick="closeAdmin()" style="padding:6px 12px;background:var(--coral);border:none;border-radius:6px;color:#fff;cursor:pointer;">Close</button>
-    </div>
-    <div style="display:flex;gap:10px;padding:10px;background:var(--ink3);overflow-x:auto;">
-      <button class="atab active btn-outline" id="atab-dash" onclick="showAdminTab('dash')" style="margin:0;padding:8px 16px;">Dashboard</button>
-      <button class="atab btn-outline" id="atab-donations" onclick="showAdminTab('donations')" style="margin:0;padding:8px 16px;">Donations</button>
-      <button class="atab btn-outline" id="atab-forum" onclick="showAdminTab('forum')" style="margin:0;padding:8px 16px;">Forum</button>
-      <button class="atab btn-outline" id="atab-chats" onclick="showAdminTab('chats')" style="margin:0;padding:8px 16px;">Chats</button>
-      <button class="atab btn-outline" id="atab-users" onclick="showAdminTab('users')" style="margin:0;padding:8px 16px;">Users</button>
-    </div>
-    <div id="adminContent" style="padding:20px;flex:1;overflow-y:auto;">
-      <div id="admTab-dash" class="adm-section"><h3>Dashboard</h3><p>Welcome, Admin.</p></div>
-      <div id="admTab-donations" class="adm-section" style="display:none"><h3>Donations</h3><p>Manage M-Pesa data here.</p></div>
-      <div id="admTab-forum" class="adm-section" style="display:none"><h3>Forum</h3><p>Approve/Delete posts.</p></div>
-      <div id="admTab-chats" class="adm-section" style="display:none"><h3>Chats</h3><p>Review AI sessions.</p></div>
-      <div id="admTab-users" class="adm-section" style="display:none"><h3>Users</h3><p>User directory.</p></div>
-    </div>
-  </div>
-</div>
+        // --- TYPING EFFECT ---
+        const phrases = ["Learn. Code. Create.", "Build Your Future.", "Industry-Ready Skills."];
+        let pIdx = 0, cIdx = 0, isDel = false;
+        const typeEl = document.getElementById('typingText');
+        function type() {
+            let txt = phrases[pIdx];
+            typeEl.innerText = isDel ? txt.substring(0, cIdx--) : txt.substring(0, cIdx++);
+            if(!isDel && cIdx === txt.length+1) { isDel = true; setTimeout(type, 2000); }
+            else if(isDel && cIdx === 0) { isDel = false; pIdx = (pIdx+1)%phrases.length; setTimeout(type, 500); }
+            else setTimeout(type, isDel ? 50 : 100);
+        }
+        type();
 
-<div id="mpesaModal" onclick="if(event.target===this)closeMpesaModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:16px;">
-  <div style="background:var(--ink2);border:1px solid var(--border2);border-radius:24px;max-width:400px;width:100%;position:relative;overflow:hidden;">
-    <div style="padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-weight:700;">Support BTECHPLUS</div>
-      <button onclick="closeMpesaModal()" style="background:none;border:none;color:var(--white3);cursor:pointer;font-size:18px;">✕</button>
-    </div>
-    
-    <div id="mpS1" style="padding:20px;">
-      <div style="margin-bottom:10px;font-size:12px;color:var(--white3);">Choose amount (KES)</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
-        <button class="mp-amt-btn gp-btn" onclick="setAmount(50)" data-amt="50">50</button>
-        <button class="mp-amt-btn gp-btn active" onclick="setAmount(100)" data-amt="100">100</button>
-        <button class="mp-amt-btn gp-btn" onclick="setAmount(200)" data-amt="200">200</button>
-        <button class="mp-amt-btn gp-btn" onclick="setAmount(500)" data-amt="500">500</button>
-        <button class="mp-amt-btn gp-btn" onclick="setAmount('custom')" data-amt="custom" style="grid-column:2/4">Custom</button>
-      </div>
-      <div id="mpCustomWrap" style="display:none;margin-bottom:16px;">
-        <input id="customAmt" type="number" placeholder="Enter amount" style="width:100%;padding:12px;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;color:var(--white);">
-      </div>
-      <button onclick="mpGoStep2()" class="btn-primary" style="background:#00a651;color:#fff;">Continue →</button>
-    </div>
+        // --- MOBILE MENU ---
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.toggle('active');
+        });
 
-    <div id="mpS2" style="display:none;padding:20px;">
-      <button onclick="showMpStep(1)" style="background:none;border:none;color:var(--lime);cursor:pointer;margin-bottom:16px;">← Back</button>
-      <div style="font-size:24px;font-weight:800;color:var(--lime);margin-bottom:16px;" id="mpAmtDisplay">KES 100</div>
-      <div id="phoneWrap" style="display:flex;align-items:center;background:var(--ink3);border:1px solid var(--border2);border-radius:8px;padding:0 12px;margin-bottom:16px;">
-        <span>📱</span>
-        <input id="mpPhone" type="tel" placeholder="07XX XXX XXX" style="flex:1;padding:12px;background:transparent;border:none;color:var(--white);outline:none;" oninput="formatPhone(this)">
-        <span id="phoneOk" style="color:#00a651;opacity:0;">✓</span>
-      </div>
-      <button id="stkBtn" onclick="submitDonation()" class="btn-primary" style="background:#00a651;color:#fff;"><span id="stkBtnTxt">Pay with M-Pesa</span></button>
-    </div>
-
-    <div id="mpS3" style="display:none;padding:40px 20px;text-align:center;">
-      <h3 style="margin:0 0 10px;">Check Your Phone</h3>
-      <p style="font-size:13px;color:var(--white3);margin-bottom:20px;">Push sent to <strong id="phoneSent" style="color:var(--lime)"></strong><br>Enter PIN to confirm.</p>
-      <div style="height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:20px;">
-        <div id="mpProgress" style="height:100%;background:var(--lime);width:0%;transition:width 55s linear;"></div>
-      </div>
-      <button onclick="closeMpesaModal()" style="background:none;border:none;color:var(--white3);cursor:pointer;">Close</button>
-    </div>
-
-    <div id="mpS4" style="display:none;padding:40px 20px;text-align:center;">
-      <div style="font-size:40px;color:var(--lime);margin-bottom:10px;">✅</div>
-      <h3 style="margin:0 0 10px;color:var(--lime);">Payment Confirmed!</h3>
-      <p style="font-size:13px;color:var(--white3);margin-bottom:20px;">Asante sana! 💚</p>
-      <div style="background:var(--ink3);padding:16px;border-radius:8px;margin-bottom:20px;text-align:left;font-size:13px;">
-        Receipt: <strong id="receiptNo">—</strong><br>
-        Amount: <strong id="confirmedAmt">—</strong>
-      </div>
-      <button onclick="closeMpesaModal()" class="btn-primary">Continue</button>
-      <button onclick="mpReset()" style="margin-top:10px;background:none;border:none;color:var(--white3);cursor:pointer;">Donate again</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-'use strict';
-
-/* ═══════════════════════════════════════════════
-   GLOBALS
-═══════════════════════════════════════════════ */
-const API = 'https://ngi-mpesa-backend.onrender.com/api';
-const ADMIN_EMAIL = 'btechkenya@gmail.com';
-let selectedAmt = 100;
-let checkoutId = null;
-let courseQ = '';
-let activeCourseGrade = 'A';
-let gradePickCount = 0;
-let mpesaShown = false;
-let wizData = {};
-let profGrade = '';
-let chatSession = localStorage.getItem('bp_session') || (() => { const id = 'bp_'+Math.random().toString(36).slice(2); localStorage.setItem('bp_session',id); return id; })();
-let chatPollTimer = null;
-let renderedMsgIds = new Set();
-let postBusy = false;
-
-/* ═══════════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════════ */
-function toggleDrawer() {} // Kept simple if you want to implement mobile nav drawer
-function closeDrawer() {}
-
-/* ═══════════════════════════════════════════════
-   OVERLAY SYSTEM
-═══════════════════════════════════════════════ */
-function openOverlay(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  if (id === 'coursesOverlay') setTimeout(renderCourses, 50);
-  if (id === 'deadlinesOverlay') setTimeout(loadDeadlines, 50);
-  if (id === 'forumOverlay') setTimeout(loadForum, 50);
-  if (id === 'trackerOverlay') setTimeout(renderTracker, 50);
-  if (id === 'profileOverlay') setTimeout(loadProfile, 50);
-  if (id === 'wizOverlay') wizReset();
-  if (id === 'supportOverlay') startChatPoll();
-}
-function closeOverlay(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.remove('active');
-  document.body.style.overflow = '';
-}
-function overlayBgClose(e, id) {
-  if (e.target.id === id) closeOverlay(id);
-}
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  if(!t) return;
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3200);
-}
-
-/* ═══════════════════════════════════════════════
-   HERO & CALCULATOR
-═══════════════════════════════════════════════ */
-const gradeColors = {A:'#00e5cc','A-':'#00e5cc','B+':'#c8f135',B:'#c8f135','B-':'#f59e0b','C+':'#f59e0b',C:'#f59e0b','C-':'#ff6b52','D+':'#ff6b52',D:'#ff6b52','D-':'#a78bfa',E:'#a78bfa'};
-const pathData = {
-  A:   {label:'Top Universities',note:'Medicine, Law, Engineering',portals:[{t:'KUCCPS',u:'https://students.kuccps.net'},{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  'A-':{label:'University Degrees',note:'All public/private universities',portals:[{t:'KUCCPS',u:'https://students.kuccps.net'},{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  'B+':{label:'Degrees & Diplomas',note:'Business, Health, Tech',portals:[{t:'KUCCPS',u:'https://students.kuccps.net'},{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  B:   {label:'Degrees, KMTC',note:'Clinical Med, Nursing',portals:[{t:'KUCCPS',u:'https://students.kuccps.net'},{t:'KMTC',u:'https://admissions.kmtc.ac.ke'}]},
-  'B-':{label:'Diplomas & KMTC',note:'KMTC & private degrees',portals:[{t:'KMTC',u:'https://admissions.kmtc.ac.ke'},{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  'C+':{label:'KMTC & Diplomas',note:'Cluster points matter here',portals:[{t:'KMTC',u:'https://admissions.kmtc.ac.ke'},{t:'Calculator',fn:"openOverlay('calcOverlay')"}]},
-  C:   {label:'KMTC Diplomas',note:'44 campuses worldwide',portals:[{t:'KMTC',u:'https://admissions.kmtc.ac.ke'},{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  'C-':{label:'TVET Diplomas',note:'Business, ICT, Health',portals:[{t:'Courses',fn:"openOverlay('coursesOverlay')"},{t:'HELB',u:'https://portal.hef.co.ke'}]},
-  'D+':{label:'TVET Certificates',note:'Technical, business, hospitality',portals:[{t:'Courses',fn:"openOverlay('coursesOverlay')"},{t:'HELB',u:'https://portal.hef.co.ke'}]},
-  D:   {label:'TVET Entry',note:'Certificate and artisan',portals:[{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  'D-':{label:'Artisan Certificates',note:'Electrical, plumbing, trades',portals:[{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-  E:   {label:'Skills Training',note:'Artisan Certs, NYS',portals:[{t:'Courses',fn:"openOverlay('coursesOverlay')"}]},
-};
-
-function heroPath(grade) {
-  document.querySelectorAll('#heroGradePicker .gp-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.replace('−','-').trim() === grade.replace('−','-'));
-  });
-  const col = gradeColors[grade] || '#c8f135';
-  const d = pathData[grade] || pathData.C;
-  const portHtml = d.portals.map(p => {
-    if (p.u) return `<a href="${p.u}" target="_blank" class="btn-outline" style="display:inline-block;width:auto;padding:8px 14px;margin:0;">${p.t} →</a>`;
-    return `<button onclick="${p.fn}" class="btn-primary" style="display:inline-block;width:auto;padding:8px 14px;">${p.t}</button>`;
-  }).join(' ');
-  const el = document.getElementById('heroResult');
-  if(el) {
-    el.style.display = 'block';
-    el.innerHTML = `<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:36px;font-weight:800;color:${col};">${grade}</div><div><div style="font-size:14px;font-weight:700;">${d.label}</div><div style="font-size:12px;color:var(--white3)">${d.note}</div></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;">${portHtml}</div>`;
-  }
-  localStorage.setItem('bpGrade', grade);
-  
-  gradePickCount++;
-  if (gradePickCount >= 3 && !mpesaShown) { mpesaShown = true; setTimeout(openMpesaModal, 1500); }
-}
-
-function calcCluster() {
-  const v1 = parseInt(document.getElementById('m1').value);
-  const v2 = parseInt(document.getElementById('m2').value);
-  const v3 = parseInt(document.getElementById('m3g').value);
-  const v4 = parseInt(document.getElementById('m4g').value);
-  const total = v1+v2+v3+v4;
-  const pct = Math.round((total/48)*100);
-  const band = total>=40 ? {lbl:'Top Universities',col:'#00e5cc'} : total>=32 ? {lbl:'Degrees',col:'#c8f135'} : total>=24 ? {lbl:'Diplomas',col:'#f59e0b'} : {lbl:'Certificates',col:'#ff6b52'};
-  
-  const res = document.getElementById('calcResult');
-  if(res) {
-    res.innerHTML = `<div style="text-align:center;padding:16px;background:rgba(255,255,255,.05);border-radius:12px;">
-      <div style="font-size:48px;font-weight:800;color:${band.col};line-height:1;">${total.toFixed(1)}</div>
-      <div style="font-size:12px;color:var(--white3);margin-bottom:10px;">out of 48 points</div>
-      <div style="height:6px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-bottom:10px;"><div style="height:100%;width:${pct}%;background:${band.col};"></div></div>
-      <div style="font-size:14px;font-weight:700;">Qualifies for: ${band.lbl}</div>
-    </div>`;
-  }
-  localStorage.setItem('bpCluster', total.toFixed(1));
-  toast(`Points: ${total.toFixed(1)}/48`);
-}
-
-/* ═══════════════════════════════════════════════
-   COURSE FINDER (Mock Data for brevity)
-═══════════════════════════════════════════════ */
-const courseDB = {
-  "A": [{cat:"Medicine", items:["MBChB - UoN, Moi, JKUAT", "Dental Surgery - UoN"]}, {cat:"Engineering", items:["Civil Eng", "Electrical Eng", "Computer Science"]}],
-  "B": [{cat:"KMTC Diplomas", items:["Clinical Medicine", "Nursing", "Pharmacy"]}, {cat:"Degrees", items:["BCom", "Education", "IT"]}],
-  "C": [{cat:"KMTC Diplomas", items:["Clinical Medicine (44 campuses)", "Nursing", "Health Records", "Public Health"]}, {cat:"TVET", items:["Diploma in Architecture", "Diploma in Law"]}]
-};
-// Fallback for missing grades in this abbreviated mock DB
-['A-','B+','B-','C+','C-','D+','D','D-','E'].forEach(g => { if(!courseDB[g]) courseDB[g] = [{cat:"Available Programmes", items:["Programmes for grade "+g+" available on official portals."]}]; });
-
-function pickGrade(btn, g) {
-  document.querySelectorAll('.grade-pill').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  activeCourseGrade = g;
-  courseQ = '';
-  const si = document.getElementById('courseSearch'); if(si) si.value = '';
-  renderCourses();
-}
-
-function renderCourses() {
-  const data = courseDB[activeCourseGrade] || [];
-  const q = courseQ.toLowerCase();
-  let html = '';
-  data.forEach(c => {
-    const items = q ? c.items.filter(i => i.toLowerCase().includes(q)) : c.items;
-    if (!items.length) return;
-    html += `<div class="course-block"><div class="course-block-head"><h4>${c.cat}</h4></div><div class="course-block-body">${items.map(i => `<div class="course-entry">→ ${i}</div>`).join('')}</div></div>`;
-  });
-  const out = document.getElementById('courseOut');
-  if(out) out.innerHTML = html || `<div style="text-align:center;padding:20px;color:var(--white3);">No results found.</div>`;
-}
-
-/* ═══════════════════════════════════════════════
-   MPESA LOGIC
-═══════════════════════════════════════════════ */
-function openMpesaModal(){showMpStep(1);const m=document.getElementById('mpesaModal');if(m)m.style.display='flex';}
-function closeMpesaModal(){const m=document.getElementById('mpesaModal');if(m)m.style.display='none';}
-
-function showMpStep(n){
-  [1,2,3,4].forEach(i=>{const el=document.getElementById('mpS'+i);if(el)el.style.display=i===n?'block':'none';});
-}
-
-function setAmount(a){
-  document.querySelectorAll('.mp-amt-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll(`[data-amt="${a}"]`).forEach(b=>b.classList.add('active'));
-  const cw=document.getElementById('mpCustomWrap');
-  if(a==='custom'){if(cw)cw.style.display='block';selectedAmt=0;}
-  else{if(cw)cw.style.display='none';selectedAmt=Number(a);}
-}
-
-function mpGoStep2(){
-  const customEl=document.getElementById('customAmt');
-  const custom=customEl?parseInt(customEl.value)||0:0;
-  const amt=(selectedAmt===0||selectedAmt==='custom')?custom:selectedAmt;
-  if(!amt||amt<10){toast('⚠️ Enter valid amount (min 10)');return;}
-  selectedAmt=amt;
-  const disp=document.getElementById('mpAmtDisplay');if(disp)disp.textContent='KES '+amt;
-  showMpStep(2);
-}
-
-function formatPhone(inp){
-  let v=inp.value.replace(/\D/g,'');
-  if(v.startsWith('254'))v='0'+v.slice(3);
-  if(v.length>10)v=v.slice(0,10);
-  inp.value=v;
-  const ok=document.getElementById('phoneOk');
-  if(ok)ok.style.opacity=/^(07|01)\d{8}$/.test(v)?'1':'0';
-}
-
-async function submitDonation(){
-  const phone=(document.getElementById('mpPhone')?.value||'').replace(/\s/g,'');
-  if(!/^(07|01)\d{8}$/.test(phone)){toast('⚠️ Enter a valid Safaricom number');return;}
-  const btn=document.getElementById('stkBtn');const txt=document.getElementById('stkBtnTxt');
-  btn.disabled=true;if(txt)txt.textContent='⏳ Sending prompt...';
-  
-  try {
-    const res = await fetch(API + '/mpesa/stk', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: phone, amount: selectedAmt })
-    });
-    const data = await res.json();
-    if (data.success) {
-      checkoutId = data.checkoutRequestId;
-      const ps = document.getElementById('phoneSent'); if (ps) ps.textContent = phone;
-      showMpStep(3);
-      const pb = document.getElementById('mpProgress'); if(pb) pb.style.width = '100%';
-      pollDonationStatus(data.checkoutRequestId, 0);
-    } else {
-      toast('❌ ' + (data.error || 'M-Pesa request failed.'));
-      btn.disabled = false; if(txt) txt.textContent = 'Pay with M-Pesa';
-    }
-  } catch(err) {
-    toast('❌ Network error.');
-    btn.disabled = false; if(txt) txt.textContent = 'Pay with M-Pesa';
-  }
-}
-
-async function pollDonationStatus(cid, attempts) {
-  if (attempts > 12) { toast('Payment not confirmed yet. Check your messages.'); return; }
-  await new Promise(r => setTimeout(r, 5000));
-  try {
-    const res = await fetch(API + '/mpesa/status/' + cid);
-    const data = await res.json();
-    if (data.status === 'SUCCESS') {
-      const rn = document.getElementById('receiptNo'); if (rn) rn.textContent = data.mpesa_receipt || 'CONFIRMED';
-      const ca = document.getElementById('confirmedAmt'); if (ca) ca.textContent = selectedAmt;
-      showMpStep(4);
-      toast('🎉 Donation received! Asante sana! 💚');
-    } else if (data.status === 'FAILED') {
-      showMpStep(1);
-      toast('❌ Payment was cancelled.');
-    } else {
-      pollDonationStatus(cid, attempts + 1);
-    }
-  } catch(e) {
-    pollDonationStatus(cid, attempts + 1);
-  }
-}
-
-function mpReset() {
-  setAmount(100);
-  const pw = document.getElementById('mpPhone'); if (pw) pw.value = '';
-  showMpStep(1);
-}
-
-/* ═══════════════════════════════════════════════
-   AUTH & ADMIN
-═══════════════════════════════════════════════ */
-function checkAuth() {
-  const user = JSON.parse(localStorage.getItem('bpUser') || 'null');
-  const dash = document.getElementById('dashPanel');
-  const guest = document.getElementById('guestHome');
-  const nlo = document.getElementById('navLogoutLi');
-  const nli = document.getElementById('navLoginBtn');
-  const adminBtn = document.getElementById('adminPanelBtn');
-  
-  if (user && user.email) {
-    if(dash) dash.style.display = 'block';
-    if(guest) guest.style.display = 'none';
-    if(nlo) nlo.style.display = 'list-item';
-    if(nli) nli.textContent = '👤 ' + (user.username || user.name || 'Account').split(' ')[0];
-    
-    const name = user.username || user.name || 'Student';
-    const av = document.getElementById('dashAvatar'); if(av) av.textContent = name.slice(0,2).toUpperCase();
-    const dn = document.getElementById('dashName'); if(dn) dn.textContent = name;
-    const de = document.getElementById('dashEmail'); if(de) de.textContent = user.email;
-    
-    const cl = localStorage.getItem('bpCluster'); const dc = document.getElementById('dashCluster'); if(dc&&cl) dc.textContent = cl;
-    const gr = localStorage.getItem('bpGrade'); const dg = document.getElementById('dashGrade'); if(dg&&gr) dg.textContent = gr;
-    
-    // THE FIX: Do not require a token for Admin panel if logged in locally.
-    const isAdmin = user && (user.email === ADMIN_EMAIL || user.username === 'btechplus_admin' || user.email === 'admin@btechplus.com');
-    if(adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
-  } else {
-    if(dash) dash.style.display = 'none';
-    if(guest) guest.style.display = 'block';
-    if(nlo) nlo.style.display = 'none';
-    if(nli) nli.textContent = 'My Account';
-    if(adminBtn) adminBtn.style.display = 'none';
-  }
-}
-
-async function loginUser() {
-  const email = (document.getElementById('liEmail')?.value||'').trim();
-  const pw = (document.getElementById('liPw')?.value||'').trim();
-  const msg = document.getElementById('liMsg');
-  const btn = document.getElementById('loginBtn');
-  if(!email || !pw){if(msg)msg.innerHTML='<span style="color:var(--coral)">Please fill in both fields.</span>';return;}
-  btn.disabled=true; btn.textContent='Signing in...';
-  
-  try {
-    const r = await fetch(API+'/auth/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
-    const d = await r.json();
-    if(d.success){
-      localStorage.setItem('bpUser', JSON.stringify(d.user));
-      localStorage.setItem('bpToken', d.token);
-      if(msg)msg.innerHTML='<span style="color:var(--lime)">✅ Welcome back!</span>';
-      setTimeout(()=>{closeOverlay('authOverlay');checkAuth();toast('👋 Welcome back!');},500);
-    } else {
-      throw new Error(d.error || 'Invalid credentials');
-    }
-  } catch(e) {
-    // Local Fallback
-    const stored = JSON.parse(localStorage.getItem('bpAccounts')||'{}');
-    if(stored[email] && stored[email].pw === btoa(pw)){
-      const user = {email, name:stored[email].name};
-      localStorage.setItem('bpUser', JSON.stringify(user));
-      localStorage.setItem('bpToken', 'local_dummy_token_for_admin'); // Dummy token ensures robustness
-      if(msg)msg.innerHTML='<span style="color:var(--lime)">✅ Welcome back! (Offline mode)</span>';
-      setTimeout(()=>{closeOverlay('authOverlay');checkAuth();toast('👋 Welcome back!');},500);
-    } else {
-      if(msg)msg.innerHTML='<span style="color:var(--coral)">❌ Invalid credentials</span>';
-      btn.disabled=false; btn.textContent='Login';
-    }
-  }
-}
-
-async function registerUser() {
-  const name = (document.getElementById('regName')?.value||'').trim();
-  const email = (document.getElementById('regEmail')?.value||'').trim();
-  const pw = (document.getElementById('regPw')?.value||'').trim();
-  const msg = document.getElementById('regMsg');
-  const btn = document.getElementById('registerBtn');
-  if(!name || !email || !pw){if(msg)msg.innerHTML='<span style="color:var(--coral)">Fill all fields.</span>';return;}
-  btn.disabled=true; btn.textContent='Registering...';
-  
-  try {
-    const r = await fetch(API+'/auth/register', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:name,email,password:pw})});
-    const d = await r.json();
-    if(d.success){
-      localStorage.setItem('bpUser', JSON.stringify(d.user));
-      localStorage.setItem('bpToken', d.token);
-      if(msg)msg.innerHTML='<span style="color:var(--lime)">✅ Account created!</span>';
-      setTimeout(()=>{closeOverlay('authOverlay');checkAuth();toast('🎉 Welcome!');},500);
-    } else {
-      throw new Error(d.error || 'Registration failed');
-    }
-  } catch(e) {
-    // Local Fallback
-    const stored = JSON.parse(localStorage.getItem('bpAccounts')||'{}');
-    if(stored[email]){if(msg)msg.innerHTML='<span style="color:var(--coral)">Account exists.</span>';btn.disabled=false;btn.textContent='Register';return;}
-    stored[email] = {name, pw:btoa(pw)}; localStorage.setItem('bpAccounts', JSON.stringify(stored));
-    const user = {email, name}; localStorage.setItem('bpUser', JSON.stringify(user));
-    localStorage.setItem('bpToken', 'local_dummy_token_for_admin');
-    if(msg)msg.innerHTML='<span style="color:var(--lime)">✅ Account created! (Offline mode)</span>';
-    setTimeout(()=>{closeOverlay('authOverlay');checkAuth();toast('🎉 Welcome!');},500);
-  }
-}
-
-function logoutUser() {
-  localStorage.removeItem('bpUser'); localStorage.removeItem('bpToken');
-  checkAuth(); toast('👋 Signed out.');
-}
-
-function openAdmin() {
-  const user = JSON.parse(localStorage.getItem('bpUser') || 'null');
-  const isAdmin = user && (user.email === ADMIN_EMAIL || user.username === 'btechplus_admin' || user.email === 'admin@btechplus.com');
-  if (!isAdmin) { toast('⛔ Admin access denied.'); return; }
-  const el = document.getElementById('adminOverlay');
-  if(el) { el.style.display = 'block'; showAdminTab('dash'); }
-}
-function closeAdmin() { const el = document.getElementById('adminOverlay'); if(el) el.style.display = 'none'; }
-
-function showAdminTab(tab) {
-  document.querySelectorAll('.atab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.adm-section').forEach(s => s.style.display = 'none');
-  const t = document.getElementById('atab-'+tab); if(t) t.classList.add('active');
-  const s = document.getElementById('admTab-'+tab); if(s) s.style.display = 'block';
-}
-
-/* ═══════════════════════════════════════════════
-   TRACKER
-═══════════════════════════════════════════════ */
-const trackerData = [
-  {id:'results', label:'KCSE Results', sub:'Released by KNEC'},
-  {id:'kuccps_open', label:'KUCCPS Portal', sub:'Portal opens for choices'},
-  {id:'choices', label:'Course Choices', sub:'Submit your 6 options'},
-  {id:'revision', label:'Revision Window', sub:'Edit choices if needed'},
-  {id:'placement', label:'Placement', sub:'See your final course'},
-  {id:'reporting', label:'Reporting', sub:'Join your institution'},
-  {id:'helb', label:'HELB Loan', sub:'Apply for funding'}
-];
-
-function renderTracker() {
-  const el = document.getElementById('trackerSteps');
-  if (!el) return;
-  const saved = JSON.parse(localStorage.getItem('bp_tracker') || '{}');
-  el.innerHTML = trackerData.map((s, i) => {
-    const isDone = saved[s.id];
-    const cls = isDone ? 't-done' : (i===0||saved[trackerData[i-1]?.id] ? 't-active' : 't-pending');
-    const col = isDone ? 'var(--lime)' : (cls==='t-active' ? 'var(--white)' : 'var(--white3)');
-    const ico = isDone ? '✓' : (cls==='t-active' ? '⏳' : '○');
-    const btn = !isDone ? `<button onclick="markTracker('${s.id}')" style="padding:6px 12px;background:rgba(200,241,53,.1);color:var(--lime);border:1px solid rgba(200,241,53,.2);border-radius:6px;font-size:11px;cursor:pointer;">Mark Done</button>` : `<span style="color:var(--lime);font-size:12px;font-weight:700;">✓</span>`;
-    return `<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:center;">
-      <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:${col};flex-shrink:0;">${ico}</div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:${col};">${s.label}</div><div style="font-size:12px;color:var(--white3);">${s.sub}</div></div>
-      ${btn}
-    </div>`;
-  }).join('');
-}
-
-function markTracker(id) {
-  const saved = JSON.parse(localStorage.getItem('bp_tracker') || '{}');
-  saved[id] = true;
-  localStorage.setItem('bp_tracker', JSON.stringify(saved));
-  renderTracker();
-}
-
-function resetTracker() {
-  if(!confirm('Reset tracker?')) return;
-  localStorage.removeItem('bp_tracker');
-  renderTracker();
-}
-
-function checkPlacement() {
-  const idx = document.getElementById('trackerIdx')?.value;
-  const yr = document.getElementById('trackerYear')?.value;
-  const res = document.getElementById('trackerResult');
-  if(!idx || idx.length !== 11) { toast('⚠️ Enter valid 11-digit Index Number'); return; }
-  res.innerHTML = `<div style="background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);padding:14px;border-radius:10px;margin-top:10px;"><div style="color:var(--green);font-size:13px;font-weight:700;margin-bottom:8px">Ready to check for ${idx}</div><div style="font-size:12px;color:var(--white2);margin-bottom:12px">Log into the KUCCPS portal using your index number and KCSE year (${yr}). Your password is your birth certificate number.</div><a href="https://students.kuccps.net" target="_blank" class="btn-primary" style="display:block;text-align:center;text-decoration:none;">Open KUCCPS Portal →</a></div>`;
-}
-
-/* ═══════════════════════════════════════════════
-   PROFILE
-═══════════════════════════════════════════════ */
-function profPick(btn, g) {
-  document.querySelectorAll('.prof-g').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  profGrade = g;
-}
-
-function saveProfile() {
-  const name = document.getElementById('profName')?.value.trim();
-  if(!name || !profGrade) { toast('⚠️ Fill name and mean grade'); return; }
-  const p = {
-    name, grade: profGrade,
-    eng: document.getElementById('profEng')?.value,
-    math: document.getElementById('profMath')?.value,
-    year: document.getElementById('profYear')?.value
-  };
-  localStorage.setItem('bp_profile', JSON.stringify(p));
-  loadProfile();
-  toast('💾 Profile saved locally!');
-}
-
-function loadProfile() {
-  const p = JSON.parse(localStorage.getItem('bp_profile') || 'null');
-  if(!p) return;
-  const nameEl = document.getElementById('profName'); if(nameEl) nameEl.value = p.name || '';
-  if(p.grade) {
-    profGrade = p.grade;
-    document.querySelectorAll('.prof-g').forEach(b => {
-      if(b.textContent.replace('−','-') === p.grade.replace('−','-')) b.classList.add('active');
-    });
-  }
-  ['Eng','Math','Year'].forEach(k => { const el=document.getElementById('prof'+k); if(el&&p[k.toLowerCase()]) el.value = p[k.toLowerCase()]; });
-  
-  const dis = document.getElementById('savedProfile');
-  const cnt = document.getElementById('savedProfileContent');
-  if(dis && cnt) {
-    dis.style.display = 'block';
-    cnt.innerHTML = `<strong style="color:var(--white)">${p.name}</strong> (Class of ${p.year})<br>Mean Grade: <strong style="color:var(--lime);font-size:16px">${p.grade}</strong><br>Eng: ${p.eng||'-'} · Math: ${p.math||'-'}`;
-  }
-}
-
-function clearProfile() {
-  if(!confirm('Clear profile?')) return;
-  localStorage.removeItem('bp_profile');
-  const dis = document.getElementById('savedProfile'); if(dis) dis.style.display = 'none';
-  profGrade = '';
-  document.querySelectorAll('.prof-g').forEach(b => b.classList.remove('active'));
-  ['profName','profEng','profMath','profYear'].forEach(id => {const el=document.getElementById(id); if(el) el.value='';});
-}
-
-function loadGradeFromProfile() {
-  if(profGrade) {
-    closeOverlay('profileOverlay');
-    openOverlay('coursesOverlay');
-    // Simulate clicking
-    document.querySelectorAll('.grade-pill').forEach(b => {
-      if(b.textContent.split(' ')[0].replace('−','-') === profGrade.replace('−','-')) pickGrade(b, profGrade);
-    });
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   WIZARD
-═══════════════════════════════════════════════ */
-function wizSet(k, v) { wizData[k] = v; }
-function wizGo(n) {
-  [1,2,3,4].forEach(i => {
-    const el = document.getElementById('wizS'+i);
-    if(el) el.style.display = i===n ? 'block' : 'none';
-  });
-  const pb = document.getElementById('wizProgress');
-  if(pb) pb.style.width = (n/4*100)+'%';
-  if(n===4) renderWizResult();
-}
-
-function wizGrade(g) {
-  wizSet('grade', g);
-  document.querySelectorAll('.wiz-grade-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.replace('−','-') === g.replace('−','-'));
-    b.style.background = b.classList.contains('active') ? 'rgba(200,241,53,.12)' : 'rgba(255,255,255,.04)';
-    b.style.borderColor = b.classList.contains('active') ? 'var(--lime)' : 'var(--border2)';
-    b.style.color = b.classList.contains('active') ? 'var(--lime)' : 'var(--white2)';
-  });
-  setTimeout(() => wizGo(3), 150);
-}
-
-function wizField(f) {
-  wizSet('field', f);
-  wizGo(4);
-}
-
-function renderWizResult() {
-  const g = wizData.grade || 'C';
-  const res = document.getElementById('wizResult');
-  const acts = document.getElementById('wizActions');
-  if(!res || !acts) return;
-  
-  res.innerHTML = `<div style="background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:center"><div style="font-family:'Fraunces',serif;font-size:42px;font-weight:800;color:var(--lime);line-height:1;">${g}</div><div><div style="font-size:15px;font-weight:700;color:var(--white)">Your Pathway is Ready</div><div style="font-size:12px;color:var(--white3)">Based on your choices, here are your next steps.</div></div></div>`;
-  
-  let html = '';
-  if(['A','A-','B+','B','B-','C+'].includes(g)) {
-    html += `<button class="btn-outline" style="text-align:left;padding:12px;display:flex;gap:10px;align-items:center;" onclick="closeOverlay('wizOverlay');openOverlay('calcOverlay')"><span style="font-size:24px;">🧮</span><div><div style="font-weight:700;color:var(--white);">Cluster Calculator</div><div style="font-size:11px;">Calculate points for Degree placement</div></div></button>`;
-  }
-  html += `<button class="btn-primary" style="text-align:left;padding:12px;display:flex;gap:10px;align-items:center;" onclick="closeOverlay('wizOverlay');openOverlay('coursesOverlay')"><span style="font-size:24px;">📚</span><div><div style="font-weight:700;">View Courses</div><div style="font-size:11px;opacity:0.8;">Filtered for Grade ${g}</div></div></button>`;
-  html += `<a href="https://students.kuccps.net" target="_blank" class="btn-outline" style="text-align:left;padding:12px;display:flex;gap:10px;align-items:center;text-decoration:none;"><span style="font-size:24px;">🎓</span><div><div style="font-weight:700;color:var(--white);">KUCCPS Portal</div><div style="font-size:11px;">Official application site</div></div></a>`;
-  
-  acts.innerHTML = html;
-}
-
-function wizReset() {
-  wizData = {};
-  document.querySelectorAll('.wiz-grade-btn').forEach(b => {
-    b.classList.remove('active');
-    b.style.background = 'rgba(255,255,255,.04)';
-    b.style.borderColor = 'var(--border2)';
-    b.style.color = 'var(--white2)';
-  });
-  wizGo(1);
-}
-
-/* ═══════════════════════════════════════════════
-   BASIC INIT
-═══════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  checkAuth();
-});
-
-</script>
-</body>
-</html>
+        // --- STATS ANIMATION ---
+        const stats = document.querySelectorAll('.stat-number');
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    stats.forEach(stat => {
+                        const target = parseInt(stat.innerText.replace(/\D/g,''));
+                        let count = 0;
+                        const inc = target / 50;
+                        const interval = setInterval(() => {
+                            count += inc;
+                            if(count >= target) { 
+                                stat.innerText = target + "+"; 
+                                clearInterval(interval); 
+                            } else { 
+                                stat.innerText = Math.ceil(count) + "+"; 
+                            }
+                        }, 30);
+                    });
+                    obs.disconnect();
+                }
+            });
+        });
+        obs.observe(document.querySelector('.stats-section'));
+    </script>
